@@ -1,12 +1,14 @@
+import 'package:find_toilet/utilities/typedef.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key});
+  final ReturnVoid onPressed;
+  const CustomButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       child: const Text(
         '완료',
       ),

@@ -14,22 +14,10 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
-    bool isLoading = true;
-    void toNext() {
-      if (isLoading) {
-        setState(() => isLoading = false);
-        Timer(const Duration(seconds: 5), () {
-          if (isLoading) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SelectFontTheme()));
-          }
-        });
-      }
-    }
-
-    toNext();
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const SelectFontTheme()));
+    });
 
     return Scaffold(
       backgroundColor: mainColor,
