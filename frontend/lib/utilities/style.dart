@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //** 색 관련
 const mainColor = Color(0xFF5957D4);
 const whiteColor = Colors.white;
+const blackColor = Colors.black;
 
 //** 글씨 관련
 const double titleSize = 30;

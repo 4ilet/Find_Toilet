@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/typedef.dart';
+import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {

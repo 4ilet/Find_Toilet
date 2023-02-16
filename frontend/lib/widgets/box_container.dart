@@ -1,10 +1,16 @@
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
 
-class ThemeBox extends StatelessWidget {
+class ThemeBox extends StatefulWidget {
   final String text;
-  const ThemeBox({super.key, required this.text});
+  late bool selected;
+  ThemeBox({super.key, required this.text, required this.selected});
 
+  @override
+  State<ThemeBox> createState() => _ThemeBoxState();
+}
+
+class _ThemeBoxState extends State<ThemeBox> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,16 +19,17 @@ class ThemeBox extends StatelessWidget {
           height: 220,
           width: 170,
           color: whiteColor,
+          selected: widget.selected,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const CommonBox(
+              CommonBox(
                 color: Colors.grey,
                 height: 130,
                 width: 130,
               ),
               Text(
-                text,
+                widget.text,
                 style: const TextStyle(fontSize: defaultSize),
               ),
             ],
@@ -36,12 +43,14 @@ class CommonBox extends StatefulWidget {
   final Color? color;
   final double height;
   final double width;
-  const CommonBox({
+  late bool selected;
+  CommonBox({
     super.key,
     this.child,
     this.color,
     required this.height,
     required this.width,
+    this.selected = false,
   });
 
   @override
@@ -53,7 +62,14 @@ class _CommonBoxState extends State<CommonBox> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: widget.color),
+        borderRadius: BorderRadius.circular(10),
+        color: widget.color,
+        boxShadow: widget.selected
+            ? const [
+                BoxShadow(blurRadius: 10, spreadRadius: 5, color: Colors.red),
+              ]
+            : null,
+      ),
       child: SizedBox(
         height: widget.height,
         width: widget.width,
