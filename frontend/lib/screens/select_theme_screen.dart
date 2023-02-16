@@ -3,6 +3,7 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class SelectFontTheme extends StatefulWidget {
@@ -45,11 +46,16 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Center(
-              child: WhiteText(title: '어서오세요', fontSize: FontSize.titleSize)),
+              child: CustomText(
+            title: '어서오세요',
+            fontSize: FontSize.titleSize,
+            color: CustomColors.whiteColor,
+          )),
           const SizedBox(height: 15),
-          const WhiteText(
+          const CustomText(
             title: '사용하실 테마를 선택해주세요.',
             fontSize: FontSize.defaultSize,
+            color: CustomColors.whiteColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

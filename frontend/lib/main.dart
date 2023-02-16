@@ -1,4 +1,4 @@
-import 'package:find_toilet/screens/intro_screen.dart';
+import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +14,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Find Toilet',
       theme: ThemeData(fontFamily: 'Kimm'),
-      home: const Intro(),
+      // home: const Intro(),
+      home: const BookMarkMain(),
     );
   }
 }
