@@ -50,7 +50,7 @@
 - SpringBoot
 
 ### Communication
-- [Notion](https://www.notion.so/f0c5423767ff41aabd586cf7711429cc) : 기획, 컨벤션 정리 등 문서화에 활용
+- [Notion](https://www.notion.so/f0c5423767ff41aabd586cf7711429cc) : 기획, 컨벤션 정리 등 문서 작성 시 활용
 - Slack : 자료 공유 및 Scrum 시 활용
 - Discord : 음성 회의 시 활용
 
