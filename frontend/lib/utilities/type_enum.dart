@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 //* types
 typedef WidgetList = List<Widget>;
+typedef StringList = List<String>;
+typedef IntList = List<int>;
 typedef ReturnVoid = void Function();
 
 //* enums

@@ -8,7 +8,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     void toBookMark() {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const BookMarkMain()));
+          MaterialPageRoute(builder: (context) => BookMarkMain(folderCnt: 4)));
     }
 
     return Scaffold(

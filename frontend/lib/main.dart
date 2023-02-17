@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       title: 'Find Toilet',
       theme: ThemeData(fontFamily: 'Kimm'),
       // home: const Intro(),
-      home: const BookMarkMain(),
+      home: BookMarkMain(folderCnt: 4),
     );
   }
 }
