@@ -6,6 +6,7 @@ const mainColor = Color(0xFF5957D4);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
 const redColor = Colors.red;
+const yellowColor = Colors.yellow;
 Color convertedColor(CustomColors color) {
   switch (color) {
     case CustomColors.whiteColor:
@@ -14,8 +15,10 @@ Color convertedColor(CustomColors color) {
       return mainColor;
     case CustomColors.blackColor:
       return blackColor;
-    default:
+    case CustomColors.redColor:
       return redColor;
+    default:
+      return yellowColor;
   }
 }
 
@@ -23,6 +26,7 @@ Color convertedColor(CustomColors color) {
 const double titleSize = 30;
 const double largeSize = 24;
 const double defaultSize = 19;
+const double smallSize = 15;
 
 double convertedSize(FontSize size) {
   switch (size) {
@@ -30,6 +34,8 @@ double convertedSize(FontSize size) {
       return titleSize;
     case FontSize.largeSize:
       return largeSize;
+    case FontSize.smallSize:
+      return smallSize;
     default:
       return defaultSize;
   }

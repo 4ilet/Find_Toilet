@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final ReturnVoid onPressed;
-  const CustomButton({super.key, required this.onPressed});
+  final String buttonText;
+  const CustomButton(
+      {super.key, required this.onPressed, this.buttonText = '완료'});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      child: const Text(
-        '완료',
+      child: Text(
+        buttonText,
       ),
     );
   }

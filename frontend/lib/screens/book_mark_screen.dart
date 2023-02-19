@@ -1,7 +1,10 @@
+import 'package:find_toilet/screens/review_form_screen.dart';
+import 'package:find_toilet/utilities/icon.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -76,22 +79,156 @@ class BookMarkList extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Column(children: [
-          Row(
-            children: [
-              CustomText(
-                title: folderName,
-                fontSize: FontSize.titleSize,
-                color: CustomColors.whiteColor,
-              ),
-              CustomText(
-                title: '$listCnt개',
-                fontSize: FontSize.defaultSize,
-                color: CustomColors.whiteColor,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                CustomText(
+                  title: folderName,
+                  fontSize: FontSize.titleSize,
+                  color: CustomColors.whiteColor,
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                CustomText(
+                  title: '$listCnt개',
+                  fontSize: FontSize.defaultSize,
+                  color: CustomColors.whiteColor,
+                  font: 'Noto Sans',
+                ),
+              ],
+            ),
           ),
-          const ExitPage(),
+          const ListItem(),
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: ExitPage(),
+          ),
         ]),
+      ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String font;
+  final StringList? available;
+  const ListItem({
+    super.key,
+    this.font = 'Noto Sans',
+    this.available,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    void toReview() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const ReviewForm()));
+    }
+
+    return CommonBox(
+      color: whiteColor,
+      height: 200,
+      width: 500,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                    color: CustomColors.mainColor,
+                    title: '광주시립도서관화장실',
+                    fontSize: FontSize.defaultSize,
+                    font: font),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.favorite_rounded,
+                          color: redColor,
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => const NavigationModal());
+                        },
+                        icon: const Icon(
+                          Icons.send,
+                          color: Colors.lightBlue,
+                        )),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWithIcon(
+                  icon: locationIcon,
+                  text: '광주광역시 북구 어쩌고길',
+                  font: font,
+                ),
+                TextWithIcon(
+                  icon: phoneIcon,
+                  text: '062-xxxx-xxxx',
+                  font: font,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                TextWithIcon(
+                    icon: clockIcon,
+                    text: '00:00 - 00:00',
+                    textColor: CustomColors.blackColor),
+                TextWithIcon(
+                  icon: startIcon,
+                  text: '4.3(30개)',
+                  iconColor: yellowColor,
+                ),
+              ],
+            ),
+            CustomText(
+              title: '이용 가능 시설',
+              fontSize: FontSize.smallSize,
+              color: CustomColors.mainColor,
+              font: font,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomText(
+                  title: '장애인용',
+                  fontSize: FontSize.smallSize,
+                  color: CustomColors.blackColor,
+                  font: font,
+                ),
+                CustomText(
+                    title: '유아용',
+                    fontSize: FontSize.smallSize,
+                    color: CustomColors.blackColor,
+                    font: font),
+                CustomText(
+                  title: '기저귀 교환대',
+                  fontSize: FontSize.smallSize,
+                  color: CustomColors.blackColor,
+                  font: font,
+                ),
+                CustomButton(
+                  onPressed: toReview,
+                  buttonText: '리뷰 남기기',
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

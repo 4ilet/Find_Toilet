@@ -9,8 +9,8 @@ typedef ReturnVoid = void Function();
 //* enums
 enum Themes { largeFont, defaultFont }
 
-enum FontSize { titleSize, largeSize, defaultSize }
+enum FontSize { titleSize, largeSize, defaultSize, smallSize }
 
 enum ExtendedFontSize { titleSize, largeSize, defaultSize }
 
-enum CustomColors { whiteColor, mainColor, redColor, blackColor }
+enum CustomColors { whiteColor, mainColor, redColor, blackColor, yellowColor }

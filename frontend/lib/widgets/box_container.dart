@@ -204,3 +204,17 @@ class FolderBox extends StatelessWidget {
     );
   }
 }
+
+class AddBox extends StatefulWidget {
+  const AddBox({super.key});
+
+  @override
+  State<AddBox> createState() => _AddBoxState();
+}
+
+class _AddBoxState extends State<AddBox> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
