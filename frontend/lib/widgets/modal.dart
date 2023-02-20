@@ -45,3 +45,18 @@ class NavigationModal extends StatelessWidget {
     );
   }
 }
+
+class HelpModal extends StatelessWidget {
+  const HelpModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Dialog(
+      child: CustomText(
+        title: '도움말',
+        fontSize: FontSize.largeSize,
+        color: CustomColors.blackColor,
+      ),
+    );
+  }
+}

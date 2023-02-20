@@ -45,7 +45,7 @@ class _ReviewFormState extends State<ReviewForm> {
                   IconButton(
                     onPressed: () => changeScore(i),
                     icon: Icon(
-                      startIcon,
+                      starIcon,
                       color: i <= score ? yellowColor : whiteColor,
                       size: 40,
                     ),

@@ -21,9 +21,8 @@ class CustomButton extends StatelessWidget {
 }
 
 class ExitPage extends StatelessWidget {
-  const ExitPage({
-    super.key,
-  });
+  final CustomColors color;
+  const ExitPage({super.key, this.color = CustomColors.whiteColor});
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +31,16 @@ class ExitPage extends StatelessWidget {
         Navigator.pop(context);
       },
       child: Row(
-        children: const [
+        children: [
           CustomText(
             title: '나가기',
             fontSize: FontSize.largeSize,
-            color: CustomColors.whiteColor,
+            color: color,
           ),
           Icon(
             Icons.chevron_right_rounded,
             size: 40,
-            color: whiteColor,
+            color: convertedColor(color),
           )
         ],
       ),

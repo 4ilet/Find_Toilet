@@ -29,14 +29,13 @@ class TextWithIcon extends StatelessWidget {
   final IconData icon;
   final String text, font;
   final FontSize fontSize;
-  final Color iconColor;
-  final CustomColors textColor;
+  final CustomColors textColor, iconColor;
   const TextWithIcon({
     super.key,
     required this.icon,
     required this.text,
     this.fontSize = FontSize.smallSize,
-    this.iconColor = mainColor,
+    this.iconColor = CustomColors.mainColor,
     this.textColor = CustomColors.blackColor,
     this.font = 'Kimm',
   });
@@ -47,7 +46,10 @@ class TextWithIcon extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: iconColor,
+          color: convertedColor(iconColor),
+        ),
+        const SizedBox(
+          width: 10,
         ),
         CustomText(
           title: text,
