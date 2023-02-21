@@ -18,3 +18,6 @@ const licenseIcon = Icons.brightness_7_outlined;
 
 const planeIcon = Icons.near_me_outlined;
 const bookMarkIcon = Icons.bookmark_border;
+
+const searchIcon = Icons.search_rounded;
+const closeIcon = Icons.close;
