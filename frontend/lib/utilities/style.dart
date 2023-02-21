@@ -1,38 +1,42 @@
+import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
 //** 색 관련
 const mainColor = Color(0xFF5957D4);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
+const redColor = Colors.red;
+const yellowColor = Colors.yellow;
+Color convertedColor(CustomColors color) {
+  switch (color) {
+    case CustomColors.whiteColor:
+      return whiteColor;
+    case CustomColors.mainColor:
+      return mainColor;
+    case CustomColors.blackColor:
+      return blackColor;
+    case CustomColors.redColor:
+      return redColor;
+    default:
+      return yellowColor;
+  }
+}
 
 //** 글씨 관련
 const double titleSize = 30;
 const double largeSize = 24;
 const double defaultSize = 19;
+const double smallSize = 15;
 
-enum FontSize { titleSize, largeSize, defaultSize }
-
-double convedSize(FontSize size) {
+double convertedSize(FontSize size) {
   switch (size) {
     case FontSize.titleSize:
       return titleSize;
     case FontSize.largeSize:
       return largeSize;
+    case FontSize.smallSize:
+      return smallSize;
     default:
       return defaultSize;
-  }
-}
-
-class WhiteText extends StatelessWidget {
-  final String title;
-  final FontSize fontSize;
-  const WhiteText({super.key, required this.title, required this.fontSize});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(color: whiteColor, fontSize: convedSize(fontSize)),
-    );
   }
 }
