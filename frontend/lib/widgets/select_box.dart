@@ -36,7 +36,7 @@ class _SelectBox extends State<SelectBox> {
             itemHeight: 50,
             value: dropdownValue,
             icon: const Icon(Icons.arrow_drop_down),
-            elevation: 16,
+            // elevation: 16,
             style: const TextStyle(color: Colors.black),
             onChanged: (String? value) {
               setState(() {

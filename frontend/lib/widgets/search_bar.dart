@@ -4,6 +4,7 @@ import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
 import 'package:find_toilet/utilities/icon.dart';
 import 'package:find_toilet/utilities/style.dart';
+import 'package:find_toilet/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -39,33 +40,35 @@ class _SearchBarState extends State<SearchBar> {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const SizedBox(
-          height: 100,
-        ),
+        const SizedBox(height: 100),
         // IconButton(onPressed: toSettings, icon: const Icon(hamburgerIcon)),
-        SizedBox(
-          width: 250,
+        Container(
+          width: 270,
           height: 40,
+          decoration: BoxDecoration(
+              boxShadow: const [defaultShadow],
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(5)),
           child: TextField(
+            style: const TextStyle(fontFamily: 'Noto Sans'),
             // autofocus: false,
             decoration: InputDecoration(
                 // icon: Icon(searchIcon),
                 hintText: '검색어를 입력하세요',
-                focusedBorder: const OutlineInputBorder(),
-                focusColor: mainColor,
-                prefixIcon: IconButton(
-                    onPressed: toSettings, icon: const Icon(hamburgerIcon)),
-                suffixIcon: IconButton(
-                  icon: const Icon(closeIcon),
-                  onPressed: toMain,
-                )),
+                // focusedBorder: const OutlineInputBorder(),
+                // focusColor: mainColor,
+                prefixIcon: CustomIconButton(
+                    icon: hamburgerIcon, iconSize: 30, onPressed: toSettings),
+                suffixIcon: CustomIconButton(
+                    icon: closeIcon, iconSize: 30, onPressed: toMain)),
           ),
         ),
         // const TextField(maxLines: 1),
-        IconButton(onPressed: toSearch, icon: const Icon(searchIcon)),
-        IconButton(onPressed: toBookMark, icon: const Icon(bookMarkIcon))
+        CustomIconButton(onPressed: toSearch, icon: searchIcon, iconSize: 30),
+        CustomIconButton(
+            onPressed: toBookMark, icon: bookMarkIcon, iconSize: 30)
       ],
     );
   }

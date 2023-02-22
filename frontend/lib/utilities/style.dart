@@ -6,7 +6,8 @@ const mainColor = Color(0xFF5957D4);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
 const redColor = Colors.red;
-const yellowColor = Colors.yellow;
+const yellowColor = Color(0xFFFFBF44);
+const greyColor = Colors.grey;
 Color convertedColor(CustomColors color) {
   switch (color) {
     case CustomColors.whiteColor:
@@ -40,3 +41,7 @@ double convertedSize(FontSize size) {
       return defaultSize;
   }
 }
+
+//* 그림자
+const defaultShadow = BoxShadow(
+    color: greyColor, blurRadius: 5, spreadRadius: 0, offset: Offset(0.5, 0.5));

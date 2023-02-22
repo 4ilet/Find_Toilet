@@ -13,9 +13,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      child: Text(
-        buttonText,
-      ),
+      child: Text(buttonText),
     );
   }
 }
@@ -44,6 +42,29 @@ class ExitPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class CustomIconButton extends StatelessWidget {
+  final Icon icon;
+  final double iconSize;
+  final ReturnVoid onPressed;
+  const CustomIconButton({
+    super.key,
+    required this.icon,
+    required this.iconSize,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      onPressed: onPressed,
+      icon: icon,
+      iconSize: iconSize,
     );
   }
 }
