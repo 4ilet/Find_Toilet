@@ -58,7 +58,7 @@
 - [ERD]()
 - [화면정의서]()
 
-## 개발팀 소개
+## 개발팀 소개 
 |<img src="https://avatars.githubusercontent.com/u/97578425?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/61959111?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/97578485?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/97578460?v=4" width="100" height="100"/>|
 |:---:|:---:|:---:|:---:|
 |**Backend**|**Backend**|**Frontend**|**Frontend**|
