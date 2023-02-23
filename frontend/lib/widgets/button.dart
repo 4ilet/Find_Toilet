@@ -68,3 +68,32 @@ class CustomIconButton extends StatelessWidget {
     );
   }
 }
+
+class CustomCircleButton extends StatelessWidget {
+  final Color color;
+  final bool shadow;
+  final double width, height;
+  final Widget child;
+
+  const CustomCircleButton({
+    super.key,
+    this.color = whiteColor,
+    this.shadow = true,
+    required this.width,
+    required this.height,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+          boxShadow: shadow ? [defaultShadow] : null),
+      width: width,
+      height: height,
+      child: child,
+    );
+  }
+}

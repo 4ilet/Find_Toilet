@@ -1,9 +1,10 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
-import 'package:find_toilet/utilities/icon.dart';
+import 'package:find_toilet/utilities/icondata.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -226,23 +227,25 @@ class _AddBoxState extends State<AddBox> {
         width: 150,
         color: whiteColor,
         child: const Center(
-            child: Icon(
-          Icons.add,
-          color: mainColor,
-          size: 50,
-        )),
+          child: CustomIcon(
+            icon: plusIcon,
+            color: mainColor,
+            size: 50,
+          ),
+        ),
       ),
     );
   }
 }
 
 //* 장소 목록 아이템
-class ListItem extends StatelessWidget {
+class ListItem extends StatefulWidget {
   final String font;
   final StringList available;
   final String toiletName, address, phoneNo, duration;
   final double score;
   final int reviewCnt;
+  final bool isLiked;
   const ListItem({
     super.key,
     this.font = 'Noto Sans',
@@ -253,7 +256,26 @@ class ListItem extends StatelessWidget {
     this.score = 4.3,
     this.reviewCnt = 30,
     this.available = const ['장애인용', '유아용', '기저귀 교환대'],
+    this.isLiked = false,
   });
+
+  @override
+  State<ListItem> createState() => _ListItemState();
+}
+
+class _ListItemState extends State<ListItem> {
+  late bool liked;
+  void changeLiked() {
+    setState(() {
+      liked = !liked;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    liked = widget.isLiked;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,107 +283,110 @@ class ListItem extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const ReviewForm(
-                    toiletName: '광주시립도서관화장실',
-                  )));
+              builder: (context) => ReviewForm(toiletName: widget.toiletName)));
     }
 
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: CommonBox(
-        color: whiteColor,
-        height: 200,
-        width: 500,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomText(
-                      color: CustomColors.mainColor,
-                      title: toiletName,
-                      fontSize: FontSize.defaultSize,
-                      font: font),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.favorite_rounded,
-                            color: redColor,
-                          )),
-                      IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => const NavigationModal());
-                          },
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.lightBlue,
-                          )),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWithIcon(
-                    icon: locationIcon,
-                    text: address,
-                    font: font,
-                  ),
-                  TextWithIcon(
-                    icon: phoneIcon,
-                    text: phoneNo,
-                    font: font,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWithIcon(
-                    icon: clockIcon,
-                    text: duration,
-                    textColor: CustomColors.blackColor,
-                    font: font,
-                  ),
-                  TextWithIcon(
-                      icon: starIcon,
-                      text: '$score ($reviewCnt개)',
-                      iconColor: CustomColors.yellowColor,
-                      font: font),
-                ],
-              ),
-              CustomText(
-                title: '이용 가능 시설',
-                fontSize: FontSize.smallSize,
-                color: CustomColors.mainColor,
-                font: font,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (String each in available)
+      child: GestureDetector(
+        onTap: () {},
+        child: CommonBox(
+          color: whiteColor,
+          height: 200,
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     CustomText(
-                      title: each,
-                      fontSize: FontSize.smallSize,
-                      color: CustomColors.blackColor,
-                      font: font,
+                        color: CustomColors.mainColor,
+                        title: widget.toiletName,
+                        fontSize: FontSize.defaultSize,
+                        font: widget.font),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: changeLiked,
+                          icon: CustomIcon(
+                              icon: liked ? heartIcon : emptyHeartIcon,
+                              color: redColor),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const NavigationModal());
+                            },
+                            icon: const CustomIcon(
+                              icon: planeIcon,
+                              color: Colors.lightBlue,
+                              size: 35,
+                            )),
+                      ],
                     ),
-                  CustomButton(
-                    onPressed: toReview,
-                    buttonText: '리뷰 남기기',
-                  )
-                ],
-              )
-            ],
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWithIcon(
+                      icon: locationIcon,
+                      text: widget.address,
+                      font: widget.font,
+                    ),
+                    TextWithIcon(
+                      icon: phoneIcon,
+                      text: widget.phoneNo,
+                      font: widget.font,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWithIcon(
+                      icon: clockIcon,
+                      text: widget.duration,
+                      textColor: CustomColors.blackColor,
+                      font: widget.font,
+                    ),
+                    TextWithIcon(
+                        icon: starIcon,
+                        text: '${widget.score} (${widget.reviewCnt}개)',
+                        iconColor: CustomColors.yellowColor,
+                        font: widget.font),
+                  ],
+                ),
+                CustomText(
+                  title: '이용 가능 시설',
+                  fontSize: FontSize.smallSize,
+                  color: CustomColors.mainColor,
+                  font: widget.font,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (String each in widget.available)
+                      CustomText(
+                        title: each,
+                        fontSize: FontSize.smallSize,
+                        color: CustomColors.blackColor,
+                        font: widget.font,
+                      ),
+                    CustomButton(
+                      onPressed: toReview,
+                      buttonText: '리뷰 남기기',
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -418,7 +443,7 @@ class _FilterBoxState extends State<FilterBox> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   child: CustomText(
                     title: showedFilter[i],
-                    fontSize: FontSize.defaultSize,
+                    fontSize: FontSize.smallSize,
                     color: selectedList[i]
                         ? CustomColors.whiteColor
                         : CustomColors.blackColor,

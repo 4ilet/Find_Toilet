@@ -6,9 +6,8 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class ToiletList extends StatefulWidget {
-  const ToiletList({
-    super.key,
-  });
+  final bool isMain;
+  const ToiletList({super.key, required this.isMain});
 
   @override
   State<ToiletList> createState() => _ToiletListState();
@@ -31,7 +30,7 @@ class _ToiletListState extends State<ToiletList> {
   @override
   Widget build(BuildContext context) {
     const List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
-    final double highLimit = MediaQuery.of(context).size.height * 0.9;
+    final double highLimit = MediaQuery.of(context).size.height * 0.8;
     return Positioned(
       bottom: 0,
       child: GestureDetector(
@@ -97,20 +96,23 @@ class _ToiletListState extends State<ToiletList> {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       CustomText(
-                        title: '검색 결과',
+                        title: widget.isMain ? '주변 화장실' : '검색 결과',
                         fontSize: FontSize.largeSize,
                         color: CustomColors.whiteColor,
                       ),
-                      SelectBox(selectList: sortOrder, width: 100, height: 30)
+                      widget.isMain
+                          ? const SizedBox()
+                          : const SelectBox(
+                              selectList: sortOrder, width: 120, height: 30)
                     ],
                   ),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: CustomText(
-                    title: '필터를 적용해 검색한 결과입니다',
+                    title: '필터를 적용한 결과입니다',
                     fontSize: FontSize.smallSize,
                     color: CustomColors.whiteColor,
                     font: 'Noto Sans',

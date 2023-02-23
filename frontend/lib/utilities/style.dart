@@ -1,7 +1,7 @@
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
-//** 색 관련
+//* 색 관련
 const mainColor = Color(0xFF5957D4);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
@@ -23,7 +23,7 @@ Color convertedColor(CustomColors color) {
   }
 }
 
-//** 글씨 관련
+//* 글씨 관련
 const double titleSize = 30;
 const double largeSize = 24;
 const double defaultSize = 19;
@@ -44,4 +44,4 @@ double convertedSize(FontSize size) {
 
 //* 그림자
 const defaultShadow = BoxShadow(
-    color: greyColor, blurRadius: 5, spreadRadius: 0, offset: Offset(0.5, 0.5));
+    color: greyColor, blurRadius: 1, spreadRadius: 0.1, offset: Offset(0, 1));
