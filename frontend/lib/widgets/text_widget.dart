@@ -44,13 +44,8 @@ class TextWithIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: convertedColor(iconColor),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
+        Icon(icon, color: convertedColor(iconColor)),
+        const SizedBox(width: 10),
         CustomText(
           title: text,
           fontSize: fontSize,

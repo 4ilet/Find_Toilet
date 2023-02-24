@@ -6,8 +6,9 @@ import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
-class Main extends StatelessWidget {
-  const Main({super.key});
+class Search extends StatelessWidget {
+  final String query;
+  const Search({super.key, required this.query});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class Main extends StatelessWidget {
                 height: MediaQuery.of(context).size.height,
                 child: const Center(
                   child: CustomText(
-                    title: '여기에 지도 들어감 \n 메인 페이지',
+                    title: '여기에 지도 들어감 \n 검색 페이지',
                     fontSize: FontSize.titleSize,
                     color: CustomColors.whiteColor,
                   ),
@@ -33,9 +34,12 @@ class Main extends StatelessWidget {
             ],
           ),
           Column(
-            children: const [SearchBar(isMain: true), FilterBox()],
+            children: [
+              SearchBar(isMain: false, query: query),
+              const FilterBox()
+            ],
           ),
-          const ToiletList(isMain: true),
+          const ToiletList(isMain: false),
         ],
       ),
     );

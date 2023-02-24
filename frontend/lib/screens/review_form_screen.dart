@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/icon.dart';
+import 'package:find_toilet/utilities/icondata.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
@@ -6,23 +6,23 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReviewForm extends StatefulWidget {
-  const ReviewForm({super.key});
+  final String toiletName;
+  const ReviewForm({super.key, required this.toiletName});
 
   @override
   State<ReviewForm> createState() => _ReviewFormState();
 }
 
 class _ReviewFormState extends State<ReviewForm> {
+  int score = -1;
+  void changeScore(int i) {
+    setState(() {
+      score = i;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    int score = -1;
-    void changeScore(int i) {
-      // print(i);
-      // setState() {
-      score = i;
-      // }
-    }
-
     return Scaffold(
       backgroundColor: mainColor,
       body: Padding(
@@ -30,8 +30,8 @@ class _ReviewFormState extends State<ReviewForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const CustomText(
-                title: '광주시립도서관화장실',
+            CustomText(
+                title: widget.toiletName,
                 fontSize: FontSize.largeSize,
                 color: CustomColors.whiteColor),
             const CustomText(
@@ -42,13 +42,13 @@ class _ReviewFormState extends State<ReviewForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (int i = 0; i < 5; i += 1)
-                  IconButton(
+                  CustomIconButton(
                     onPressed: () => changeScore(i),
                     icon: Icon(
                       starIcon,
                       color: i <= score ? yellowColor : whiteColor,
-                      size: 40,
                     ),
+                    iconSize: 50,
                   ),
               ],
             ),
