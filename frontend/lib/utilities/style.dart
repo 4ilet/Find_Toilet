@@ -40,3 +40,6 @@ double convertedSize(FontSize size) {
       return defaultSize;
   }
 }
+
+//* 글씨체 관련
+const notoSans = 'Noto Sans';

@@ -47,3 +47,25 @@ class ExitPage extends StatelessWidget {
     );
   }
 }
+
+class CustomIconButton extends StatelessWidget {
+  final CustomColors color;
+  final IconData icon;
+  final ReturnVoid onPressed;
+  const CustomIconButton({
+    super.key,
+    required this.color,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 37,
+      width: 30,
+      child: IconButton(
+          onPressed: onPressed, icon: Icon(icon, color: convertedColor(color))),
+    );
+  }
+}

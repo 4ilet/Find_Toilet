@@ -62,6 +62,10 @@ flutter:
   assets:
     - assets/logos/logo_2.png
     - assets/logos/logo_3.png
+    - assets/images/t_map.png
+    - assets/images/kakao_map.png
+    - assets/images/naver_map.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,6 +1,6 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
-import 'package:find_toilet/utilities/icon.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:flutter/material.dart';
 
 class Main extends StatelessWidget {
