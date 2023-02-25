@@ -2,8 +2,9 @@ import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
-import 'package:find_toilet/utilities/icondata.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
+import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:flutter/material.dart';
 
@@ -63,9 +64,17 @@ class _SearchBarState extends State<SearchBar> {
               border: InputBorder.none,
               hintText: '검색어를 입력하세요',
               prefixIcon: CustomIconButton(
-                  icon: hamburgerIcon, iconSize: 30, onPressed: toSettings),
+                icon: hamburgerIcon,
+                iconSize: 30,
+                onPressed: toSettings,
+                color: CustomColors.blackColor,
+              ),
               suffixIcon: CustomIconButton(
-                  icon: closeIcon, iconSize: 30, onPressed: toMain),
+                icon: closeIcon,
+                iconSize: 30,
+                onPressed: toMain,
+                color: CustomColors.blackColor,
+              ),
             ),
           ),
         ),
@@ -73,12 +82,20 @@ class _SearchBarState extends State<SearchBar> {
             width: 40,
             height: 40,
             child: CustomIconButton(
-                onPressed: toSearch, icon: searchIcon, iconSize: 30)),
+              onPressed: toSearch,
+              icon: searchIcon,
+              iconSize: 30,
+              color: CustomColors.blackColor,
+            )),
         CustomCircleButton(
             width: 40,
             height: 40,
             child: CustomIconButton(
-                onPressed: toBookMark, icon: bookMarkIcon, iconSize: 30)),
+              onPressed: toBookMark,
+              icon: bookMarkIcon,
+              iconSize: 30,
+              color: CustomColors.blackColor,
+            )),
       ],
     );
   }

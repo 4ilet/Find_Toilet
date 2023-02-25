@@ -95,22 +95,37 @@ class InputModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Column(children: [
-        CustomText(
+    return SimpleDialog(
+        title: CustomText(
             title: title,
-            fontSize: FontSize.largeSize,
+            fontSize: FontSize.defaultSize,
             color: CustomColors.blackColor),
-        const Expanded(child: TextField()),
-        Row(
-          children: [
-            CustomButton(
-                onPressed: () => routerPop(context: context), buttonText: '수정'),
-            CustomButton(
-                onPressed: () => routerPop(context: context), buttonText: '취소')
-          ],
-        )
-      ]),
-    );
+        children: [
+          const Expanded(
+              child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: TextField(),
+          )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CustomButton(
+                  onPressed: () => routerPop(context: context),
+                  buttonText: '수정'),
+              CustomButton(
+                  onPressed: () => routerPop(context: context),
+                  buttonText: '취소')
+            ],
+          ),
+        ]);
+  }
+}
+
+class CustomModal extends StatelessWidget {
+  const CustomModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SimpleDialog();
   }
 }

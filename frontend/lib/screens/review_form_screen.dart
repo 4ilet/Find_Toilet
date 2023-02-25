@@ -1,4 +1,3 @@
-import 'package:find_toilet/utilities/icondata.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -45,11 +44,10 @@ class _ReviewFormState extends State<ReviewForm> {
                 for (int i = 0; i < 5; i += 1)
                   CustomIconButton(
                     onPressed: () => changeScore(i),
-                    icon: Icon(
-                      starIcon,
-                      color: i <= score ? yellowColor : whiteColor,
-                    ),
-                    iconSize: 50,
+                    icon: starIcon,
+                    color: i <= score
+                        ? CustomColors.yellowColor
+                        : CustomColors.whiteColor,
                   ),
               ],
             ),

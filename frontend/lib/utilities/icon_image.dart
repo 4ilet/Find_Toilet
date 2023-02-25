@@ -22,8 +22,21 @@ const bookMarkIcon = Icons.bookmark_border;
 const editIcon = Icons.edit;
 const deleteIcon = Icons.delete;
 
+//* filter 선택
+const toLeftIcon = Icons.arrow_left_sharp;
+const toRightIcon = Icons.arrow_right_sharp;
+const toDownIcon = Icons.arrow_drop_down;
+
+const heartIcon = Icons.favorite;
+const emptyHeartIcon = Icons.favorite_border_rounded;
+
 //* image
 const logo = 'assets/logos/logo_2.png';
 const naverMap = 'assets/images/naver_map.png';
 const kakaoMap = 'assets/images/kakao_map.png';
 const tMap = 'assets/images/t_map.png';
+
+const searchIcon = Icons.search_rounded;
+const closeIcon = Icons.close;
+
+const plusIcon = Icons.add;

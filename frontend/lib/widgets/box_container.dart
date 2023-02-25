@@ -1,6 +1,5 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
-import 'package:find_toilet/utilities/icondata.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -426,7 +425,12 @@ class _FilterBoxState extends State<FilterBox> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CustomIconButton(icon: toLeftIcon, iconSize: 50, onPressed: () {}),
+        CustomIconButton(
+          icon: toLeftIcon,
+          iconSize: 50,
+          onPressed: () {},
+          color: CustomColors.mainColor,
+        ),
         for (int i = 0; i < 3; i += 1)
           GestureDetector(
             onTap: () => changeSelected(i),
@@ -452,7 +456,12 @@ class _FilterBoxState extends State<FilterBox> {
               ),
             ),
           ),
-        CustomIconButton(icon: toRightIcon, iconSize: 50, onPressed: () {}),
+        CustomIconButton(
+          icon: toRightIcon,
+          iconSize: 50,
+          onPressed: () {},
+          color: CustomColors.mainColor,
+        ),
       ],
     );
   }
