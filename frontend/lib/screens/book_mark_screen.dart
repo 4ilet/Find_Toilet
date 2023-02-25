@@ -100,16 +100,14 @@ class BookMarkList extends StatelessWidget {
             ),
           ),
           SingleChildScrollView(
-              child: SizedBox(
-            child: Column(
-              children: [
-                for (int i = 0; i < 7; i += 1)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: ListItem(),
-                  ),
-              ],
-            ),
+              child: Column(
+            children: [
+              for (int i = 0; i < 7; i += 1)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: ListItem(),
+                ),
+            ],
           )),
           const Padding(
             padding: EdgeInsets.all(20),
