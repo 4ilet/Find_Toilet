@@ -1,6 +1,8 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
 import 'package:find_toilet/utilities/icondata.dart';
+import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
@@ -90,12 +92,12 @@ class _CommonBoxState extends State<CommonBox> {
 
 //* 즐겨찾기 상자 한 줄
 class BookMarkBox extends StatelessWidget {
-  bool onlyOne, add;
-  String folderName1;
-  String folderName2;
-  int listCnt1;
-  int listCnt2;
-  BookMarkBox({
+  final bool onlyOne, add;
+  final String folderName1;
+  final String folderName2;
+  final int listCnt1;
+  final int listCnt2;
+  const BookMarkBox({
     super.key,
     this.onlyOne = false,
     this.folderName1 = '기본',
@@ -148,18 +150,10 @@ class FolderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void showBookMark() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BookMarkList(
-                    folderName: folderName,
-                    listCnt: listCnt,
-                  )));
-    }
-
     return GestureDetector(
-      onTap: showBookMark,
+      onTap: () => routerPush(
+          context: context,
+          page: BookMarkList(folderName: folderName, listCnt: listCnt)),
       child: CommonBox(
           height: 150,
           width: 150,
@@ -180,28 +174,34 @@ class FolderBox extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 37,
-                          width: 30,
-                          child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.edit, color: mainColor)),
+                        CustomIconButton(
+                          icon: editIcon,
+                          color: CustomColors.mainColor,
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const InputModal(title: '즐겨 찾기 폴더명 수정')),
                         ),
-                        SizedBox(
-                          height: 37,
-                          width: 30,
-                          child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.delete, color: redColor)),
+                        CustomIconButton(
+                          icon: deleteIcon,
+                          color: CustomColors.redColor,
+                          onPressed: () {},
                         ),
                       ],
                     ),
                   ],
                 ),
-                CustomText(
-                    title: '$listCnt 개',
-                    fontSize: FontSize.defaultSize,
-                    color: CustomColors.blackColor)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomText(
+                      title: '$listCnt 개',
+                      fontSize: FontSize.smallSize,
+                      color: CustomColors.blackColor,
+                      font: notoSans,
+                    ),
+                  ],
+                )
               ],
             ),
           )),
@@ -248,7 +248,6 @@ class ListItem extends StatefulWidget {
   final bool isLiked;
   const ListItem({
     super.key,
-    this.font = 'Noto Sans',
     this.toiletName = '광주시립도서관화장실',
     this.address = '광주광역시 북구 어쩌고길',
     this.phoneNo = '062-xxx-xxxx',
@@ -257,6 +256,7 @@ class ListItem extends StatefulWidget {
     this.reviewCnt = 30,
     this.available = const ['장애인용', '유아용', '기저귀 교환대'],
     this.isLiked = false,
+    this.font = notoSans,
   });
 
   @override

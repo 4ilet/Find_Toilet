@@ -47,13 +47,14 @@ class ExitPage extends StatelessWidget {
 }
 
 class CustomIconButton extends StatelessWidget {
-  final Icon icon;
   final double iconSize;
   final ReturnVoid onPressed;
+  final CustomColors color;
+  final IconData icon;
   const CustomIconButton({
     super.key,
+    required this.color,
     required this.icon,
-    required this.iconSize,
     required this.onPressed,
   });
 

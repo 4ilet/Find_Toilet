@@ -45,3 +45,6 @@ double convertedSize(FontSize size) {
 //* 그림자
 const defaultShadow = BoxShadow(
     color: greyColor, blurRadius: 1, spreadRadius: 0.1, offset: Offset(0, 1));
+
+//* 글씨체 관련
+const notoSans = 'Noto Sans';

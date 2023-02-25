@@ -1,4 +1,8 @@
+import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
+import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +16,8 @@ class NavigationModal extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
-            Row(
-              // crossAxisAlignment: CrossAxisAlignment.end,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: const [
                 CloseButton(),
               ],
@@ -29,13 +33,37 @@ class NavigationModal extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
-                  children: const [Text('네이버맵')],
+                  children: [
+                    Image.asset(naverMap),
+                    const CustomText(
+                      title: '네이버맵',
+                      fontSize: FontSize.defaultSize,
+                      color: CustomColors.blackColor,
+                      font: notoSans,
+                    )
+                  ],
                 ),
                 Column(
-                  children: const [Text('카카오맵')],
+                  children: [
+                    Image.asset(kakaoMap),
+                    const CustomText(
+                      title: '카카오맵',
+                      fontSize: FontSize.defaultSize,
+                      color: CustomColors.blackColor,
+                      font: notoSans,
+                    )
+                  ],
                 ),
                 Column(
-                  children: const [Text('T맵')],
+                  children: [
+                    Image.asset(tMap),
+                    const CustomText(
+                      title: 'T맵',
+                      fontSize: FontSize.defaultSize,
+                      color: CustomColors.blackColor,
+                      font: notoSans,
+                    )
+                  ],
                 ),
               ],
             ),
@@ -57,6 +85,32 @@ class HelpModal extends StatelessWidget {
         fontSize: FontSize.largeSize,
         color: CustomColors.blackColor,
       ),
+    );
+  }
+}
+
+class InputModal extends StatelessWidget {
+  final String title;
+  const InputModal({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(children: [
+        CustomText(
+            title: title,
+            fontSize: FontSize.largeSize,
+            color: CustomColors.blackColor),
+        const Expanded(child: TextField()),
+        Row(
+          children: [
+            CustomButton(
+                onPressed: () => routerPop(context: context), buttonText: '수정'),
+            CustomButton(
+                onPressed: () => routerPop(context: context), buttonText: '취소')
+          ],
+        )
+      ]),
     );
   }
 }

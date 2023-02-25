@@ -50,7 +50,7 @@ class _BookMarkMainState extends State<BookMarkMain> {
                 listCnt2: folderCntList[2 * i + 1],
               ),
             remain == 0
-                ? BookMarkBox(onlyOne: true, add: true)
+                ? const BookMarkBox(onlyOne: true, add: true)
                 : BookMarkBox(
                     add: true,
                     folderName1: folderNameList.last,
@@ -94,12 +94,23 @@ class BookMarkList extends StatelessWidget {
                   title: '$listCnt개',
                   fontSize: FontSize.defaultSize,
                   color: CustomColors.whiteColor,
-                  font: 'Noto Sans',
+                  font: notoSans,
                 ),
               ],
             ),
           ),
-          const ListItem(),
+          SingleChildScrollView(
+              child: SizedBox(
+            child: Column(
+              children: [
+                for (int i = 0; i < 7; i += 1)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: ListItem(),
+                  ),
+              ],
+            ),
+          )),
           const Padding(
             padding: EdgeInsets.all(20),
             child: ExitPage(),
