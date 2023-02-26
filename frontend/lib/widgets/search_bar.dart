@@ -2,6 +2,7 @@ import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
+import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -20,11 +21,6 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
-    void toBookMark() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BookMarkMain(folderCnt: 4)));
-    }
-
     void toSettings() {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Settings()));
@@ -91,7 +87,8 @@ class _SearchBarState extends State<SearchBar> {
             width: 40,
             height: 40,
             child: CustomIconButton(
-              onPressed: toBookMark,
+              onPressed: () => routerPush(
+                  context: context, page: const BookMarkMain(folderCnt: 4)),
               icon: bookMarkIcon,
               iconSize: 30,
               color: CustomColors.blackColor,

@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 //* 즐겨찾기 메인 화면 (폴더 존재)
 class BookMarkMain extends StatefulWidget {
   final String nickname;
-  int folderCnt;
-  BookMarkMain({super.key, this.nickname = '포일렛', this.folderCnt = 1});
+  final int folderCnt;
+  const BookMarkMain({super.key, this.nickname = '포일렛', this.folderCnt = 1});
 
   @override
   State<BookMarkMain> createState() => _BookMarkMainState();
@@ -22,10 +22,8 @@ class _BookMarkMainState extends State<BookMarkMain> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      quot = widget.folderCnt ~/ 2;
-      remain = widget.folderCnt % 2;
-    });
+    quot = widget.folderCnt ~/ 2;
+    remain = widget.folderCnt % 2;
   }
 
   @override

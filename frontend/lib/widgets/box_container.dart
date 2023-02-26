@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
   final String text;
-  late bool selected;
-  ThemeBox({super.key, required this.text, required this.selected});
+  final bool selected;
+  const ThemeBox({super.key, required this.text, required this.selected});
 
   @override
   State<ThemeBox> createState() => _ThemeBoxState();
@@ -33,7 +33,7 @@ class _ThemeBoxState extends State<ThemeBox> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              CommonBox(
+              const CommonBox(
                 color: Colors.grey,
                 height: 130,
                 width: 130,
@@ -53,8 +53,8 @@ class CommonBox extends StatefulWidget {
   final Widget? child;
   final Color? color;
   final double height, width;
-  late bool selected;
-  CommonBox({
+  final bool selected;
+  const CommonBox({
     super.key,
     this.child,
     this.color,
@@ -149,6 +149,9 @@ class FolderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String printedName = folderName.length < 3
+        ? folderName
+        : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
     return GestureDetector(
       onTap: () => routerPush(
           context: context,
@@ -158,7 +161,7 @@ class FolderBox extends StatelessWidget {
           width: 150,
           color: whiteColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -166,7 +169,7 @@ class FolderBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomText(
-                      title: folderName,
+                      title: printedName,
                       fontSize: FontSize.defaultSize,
                       color: CustomColors.mainColor,
                     ),
@@ -176,15 +179,20 @@ class FolderBox extends StatelessWidget {
                         CustomIconButton(
                           icon: editIcon,
                           color: CustomColors.mainColor,
-                          onPressed: () => showDialog(
+                          onPressed: showModal(
                               context: context,
-                              builder: (context) =>
-                                  const InputModal(title: '즐겨 찾기 폴더명 수정')),
+                              page: const InputModal(
+                                title: '즐겨 찾기 폴더명 수정',
+                                buttonText: '수정',
+                              )),
+                          iconSize: 25,
                         ),
                         CustomIconButton(
                           icon: deleteIcon,
                           color: CustomColors.redColor,
-                          onPressed: () {},
+                          onPressed: showModal(
+                              context: context, page: const DeleteModal()),
+                          iconSize: 25,
                         ),
                       ],
                     ),
@@ -220,12 +228,17 @@ class _AddBoxState extends State<AddBox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
-      child: CommonBox(
+      onTap: () => showDialog(
+          context: context,
+          builder: (context) => const InputModal(
+                title: '즐겨 찾기 폴더 생성',
+                buttonText: '만들기',
+              )),
+      child: const CommonBox(
         height: 150,
         width: 150,
         color: whiteColor,
-        child: const Center(
+        child: Center(
           child: CustomIcon(
             icon: plusIcon,
             color: mainColor,
