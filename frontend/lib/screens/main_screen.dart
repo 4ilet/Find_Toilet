@@ -32,10 +32,11 @@ class Main extends StatelessWidget {
               ),
             ],
           ),
-          Column(
-            children: const [SearchBar(isMain: true), FilterBox()],
-          ),
-          const ToiletList(isMain: true),
+          Column(children: const [SearchBar(isMain: true), FilterBox()]),
+          // const ToiletList(isMain: true),
+          const ToiletBottomSheet(
+            isMain: true,
+          )
         ],
       ),
     );

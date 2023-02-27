@@ -299,7 +299,7 @@ class _ListItemState extends State<ListItem> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
         onTap: () {},
         child: CommonBox(

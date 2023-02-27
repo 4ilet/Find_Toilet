@@ -2,6 +2,7 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/scroll_view.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -72,11 +73,11 @@ class BookMarkList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-        child: Column(children: [
-          Padding(
+        backgroundColor: mainColor,
+        body: ToiletScrollView(
+          toolbarHeight: 50,
+          expandedHeight: 80,
+          flexibleSpace: Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
@@ -94,25 +95,13 @@ class BookMarkList extends StatelessWidget {
                   color: CustomColors.whiteColor,
                   font: notoSans,
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: ExitPage(),
+                ),
               ],
             ),
           ),
-          SingleChildScrollView(
-              child: Column(
-            children: [
-              for (int i = 0; i < 7; i += 1)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: ListItem(),
-                ),
-            ],
-          )),
-          const Padding(
-            padding: EdgeInsets.all(20),
-            child: ExitPage(),
-          ),
-        ]),
-      ),
-    );
+        ));
   }
 }

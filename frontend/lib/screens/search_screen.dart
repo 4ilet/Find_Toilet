@@ -39,7 +39,7 @@ class Search extends StatelessWidget {
               const FilterBox()
             ],
           ),
-          const ToiletList(isMain: false),
+          const ToiletBottomSheet(isMain: false),
         ],
       ),
     );
