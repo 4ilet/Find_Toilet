@@ -1,5 +1,4 @@
 import 'package:find_toilet/utilities/settings_utils.dart';
-import 'package:find_toilet/utilities/icondata.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';

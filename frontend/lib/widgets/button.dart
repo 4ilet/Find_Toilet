@@ -1,5 +1,6 @@
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,7 @@ class CustomIconButton extends StatelessWidget {
     required this.color,
     required this.icon,
     required this.onPressed,
+    this.iconSize = 30,
   });
 
   @override
@@ -64,8 +66,11 @@ class CustomIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       onPressed: onPressed,
-      icon: icon,
-      iconSize: iconSize,
+      icon: CustomIcon(
+        icon: icon,
+        color: convertedColor(color),
+        size: iconSize,
+      ),
     );
   }
 }

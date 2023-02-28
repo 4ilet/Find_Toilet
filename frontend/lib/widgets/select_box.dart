@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/icondata.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/widgets/icon.dart';
 import 'package:flutter/material.dart';
