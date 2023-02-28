@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:find_toilet/screens/utils/utils.dart';
-import 'package:find_toilet/screens/utils/tile_servers.dart';
-import 'package:find_toilet/screens/utils/viewport_painter.dart';
+import 'package:find_toilet/utilities/utils.dart';
+import 'package:find_toilet/utilities/tile_servers.dart';
+import 'package:find_toilet/utilities/viewport_painter.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
