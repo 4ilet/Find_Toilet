@@ -10,7 +10,7 @@ class CustomText extends StatelessWidget {
       {super.key,
       required this.title,
       required this.fontSize,
-      required this.color,
+      this.color = CustomColors.blackColor,
       this.font = 'Kimm'});
 
   @override

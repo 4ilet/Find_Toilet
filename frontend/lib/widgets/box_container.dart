@@ -153,7 +153,7 @@ class FolderBox extends StatelessWidget {
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
     return GestureDetector(
-      onTap: () => routerPush(
+      onTap: routerPush(
           context: context,
           page: BookMarkList(folderName: folderName, listCnt: listCnt)),
       child: CommonBox(
@@ -291,13 +291,6 @@ class _ListItemState extends State<ListItem> {
 
   @override
   Widget build(BuildContext context) {
-    void toReview() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ReviewForm(toiletName: widget.toiletName)));
-    }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
@@ -323,18 +316,17 @@ class _ListItemState extends State<ListItem> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: changeLiked,
+                          onPressed: showModal(
+                              context: context,
+                              page: const AddToBookMarkModal()),
                           icon: CustomIcon(
                               icon: liked ? heartIcon : emptyHeartIcon,
                               color: redColor),
                         ),
                         IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const NavigationModal());
-                            },
+                            onPressed: showModal(
+                                context: context,
+                                page: const NavigationModal()),
                             icon: const CustomIcon(
                               icon: planeIcon,
                               color: Colors.lightBlue,
@@ -365,7 +357,6 @@ class _ListItemState extends State<ListItem> {
                     TextWithIcon(
                       icon: clockIcon,
                       text: widget.duration,
-                      textColor: CustomColors.blackColor,
                       font: widget.font,
                     ),
                     TextWithIcon(
@@ -388,11 +379,12 @@ class _ListItemState extends State<ListItem> {
                       CustomText(
                         title: each,
                         fontSize: FontSize.smallSize,
-                        color: CustomColors.blackColor,
                         font: widget.font,
                       ),
                     CustomButton(
-                      onPressed: toReview,
+                      onPressed: routerPush(
+                          context: context,
+                          page: ReviewForm(toiletName: widget.toiletName)),
                       buttonText: '리뷰 남기기',
                     )
                   ],

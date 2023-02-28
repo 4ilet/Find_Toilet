@@ -1,4 +1,5 @@
 import 'package:find_toilet/screens/main_screen.dart';
+import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -19,11 +20,6 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
     Themes selected = Themes.largeFont;
     Themes defaultFont = Themes.defaultFont;
     Themes largeFont = Themes.largeFont;
-
-    void toMain() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Main()));
-    }
 
     void changeTheme(Themes fontSize) {
       if (fontSize == Themes.defaultFont) {
@@ -70,7 +66,8 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
               ),
             ],
           ),
-          CustomButton(onPressed: toMain)
+          CustomButton(
+              onPressed: routerPush(context: context, page: const Main()))
         ],
       ),
     );

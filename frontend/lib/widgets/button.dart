@@ -1,24 +1,42 @@
+import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
+//* 버튼
 class CustomButton extends StatelessWidget {
   final ReturnVoid onPressed;
   final String buttonText;
+  final CustomColors textColor;
+  final Color? buttonColor;
+  final FontSize fontSize;
   const CustomButton(
-      {super.key, required this.onPressed, this.buttonText = '완료'});
+      {super.key,
+      required this.onPressed,
+      this.buttonText = '완료',
+      this.textColor = CustomColors.mainColor,
+      this.buttonColor = whiteColor,
+      this.fontSize = FontSize.defaultSize});
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      child: Text(buttonText),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(buttonColor),
+      ),
+      child: CustomText(
+        title: buttonText,
+        color: textColor,
+        fontSize: fontSize,
+      ),
     );
   }
 }
 
+//* 나가기 버튼
 class ExitPage extends StatelessWidget {
   final CustomColors color;
   const ExitPage({super.key, this.color = CustomColors.whiteColor});
@@ -26,9 +44,7 @@ class ExitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
+      onTap: routerPop(context: context),
       child: Row(
         children: [
           CustomText(
@@ -36,8 +52,8 @@ class ExitPage extends StatelessWidget {
             fontSize: FontSize.largeSize,
             color: color,
           ),
-          Icon(
-            Icons.chevron_right_rounded,
+          CustomIcon(
+            icon: Icons.chevron_right_rounded,
             size: 40,
             color: convertedColor(color),
           )
@@ -47,6 +63,7 @@ class ExitPage extends StatelessWidget {
   }
 }
 
+//* 아이콘 버튼
 class CustomIconButton extends StatelessWidget {
   final double iconSize;
   final ReturnVoid onPressed;
@@ -75,6 +92,7 @@ class CustomIconButton extends StatelessWidget {
   }
 }
 
+//* 원으로 감싸진 버튼
 class CustomCircleButton extends StatelessWidget {
   final Color color;
   final bool shadow;
