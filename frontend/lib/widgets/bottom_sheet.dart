@@ -18,7 +18,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-        minChildSize: 0.4,
+        minChildSize: 0.08,
         maxChildSize: 0.8,
         builder: (BuildContext context, ScrollController scrollController) {
           return CustomScrollView(controller: scrollController, slivers: [
