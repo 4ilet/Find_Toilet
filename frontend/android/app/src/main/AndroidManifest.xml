@@ -1,5 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.find_toilet">
+    <queries>
+    <!-- If your app checks for SMS support -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="sms" />
+    </intent>
+    <!-- If your app checks for call support -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="tel" />
+    </intent>
+    </queries>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
    <application
         android:label="find_toilet"

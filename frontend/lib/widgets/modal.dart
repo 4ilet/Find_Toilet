@@ -5,6 +5,7 @@ import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //* 내비게이션 앱 연결 모달
 class NavigationModal extends StatelessWidget {
@@ -18,6 +19,20 @@ class NavigationModal extends StatelessWidget {
       Image.asset(kakaoMap),
       Image.asset(tMap)
     ];
+    VoidFuncList toMapApp = [
+      () async {
+        //* 분기 처리 => 앱 없으면 웹으로?
+        // await launchUrl(Uri(scheme: 'https', host: 'play.google.com'),
+        //     mode: LaunchMode.externalApplication);
+        // await launch('kakaomap://open');
+        // await launch('kakaomap://place?id=SES0426');
+      },
+      () async {
+        await launchUrl(Uri.parse('kakaomap://open'),
+            mode: LaunchMode.externalApplication);
+      },
+      () {},
+    ];
     return CustomModalWithClose(
       title: '내비게이션 켜기',
       children: [
@@ -27,7 +42,10 @@ class NavigationModal extends StatelessWidget {
             for (int i = 0; i < 3; i += 1)
               Column(
                 children: [
-                  imgList[i],
+                  GestureDetector(
+                    onTap: toMapApp[i],
+                    child: imgList[i],
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomText(

@@ -27,7 +27,7 @@ class _ReviewFormState extends State<ReviewForm> {
     return Scaffold(
       backgroundColor: mainColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -42,7 +42,7 @@ class _ReviewFormState extends State<ReviewForm> {
               font: notoSans,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -63,7 +63,12 @@ class _ReviewFormState extends State<ReviewForm> {
               width: 350,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), color: whiteColor),
-              child: const TextField(maxLines: 10),
+              child: const TextField(
+                maxLines: 10,
+                style: TextStyle(
+                  fontFamily: notoSans,
+                ),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

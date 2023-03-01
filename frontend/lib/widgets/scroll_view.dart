@@ -16,6 +16,7 @@ class ToiletScrollView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
       SliverAppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 40,
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
           pinned: true,

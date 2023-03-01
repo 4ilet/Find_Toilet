@@ -180,11 +180,12 @@ class FolderBox extends StatelessWidget {
                           icon: editIcon,
                           color: CustomColors.mainColor,
                           onPressed: showModal(
-                              context: context,
-                              page: const InputModal(
-                                title: '즐겨 찾기 폴더명 수정',
-                                buttonText: '수정',
-                              )),
+                            context: context,
+                            page: const InputModal(
+                              title: '즐겨 찾기 폴더명 수정',
+                              buttonText: '수정',
+                            ),
+                          ),
                           iconSize: 25,
                         ),
                         CustomIconButton(
@@ -382,6 +383,7 @@ class _ListItemState extends State<ListItem> {
                         font: widget.font,
                       ),
                     CustomButton(
+                      fontSize: FontSize.smallSize,
                       onPressed: routerPush(
                           context: context,
                           page: ReviewForm(toiletName: widget.toiletName)),

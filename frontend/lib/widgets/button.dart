@@ -1,4 +1,5 @@
 import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/icon.dart';
@@ -53,7 +54,7 @@ class ExitPage extends StatelessWidget {
             color: color,
           ),
           CustomIcon(
-            icon: Icons.chevron_right_rounded,
+            icon: exitIcon,
             size: 40,
             color: convertedColor(color),
           )
@@ -83,6 +84,7 @@ class CustomIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       onPressed: onPressed,
+      iconSize: iconSize,
       icon: CustomIcon(
         icon: icon,
         color: convertedColor(color),
