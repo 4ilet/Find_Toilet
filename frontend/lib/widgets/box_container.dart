@@ -327,7 +327,11 @@ class _ListItemState extends State<ListItem> {
                         IconButton(
                             onPressed: showModal(
                                 context: context,
-                                page: const NavigationModal()),
+                                page: NavigationModal(
+                                  startPoint: const [37.537229, 127.005515],
+                                  endPoint: const [37.4979502, 127.0276368],
+                                  destination: widget.toiletName,
+                                )),
                             icon: const CustomIcon(
                               icon: planeIcon,
                               color: Colors.lightBlue,

@@ -9,7 +9,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 //* 내비게이션 앱 연결 모달
 class NavigationModal extends StatelessWidget {
-  const NavigationModal({super.key});
+  final List<double> startPoint, endPoint;
+  final String destination;
+  const NavigationModal({
+    super.key,
+    required this.startPoint,
+    required this.endPoint,
+    required this.destination,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +26,25 @@ class NavigationModal extends StatelessWidget {
       Image.asset(kakaoMap),
       Image.asset(tMap)
     ];
-    VoidFuncList toMapApp = [
-      () async {
-        //* 분기 처리 => 앱 없으면 웹으로?
-        // await launchUrl(Uri(scheme: 'https', host: 'play.google.com'),
-        //     mode: LaunchMode.externalApplication);
-        // await launch('kakaomap://open');
-        // await launch('kakaomap://place?id=SES0426');
-      },
-      () async {
-        await launchUrl(Uri.parse('kakaomap://open'),
-            mode: LaunchMode.externalApplication);
-      },
-      () {},
+    List<Uri> uriList = [
+      Uri.parse(
+          'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=com.example.myapp'),
+      Uri.parse(
+          'kakaomap://route?sp=${startPoint[0]},${startPoint[1]}&ep=${endPoint[0]},${endPoint[1]}&by=CAR'),
+      Uri.parse('tmap://open')
     ];
+    ReturnVoid toMapApp(int i) {
+      return () async {
+        // final uri = uriList[i];
+        // await launchUrl(uri, mode: LaunchMode.externalApplication);
+        final newUri = Uri.parse(
+            'https://map.naver.com/v5/directions/14134997.483033512,4519704.42999858,광화문,13161322,PLACE_POI/14130204.52216987,4512164.397202961,대교아파트,19000666,PLACE_POI/-/transit?c=12,0,0,0,dh'
+            // 'https://apis.openapi.sk.com/tmap/routes/prediction?version=1&callback={callback}'
+            );
+        await launchUrl(newUri);
+      };
+    }
+
     return CustomModalWithClose(
       title: '내비게이션 켜기',
       children: [
@@ -43,7 +55,7 @@ class NavigationModal extends StatelessWidget {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: toMapApp[i],
+                    onTap: toMapApp(i),
                     child: imgList[i],
                   ),
                   Padding(
