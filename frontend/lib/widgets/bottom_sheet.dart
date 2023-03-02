@@ -18,7 +18,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.08,
+      initialChildSize: widget.isMain ? 0.4 : 0.08,
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
@@ -58,7 +58,8 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                 : SelectBox(
                                     selectList: sortOrder,
                                     width: 120,
-                                    height: 30)
+                                    height: 25,
+                                  ),
                           ],
                         ),
                       ),
