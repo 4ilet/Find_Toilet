@@ -73,35 +73,36 @@ class BookMarkList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: mainColor,
-        body: ToiletScrollView(
-          toolbarHeight: 50,
-          expandedHeight: 80,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                CustomText(
-                  title: folderName,
-                  fontSize: FontSize.titleSize,
-                  color: CustomColors.whiteColor,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                CustomText(
-                  title: '$listCnt개',
-                  fontSize: FontSize.defaultSize,
-                  color: CustomColors.whiteColor,
-                  font: notoSans,
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ExitPage(),
-                ),
-              ],
-            ),
+      backgroundColor: mainColor,
+      body: ToiletScrollView(
+        toolbarHeight: 50,
+        expandedHeight: 80,
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              CustomText(
+                title: folderName,
+                fontSize: FontSize.titleSize,
+                color: CustomColors.whiteColor,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              CustomText(
+                title: '$listCnt개',
+                fontSize: FontSize.defaultSize,
+                color: CustomColors.whiteColor,
+                font: notoSans,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: ExitPage(),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

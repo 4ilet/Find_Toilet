@@ -21,6 +21,7 @@ const bookMarkIcon = Icons.bookmark_border;
 
 const editIcon = Icons.edit;
 const deleteIcon = Icons.delete;
+const exitIcon = Icons.chevron_right_rounded;
 
 //* filter 선택
 const toLeftIcon = Icons.arrow_left_sharp;

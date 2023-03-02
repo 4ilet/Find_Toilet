@@ -18,11 +18,15 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-        minChildSize: 0.08,
-        maxChildSize: 0.8,
-        builder: (BuildContext context, ScrollController scrollController) {
-          return CustomScrollView(controller: scrollController, slivers: [
+      initialChildSize: widget.isMain ? 0.4 : 0.08,
+      minChildSize: 0.08,
+      maxChildSize: 0.8,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return CustomScrollView(
+          controller: scrollController,
+          slivers: [
             SliverAppBar(
+              automaticallyImplyLeading: false,
               toolbarHeight: 40,
               backgroundColor: Colors.white10,
               pinned: true,
@@ -54,7 +58,8 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                 : SelectBox(
                                     selectList: sortOrder,
                                     width: 120,
-                                    height: 30)
+                                    height: 25,
+                                  ),
                           ],
                         ),
                       ),
@@ -86,8 +91,10 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                   );
                 },
               ),
-            )
-          ]);
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 }

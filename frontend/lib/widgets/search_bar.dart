@@ -21,25 +21,6 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
-    void toSettings() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Settings()));
-    }
-
-    void toSearch() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const Search(
-                    query: '광주',
-                  )));
-    }
-
-    void toMain() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Main()));
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -55,20 +36,18 @@ class _SearchBarState extends State<SearchBar> {
             controller: widget.isMain
                 ? null
                 : TextEditingController(text: widget.query),
-            style: const TextStyle(fontFamily: 'Noto Sans'),
+            style: const TextStyle(fontFamily: notoSans),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: '검색어를 입력하세요',
               prefixIcon: CustomIconButton(
                 icon: hamburgerIcon,
-                iconSize: 30,
-                onPressed: toSettings,
+                onPressed: routerPush(context: context, page: const Settings()),
                 color: CustomColors.blackColor,
               ),
               suffixIcon: CustomIconButton(
                 icon: closeIcon,
-                iconSize: 30,
-                onPressed: toMain,
+                onPressed: routerPush(context: context, page: const Main()),
                 color: CustomColors.blackColor,
               ),
             ),
@@ -78,19 +57,20 @@ class _SearchBarState extends State<SearchBar> {
             width: 40,
             height: 40,
             child: CustomIconButton(
-              onPressed: toSearch,
+              onPressed: routerPush(
+                context: context,
+                page: const Search(query: '광주'),
+              ),
               icon: searchIcon,
-              iconSize: 30,
               color: CustomColors.blackColor,
             )),
         CustomCircleButton(
             width: 40,
             height: 40,
             child: CustomIconButton(
-              onPressed: () => routerPush(
+              onPressed: routerPush(
                   context: context, page: const BookMarkMain(folderCnt: 4)),
               icon: bookMarkIcon,
-              iconSize: 30,
               color: CustomColors.blackColor,
             )),
       ],

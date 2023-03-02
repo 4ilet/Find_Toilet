@@ -16,9 +16,8 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 5), () {
-      routerPush(context: context, page: const SelectFontTheme());
-    });
+    Future.delayed(const Duration(seconds: 5),
+        routerPush(context: context, page: const SelectFontTheme()));
 
     return Scaffold(
       backgroundColor: mainColor,
