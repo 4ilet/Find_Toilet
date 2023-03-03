@@ -8,6 +8,7 @@ typedef BoolList = List<bool>;
 typedef IconDataList = List<IconData>;
 typedef ReturnVoid = void Function();
 typedef VoidFuncList = List<ReturnVoid>;
+typedef ShadowList = List<BoxShadow>;
 
 //* enums
 enum Themes { largeFont, defaultFont }

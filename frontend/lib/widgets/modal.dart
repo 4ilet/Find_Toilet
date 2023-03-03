@@ -2,6 +2,7 @@ import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -77,15 +78,31 @@ class NavigationModal extends StatelessWidget {
 
 //* 도움말 모달
 class HelpModal extends StatelessWidget {
-  const HelpModal({super.key});
+  final String title;
+  const HelpModal({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return const Dialog(
-      child: CustomText(
-        title: '도움말',
-        fontSize: FontSize.largeSize,
-      ),
+    if (screenWidth == null || screenHeight == null) {
+      initWidthHeight(context);
+    }
+    return CustomModalWithClose(
+      title: title,
+      children: [
+        SingleChildScrollView(
+          child: CustomBox(
+            width: screenWidth * 0.8,
+            // height: screenHeight,
+            child: const Center(
+              child: CustomText(
+                title: '여기에 내용이 들어감',
+                fontSize: FontSize.defaultSize,
+                font: notoSans,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -135,30 +152,31 @@ class CustomModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: CustomText(
-              title: title, fontSize: FontSize.largeSize, color: titleColor),
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: CustomText(
+            title: title, fontSize: FontSize.largeSize, color: titleColor),
+      ),
+      children: [
+        ...children,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CustomButton(
+                textColor: CustomColors.mainColor,
+                onPressed: onPressed ?? routerPop(context: context),
+                buttonText: buttonText),
+            onlyOne
+                ? const SizedBox()
+                : CustomButton(
+                    onPressed: routerPop(context: context),
+                    buttonText: '취소',
+                    textColor: CustomColors.mainColor,
+                  )
+          ],
         ),
-        children: [
-          ...children,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomButton(
-                  textColor: CustomColors.mainColor,
-                  onPressed: onPressed ?? routerPop(context: context),
-                  buttonText: buttonText),
-              onlyOne
-                  ? const SizedBox()
-                  : CustomButton(
-                      onPressed: routerPop(context: context),
-                      buttonText: '취소',
-                      textColor: CustomColors.mainColor,
-                    )
-            ],
-          ),
-        ]);
+      ],
+    );
   }
 }
 
@@ -212,12 +230,15 @@ class DeleteModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomModal(title: '폴더 삭제 확인', children: [
-      CustomText(
-          title: '폴더 삭제 시 내부의 즐겨찾기도 모두 삭제됩니다. 그래도 삭제하시겠습니까?',
-          fontSize: FontSize.defaultSize,
-          color: CustomColors.blackColor),
-    ]);
+    return const CustomModal(
+      title: '폴더 삭제 확인',
+      children: [
+        CustomText(
+            title: '폴더 삭제 시 내부의 즐겨찾기도 모두 삭제됩니다. 그래도 삭제하시겠습니까?',
+            fontSize: FontSize.defaultSize,
+            color: CustomColors.blackColor),
+      ],
+    );
   }
 }
 
@@ -259,31 +280,21 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
                             horizontal: 10, vertical: 10),
                         child: Column(
                           children: [
-                            GestureDetector(
+                            CustomBox(
                               onTap: selectFolder(2 * i + j),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(),
-                                    boxShadow: selected == 2 * i + j
-                                        ? const [
-                                            BoxShadow(
-                                              color: mainColor,
-                                              blurRadius: 3,
-                                              spreadRadius: 3,
-                                            )
-                                          ]
-                                        : null),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: CustomText(
-                                      title: '폴더명',
-                                      fontSize: FontSize.defaultSize),
-                                ),
+                              color: whiteColor,
+                              border: Border.all(),
+                              boxShadow: selected == 2 * i + j
+                                  ? const [highlightShadow]
+                                  : null,
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                child: CustomText(
+                                    title: '폴더명',
+                                    fontSize: FontSize.defaultSize),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

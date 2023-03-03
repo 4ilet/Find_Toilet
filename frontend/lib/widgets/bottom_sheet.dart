@@ -31,11 +31,11 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               backgroundColor: Colors.white10,
               pinned: true,
               expandedHeight: 80,
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    color: mainColor,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10))),
+              flexibleSpace: CustomBox(
+                color: mainColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(10),
+                ),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -82,9 +82,10 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               delegate: SliverChildBuilderDelegate(
                 childCount: 10,
                 (BuildContext context, int index) {
-                  return Container(
+                  return const CustomBox(
+                    radius: 0,
                     color: mainColor,
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: ListItem(),
                     ),

@@ -1,5 +1,6 @@
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/icon.dart';
 import 'package:flutter/material.dart';
 
@@ -26,11 +27,11 @@ class _SelectBox extends State<SelectBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomBox(
       width: widget.width,
       height: widget.height,
-      decoration: BoxDecoration(
-          color: whiteColor, borderRadius: BorderRadius.circular(5)),
+      color: whiteColor,
+      radius: 5,
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           elevation: 10,

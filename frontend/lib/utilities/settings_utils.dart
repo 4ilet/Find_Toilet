@@ -20,4 +20,12 @@ final IconDataList iconList = [
   helpIcon,
 ];
 
-final VoidFuncList funcList = [];
+final List<StringList> optionList = [
+  ['표시 안 함', '표시함'],
+  ['기본', '큰 글씨'],
+  ['300m', '500m', '700m'],
+];
+
+IntList indexList = [for (int i = 0; i < 3; i += 1) 0];
+
+final pageList = [];
