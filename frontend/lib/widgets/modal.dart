@@ -78,22 +78,16 @@ class NavigationModal extends StatelessWidget {
 
 //* 도움말 모달
 class HelpModal extends StatelessWidget {
-  final String title;
-  const HelpModal({super.key, required this.title});
+  const HelpModal({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (screenWidth == null || screenHeight == null) {
-      initWidthHeight(context);
-    }
-    return CustomModalWithClose(
-      title: title,
+    return const CustomModalWithClose(
+      title: '도움말',
       children: [
         SingleChildScrollView(
           child: CustomBox(
-            width: screenWidth * 0.8,
-            // height: screenHeight,
-            child: const Center(
+            child: Center(
               child: CustomText(
                 title: '여기에 내용이 들어감',
                 fontSize: FontSize.defaultSize,
@@ -103,6 +97,104 @@ class HelpModal extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+//* 처리 방침 모달
+class PolicyModal extends StatefulWidget {
+  const PolicyModal({super.key});
+
+  @override
+  State<PolicyModal> createState() => _PolicyModalState();
+}
+
+class _PolicyModalState extends State<PolicyModal>
+    with TickerProviderStateMixin {
+  final List<Tab> policyTabs = [
+    const Tab(
+      child: CustomText(
+        title: '개인 정보 처리 방침',
+        fontSize: FontSize.smallSize,
+      ),
+    ),
+    const Tab(
+      child: CustomText(
+        title: '위치 정보 처리 방침',
+        fontSize: FontSize.smallSize,
+      ),
+    ),
+  ];
+  late TabController tabController;
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModalWithClose(
+      children: [
+        Flexible(
+          flex: 1,
+          child: TabBar(
+            controller: tabController,
+            tabs: policyTabs,
+            indicatorColor: mainColor,
+          ),
+        ),
+        Flexible(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: CustomBox(
+              child: TabBarView(
+                controller: tabController,
+                children: const [
+                  TabBarContent(isPrivate: true),
+                  TabBarContent(isPrivate: false),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+//* tab bar 내용
+class TabBarContent extends StatelessWidget {
+  final bool isPrivate;
+  const TabBarContent({super.key, required this.isPrivate});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomBox(
+      color: greyColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: CustomText(
+                isBoldText: true,
+                title: isPrivate ? '개인 정보 처리 방침' : '위치 정보 처리 방침',
+                fontSize: FontSize.largeSize,
+                font: notoSans,
+              ),
+            ),
+            for (int i = 0; i < 10; i += 1)
+              const CustomText(
+                title: '여기에 방침이 들어갑니다',
+                fontSize: FontSize.defaultSize,
+                font: notoSans,
+              )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -182,12 +274,12 @@ class CustomModal extends StatelessWidget {
 
 //* 상단 위 종료 버튼 존재 모달
 class CustomModalWithClose extends StatelessWidget {
-  final String title;
+  final String? title;
   final WidgetList children;
   final CustomColors titleColor;
   const CustomModalWithClose({
     super.key,
-    required this.title,
+    this.title,
     required this.children,
     this.titleColor = CustomColors.mainColor,
   });
@@ -209,13 +301,15 @@ class CustomModalWithClose extends StatelessWidget {
                     onPressed: routerPop(context: context))
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: CustomText(
-                  title: title,
-                  fontSize: FontSize.largeSize,
-                  color: titleColor),
-            ),
+            title != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: CustomText(
+                        title: title!,
+                        fontSize: FontSize.largeSize,
+                        color: titleColor),
+                  )
+                : const SizedBox(),
             ...children,
           ],
         ),

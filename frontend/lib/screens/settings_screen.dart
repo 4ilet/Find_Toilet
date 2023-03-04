@@ -19,19 +19,23 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   ReturnVoid changeIndex(int i) {
     return () {
-      if (i < 3) {
-        if (indexList[i] < optionList[i].length - 1) {
-          setState(() {
-            indexList[i] += 1;
-          });
-        } else {
-          setState(() {
-            indexList[i] = 0;
-          });
-        }
+      if (indexList[i] < optionList[i].length - 1) {
+        setState(() {
+          indexList[i] += 1;
+        });
+      } else {
+        setState(() {
+          indexList[i] = 0;
+        });
       }
     };
   }
+
+  WidgetList pages = [
+    const PolicyModal(),
+    const PolicyModal(),
+    const HelpModal()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +106,11 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                   ),
-                for (int i = 3; i < 7; i += 1)
+                for (int i = 4; i < 7; i += 1)
                   GestureDetector(
                     onTap: showModal(
                       context: context,
-                      page: HelpModal(
-                        title: menuList[i],
-                      ),
+                      page: pages[i - 4],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
