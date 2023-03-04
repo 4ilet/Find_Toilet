@@ -42,9 +42,6 @@ public class Toilet {
     private boolean dMalePoo;
 
     @Column(columnDefinition = "TINYINT(1)")
-    private boolean dFemalePee;
-
-    @Column(columnDefinition = "TINYINT(1)")
     private boolean dFemalePoo;
 
     @Column(columnDefinition = "TINYINT(1)")
