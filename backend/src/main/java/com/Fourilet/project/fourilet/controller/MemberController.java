@@ -7,9 +7,9 @@ public class MemberController {
 //    public signUp(){};
 
     //테스트
-    @GetMapping("/login/2")
-    public String login() {
-        return "로그인 api 테스트";
-    }
+//    @PutMapping("/user/update/nickname/{user_id}")
+//    public String updateUserNickname(){
+//
+//    }
 
 }
