@@ -31,7 +31,7 @@ public class Toilet {
     private BigDecimal lat;
 
     @Column(precision =18, scale = 10)
-    private BigDecimal log;
+    private BigDecimal lon;
 
     private String phoneNumber;
 
