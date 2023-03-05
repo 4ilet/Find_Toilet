@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    // Optional<Member> findById(long memberId);
-    Optional<Member> findByEmail(String email);
-    Optional<Member> findByRefreshToken(String refreshToken);
+    Member findById(long memberId);
+    Member findByEmail(String email);
+    Member findByRefreshToken(String refreshToken);
 
-    Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
+    Member findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
 }
 
