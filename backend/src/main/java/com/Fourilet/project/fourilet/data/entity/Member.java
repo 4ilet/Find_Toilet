@@ -32,13 +32,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Folder> folderList = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "user_role")
+    private String userRole;
 
-    @Enumerated(EnumType.STRING)
-    private SocialType socialType;
-
-    private String socialId;
+    private Long kakaoId;
 
 //    public void updateMember(MemberUpdateDto memberUpdateDto){
 //        this.nickname = memberUpdateDto.getNickName();
@@ -50,11 +47,12 @@ public class Member {
 //    }
 
      @Builder
-    public Member(String email, String nickname, String refreshToken){
+    public Member(Long kakaoId, String email, String nickname, String refreshToken, String userRole){
          this.email = email;
          this.nickname = nickname;
          this.refreshToken = refreshToken;
-         this.role = Role.USER;
+         this.userRole = userRole;
+         this.kakaoId = kakaoId;
      }
 
      public void updateRefreshToken(String updateRefreshToken){
