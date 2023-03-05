@@ -8,6 +8,7 @@ const blackColor = Colors.black;
 const redColor = Colors.red;
 const yellowColor = Color(0xFFFFBF44);
 const greyColor = Colors.grey;
+const lightGreyColor = Color(0xFFE5E5E5);
 Color convertedColor(CustomColors color) {
   switch (color) {
     case CustomColors.whiteColor:

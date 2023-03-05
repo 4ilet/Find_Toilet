@@ -12,6 +12,12 @@
         <data android:scheme="tel" />
     </intent>
     </queries>
+    <queries>
+    <intent>
+      <action android:name="android.intent.action.SENDTO" />
+      <data android:scheme="mailto" />
+    </intent>
+  </queries>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
    <application
         android:label="find_toilet"

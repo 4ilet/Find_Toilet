@@ -1,15 +1,19 @@
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/modal.dart';
 
+//* 메뉴 목록
 final StringList menuList = [
   '확대/축소 버튼',
   '글자 크기',
-  '지도 변경',
+  '지도 반경',
   '문의하기',
   '개인 정보 및 위치 처리 방침',
   '라이선스',
   '도움말'
 ];
+
+//* 메뉴 옆에 표시되는 아이콘 목록
 final IconDataList iconList = [
   scaleIcon,
   fontIcon,
@@ -20,12 +24,24 @@ final IconDataList iconList = [
   helpIcon,
 ];
 
+//* 옵션 목록
 final List<StringList> optionList = [
   ['표시 안 함', '표시함'],
   ['기본', '큰 글씨'],
   ['300m', '500m', '700m'],
 ];
 
-IntList indexList = [for (int i = 0; i < 3; i += 1) 0];
+//* 옵션 인덱스 목록
+IntList indexList = [0, 0, 0];
 
-final pageList = [];
+//* 모달 목록
+WidgetList pages = [
+  const PolicyModal(),
+  const HelpModal(isHelpModal: false),
+  const HelpModal()
+];
+
+//* 모달 내부 내용
+const privatePolicy = '서비스 제공자(포일렛)은 사용자의 개인 정보를';
+const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
+const license = '글꼴\n위치 정보';
