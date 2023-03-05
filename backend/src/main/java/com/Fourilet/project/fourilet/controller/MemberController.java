@@ -11,5 +11,4 @@ public class MemberController {
 //    public String updateUserNickname(){
 //
 //    }
-
 }
