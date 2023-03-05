@@ -27,11 +27,16 @@ public class Member {
     @Column(name = "refreshToken")
     private String refreshToken;
 
-    @Column(name = "accessToken")
-    private String accessToken;
-
     @OneToMany(mappedBy = "member")
     private List<Folder> folderList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+    private String socialId;
 
 //    public void updateMember(MemberUpdateDto memberUpdateDto){
 //        this.nickname = memberUpdateDto.getNickName();
@@ -42,11 +47,15 @@ public class Member {
 //        return this;
 //    }
 
-//     @Builder
-//    public Member(String email, String nickname, String refreshToken, String accessToken){
-//         this.email = email;
-//         this.nickname = nickname;
-//         this.refreshToken = refreshToken;
-//         this.accessToken = accessToken;
-//     }
+     @Builder
+    public Member(String email, String nickname, String refreshToken, String accessToken){
+         this.email = email;
+         this.nickname = nickname;
+         this.refreshToken = refreshToken;
+         this.role = Role.USER;
+     }
+
+     public void updateRefreshToken(String updateRefreshToken){
+         this.refreshToken = updateRefreshToken;
+     }
 }

@@ -20,6 +20,41 @@ spring:
           show_sql: true # ??????? ??? ?? sql ?? ??? ??.
           format_sql: true # sql ?? ??? ?? ??
           use_sql_comments: true # ??? ?? ??
+    security:
+      oauth2:
+        client:
+          registration:
+            naver:
+              client-id: kG5ZmUBAm1fa34vHJXEq
+              client-secret: 9BNbICIKqw
+              redirect-uri: http://localhost:8080/login/ouath2/code/naver
+              authorization-grant-type: authorization_code
+              scope: name, email
+              client-name: Naver
+            kakao:
+              client-id: 12a9eb103bcd45acefe504833d7f8f7e
+              redirect-uri: http://localhost:8080/oauth2/code/kakao
+              client-authentication-method: POST
+              client-secret: rqzG2KZpFzRUH7fqbIkFgBlnnVeyz6zs
+              authorization-grant-type: authorization_code
+              scope:
+                - profile_nickname
+                - account_email
+              client_name: kakao
+          provider:
+            naver:
+              authorization_uri: https://nid.naver.com/oauth2.0/authorize
+              token_uri: https://nid.naver.com/oauth2.0/token
+              user-info-uri: https://openapi.naver.com/v1/nid/me
+              user_name_attribute: response
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth/authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
+jwt:
+  secretKey : eW9vbmp1LWZvdXJpbGV0LWJhY2tlbmQtc25zbG9naW4ta2FrYW8tb2F1dGgtc2VjdXJpdHkteW9vbmp1LWZvdXJpbGV0LWJhY2tlbmQtc25zbG9naW4ta2FrYW8tb2F1dGgtc2VjdXJpdHk=
+
 logging:
   level:
     org:
