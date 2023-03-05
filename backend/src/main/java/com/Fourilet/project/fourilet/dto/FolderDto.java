@@ -15,7 +15,6 @@ public class FolderDto {
     private long folderId;
     private String folderName;
     private Member member;
-
     @Getter
     @Setter
     public static class FolderListDto {
