@@ -24,11 +24,6 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
-    private String password;
-
-    @Column(name = "refreshToken")
-    private String refreshToken;
-
     @OneToMany(mappedBy = "member")
     private List<Folder> folderList = new ArrayList<>();
 
@@ -50,13 +45,7 @@ public class Member {
     public Member(Long kakaoId, String email, String nickname, String refreshToken, String userRole){
          this.email = email;
          this.nickname = nickname;
-         this.refreshToken = refreshToken;
          this.userRole = userRole;
          this.kakaoId = kakaoId;
-     }
-
-     public void updateRefreshToken(String updateRefreshToken){
-
-         this.refreshToken = updateRefreshToken;
      }
 }
