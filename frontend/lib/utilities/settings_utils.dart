@@ -27,7 +27,7 @@ final IconDataList iconList = [
 //* 옵션 목록
 final List<StringList> optionList = [
   ['표시 안 함', '표시함'],
-  ['기본', '큰 글씨'],
+  ['큰 글씨', '기본'],
   ['300m', '500m', '700m'],
 ];
 
@@ -45,3 +45,12 @@ WidgetList pages = [
 const privatePolicy = '서비스 제공자(포일렛)은 사용자의 개인 정보를';
 const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
 const license = '글꼴\n위치 정보';
+
+//* 첫 방문 여부
+var isFirstVisit = true;
+//* access token
+var accessToken = '';
+//* 테마
+var theme = Themes.defaultFont;
+//* 지도 반경
+var mapRadius = MapRadius.three;

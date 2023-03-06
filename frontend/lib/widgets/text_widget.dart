@@ -1,4 +1,3 @@
-import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,7 @@ class CustomText extends StatelessWidget {
   const CustomText({
     super.key,
     required this.title,
-    required this.fontSize,
+    this.fontSize = FontSize.defaultSize,
     this.color = CustomColors.blackColor,
     this.font = 'Kimm',
     this.isBoldText = false,

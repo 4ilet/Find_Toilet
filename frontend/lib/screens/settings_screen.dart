@@ -56,12 +56,15 @@ class _SettingsState extends State<Settings> {
               flex: 1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  TextWithIcon(
-                    icon: personIcon,
-                    text: '로그인',
-                    iconColor: CustomColors.blackColor,
-                    fontSize: FontSize.defaultSize,
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: TextWithIcon(
+                      icon: accessToken != '' ? personIcon : logoutIcon,
+                      text: accessToken != '' ? '로그인' : '로그아웃',
+                      iconColor: CustomColors.blackColor,
+                      fontSize: FontSize.defaultSize,
+                    ),
                   ),
                 ],
               ),

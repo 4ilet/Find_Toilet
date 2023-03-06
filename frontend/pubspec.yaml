@@ -41,6 +41,7 @@ dependencies:
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.10
   flutter_email_sender: ^5.2.0
+  shared_preferences: ^2.0.18
 
 dev_dependencies:
   flutter_test:
