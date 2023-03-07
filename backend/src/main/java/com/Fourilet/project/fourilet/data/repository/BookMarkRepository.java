@@ -1,17 +1,16 @@
 package com.Fourilet.project.fourilet.data.repository;
 
+import com.Fourilet.project.fourilet.data.entity.BookMark;
 import com.Fourilet.project.fourilet.data.entity.Folder;
-import com.Fourilet.project.fourilet.data.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface FolderRepository extends JpaRepository<Folder, Long> {
-    List<Folder> findAllByMember(Member member);
 
-    @Override
-    Optional<Folder> findById(Long folderId);
+@Repository
+public interface  BookMarkRepository extends JpaRepository<BookMark, Long> {
+    Long countByFolderId(Folder folder);
+    List<BookMark> findAllByFolderId(Folder folder);
 }
