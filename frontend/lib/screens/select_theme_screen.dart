@@ -30,13 +30,11 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
     };
   }
 
-  ReturnVoid applyTheme() {
-    return () {
-      theme = selected;
-      isFirstVisit = false;
-      setVisited();
-      routerPush(context: context, page: const Main())();
-    };
+  void applyTheme() {
+    theme = selected;
+    isFirstVisit = false;
+    setVisited();
+    routerPush(context: context, page: const Main())();
   }
 
   @override
