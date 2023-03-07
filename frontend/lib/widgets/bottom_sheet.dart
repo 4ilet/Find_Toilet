@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool isMain;
-  const ToiletBottomSheet({super.key, required this.isMain});
+  final bool showReview;
+  const ToiletBottomSheet(
+      {super.key, required this.isMain, this.showReview = false});
 
   @override
   State<ToiletBottomSheet> createState() => _ToiletBottomSheet();
@@ -18,7 +20,11 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: widget.isMain ? 0.4 : 0.08,
+      initialChildSize: widget.showReview
+          ? 0.6
+          : widget.isMain
+              ? 0.4
+              : 0.08,
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
@@ -33,9 +39,8 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               expandedHeight: 80,
               flexibleSpace: CustomBox(
                 color: mainColor,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(10),
-                ),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(10)),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -63,16 +68,18 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: CustomText(
-                          title: '필터를 적용한 결과입니다',
-                          fontSize: FontSize.smallSize,
-                          color: CustomColors.whiteColor,
-                          font: notoSans,
-                        ),
-                      ),
+                      widget.showReview
+                          ? const SizedBox()
+                          : const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: CustomText(
+                                title: '필터를 적용한 결과입니다',
+                                fontSize: FontSize.smallSize,
+                                color: CustomColors.whiteColor,
+                                font: notoSans,
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -80,14 +87,14 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                childCount: 10,
+                childCount: widget.showReview ? 1 : 10,
                 (BuildContext context, int index) {
-                  return const CustomBox(
+                  return CustomBox(
                     radius: 0,
                     color: mainColor,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: ListItem(),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListItem(showReview: widget.showReview),
                     ),
                   );
                 },

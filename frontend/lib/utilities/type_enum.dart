@@ -16,7 +16,14 @@ enum Themes { largeFont, defaultFont }
 
 enum FontSize { titleSize, largeSize, defaultSize, smallSize }
 
-enum CustomColors { whiteColor, mainColor, redColor, blackColor, yellowColor }
+enum CustomColors {
+  whiteColor,
+  mainColor,
+  redColor,
+  blackColor,
+  yellowColor,
+  lightBlueColor,
+}
 
 enum MapRadius { three, five, seven }
 
@@ -31,8 +38,10 @@ Color convertedColor(CustomColors color) {
       return blackColor;
     case CustomColors.redColor:
       return redColor;
-    default:
+    case CustomColors.yellowColor:
       return yellowColor;
+    default:
+      return lightBlueColor;
   }
 }
 
