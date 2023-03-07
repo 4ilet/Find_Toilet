@@ -2,6 +2,7 @@ package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.config.jwt.JwtProperties;
 import com.Fourilet.project.fourilet.data.entity.Member;
+import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
 import com.Fourilet.project.fourilet.service.MemberService;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -22,23 +24,45 @@ public class OAuthController {
     private MemberService memberService;
 
     @GetMapping("/kakao")
-    public ResponseEntity getLogin(@RequestParam("code") String code){
+    public ResponseEntity getServerLogin(@RequestParam("code") String code){
         System.out.println("code "+code);
         OauthToken oAuthToken = memberService.getAccessToken(code);
 
-        String jwtToken = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
+        System.out.println("access!!" + oAuthToken);
+
+        Map<String, Object> result = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
+
+        Object jwtToken = result.get("jwtToken");
+
+        Object member = result.get("member");
 
         System.out.println("JWT TOKEN!! " + jwtToken);
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 
-        return ResponseEntity.ok().headers(headers).body("success");
+        return ResponseEntity.ok().headers(headers).body(member);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<Object> getCurrentUser(HttpServletRequest request){
+    @GetMapping("/login")
+    public ResponseEntity getLogin(@RequestParam("token") String token){
 
-        Member member = memberService.getMember(request);
-        return ResponseEntity.ok().body(member);
+//        OauthToken oAuthToken = memberService.getAccessToken(code);
+//
+//        System.out.println("access!!" + oAuthToken);
+
+        Map<String, Object> result = memberService.saveMemberAndGetToken(token);
+
+        Object jwtToken = result.get("jwtToken");
+
+        Object member = result.get("member");
+
+        System.out.println("JWT TOKEN!! " + jwtToken);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+
+        return ResponseEntity.ok().headers(headers).body(member);
     }
+//
+//    @GetMapping("update/nickname")
+//    public ResponseEntity updateNickname(@RequestBody )
 }

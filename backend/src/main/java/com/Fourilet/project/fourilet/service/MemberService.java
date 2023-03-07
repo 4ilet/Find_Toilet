@@ -22,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -72,14 +74,17 @@ public class MemberService {
         return oauthToken;
     }
 
-    public String saveMemberAndGetToken(String token){
+    public Map<String, Object> saveMemberAndGetToken(String token){
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
         KakaoProfile profile = findProfile(token);
 
-        Member member = memberRepository.findByEmail(profile.getKakao_account().getEmail());
+        String email = profile.getKakao_account().getEmail();
 
-        System.out.println("MEMBER!! " + member);
+        Member member = memberRepository.findByEmail(email);
 
-        if(member == null){
+        if(member == null) {
             member = Member.builder()
                     .kakaoId(profile.getId())
                     .nickname(profile.getKakao_account().getProfile().getNickname())
@@ -89,7 +94,13 @@ public class MemberService {
 
             memberRepository.save(member);
         }
-        return createToken(member);
+
+        String jwtToken = createToken(member);
+
+        result.put("member", member);
+        result.put("jwtToken", jwtToken);
+
+        return result;
     }
 
     public String createToken(Member member){
@@ -130,9 +141,13 @@ public class MemberService {
         return kakaoProfile;
     }
 
-    public Member getMember(HttpServletRequest request){
-        Long memberId = (Long) request.getAttribute("memberId");
-        Member member = memberRepository.findByMemberId(memberId);
-        return member;
+    public Member getMember(long memberId){
+        return memberRepository.findById(memberId);
+    }
+
+    public Member updateNickname(long memberId, String nickname){
+        Member member = memberRepository.findById(memberId);
+        member.setNickname(nickname);
+        return memberRepository.save(member);
     }
 }
