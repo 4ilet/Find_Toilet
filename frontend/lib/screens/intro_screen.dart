@@ -16,6 +16,7 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
+    initWidthHeight(context);
     Future.delayed(const Duration(seconds: 5),
         routerPush(context: context, page: const SelectFontTheme()));
 

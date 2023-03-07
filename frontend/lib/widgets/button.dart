@@ -114,9 +114,10 @@ class CustomCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color,
-          boxShadow: shadow ? [defaultShadow] : null),
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: shadow ? [defaultShadow] : null,
+      ),
       width: width,
       height: height,
       child: child,

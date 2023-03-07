@@ -1,11 +1,382 @@
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
+import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+//* 도움말, 라이선스 모달
+class HelpModal extends StatelessWidget {
+  final bool isHelpModal;
+  const HelpModal({
+    super.key,
+    this.isHelpModal = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModalWithClose(
+      title: isHelpModal ? '도움말' : '라이선스',
+      children: [
+        SingleChildScrollView(
+            child: isHelpModal
+                ? const CustomBox(
+                    child: Center(
+                      child: CustomText(
+                        title: '여기에 내용이 들어감',
+                        fontSize: FontSize.defaultSize,
+                        font: notoSans,
+                      ),
+                    ),
+                  )
+                : const PolicyContent(
+                    isPrivate: false,
+                    isLicense: true,
+                  )),
+      ],
+    );
+  }
+}
+
+//* 처리 방침 모달
+class PolicyModal extends StatefulWidget {
+  const PolicyModal({super.key});
+
+  @override
+  State<PolicyModal> createState() => _PolicyModalState();
+}
+
+class _PolicyModalState extends State<PolicyModal>
+    with TickerProviderStateMixin {
+  final List<Tab> policyTabs = [
+    const Tab(
+      child: CustomText(
+        title: '개인 정보 처리 방침',
+        fontSize: FontSize.smallSize,
+      ),
+    ),
+    const Tab(
+      child: CustomText(
+        title: '위치 정보 처리 방침',
+        fontSize: FontSize.smallSize,
+      ),
+    ),
+  ];
+  late TabController tabController;
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModalWithClose(
+      children: [
+        Flexible(
+          flex: 1,
+          child: TabBar(
+            controller: tabController,
+            tabs: policyTabs,
+            indicatorColor: mainColor,
+          ),
+        ),
+        Flexible(
+          flex: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: CustomBox(
+              child: TabBarView(
+                controller: tabController,
+                children: const [
+                  PolicyContent(isPrivate: true),
+                  PolicyContent(isPrivate: false),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+//* 처리 방침, 라이선스 내용
+class PolicyContent extends StatelessWidget {
+  final bool isLicense;
+  final bool isPrivate;
+  const PolicyContent({
+    super.key,
+    required this.isPrivate,
+    this.isLicense = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomBox(
+      color: lightGreyColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: CustomText(
+                isBoldText: true,
+                title: isLicense
+                    ? '라이선스'
+                    : isPrivate
+                        ? '개인 정보 처리 방침'
+                        : '위치 정보 처리 방침',
+                fontSize: FontSize.largeSize,
+                font: notoSans,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: CustomText(
+                title: isLicense
+                    ? license
+                    : isPrivate
+                        ? privatePolicy
+                        : gpsPolicy,
+                fontSize: FontSize.smallSize,
+                font: notoSans,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//* 입력창 존재 모달
+class InputModal extends StatelessWidget {
+  final String title, buttonText;
+  const InputModal({
+    super.key,
+    required this.title,
+    required this.buttonText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: title,
+      buttonText: buttonText,
+      onPressed: () {},
+      children: const [
+        Expanded(
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: TextField(),
+        )),
+      ],
+    );
+  }
+}
+
+//* 모달 기본값
+class CustomModal extends StatelessWidget {
+  final String title, buttonText;
+  final WidgetList children;
+  final CustomColors titleColor;
+  final bool isAlert;
+  final ReturnVoid? onPressed;
+  const CustomModal({
+    super.key,
+    required this.title,
+    required this.children,
+    this.titleColor = CustomColors.blackColor,
+    this.isAlert = false,
+    this.buttonText = '확인',
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: CustomText(
+            title: title, fontSize: FontSize.largeSize, color: titleColor),
+      ),
+      children: [
+        ...children,
+        isAlert
+            ? modalButton(
+                context: context,
+                onPressed: onPressed ?? routerPop(context: context),
+                buttonText: buttonText,
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  modalButton(
+                    context: context,
+                    onPressed: onPressed ?? routerPop(context: context),
+                    buttonText: buttonText,
+                  ),
+                  modalButton(
+                    context: context,
+                    onPressed: routerPop(context: context),
+                    buttonText: '취소',
+                  ),
+                ],
+              ),
+      ],
+    );
+  }
+
+  CustomButton modalButton({
+    required BuildContext context,
+    required ReturnVoid onPressed,
+    required String buttonText,
+  }) {
+    return CustomButton(
+      textColor: CustomColors.mainColor,
+      onPressed: onPressed,
+      buttonText: buttonText,
+    );
+  }
+}
+
+//* 상단 위 종료 버튼 존재 모달
+class CustomModalWithClose extends StatelessWidget {
+  final String? title;
+  final WidgetList children;
+  final CustomColors titleColor;
+  const CustomModalWithClose({
+    super.key,
+    this.title,
+    required this.children,
+    this.titleColor = CustomColors.mainColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomIconButton(
+                    color: CustomColors.blackColor,
+                    icon: closeIcon,
+                    onPressed: routerPop(context: context))
+              ],
+            ),
+            title != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: CustomText(
+                        title: title!,
+                        fontSize: FontSize.largeSize,
+                        color: titleColor),
+                  )
+                : const SizedBox(),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// * 삭제 확인 모달
+class DeleteModal extends StatelessWidget {
+  const DeleteModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: '폴더 삭제 확인',
+      children: const [
+        CustomText(
+            title: '폴더 삭제 시 내부의 즐겨찾기도 모두 삭제됩니다. 그래도 삭제하시겠습니까?',
+            fontSize: FontSize.defaultSize,
+            color: CustomColors.blackColor),
+      ],
+      onPressed: () {},
+    );
+  }
+}
+
+//* 즐겨찾기 추가 모달
+class AddToBookMarkModal extends StatefulWidget {
+  final int folderCnt;
+  const AddToBookMarkModal({super.key, this.folderCnt = 10});
+
+  @override
+  State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
+}
+
+class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
+  int? selected;
+  ReturnVoid selectFolder(int idx) {
+    return () {
+      setState(() {
+        selected = idx;
+      });
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: '즐겨찾기 추가',
+      onPressed: () {},
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              for (int i = 0; i < widget.folderCnt ~/ 2; i += 1)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (int j = 0; j < 2; j += 1)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Column(
+                          children: [
+                            CustomBox(
+                              onTap: selectFolder(2 * i + j),
+                              color: whiteColor,
+                              border: Border.all(),
+                              boxShadow: selected == 2 * i + j
+                                  ? const [highlightShadow]
+                                  : null,
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                child: CustomText(
+                                    title: '폴더명',
+                                    fontSize: FontSize.defaultSize),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 //* 내비게이션 앱 연결 모달
 class NavigationModal extends StatelessWidget {
@@ -69,228 +440,6 @@ class NavigationModal extends StatelessWidget {
                 ],
               ),
           ],
-        ),
-      ],
-    );
-  }
-}
-
-//* 도움말 모달
-class HelpModal extends StatelessWidget {
-  const HelpModal({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Dialog(
-      child: CustomText(
-        title: '도움말',
-        fontSize: FontSize.largeSize,
-      ),
-    );
-  }
-}
-
-//* 입력창 존재 모달
-class InputModal extends StatelessWidget {
-  final String title, buttonText;
-  const InputModal({
-    super.key,
-    required this.title,
-    required this.buttonText,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomModal(
-      title: title,
-      buttonText: buttonText,
-      children: const [
-        Expanded(
-            child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(),
-        )),
-      ],
-    );
-  }
-}
-
-//* 모달 기본값
-class CustomModal extends StatelessWidget {
-  final String title, buttonText;
-  final WidgetList children;
-  final CustomColors titleColor;
-  final bool onlyOne;
-  final ReturnVoid? onPressed;
-  const CustomModal({
-    super.key,
-    required this.title,
-    required this.children,
-    this.titleColor = CustomColors.blackColor,
-    this.onlyOne = false,
-    this.buttonText = '확인',
-    this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: CustomText(
-              title: title, fontSize: FontSize.largeSize, color: titleColor),
-        ),
-        children: [
-          ...children,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomButton(
-                  textColor: CustomColors.mainColor,
-                  onPressed: onPressed ?? routerPop(context: context),
-                  buttonText: buttonText),
-              onlyOne
-                  ? const SizedBox()
-                  : CustomButton(
-                      onPressed: routerPop(context: context),
-                      buttonText: '취소',
-                      textColor: CustomColors.mainColor,
-                    )
-            ],
-          ),
-        ]);
-  }
-}
-
-//* 상단 위 종료 버튼 존재 모달
-class CustomModalWithClose extends StatelessWidget {
-  final String title;
-  final WidgetList children;
-  final CustomColors titleColor;
-  const CustomModalWithClose({
-    super.key,
-    required this.title,
-    required this.children,
-    this.titleColor = CustomColors.mainColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CustomIconButton(
-                    color: CustomColors.blackColor,
-                    icon: closeIcon,
-                    onPressed: routerPop(context: context))
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: CustomText(
-                  title: title,
-                  fontSize: FontSize.largeSize,
-                  color: titleColor),
-            ),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// * 삭제 확인 모달
-class DeleteModal extends StatelessWidget {
-  const DeleteModal({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const CustomModal(title: '폴더 삭제 확인', children: [
-      CustomText(
-          title: '폴더 삭제 시 내부의 즐겨찾기도 모두 삭제됩니다. 그래도 삭제하시겠습니까?',
-          fontSize: FontSize.defaultSize,
-          color: CustomColors.blackColor),
-    ]);
-  }
-}
-
-//* 즐겨찾기 추가 모달
-class AddToBookMarkModal extends StatefulWidget {
-  final int folderCnt;
-  const AddToBookMarkModal({super.key, this.folderCnt = 10});
-
-  @override
-  State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
-}
-
-class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
-  int? selected;
-  ReturnVoid selectFolder(int idx) {
-    return () {
-      setState(() {
-        selected = idx;
-      });
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomModal(
-      title: '즐겨찾기 추가',
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              for (int i = 0; i < widget.folderCnt ~/ 2; i += 1)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int j = 0; j < 2; j += 1)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: selectFolder(2 * i + j),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: whiteColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(),
-                                    boxShadow: selected == 2 * i + j
-                                        ? const [
-                                            BoxShadow(
-                                              color: mainColor,
-                                              blurRadius: 3,
-                                              spreadRadius: 3,
-                                            )
-                                          ]
-                                        : null),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: CustomText(
-                                      title: '폴더명',
-                                      fontSize: FontSize.defaultSize),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                  ],
-                )
-            ],
-          ),
         ),
       ],
     );

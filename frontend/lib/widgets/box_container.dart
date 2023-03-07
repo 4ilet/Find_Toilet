@@ -14,7 +14,12 @@ import 'package:flutter/material.dart';
 class ThemeBox extends StatefulWidget {
   final String text;
   final bool selected;
-  const ThemeBox({super.key, required this.text, required this.selected});
+  final ReturnVoid onTap;
+  const ThemeBox(
+      {super.key,
+      required this.text,
+      required this.selected,
+      required this.onTap});
 
   @override
   State<ThemeBox> createState() => _ThemeBoxState();
@@ -25,18 +30,20 @@ class _ThemeBoxState extends State<ThemeBox> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 12),
-      child: CommonBox(
+      child: CustomBox(
+          onTap: widget.onTap,
           height: 220,
           width: 170,
           color: whiteColor,
-          selected: widget.selected,
+          boxShadow: widget.selected ? [redShadow] : null,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const CommonBox(
-                color: Colors.grey,
+              const CustomBox(
+                color: greyColor,
                 height: 130,
                 width: 130,
+                child: SizedBox(),
               ),
               Text(
                 widget.text,
@@ -44,47 +51,6 @@ class _ThemeBoxState extends State<ThemeBox> {
               ),
             ],
           )),
-    );
-  }
-}
-
-//* 상자 형태 기본값
-class CommonBox extends StatefulWidget {
-  final Widget? child;
-  final Color? color;
-  final double height, width;
-  final bool selected;
-  const CommonBox({
-    super.key,
-    this.child,
-    this.color,
-    required this.height,
-    required this.width,
-    this.selected = false,
-  });
-
-  @override
-  State<CommonBox> createState() => _CommonBoxState();
-}
-
-class _CommonBoxState extends State<CommonBox> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: widget.color,
-        boxShadow: widget.selected
-            ? const [
-                BoxShadow(blurRadius: 10, spreadRadius: 5, color: Colors.red),
-              ]
-            : null,
-      ),
-      child: SizedBox(
-        height: widget.height,
-        width: widget.width,
-        child: widget.child,
-      ),
     );
   }
 }
@@ -152,67 +118,67 @@ class FolderBox extends StatelessWidget {
     String printedName = folderName.length < 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
-    return GestureDetector(
+    return CustomBox(
       onTap: routerPush(
-          context: context,
-          page: BookMarkList(folderName: folderName, listCnt: listCnt)),
-      child: CommonBox(
-          height: 150,
-          width: 150,
-          color: whiteColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Column(
+        context: context,
+        page: BookMarkList(folderName: folderName, listCnt: listCnt),
+      ),
+      height: 150,
+      width: 150,
+      color: whiteColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                CustomText(
+                  title: printedName,
+                  fontSize: FontSize.defaultSize,
+                  color: CustomColors.mainColor,
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomText(
-                      title: printedName,
-                      fontSize: FontSize.defaultSize,
+                    CustomIconButton(
+                      icon: editIcon,
                       color: CustomColors.mainColor,
+                      onPressed: showModal(
+                        context: context,
+                        page: const InputModal(
+                          title: '즐겨 찾기 폴더명 수정',
+                          buttonText: '수정',
+                        ),
+                      ),
+                      iconSize: 25,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomIconButton(
-                          icon: editIcon,
-                          color: CustomColors.mainColor,
-                          onPressed: showModal(
-                            context: context,
-                            page: const InputModal(
-                              title: '즐겨 찾기 폴더명 수정',
-                              buttonText: '수정',
-                            ),
-                          ),
-                          iconSize: 25,
-                        ),
-                        CustomIconButton(
-                          icon: deleteIcon,
-                          color: CustomColors.redColor,
-                          onPressed: showModal(
-                              context: context, page: const DeleteModal()),
-                          iconSize: 25,
-                        ),
-                      ],
+                    CustomIconButton(
+                      icon: deleteIcon,
+                      color: CustomColors.redColor,
+                      onPressed: showModal(
+                          context: context, page: const DeleteModal()),
+                      iconSize: 25,
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomText(
-                      title: '$listCnt 개',
-                      fontSize: FontSize.smallSize,
-                      color: CustomColors.blackColor,
-                      font: notoSans,
-                    ),
-                  ],
-                )
               ],
             ),
-          )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomText(
+                  title: '$listCnt 개',
+                  fontSize: FontSize.smallSize,
+                  color: CustomColors.blackColor,
+                  font: notoSans,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -228,23 +194,22 @@ class AddBox extends StatefulWidget {
 class _AddBoxState extends State<AddBox> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return CustomBox(
       onTap: () => showDialog(
-          context: context,
-          builder: (context) => const InputModal(
-                title: '즐겨 찾기 폴더 생성',
-                buttonText: '만들기',
-              )),
-      child: const CommonBox(
-        height: 150,
-        width: 150,
-        color: whiteColor,
-        child: Center(
-          child: CustomIcon(
-            icon: plusIcon,
-            color: mainColor,
-            size: 50,
-          ),
+        context: context,
+        builder: (context) => const InputModal(
+          title: '즐겨 찾기 폴더 생성',
+          buttonText: '만들기',
+        ),
+      ),
+      height: 150,
+      width: 150,
+      color: whiteColor,
+      child: const Center(
+        child: CustomIcon(
+          icon: plusIcon,
+          color: mainColor,
+          size: 50,
         ),
       ),
     );
@@ -294,109 +259,106 @@ class _ListItemState extends State<ListItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: GestureDetector(
+      child: CustomBox(
         onTap: () {},
-        child: CommonBox(
-          color: whiteColor,
-          height: 200,
-          width: 500,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                        color: CustomColors.mainColor,
-                        title: widget.toiletName,
-                        fontSize: FontSize.defaultSize,
-                        font: widget.font),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
+        color: whiteColor,
+        height: 200,
+        width: 500,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                      color: CustomColors.mainColor,
+                      title: widget.toiletName,
+                      fontSize: FontSize.defaultSize,
+                      font: widget.font),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: showModal(
+                            context: context, page: const AddToBookMarkModal()),
+                        icon: CustomIcon(
+                            icon: liked ? heartIcon : emptyHeartIcon,
+                            color: redColor),
+                      ),
+                      IconButton(
                           onPressed: showModal(
                               context: context,
-                              page: const AddToBookMarkModal()),
-                          icon: CustomIcon(
-                              icon: liked ? heartIcon : emptyHeartIcon,
-                              color: redColor),
-                        ),
-                        IconButton(
-                            onPressed: showModal(
-                                context: context,
-                                page: NavigationModal(
-                                  startPoint: const [37.537229, 127.005515],
-                                  endPoint: const [37.4979502, 127.0276368],
-                                  destination: widget.toiletName,
-                                )),
-                            icon: const CustomIcon(
-                              icon: planeIcon,
-                              color: Colors.lightBlue,
-                              size: 35,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextWithIcon(
-                      icon: locationIcon,
-                      text: widget.address,
-                      font: widget.font,
-                    ),
-                    TextWithIcon(
-                      icon: phoneIcon,
-                      text: widget.phoneNo,
-                      font: widget.font,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextWithIcon(
-                      icon: clockIcon,
-                      text: widget.duration,
-                      font: widget.font,
-                    ),
-                    TextWithIcon(
-                        icon: starIcon,
-                        text: '${widget.score} (${widget.reviewCnt}개)',
-                        iconColor: CustomColors.yellowColor,
-                        font: widget.font),
-                  ],
-                ),
-                CustomText(
-                  title: '이용 가능 시설',
-                  fontSize: FontSize.smallSize,
-                  color: CustomColors.mainColor,
-                  font: widget.font,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    for (String each in widget.available)
-                      CustomText(
-                        title: each,
-                        fontSize: FontSize.smallSize,
-                        font: widget.font,
-                      ),
-                    CustomButton(
+                              page: NavigationModal(
+                                startPoint: const [37.537229, 127.005515],
+                                endPoint: const [37.4979502, 127.0276368],
+                                destination: widget.toiletName,
+                              )),
+                          icon: const CustomIcon(
+                            icon: planeIcon,
+                            color: Colors.lightBlue,
+                            size: 35,
+                          )),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWithIcon(
+                    icon: locationIcon,
+                    text: widget.address,
+                    font: widget.font,
+                  ),
+                  TextWithIcon(
+                    icon: phoneIcon,
+                    text: widget.phoneNo,
+                    font: widget.font,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWithIcon(
+                    icon: clockIcon,
+                    text: widget.duration,
+                    font: widget.font,
+                  ),
+                  TextWithIcon(
+                      icon: starIcon,
+                      text: '${widget.score} (${widget.reviewCnt}개)',
+                      iconColor: CustomColors.yellowColor,
+                      font: widget.font),
+                ],
+              ),
+              CustomText(
+                title: '이용 가능 시설',
+                fontSize: FontSize.smallSize,
+                color: CustomColors.mainColor,
+                font: widget.font,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (String each in widget.available)
+                    CustomText(
+                      title: each,
                       fontSize: FontSize.smallSize,
-                      onPressed: routerPush(
-                          context: context,
-                          page: ReviewForm(toiletName: widget.toiletName)),
-                      buttonText: '리뷰 남기기',
-                    )
-                  ],
-                )
-              ],
-            ),
+                      font: widget.font,
+                    ),
+                  CustomButton(
+                    fontSize: FontSize.smallSize,
+                    onPressed: routerPush(
+                        context: context,
+                        page: ReviewForm(toiletName: widget.toiletName)),
+                    buttonText: '리뷰 남기기',
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),
@@ -417,10 +379,12 @@ class _FilterBoxState extends State<FilterBox> {
   StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
   late StringList showedFilter;
   late BoolList selectedList;
-  void changeSelected(int i) {
-    setState(() {
-      selectedList[i] = !selectedList[i];
-    });
+  ReturnVoid changeSelected(int i) {
+    return () {
+      setState(() {
+        selectedList[i] = !selectedList[i];
+      });
+    };
   }
 
   @override
@@ -443,26 +407,23 @@ class _FilterBoxState extends State<FilterBox> {
           color: CustomColors.mainColor,
         ),
         for (int i = 0; i < 3; i += 1)
-          GestureDetector(
-            onTap: () => changeSelected(i),
-            child: Container(
-              // width: 100,
-              // height: 30,
-              decoration: BoxDecoration(
-                  color: selectedList[i] ? mainColor : whiteColor,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: const [defaultShadow]),
-              child: Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  child: CustomText(
-                    title: showedFilter[i],
-                    fontSize: FontSize.smallSize,
-                    color: selectedList[i]
-                        ? CustomColors.whiteColor
-                        : CustomColors.blackColor,
-                  ),
+          CustomBox(
+            onTap: changeSelected(i),
+            // width: 100,
+            // height: 30,
+            color: selectedList[i] ? mainColor : whiteColor,
+            radius: 5,
+            boxShadow: const [defaultShadow],
+            child: Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                child: CustomText(
+                  title: showedFilter[i],
+                  fontSize: FontSize.smallSize,
+                  color: selectedList[i]
+                      ? CustomColors.whiteColor
+                      : CustomColors.blackColor,
                 ),
               ),
             ),
@@ -474,6 +435,48 @@ class _FilterBoxState extends State<FilterBox> {
           color: CustomColors.mainColor,
         ),
       ],
+    );
+  }
+}
+
+//* box 기본 틀
+class CustomBox extends StatelessWidget {
+  final ReturnVoid? onTap;
+  final Widget child;
+  final double? width, height;
+  final Color? color;
+  final double radius;
+  final ShadowList? boxShadow;
+  final BorderRadius? borderRadius;
+  final Border? border;
+  const CustomBox(
+      {super.key,
+      this.onTap,
+      required this.child,
+      this.width,
+      this.height,
+      this.color,
+      this.radius = 10,
+      this.boxShadow,
+      this.borderRadius,
+      this.border});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: borderRadius ??
+              (radius != 0 ? BorderRadius.circular(radius) : null),
+          boxShadow: boxShadow,
+          border: border,
+        ),
+        width: width,
+        height: height,
+        child: child,
+      ),
     );
   }
 }

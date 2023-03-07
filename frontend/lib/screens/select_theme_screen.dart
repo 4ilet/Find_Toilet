@@ -1,5 +1,6 @@
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -16,23 +17,26 @@ class SelectFontTheme extends StatefulWidget {
 
 class _SelectFontThemeState extends State<SelectFontTheme> {
   Themes selected = Themes.largeFont;
-  Themes defaultFont = Themes.defaultFont;
-  Themes largeFont = Themes.largeFont;
+  bool isLarge = true;
 
-  void changeTheme(Themes fontSize) {
-    if (fontSize == Themes.defaultFont) {
+  ReturnVoid changeTheme(bool isLargeTheme) {
+    return () {
       setState(() {
-        selected = Themes.defaultFont;
+        if (isLarge != isLargeTheme) {
+          selected = isLargeTheme ? Themes.largeFont : Themes.defaultFont;
+          isLarge = !isLarge;
+        }
       });
-    } else {
-      setState(() {
-        selected = Themes.largeFont;
-      });
-    }
+    };
   }
 
-  bool isLarge() => selected == largeFont;
-  bool isDefault() => selected == defaultFont;
+  void applyTheme() {
+    theme = selected;
+    isFirstVisit = false;
+    setVisited();
+    routerPush(context: context, page: const Main())();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,27 +50,26 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
             fontSize: FontSize.titleSize,
             color: CustomColors.whiteColor,
           )),
-          const SizedBox(height: 15),
           const CustomText(
             title: '사용하실 테마를 선택해주세요.',
-            fontSize: FontSize.defaultSize,
             color: CustomColors.whiteColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                child: ThemeBox(text: '큰 글씨', selected: isLarge()),
-                onTap: () => changeTheme(largeFont),
+              ThemeBox(
+                text: '큰 글씨',
+                selected: isLarge,
+                onTap: changeTheme(true),
               ),
-              GestureDetector(
-                child: ThemeBox(text: '기본', selected: isDefault()),
-                onTap: () => changeTheme(defaultFont),
+              ThemeBox(
+                text: '기본',
+                selected: !isLarge,
+                onTap: changeTheme(false),
               ),
             ],
           ),
-          CustomButton(
-              onPressed: routerPush(context: context, page: const Main()))
+          CustomButton(onPressed: applyTheme)
         ],
       ),
     );

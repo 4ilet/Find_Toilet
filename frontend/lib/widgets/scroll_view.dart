@@ -26,9 +26,9 @@ class ToiletScrollView extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           childCount: 10,
           (BuildContext context, int index) {
-            return Container(
+            return const CustomBox(
               color: mainColor,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: ListItem(),
               ),
