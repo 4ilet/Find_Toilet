@@ -4,6 +4,9 @@
 #spring.datasource.password=Fourilet@2023
 
 spring:
+    mvc:
+      pathmatch:
+        matching-strategy: ant_path_matcher
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://43.201.124.70:3306/Fourilet?serverTimezone=UTC&characterEncoding=UTF-8
