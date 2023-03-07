@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class FolderDto {
     public static class FolderListDto {
         private String FolderName;
         private long folderId;
-
+        private long folderLen;
     }
 
 }

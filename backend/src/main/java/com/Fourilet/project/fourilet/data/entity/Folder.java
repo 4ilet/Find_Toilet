@@ -3,6 +3,9 @@ package com.Fourilet.project.fourilet.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @Entity
 @Getter @Setter
@@ -21,4 +24,6 @@ public class Folder {
     @ManyToOne
     @JoinColumn(name = "member")
     private Member member;
+
+
 }

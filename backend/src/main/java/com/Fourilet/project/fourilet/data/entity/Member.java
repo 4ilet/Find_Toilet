@@ -27,19 +27,14 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Folder> folderList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviewList = new ArrayList<>();
+
     @Column(name = "user_role")
     private String userRole;
 
     private Long kakaoId;
 
-//    public void updateMember(MemberUpdateDto memberUpdateDto){
-//        this.nickname = memberUpdateDto.getNickName();
-//    }
-
-//    public Member update(String nickname){
-//        this.nickname = nickname;
-//        return this;
-//    }
 
      @Builder
     public Member(Long kakaoId, String email, String nickname, String refreshToken, String userRole){

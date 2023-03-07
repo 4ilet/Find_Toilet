@@ -17,7 +17,7 @@ public class BookMark {
 
     @ManyToOne
     @JoinColumn(name = "folderId", referencedColumnName = "folderId")
-    private Folder folder;
+    private Folder folderId;
 
     @ManyToOne
     @JoinColumn(name = "toiletId", referencedColumnName = "toiletId")
