@@ -17,6 +17,15 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
+  bool showList = false;
+  void changeShowState() {
+    setState(() {
+      if (!showList) {
+        showList = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -36,7 +45,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               toolbarHeight: 40,
               backgroundColor: Colors.white10,
               pinned: true,
-              expandedHeight: 80,
+              expandedHeight: widget.showReview ? 40 : 80,
               flexibleSpace: CustomBox(
                 color: mainColor,
                 borderRadius:
@@ -44,42 +53,73 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Stack(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomText(
-                              title: widget.isMain ? '주변 화장실' : '검색 결과',
-                              fontSize: FontSize.largeSize,
-                              color: CustomColors.whiteColor,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(
+                                  title: widget.isMain ? '주변 화장실' : '검색 결과',
+                                  fontSize: FontSize.largeSize,
+                                  color: CustomColors.whiteColor,
+                                ),
+                                widget.isMain
+                                    ? const SizedBox()
+                                    : SelectBox(
+                                        showList: showList,
+                                        onTap: changeShowState,
+                                        selectList: sortOrder,
+                                        width: 120,
+                                        height: 25,
+                                      ),
+                              ],
                             ),
-                            widget.isMain
-                                ? const SizedBox()
-                                : SelectBox(
-                                    selectList: sortOrder,
-                                    width: 120,
-                                    height: 25,
+                          ),
+                          widget.showReview
+                              ? const SizedBox()
+                              : const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  child: CustomText(
+                                    title: '필터를 적용한 결과입니다',
+                                    fontSize: FontSize.smallSize,
+                                    color: CustomColors.whiteColor,
+                                    font: notoSans,
                                   ),
-                          ],
-                        ),
+                                ),
+                        ],
                       ),
-                      widget.showReview
-                          ? const SizedBox()
-                          : const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: CustomText(
-                                title: '필터를 적용한 결과입니다',
-                                fontSize: FontSize.smallSize,
-                                color: CustomColors.whiteColor,
-                                font: notoSans,
+                      showList
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  CustomBox(
+                                    width: 120,
+                                    color: whiteColor,
+                                    boxShadow: const [defaultShadow],
+                                    child: Column(
+                                      children: [
+                                        for (String select in sortOrder)
+                                          CustomText(
+                                            title: select,
+                                            font: notoSans,
+                                            fontSize: FontSize.smallSize,
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
+                          : const SizedBox()
                     ],
                   ),
                 ),
@@ -94,7 +134,18 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                     color: mainColor,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListItem(showReview: widget.showReview),
+                      child: Column(
+                        children: [
+                          ListItem(showReview: widget.showReview),
+                          for (int i = 0; i < 10; i += 1)
+                            widget.showReview
+                                ? const ReviewBox(
+                                    nickname: '아아',
+                                    score: 4.0,
+                                    content: '아주 좋아요')
+                                : const SizedBox()
+                        ],
+                      ),
                     ),
                   );
                 },

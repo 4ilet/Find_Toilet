@@ -1,4 +1,5 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -268,7 +269,7 @@ class _ListItemState extends State<ListItem> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: () {},
+        onTap: routerPush(context: context, page: const Main(showReview: true)),
         color: whiteColor,
         height: 200,
         width: 500,
@@ -582,11 +583,10 @@ class ReviewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: CustomBox(
         color: whiteColor,
-        height: 160,
-        width: 400,
+        width: 360,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
@@ -604,10 +604,11 @@ class ReviewBox extends StatelessWidget {
                     icon: starIcon,
                     text: '$score',
                     iconColor: CustomColors.yellowColor,
+                    font: notoSans,
                   ),
                 ],
               ),
-              CustomText(title: content)
+              CustomText(title: content, font: notoSans)
             ],
           ),
         ),

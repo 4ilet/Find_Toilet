@@ -11,6 +11,7 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initWidthHeight(context);
     return Scaffold(
       body: Stack(
         children: [
