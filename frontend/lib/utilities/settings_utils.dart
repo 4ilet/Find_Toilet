@@ -54,3 +54,24 @@ var accessToken = '';
 var theme = Themes.defaultFont;
 //* 지도 반경
 var mapRadius = MapRadius.three;
+
+//* 문의하기 내부 내용
+String body(
+        {required String release,
+        required int sdkInt,
+        required String manufacturer,
+        required String model,
+        required String brand,
+        required String device,
+        required String hardware}) =>
+    '''
+제목 말머리로 [오류]/[문의]/[제안]/[기타] 중 한 가지를 작성해주세요.\n
+문의 사항
+\n\n\n\n
+--------------------
+OS 버전: Android $release (SDK $sdkInt)
+기기: $manufacturer $model
+brand: $brand
+device: $device
+hardware: $hardware
+''';

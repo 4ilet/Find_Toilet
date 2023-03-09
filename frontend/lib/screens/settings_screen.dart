@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -9,6 +10,7 @@ import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -31,10 +33,39 @@ class _SettingsState extends State<Settings> {
   }
 
   void sendEmail() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    final deviceInfo = await deviceInfoPlugin.deviceInfo;
+    final info = deviceInfo.data;
+    final version = info['version'];
+    final manufacturer = info['manufacturer'];
+    final model = info['model'];
+    final brand = info['brand'];
+    final device = info['device'];
+    final hardware = info['hardware'];
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String appVersion = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    print(appName);
+    print(packageName);
+    print(appVersion);
+    print(buildNumber);
+
     final Email email = Email(
       subject: '[화장실을 찾아서 문의]',
       recipients: ['team.4ilet@gmail.com'],
-      body: '',
+      body: body(
+        release: version['release'],
+        sdkInt: version['sdkInt'],
+        manufacturer: manufacturer,
+        model: model,
+        brand: brand,
+        device: device,
+        hardware: hardware,
+      ),
       isHTML: false,
     );
     try {
