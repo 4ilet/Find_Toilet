@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface  BookMarkRepository extends JpaRepository<BookMark, Long> {
-    Long countByFolderId(Folder folder);
-    List<BookMark> findAllByFolderId(Folder folder);
+    Long countByFolder(Folder folder);
+    List<BookMark> findAllByFolder(Folder folder);
 }
