@@ -16,11 +16,11 @@ public class BookMark {
     private long BookMarkId;
 
     @ManyToOne
-    @JoinColumn(name = "folderId", referencedColumnName = "folderId")
-    private Folder folderId;
+    @JoinColumn(name = "folder")
+    private Folder folder;
 
     @ManyToOne
-    @JoinColumn(name = "toiletId", referencedColumnName = "toiletId")
+    @JoinColumn(name = "toilet")
     private Toilet toilet;
 
 }

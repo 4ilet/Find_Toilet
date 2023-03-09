@@ -22,5 +22,11 @@ public class FolderDto {
         private long folderId;
         private long folderLen;
     }
+//    @Getter
+//    @Setter
+//    public static class newFolderDto {
+//        private Member member;
+//        private String folderName;
+//    }
 
 }
