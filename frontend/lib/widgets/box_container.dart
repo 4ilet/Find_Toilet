@@ -1,6 +1,7 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
+import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -217,13 +218,11 @@ class _AddBoxState extends State<AddBox> {
 
 //* 장소 목록 아이템
 class ListItem extends StatefulWidget {
-  final String font;
+  final String font, toiletName, address, phoneNo, duration;
   final StringList available;
-  final String toiletName, address, phoneNo, duration;
   final double score;
   final int reviewCnt;
-  final bool isLiked;
-  final bool showReview;
+  final bool isLiked, showReview, isMain;
   const ListItem({
     super.key,
     this.toiletName = '광주시립도서관화장실',
@@ -236,6 +235,7 @@ class ListItem extends StatefulWidget {
     this.isLiked = false,
     this.font = notoSans,
     required this.showReview,
+    this.isMain = true,
   });
 
   @override
@@ -244,8 +244,8 @@ class ListItem extends StatefulWidget {
 
 class _ListItemState extends State<ListItem> {
   late bool liked;
-  final iconList = [locationIcon, phoneIcon, clockIcon, starIcon];
-  late final infoList;
+  final IconDataList iconList = [locationIcon, phoneIcon, clockIcon, starIcon];
+  late final StringList infoList;
   void changeLiked() {
     setState(() {
       liked = !liked;
@@ -269,7 +269,11 @@ class _ListItemState extends State<ListItem> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: routerPush(context: context, page: const Main(showReview: true)),
+        onTap: routerPush(
+            context: context,
+            page: widget.isMain
+                ? const Main(showReview: true)
+                : const Search(query: '', showReview: true)),
         color: whiteColor,
         height: 200,
         width: 500,
@@ -295,22 +299,24 @@ class _ListItemState extends State<ListItem> {
                         onPressed: showModal(
                             context: context, page: const AddToBookMarkModal()),
                         icon: CustomIcon(
-                            icon: liked ? heartIcon : emptyHeartIcon,
-                            color: redColor),
+                          icon: liked ? heartIcon : emptyHeartIcon,
+                          color: redColor,
+                        ),
                       ),
                       IconButton(
-                          onPressed: showModal(
-                              context: context,
-                              page: NavigationModal(
-                                startPoint: const [37.537229, 127.005515],
-                                endPoint: const [37.4979502, 127.0276368],
-                                destination: widget.toiletName,
-                              )),
-                          icon: const CustomIcon(
-                            icon: planeIcon,
-                            color: Colors.lightBlue,
-                            size: 35,
-                          )),
+                        onPressed: showModal(
+                            context: context,
+                            page: NavigationModal(
+                              startPoint: const [37.537229, 127.005515],
+                              endPoint: const [37.4979502, 127.0276368],
+                              destination: widget.toiletName,
+                            )),
+                        icon: const CustomIcon(
+                          icon: planeIcon,
+                          color: Colors.lightBlue,
+                          size: 35,
+                        ),
+                      ),
                     ],
                   ),
                 ],
