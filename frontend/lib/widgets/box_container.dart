@@ -1,5 +1,7 @@
 import 'package:find_toilet/screens/book_mark_screen.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
+import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -31,26 +33,24 @@ class _ThemeBoxState extends State<ThemeBox> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 12),
       child: CustomBox(
-          onTap: widget.onTap,
-          height: 220,
-          width: 170,
-          color: whiteColor,
-          boxShadow: widget.selected ? [redShadow] : null,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const CustomBox(
-                color: greyColor,
-                height: 130,
-                width: 130,
-                child: SizedBox(),
-              ),
-              Text(
-                widget.text,
-                style: const TextStyle(fontSize: defaultSize),
-              ),
-            ],
-          )),
+        onTap: widget.onTap,
+        height: 220,
+        width: 170,
+        color: whiteColor,
+        boxShadow: widget.selected ? [redShadow] : null,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const CustomBox(
+              color: greyColor,
+              height: 130,
+              width: 130,
+              child: SizedBox(),
+            ),
+            CustomText(title: widget.text)
+          ],
+        ),
+      ),
     );
   }
 }
@@ -218,12 +218,11 @@ class _AddBoxState extends State<AddBox> {
 
 //* 장소 목록 아이템
 class ListItem extends StatefulWidget {
-  final String font;
+  final String font, toiletName, address, phoneNo, duration;
   final StringList available;
-  final String toiletName, address, phoneNo, duration;
   final double score;
   final int reviewCnt;
-  final bool isLiked;
+  final bool isLiked, showReview, isMain;
   const ListItem({
     super.key,
     this.toiletName = '광주시립도서관화장실',
@@ -235,6 +234,8 @@ class ListItem extends StatefulWidget {
     this.available = const ['장애인용', '유아용', '기저귀 교환대'],
     this.isLiked = false,
     this.font = notoSans,
+    required this.showReview,
+    this.isMain = true,
   });
 
   @override
@@ -243,6 +244,8 @@ class ListItem extends StatefulWidget {
 
 class _ListItemState extends State<ListItem> {
   late bool liked;
+  final IconDataList iconList = [locationIcon, phoneIcon, clockIcon, starIcon];
+  late final StringList infoList;
   void changeLiked() {
     setState(() {
       liked = !liked;
@@ -253,6 +256,12 @@ class _ListItemState extends State<ListItem> {
   void initState() {
     super.initState();
     liked = widget.isLiked;
+    infoList = [
+      widget.address,
+      widget.phoneNo,
+      widget.duration,
+      '${widget.score} (${widget.reviewCnt}개)'
+    ];
   }
 
   @override
@@ -260,7 +269,11 @@ class _ListItemState extends State<ListItem> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: () {},
+        onTap: routerPush(
+            context: context,
+            page: widget.isMain
+                ? const Main(showReview: true)
+                : const Search(query: '', showReview: true)),
         color: whiteColor,
         height: 200,
         width: 500,
@@ -272,6 +285,8 @@ class _ListItemState extends State<ListItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // toiletTopInfo(context),
+                  // for (int i = 0; i < 2; i += 1) toiletInfo(i),
                   CustomText(
                       color: CustomColors.mainColor,
                       title: widget.toiletName,
@@ -284,22 +299,24 @@ class _ListItemState extends State<ListItem> {
                         onPressed: showModal(
                             context: context, page: const AddToBookMarkModal()),
                         icon: CustomIcon(
-                            icon: liked ? heartIcon : emptyHeartIcon,
-                            color: redColor),
+                          icon: liked ? heartIcon : emptyHeartIcon,
+                          color: redColor,
+                        ),
                       ),
                       IconButton(
-                          onPressed: showModal(
-                              context: context,
-                              page: NavigationModal(
-                                startPoint: const [37.537229, 127.005515],
-                                endPoint: const [37.4979502, 127.0276368],
-                                destination: widget.toiletName,
-                              )),
-                          icon: const CustomIcon(
-                            icon: planeIcon,
-                            color: Colors.lightBlue,
-                            size: 35,
-                          )),
+                        onPressed: showModal(
+                            context: context,
+                            page: NavigationModal(
+                              startPoint: const [37.537229, 127.005515],
+                              endPoint: const [37.4979502, 127.0276368],
+                              destination: widget.toiletName,
+                            )),
+                        icon: const CustomIcon(
+                          icon: planeIcon,
+                          color: Colors.lightBlue,
+                          size: 35,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -362,6 +379,83 @@ class _ListItemState extends State<ListItem> {
           ),
         ),
       ),
+    );
+  }
+
+  Row toiletTopInfo(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 7,
+          child: CustomText(
+            color: CustomColors.mainColor,
+            title: widget.toiletName,
+            fontSize: FontSize.defaultSize,
+            font: widget.font,
+          ),
+        ),
+        Flexible(
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomIconButton(
+                onPressed: showModal(
+                  context: context,
+                  page: const AddToBookMarkModal(),
+                ),
+                icon: liked ? heartIcon : emptyHeartIcon,
+                color: CustomColors.redColor,
+              ),
+              CustomIconButton(
+                onPressed: showModal(
+                  context: context,
+                  page: NavigationModal(
+                    startPoint: const [37.537229, 127.005515],
+                    endPoint: const [37.4979502, 127.0276368],
+                    destination: widget.toiletName,
+                  ),
+                ),
+                icon: planeIcon,
+                color: CustomColors.lightBlueColor,
+                iconSize: 35,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row toiletInfo(int i) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 7,
+          child: TextWithIcon(
+            icon: iconList[2 * i],
+            text: infoList[2 * i],
+            font: widget.font,
+          ),
+        ),
+        Flexible(
+          flex: 4,
+          child: i == 0
+              ? TextWithIcon(
+                  icon: iconList[2 * i + 1],
+                  text: infoList[2 * i + 1],
+                  font: widget.font,
+                )
+              : TextWithIcon(
+                  icon: iconList[2 * i + 1],
+                  text: infoList[2 * i + 1],
+                  iconColor: CustomColors.yellowColor,
+                  font: widget.font,
+                ),
+        )
+      ],
     );
   }
 }
@@ -476,6 +570,54 @@ class CustomBox extends StatelessWidget {
         width: width,
         height: height,
         child: child,
+      ),
+    );
+  }
+}
+
+//* review 상자
+class ReviewBox extends StatelessWidget {
+  final String nickname, content;
+  final double score;
+  const ReviewBox({
+    super.key,
+    required this.nickname,
+    required this.score,
+    required this.content,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: CustomBox(
+        color: whiteColor,
+        width: 360,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    color: CustomColors.mainColor,
+                    title: nickname,
+                    font: notoSans,
+                  ),
+                  TextWithIcon(
+                    icon: starIcon,
+                    text: '$score',
+                    iconColor: CustomColors.yellowColor,
+                    font: notoSans,
+                  ),
+                ],
+              ),
+              CustomText(title: content, font: notoSans)
+            ],
+          ),
+        ),
       ),
     );
   }

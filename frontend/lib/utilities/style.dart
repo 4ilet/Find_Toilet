@@ -8,6 +8,7 @@ const redColor = Colors.red;
 const yellowColor = Color(0xFFFFBF44);
 const greyColor = Colors.grey;
 const lightGreyColor = Color(0xFFE5E5E5);
+const lightBlueColor = Colors.lightBlue;
 
 //* 글씨 관련
 const double titleSize = 30;

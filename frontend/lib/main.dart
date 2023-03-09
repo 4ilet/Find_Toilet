@@ -1,4 +1,4 @@
-import 'package:find_toilet/screens/intro_screen.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_func.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +15,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Find Toilet',
       theme: ThemeData(fontFamily: 'Kimm'),
-      home: const Intro(),
-      // home: const Main(),
+      // home: const Intro(),
+      home: const Main(),
       // home: const Settings(),
     );
   }

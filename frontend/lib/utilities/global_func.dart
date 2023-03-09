@@ -22,7 +22,7 @@ ReturnVoid showModal({required BuildContext context, required Widget page}) {
 }
 
 //* 화면 너비, 높이 (intro에서 실행)
-late final screenWidth, screenHeight;
+late var screenWidth, screenHeight;
 void initWidthHeight(BuildContext context) {
   final size = MediaQuery.of(context).size;
   screenWidth = size.width;
