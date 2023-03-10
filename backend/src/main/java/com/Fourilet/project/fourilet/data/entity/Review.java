@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import javax.persistence.*;
 
@@ -15,10 +16,12 @@ public class Review {
     @Column(name = "reviewId")
     private long reviewId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "toiletId")
     private Toilet reviewedToilet;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "member")
     private Member member;

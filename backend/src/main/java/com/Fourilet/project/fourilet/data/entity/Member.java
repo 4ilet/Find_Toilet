@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,9 +25,11 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member")
     private List<Folder> folderList = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member")
     private List<Review> reviewList = new ArrayList<>();
 
