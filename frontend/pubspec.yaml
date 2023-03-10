@@ -43,6 +43,8 @@ dependencies:
   shared_preferences: ^2.0.18
   device_info_plus: ^8.1.0
   package_info_plus: ^3.0.3
+  kakao_flutter_sdk_user: ^1.4.1
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,8 @@ flutter:
     - assets/images/t_map.png
     - assets/images/kakao_map.png
     - assets/images/naver_map.png
+    - assets/images/kakao_login_medium.png
+    - .env
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

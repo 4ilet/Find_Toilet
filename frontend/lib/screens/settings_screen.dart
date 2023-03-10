@@ -89,13 +89,15 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () {},
-                    child: TextWithIcon(
-                      icon: accessToken != '' ? personIcon : logoutIcon,
-                      text: accessToken != '' ? '로그인' : '로그아웃',
-                      iconColor: CustomColors.blackColor,
-                      fontSize: FontSize.defaultSize,
-                    ),
+                    onTap: login,
+                    child: accessToken == ''
+                        ? Image.asset(kakaoLogin)
+                        : const TextWithIcon(
+                            icon: logoutIcon,
+                            text: '로그아웃',
+                            iconColor: CustomColors.blackColor,
+                            fontSize: FontSize.defaultSize,
+                          ),
                   ),
                 ],
               ),
