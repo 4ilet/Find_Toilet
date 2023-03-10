@@ -25,6 +25,9 @@ public class Toilet {
     @OneToMany(mappedBy = "reviewedToilet")
     private List<Review> reviewList = new ArrayList<>();
 
+//    @OneToMany(mappedBy = "toilet")
+//    private BookMark bookMark;
+
     private String toiletName;
 
     private String address;

@@ -4,18 +4,19 @@ import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ToiletRepository extends JpaRepository<Toilet, Long> {
+
+    Optional<Toilet> findById(long toiletId);
 
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +

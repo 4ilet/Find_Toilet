@@ -27,5 +27,7 @@ public class Folder {
     @JoinColumn(name = "member")
     private Member member;
 
+//    @OneToMany(mappedBy = "folder")
+//    private BookMark bookMark;
 
 }

@@ -18,12 +18,12 @@ public class BookMark {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "folderId", referencedColumnName = "folderId")
-    private Folder folderId;
+    @JoinColumn(name = "folder")
+    private Folder folder;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "toiletId", referencedColumnName = "toiletId")
+    @JoinColumn(name = "toilet")
     private Toilet toilet;
 
 }
