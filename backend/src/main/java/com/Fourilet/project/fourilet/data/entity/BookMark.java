@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,10 +16,12 @@ public class BookMark {
     @Column(name = "bookmarkId")
     private long BookMarkId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "folderId", referencedColumnName = "folderId")
     private Folder folderId;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "toiletId", referencedColumnName = "toiletId")
     private Toilet toilet;

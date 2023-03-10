@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Folder {
     @Column(name = "folderName")
     private String folderName;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "member")
     private Member member;
