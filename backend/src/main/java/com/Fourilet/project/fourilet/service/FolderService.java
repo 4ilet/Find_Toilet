@@ -10,6 +10,7 @@ import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.data.repository.ToiletRepository;
 import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
+import com.Fourilet.project.fourilet.dto.ToiletDto2;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,12 +107,12 @@ public class FolderService {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    public List<ToiletDto> getToiletList(long folderId){
+    public List<ToiletDto2> getToiletList(long folderId){
         LOGGER.info("CALL GET TOILET LIST");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
 
-        List<ToiletDto> toiletDtoList = new ArrayList<>();
+        List<ToiletDto2> toiletDtoList = new ArrayList<>();
         List<Toilet> toiletList = new ArrayList<>();
 
         for (BookMark bookmark : bookMarkList){
@@ -121,7 +122,7 @@ public class FolderService {
         }
 
         for (Toilet toilet : toiletList){
-            ToiletDto toiletDto2 = new ToiletDto();
+            ToiletDto2 toiletDto2 = new ToiletDto2();
             toiletDto2.setToiletId(toilet.getToiletId());
             toiletDto2.setToiletName(toilet.getToiletName());
             toiletDto2.setAddress(toilet.getAddress());

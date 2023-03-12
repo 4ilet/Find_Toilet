@@ -22,7 +22,7 @@ public class Toilet {
     private Long toiletId;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "reviewedToilet")
+    @OneToMany(mappedBy = "toilet")
     private List<Review> reviewList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "toilet")
