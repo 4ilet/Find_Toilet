@@ -60,5 +60,12 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
+//    @PostMapping("/user/signup")
+//    public signUp(){};
 
+    //테스트
+//    @PutMapping("/user/update/nickname/{user_id}")
+//    public String updateUserNickname(){
+//
+//    }
 }
