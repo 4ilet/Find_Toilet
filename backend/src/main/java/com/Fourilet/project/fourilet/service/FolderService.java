@@ -9,6 +9,7 @@ import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.data.repository.ToiletRepository;
 import com.Fourilet.project.fourilet.dto.FolderDto;
+import com.Fourilet.project.fourilet.dto.ToiletDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +93,7 @@ public class FolderService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     public ResponseEntity<?> deleteToilet(long folderId, long toiletId){
-        LOGGER.info("CAA DELETE TOILET");
+        LOGGER.info("CALL DELETE TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
 
@@ -104,5 +105,40 @@ public class FolderService {
             }
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    public List<ToiletDto> getToiletList(long folderId){
+        LOGGER.info("CALL GET TOILET LIST");
+        Folder folder = folderRepository.findById(folderId).orElse(null);
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
+
+        List<ToiletDto> toiletDtoList = new ArrayList<>();
+        List<Toilet> toiletList = new ArrayList<>();
+
+        for (BookMark bookmark : bookMarkList){
+            Toilet toilet = bookmark.getToilet();
+            System.out.println(toilet.getToiletName());
+            toiletList.add(toilet);
+        }
+
+        for (Toilet toilet : toiletList){
+            ToiletDto toiletDto2 = new ToiletDto();
+            toiletDto2.setToiletId(toilet.getToiletId());
+            toiletDto2.setToiletName(toilet.getToiletName());
+            toiletDto2.setAddress(toilet.getAddress());
+            toiletDto2.setOperationTime(toilet.getOperationTime());
+            toiletDto2.setLat(toilet.getLat());
+            toiletDto2.setLon(toilet.getLon());
+            toiletDto2.setPhoneNumber(toilet.getPhoneNumber());
+            toiletDto2.setDMalePee(toilet.isDMalePee());
+            toiletDto2.setDMalePoo(toilet.isDMalePoo());
+            toiletDto2.setDFemalePoo(toilet.isDFemalePoo());
+            toiletDto2.setCFemalePoo(toilet.isCFemalePoo());
+            toiletDto2.setCMalePee(toilet.isCMalePee());
+            toiletDto2.setCMalePoo(toilet.isCMalePoo());
+            toiletDto2.setAllDay(toilet.isAllDay());
+            toiletDto2.setDiaper(toilet.isDiaper());
+            toiletDtoList.add(toiletDto2);
+        }
+        return toiletDtoList;
     }
 }
