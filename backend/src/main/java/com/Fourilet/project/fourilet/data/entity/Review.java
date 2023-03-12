@@ -18,8 +18,8 @@ public class Review {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "toilet")
-    private Toilet toilet;
+    @JoinColumn(name = "toiletId")
+    private Toilet reviewedToilet;
 
     @JsonBackReference
     @ManyToOne

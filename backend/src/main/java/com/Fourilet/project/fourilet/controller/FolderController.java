@@ -1,10 +1,8 @@
 package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.data.entity.Folder;
-import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.dto.FolderDto;
-import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -59,10 +57,4 @@ public class FolderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/folder/toiletlist/{folderId}")
-    public ResponseEntity<?> getToiletList(@PathVariable long folderId){
-        List<ToiletDto> toiletDtoList = folderService.getToiletList(folderId);
-
-        return new ResponseEntity<>(toiletDtoList, HttpStatus.OK);
-    }
 }
