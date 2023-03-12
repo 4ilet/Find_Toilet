@@ -18,7 +18,7 @@ public class Toilet {
     @Column(name = "toiletId")
     private long toiletId;
 
-    @OneToMany(mappedBy = "reviewedToilet")
+    @OneToMany(mappedBy = "toilet")
     private List<Review> reviewList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "toilet")

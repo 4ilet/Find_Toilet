@@ -16,8 +16,8 @@ public class Review {
     private long reviewId;
 
     @ManyToOne
-    @JoinColumn(name = "toiletId")
-    private Toilet reviewedToilet;
+    @JoinColumn(name = "toilet")
+    private Toilet toilet;
 
     @ManyToOne
     @JoinColumn(name = "member")
