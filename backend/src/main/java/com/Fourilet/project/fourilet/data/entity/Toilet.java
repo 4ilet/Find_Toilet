@@ -1,6 +1,9 @@
 package com.Fourilet.project.fourilet.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,9 +19,10 @@ public class Toilet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "toiletId")
-    private long toiletId;
+    private Long toiletId;
 
-    @OneToMany(mappedBy = "toilet")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "reviewedToilet")
     private List<Review> reviewList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "toilet")
