@@ -45,14 +45,10 @@ class _SettingsState extends State<Settings> {
     final hardware = info['hardware'];
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appName = packageInfo.appName;
-    String packageName = packageInfo.packageName;
     String appVersion = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    print(appName);
-    print(packageName);
-    print(appVersion);
-    print(buildNumber);
+    // String appName = packageInfo.appName;
+    // String packageName = packageInfo.packageName;
+    // String buildNumber = packageInfo.buildNumber;
 
     final Email email = Email(
       subject: '[화장실을 찾아서 문의]',
@@ -71,7 +67,7 @@ class _SettingsState extends State<Settings> {
     try {
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context: context, page: errorModal())();
+      showModal(context: context, page: errorModal('email'))();
     }
   }
 
@@ -89,7 +85,7 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: login,
+                    onTap: () => login(context, errorModal('login')),
                     child: accessToken == ''
                         ? Image.asset(kakaoLogin)
                         : const TextWithIcon(
@@ -202,14 +198,16 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  CustomModal errorModal() {
-    return const CustomModal(
+  CustomModal errorModal(String feature) {
+    const emailError =
+        '문의 메일 전송 오류가 발생했습니다.\n gmail앱이 존재하지 않거나, \n기타 오류 때문일 수 있습니다. \n 문의사항은 아래 이메일로 연락주세요 \n team.4ilet@gmail.com';
+    const loginError = '카카오톡 로그인 오류가 발생했습니다.';
+    return CustomModal(
       title: '오류 발생',
       isAlert: true,
       children: [
         CustomText(
-          title:
-              '문의 메일 전송 오류가 발생했습니다.\n gmail앱이 존재하지 않거나, \n기타 오류 때문일 수 있습니다. \n 문의사항은 아래 이메일로 연락주세요 \n team.4ilet@gmail.com',
+          title: feature == 'email' ? emailError : loginError,
           fontSize: FontSize.defaultSize,
           font: notoSans,
         ),
