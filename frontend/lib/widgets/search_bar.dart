@@ -6,6 +6,7 @@ import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:flutter/material.dart';
 
@@ -25,13 +26,12 @@ class _SearchBarState extends State<SearchBar> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         const SizedBox(height: 100),
-        Container(
+        CustomBox(
           width: 270,
           height: 40,
-          decoration: BoxDecoration(
-              boxShadow: const [defaultShadow],
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(5)),
+          boxShadow: const [defaultShadow],
+          color: whiteColor,
+          radius: 5,
           child: TextField(
             controller: widget.isMain
                 ? null

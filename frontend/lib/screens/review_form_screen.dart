@@ -2,6 +2,7 @@ import 'package:find_toilet/utilities/global_func.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -58,12 +59,11 @@ class _ReviewFormState extends State<ReviewForm> {
                 ],
               ),
             ),
-            Container(
+            const CustomBox(
               height: 150,
               width: 350,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: whiteColor),
-              child: const TextField(
+              color: whiteColor,
+              child: TextField(
                 maxLines: 10,
                 style: TextStyle(
                   fontFamily: notoSans,

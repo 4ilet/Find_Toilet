@@ -1,4 +1,3 @@
-import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
@@ -6,21 +5,26 @@ class CustomText extends StatelessWidget {
   final String title, font;
   final FontSize fontSize;
   final CustomColors color;
-  const CustomText(
-      {super.key,
-      required this.title,
-      required this.fontSize,
-      this.color = CustomColors.blackColor,
-      this.font = 'Kimm'});
+  final bool isBoldText;
+  const CustomText({
+    super.key,
+    required this.title,
+    this.fontSize = FontSize.defaultSize,
+    this.color = CustomColors.blackColor,
+    this.font = 'Kimm',
+    this.isBoldText = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
       style: TextStyle(
-          color: convertedColor(color),
-          fontSize: convertedSize(fontSize),
-          fontFamily: font),
+        color: convertedColor(color),
+        fontSize: convertedSize(fontSize),
+        fontFamily: font,
+        fontWeight: isBoldText ? FontWeight.bold : null,
+      ),
     );
   }
 }

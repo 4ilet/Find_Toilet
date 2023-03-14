@@ -13,13 +13,16 @@ class CustomButton extends StatelessWidget {
   final CustomColors textColor;
   final Color? buttonColor;
   final FontSize fontSize;
-  const CustomButton(
-      {super.key,
-      required this.onPressed,
-      this.buttonText = '완료',
-      this.textColor = CustomColors.mainColor,
-      this.buttonColor = whiteColor,
-      this.fontSize = FontSize.defaultSize});
+  final String font;
+  const CustomButton({
+    super.key,
+    required this.onPressed,
+    this.buttonText = '완료',
+    this.textColor = CustomColors.mainColor,
+    this.buttonColor = whiteColor,
+    this.fontSize = FontSize.defaultSize,
+    this.font = 'Kimm',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class CustomButton extends StatelessWidget {
         title: buttonText,
         color: textColor,
         fontSize: fontSize,
+        font: font,
       ),
     );
   }
@@ -114,9 +118,10 @@ class CustomCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color,
-          boxShadow: shadow ? [defaultShadow] : null),
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: shadow ? [defaultShadow] : null,
+      ),
       width: width,
       height: height,
       child: child,

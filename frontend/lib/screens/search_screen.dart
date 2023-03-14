@@ -6,7 +6,12 @@ import 'package:flutter/material.dart';
 
 class Search extends StatelessWidget {
   final String query;
-  const Search({super.key, required this.query});
+  final bool showReview;
+  const Search({
+    super.key,
+    required this.query,
+    this.showReview = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,10 @@ class Search extends StatelessWidget {
               const FilterBox()
             ],
           ),
-          const ToiletBottomSheet(isMain: false),
+          ToiletBottomSheet(
+            isMain: false,
+            showReview: showReview,
+          ),
         ],
       ),
     );
