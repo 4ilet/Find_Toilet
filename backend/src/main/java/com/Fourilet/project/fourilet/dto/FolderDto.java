@@ -2,6 +2,7 @@ package com.Fourilet.project.fourilet.dto;
 
 
 import com.Fourilet.project.fourilet.data.entity.Member;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,14 +19,20 @@ public class FolderDto {
     @Getter
     @Setter
     public static class FolderListDto {
+        @ApiParam(value = "즐겨찾기 폴더 이름", type = "String")
         private String FolderName;
+        @ApiParam(value = "즐겨찾기 폴더 ID", type = "long")
         private long folderId;
+        @ApiParam(value = "즐겨찾기 폴더의 길이", type = "long")
         private long folderLen;
     }
     @Getter
     @Setter
     public static class newFolderDto {
+        @ApiParam(value = "사용자 ID", type = "long")
         private Member member;
+        @ApiParam(value = "즐겨찾기 폴더 이름", type = "String")
         private String folderName;
+
     }
 }
