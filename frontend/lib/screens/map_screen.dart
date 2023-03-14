@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 import 'package:geolocator/geolocator.dart';
+// import 'package:flutter_map/flutter_map.dart';
+// import 'package:latlong2/latlong.dart';
+// import 'package:location/location.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -28,11 +31,10 @@ class MapScreenState extends State<MapScreen> {
     LocationPermission permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(position.latitude.abs());
-    print(position.longitude.abs());
-    controller.center =
-        LatLng(position.latitude.abs(), position.longitude.abs());
-    controller.zoom = 16;
+    // print(position.latitude.abs());
+    // print(position.longitude.abs());
+    controller.center = LatLng(position.latitude, position.longitude);
+    controller.zoom = 15;
     setState(() {});
   }
 
@@ -171,6 +173,7 @@ class MapScreenState extends State<MapScreen> {
         },
         tooltip: 'My Location',
         child: const Icon(Icons.my_location),
+        // child: const Icon(Icons.add_box),
       ),
     );
   }

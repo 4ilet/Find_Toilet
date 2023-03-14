@@ -9,23 +9,27 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: const MapScreen(),
-              ),
-            ],
-          ),
-          Column(children: const [SearchBar(isMain: true), FilterBox()]),
-          const ToiletBottomSheet(isMain: true)
-        ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: const MapScreen(),
+                ),
+              ],
+            ),
+            Column(children: const [SearchBar(isMain: true), FilterBox()]),
+            const ToiletBottomSheet(isMain: true)
+          ],
+        ),
       ),
     );
   }
