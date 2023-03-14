@@ -34,14 +34,17 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  modal_bottom_sheet: ^2.1.2
+  # cupertino_icons: ^1.0.2
   map: ^1.3.5+1
   geolocator: ^9.0.2
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.10
   flutter_email_sender: ^5.2.0
   shared_preferences: ^2.0.18
+  device_info_plus: ^8.1.0
+  package_info_plus: ^3.0.3
+  kakao_flutter_sdk_user: ^1.4.1
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +75,8 @@ flutter:
     - assets/images/t_map.png
     - assets/images/kakao_map.png
     - assets/images/naver_map.png
+    - assets/images/kakao_login_medium.png
+    - .env
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
