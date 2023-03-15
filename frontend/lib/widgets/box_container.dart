@@ -345,10 +345,11 @@ class _ListItemState extends State<ListItem> {
                     font: widget.font,
                   ),
                   TextWithIcon(
-                      icon: starIcon,
-                      text: '${widget.score} (${widget.reviewCnt}개)',
-                      iconColor: CustomColors.yellowColor,
-                      font: widget.font),
+                    icon: starIcon,
+                    text: '${widget.score} (${widget.reviewCnt}개)',
+                    iconColor: CustomColors.yellowColor,
+                    font: widget.font,
+                  ),
                 ],
               ),
               CustomText(

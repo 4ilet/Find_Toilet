@@ -26,64 +26,81 @@ class _ReviewFormState extends State<ReviewForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: mainColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CustomText(
-                title: widget.toiletName,
-                fontSize: FontSize.largeSize,
-                color: CustomColors.whiteColor),
-            const CustomText(
-              title: '어떠셨나요?',
-              fontSize: FontSize.defaultSize,
-              color: CustomColors.whiteColor,
-              font: notoSans,
+            Flexible(
+              flex: 2,
+              child: CustomText(
+                  title: widget.toiletName,
+                  fontSize: FontSize.largeSize,
+                  color: CustomColors.whiteColor),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  for (int i = 0; i < 5; i += 1)
-                    CustomIconButton(
-                      onPressed: () => changeScore(i),
-                      icon: starIcon,
-                      iconSize: 50,
-                      color: i <= score
-                          ? CustomColors.yellowColor
-                          : CustomColors.whiteColor,
+            const Flexible(
+              child: CustomText(
+                title: '어떠셨나요?',
+                fontSize: FontSize.defaultSize,
+                color: CustomColors.whiteColor,
+                font: notoSans,
+              ),
+            ),
+            Flexible(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    for (int i = 0; i < 5; i += 1)
+                      CustomIconButton(
+                        onPressed: () => changeScore(i),
+                        icon: starIcon,
+                        iconSize: 50,
+                        color: i <= score
+                            ? CustomColors.yellowColor
+                            : CustomColors.whiteColor,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const Flexible(
+              flex: 5,
+              child: CustomBox(
+                width: 350,
+                color: whiteColor,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: TextField(
+                    maxLines: 10,
+                    style: TextStyle(
+                      fontFamily: notoSans,
                     ),
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomButton(
+                    onPressed: routerPop(context: context),
+                    buttonText: '취소',
+                    buttonColor: whiteColor,
+                  ),
+                  CustomButton(
+                    onPressed: () {},
+                    buttonText: '등록',
+                    buttonColor: whiteColor,
+                  ),
                 ],
               ),
-            ),
-            const CustomBox(
-              height: 150,
-              width: 350,
-              color: whiteColor,
-              child: TextField(
-                maxLines: 10,
-                style: TextStyle(
-                  fontFamily: notoSans,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CustomButton(
-                  onPressed: routerPop(context: context),
-                  buttonText: '취소',
-                  buttonColor: whiteColor,
-                ),
-                CustomButton(
-                  onPressed: () {},
-                  buttonText: '등록',
-                  buttonColor: whiteColor,
-                ),
-              ],
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -36,10 +37,15 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     });
   }
 
+  Future<ReviewList>? reviewList;
+
   @override
   void initState() {
     super.initState();
     selectedValue = sortOrder.first;
+    if (widget.showReview) {
+      reviewList = ReviewProvider.getReviewList(toiletId: 1);
+    }
   }
 
   @override
@@ -112,13 +118,29 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                             showReview: widget.showReview,
                             isMain: widget.isMain,
                           ),
-                          for (int i = 0; i < 10; i += 1)
-                            widget.showReview
-                                ? const ReviewBox(
-                                    nickname: '아아',
-                                    score: 4.0,
-                                    content: '아주 좋아요')
-                                : const SizedBox()
+                          // widget.showReview
+                          //     ? FutureBuilder(
+                          //         future: reviewList,
+                          //         builder: (context, snapshot) {
+                          //           if (snapshot.hasData) {
+                          //             return Column(
+                          //               children: const [
+                          //                 Expanded(
+                          //                   child: ReviewBox(
+                          //                     nickname: '아아',
+                          //                     score: 4.0,
+                          //                     content: '아주 좋아요',
+                          //                   ),
+                          //                 )
+                          //               ],
+                          //             );
+                          //           }
+                          //           return const Center(
+                          //             child: CircularProgressIndicator(),
+                          //           );
+                          //         },
+                          //       )
+                          //     : const SizedBox(),
                         ],
                       ),
                     ),

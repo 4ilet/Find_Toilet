@@ -1,3 +1,4 @@
+import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,8 @@ typedef IconDataList = List<IconData>;
 typedef ReturnVoid = void Function();
 typedef VoidFuncList = List<ReturnVoid>;
 typedef ShadowList = List<BoxShadow>;
+
+typedef ReviewList = List<ReviewModel>;
 
 //* enums
 enum Themes { largeFont, defaultFont }
