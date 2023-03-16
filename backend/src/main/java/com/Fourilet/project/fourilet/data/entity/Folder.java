@@ -23,11 +23,9 @@ public class Folder {
     private String folderName;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member")
     private Member member;
 
-//    @OneToMany(mappedBy = "folder")
-//    private BookMark bookMark;
 
 }

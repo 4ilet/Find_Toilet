@@ -36,6 +36,8 @@ public class ReviewDto {
     @Getter
     @Setter
     public static class GetReviewDto {
+        @ApiParam(value = "리뷰 아이디", type = "long")
+        private long reviewId;
         @ApiParam(value = "리뷰",type = "String")
         private String comment;
         @ApiParam(value = "점수", type = "float")

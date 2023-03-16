@@ -31,7 +31,7 @@ public class FolderService {
     private final BookMarkRepository bookMarkRepository;
     private final ToiletRepository toiletRepository;
     public List<FolderDto.FolderListDto> getFolderList(long memberId) {
-        LOGGER.info("call folderServiceIm.getFolderList");
+        LOGGER.info("call folderService.getFolderList");
         Member member = memberRepository.findById(memberId);
         List<Folder> memberFolderList = folderRepository.findAllByMember(member);
         List<FolderDto.FolderListDto> folderListDto = new ArrayList<>();
@@ -47,12 +47,9 @@ public class FolderService {
         return folderListDto;
     }
 
-    // null일때 예외처리해야함.
     public void deleteFolder(long folderId) {
         Folder folder = folderRepository.findById(folderId).orElse(null);
-//        System.out.println(folder.getFolderName());
         List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
-//        System.out.println(bookmarkList.size());
         if (bookmarkList.size() > 0) {
             for (BookMark bookmark : bookmarkList) {
                 bookMarkRepository.delete(bookmark);
@@ -61,30 +58,29 @@ public class FolderService {
         folderRepository.delete(folder);
     }
 
-    public ResponseEntity<?> updateFolderName(long folderId, FolderDto folderDto){
+    public void updateFolderName(long folderId, FolderDto folderDto){
         LOGGER.info("CALL UPDATE FOLDER NAME");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         folder.setFolderName(folderDto.getFolderName());
         folderRepository.save(folder);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> createFolder(long memberId, FolderDto newFolderDto) {
+    public void createFolder(long memberId, FolderDto.NewFolderDto newFolderDto) {
         LOGGER.info("CALL CREATE FOLDER");
         Member member =  memberRepository.findById(memberId);
+        if (member == null) {
+            throw new NullPointerException("존재하지 않는 회원입니다.");
+        }
         Folder folder = new Folder();
         folder.setFolderName(newFolderDto.getFolderName());
         folder.setMember(member);
         folderRepository.save(folder);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<?> addToilet(long folderId, long toiletId){
         LOGGER.info("CALL ADD TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-        System.out.println("토일렛도?" + toilet.getToiletId());
         BookMark bookMark = new BookMark();
 
         bookMark.setFolder(folder);

@@ -28,11 +28,13 @@ public class FolderDto {
     }
     @Getter
     @Setter
-    public static class newFolderDto {
-        @ApiParam(value = "사용자 ID", type = "long")
-        private Member member;
+    public static class NewFolderDto {
         @ApiParam(value = "즐겨찾기 폴더 이름", type = "String")
         private String folderName;
 
+    }
+    public static class updateFolderDto {
+        @ApiParam(value = "즐겨찾기 폴더 이름", type = "String")
+        private String folderName;
     }
 }
