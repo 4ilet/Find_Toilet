@@ -1,5 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -67,7 +67,7 @@ class _SettingsState extends State<Settings> {
     try {
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context: context, page: errorModal('email'))();
+      showModal(context, page: errorModal('email'))();
     }
   }
 
@@ -125,7 +125,7 @@ class _SettingsState extends State<Settings> {
                     eachMenu(
                       index: i,
                       onTap: showModal(
-                        context: context,
+                        context,
                         page: pages[i - 4],
                       ),
                     ),
@@ -162,6 +162,7 @@ class _SettingsState extends State<Settings> {
               ),
               CustomText(
                 title: optionList[i][indexList[i]],
+                font: kimm,
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.mainColor,
               ),
@@ -209,7 +210,6 @@ class _SettingsState extends State<Settings> {
         CustomText(
           title: feature == 'email' ? emailError : loginError,
           fontSize: FontSize.defaultSize,
-          font: notoSans,
         ),
       ],
     );

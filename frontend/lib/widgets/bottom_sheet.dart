@@ -90,9 +90,9 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                   ),
                                   child: CustomText(
                                     title: '필터를 적용한 결과입니다',
+                                    font: kimm,
                                     fontSize: FontSize.smallSize,
                                     color: CustomColors.whiteColor,
-                                    font: notoSans,
                                   ),
                                 ),
                         ],
@@ -118,6 +118,16 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                             showReview: widget.showReview,
                             isMain: widget.isMain,
                           ),
+                          for (int i = 0; i < 5; i += 1)
+                            widget.showReview
+                                ? const ReviewBox(
+                                    nickname: '아나',
+                                    score: 4.0,
+                                    content: '아주 좋아요',
+                                    toiletName: '광주시립도서관화장실',
+                                    toiletId: 2,
+                                  )
+                                : const SizedBox(),
                           // widget.showReview
                           //     ? FutureBuilder(
                           //         future: reviewList,
@@ -165,6 +175,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
             title: widget.isMain ? '주변 화장실' : '검색 결과',
             fontSize: FontSize.largeSize,
             color: CustomColors.whiteColor,
+            font: kimm,
           ),
           widget.isMain
               ? const SizedBox()
@@ -200,7 +211,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                     child: Center(
                       child: CustomText(
                         title: select,
-                        font: notoSans,
                         fontSize: FontSize.smallSize,
                       ),
                     ),

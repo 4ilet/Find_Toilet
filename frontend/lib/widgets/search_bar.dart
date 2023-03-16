@@ -2,7 +2,7 @@ import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -36,18 +36,17 @@ class _SearchBarState extends State<SearchBar> {
             controller: widget.isMain
                 ? null
                 : TextEditingController(text: widget.query),
-            style: const TextStyle(fontFamily: notoSans),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: '검색어를 입력하세요',
               prefixIcon: CustomIconButton(
                 icon: hamburgerIcon,
-                onPressed: routerPush(context: context, page: const Settings()),
+                onPressed: routerPush(context, page: const Settings()),
                 color: CustomColors.blackColor,
               ),
               suffixIcon: CustomIconButton(
                 icon: closeIcon,
-                onPressed: routerPush(context: context, page: const Main()),
+                onPressed: routerPush(context, page: const Main()),
                 color: CustomColors.blackColor,
               ),
             ),
@@ -58,7 +57,7 @@ class _SearchBarState extends State<SearchBar> {
             height: 40,
             child: CustomIconButton(
               onPressed: routerPush(
-                context: context,
+                context,
                 page: const Search(query: '광주'),
               ),
               icon: searchIcon,
@@ -68,8 +67,8 @@ class _SearchBarState extends State<SearchBar> {
             width: 40,
             height: 40,
             child: CustomIconButton(
-              onPressed: routerPush(
-                  context: context, page: const BookMarkMain(folderCnt: 4)),
+              onPressed:
+                  routerPush(context, page: const BookMarkMain(folderCnt: 4)),
               icon: bookMarkIcon,
               color: CustomColors.blackColor,
             )),

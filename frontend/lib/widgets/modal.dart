@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -29,7 +29,6 @@ class HelpModal extends StatelessWidget {
                       child: CustomText(
                         title: '여기에 내용이 들어감',
                         fontSize: FontSize.defaultSize,
-                        font: notoSans,
                       ),
                     ),
                   )
@@ -133,7 +132,6 @@ class PolicyContent extends StatelessWidget {
                         ? '개인 정보 처리 방침'
                         : '위치 정보 처리 방침',
                 fontSize: FontSize.largeSize,
-                font: notoSans,
               ),
             ),
             Padding(
@@ -145,7 +143,6 @@ class PolicyContent extends StatelessWidget {
                         ? privatePolicy
                         : gpsPolicy,
                 fontSize: FontSize.smallSize,
-                font: notoSans,
               ),
             ),
           ],
@@ -211,7 +208,7 @@ class CustomModal extends StatelessWidget {
         isAlert
             ? modalButton(
                 context: context,
-                onPressed: onPressed ?? routerPop(context: context),
+                onPressed: onPressed ?? routerPop(context),
                 buttonText: buttonText,
               )
             : Row(
@@ -219,12 +216,12 @@ class CustomModal extends StatelessWidget {
                 children: [
                   modalButton(
                     context: context,
-                    onPressed: onPressed ?? routerPop(context: context),
+                    onPressed: onPressed ?? routerPop(context),
                     buttonText: buttonText,
                   ),
                   modalButton(
                     context: context,
-                    onPressed: routerPop(context: context),
+                    onPressed: routerPop(context),
                     buttonText: '취소',
                   ),
                 ],
@@ -272,7 +269,7 @@ class CustomModalWithClose extends StatelessWidget {
                 CustomIconButton(
                     color: CustomColors.blackColor,
                     icon: closeIcon,
-                    onPressed: routerPop(context: context))
+                    onPressed: routerPop(context))
               ],
             ),
             title != null
@@ -434,13 +431,31 @@ class NavigationModal extends StatelessWidget {
                     child: CustomText(
                       title: appList[i],
                       fontSize: FontSize.defaultSize,
-                      font: notoSans,
                     ),
                   )
                 ],
               ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+//* 오류 발생 모달
+class ErrorModal extends StatelessWidget {
+  final String content;
+  const ErrorModal({super.key, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: '오류 발생',
+      isAlert: true,
+      children: [
+        CustomText(
+          title: content,
+        )
       ],
     );
   }

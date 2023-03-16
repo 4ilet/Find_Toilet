@@ -93,7 +93,6 @@ class BookMarkList extends StatelessWidget {
                 title: '$listCnt개',
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
-                font: notoSans,
               ),
               const Padding(
                 padding: EdgeInsets.all(20),

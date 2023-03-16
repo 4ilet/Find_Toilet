@@ -12,6 +12,8 @@ typedef ReturnVoid = void Function();
 typedef VoidFuncList = List<ReturnVoid>;
 typedef ShadowList = List<BoxShadow>;
 
+typedef DynamicMap = Map<String, dynamic>;
+
 typedef ReviewList = List<ReviewModel>;
 
 //* enums

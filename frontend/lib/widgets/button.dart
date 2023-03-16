@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -49,7 +49,7 @@ class ExitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: routerPop(context: context),
+      onTap: routerPop(context),
       child: Row(
         children: [
           CustomText(

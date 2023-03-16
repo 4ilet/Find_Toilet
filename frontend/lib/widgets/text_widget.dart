@@ -1,8 +1,10 @@
+import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
-  final String title, font;
+  final String title;
+  final String? font;
   final FontSize fontSize;
   final CustomColors color;
   final bool isBoldText;
@@ -11,7 +13,7 @@ class CustomText extends StatelessWidget {
     required this.title,
     this.fontSize = FontSize.defaultSize,
     this.color = CustomColors.blackColor,
-    this.font = 'Kimm',
+    this.font,
     this.isBoldText = false,
   });
 
@@ -41,7 +43,7 @@ class TextWithIcon extends StatelessWidget {
     this.fontSize = FontSize.smallSize,
     this.iconColor = CustomColors.mainColor,
     this.textColor = CustomColors.blackColor,
-    this.font = 'Kimm',
+    this.font = kimm,
   });
 
   @override

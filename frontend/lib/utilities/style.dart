@@ -32,4 +32,4 @@ const highlightShadow = BoxShadow(
 const redShadow = BoxShadow(blurRadius: 10, spreadRadius: 5, color: Colors.red);
 
 //* 글씨체 관련
-const notoSans = 'Noto Sans';
+const kimm = 'Kimm';

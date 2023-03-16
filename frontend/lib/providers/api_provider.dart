@@ -4,9 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final baseUrl = dotenv.env['baseUrl'];
 final options = BaseOptions(
   baseUrl: baseUrl!,
-  headers: {
-    'Authorization': '',
-  },
+  // headers: {
+  //   'Authorization':
+  //       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwdWJoYW4zNUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuCmOybkOqyvSIsImlkIjoxMywiZXhwIjoxNjc5ODEzNDE1fQ.QxSbAXsGLnz4R1Tj-DTYFie9BmU_-dln2tYYs5DBa-O4soDRTQ5EGbA-yiBzRXteYNFy77PM1GUOZhy-CFaGlg',
+  // },
 );
 final dio = Dio(options);
 
@@ -24,7 +25,8 @@ String postReviewUrl({required int memberId, required int toiletId}) =>
     '$reviewUrl/post/$memberId/$toiletId';
 String updateReviewUrl({required int reviewId}) =>
     '$reviewUrl/update/$reviewId';
-String deleteListUrl({required int toiletId}) => '$reviewUrl/delete/$toiletId';
+String deleteReviewUrl({required int reviewId}) =>
+    '$reviewUrl/delete/$reviewId';
 
 //* bookmark
 
