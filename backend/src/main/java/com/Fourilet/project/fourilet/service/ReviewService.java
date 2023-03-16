@@ -53,6 +53,7 @@ public class ReviewService {
             for (Review review : reviewList) {
                 ReviewDto.GetReviewDto reviewListDto = new ReviewDto.GetReviewDto();
                 Member member = memberRepository.findById(review.getMember().getMemberId());
+                reviewListDto.setReviewId(review.getReviewId());
                 reviewListDto.setComment(review.getComment());
                 reviewListDto.setScore(review.getScore());
                 reviewListDto.setNickname(member.getNickname());
