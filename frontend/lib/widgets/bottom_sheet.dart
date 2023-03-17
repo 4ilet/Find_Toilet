@@ -90,7 +90,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                   ),
                                   child: CustomText(
                                     title: '필터를 적용한 결과입니다',
-                                    font: kimm,
                                     fontSize: FontSize.smallSize,
                                     color: CustomColors.whiteColor,
                                   ),
@@ -126,6 +125,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                     content: '아주 좋아요',
                                     toiletName: '광주시립도서관화장실',
                                     toiletId: 2,
+                                    reviewId: 13,
                                   )
                                 : const SizedBox(),
                           // widget.showReview

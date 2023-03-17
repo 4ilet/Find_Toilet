@@ -106,11 +106,12 @@ class FolderBox extends StatelessWidget {
   const FolderBox(
       {super.key,
       required this.folderName,
+      required this.folderId,
       this.listCnt = 0,
       this.add = false});
 
   final String folderName;
-  final int listCnt;
+  final int listCnt, folderId;
   final bool add;
 
   @override
@@ -157,7 +158,11 @@ class FolderBox extends StatelessWidget {
                     CustomIconButton(
                       icon: deleteIcon,
                       color: CustomColors.redColor,
-                      onPressed: showModal(context, page: const DeleteModal()),
+                      onPressed: showModal(context,
+                          page: DeleteModal(
+                            deleteMode: 1,
+                            id: folderId,
+                          )),
                       iconSize: 25,
                     ),
                   ],
@@ -233,7 +238,7 @@ class ListItem extends StatefulWidget {
     this.isLiked = false,
     required this.showReview,
     this.isMain = true,
-    this.toiletId = 1,
+    this.toiletId = 13,
   });
 
   @override
@@ -572,7 +577,7 @@ class CustomBox extends StatelessWidget {
 //* review 상자
 class ReviewBox extends StatelessWidget {
   final String nickname, content, toiletName;
-  final int toiletId;
+  final int toiletId, reviewId;
   final double score;
   const ReviewBox({
     super.key,
@@ -581,6 +586,7 @@ class ReviewBox extends StatelessWidget {
     required this.content,
     required this.toiletName,
     required this.toiletId,
+    required this.reviewId,
   });
 
   @override
@@ -611,6 +617,9 @@ class ReviewBox extends StatelessWidget {
                       page: ReviewForm(
                         toiletName: toiletName,
                         toiletId: toiletId,
+                        reviewId: reviewId,
+                        preComment: content,
+                        preScore: score,
                       ),
                     ),
                   ),
@@ -620,7 +629,10 @@ class ReviewBox extends StatelessWidget {
                     iconSize: 20,
                     onPressed: showModal(
                       context,
-                      page: const DeleteModal(),
+                      page: DeleteModal(
+                        deleteMode: 0,
+                        id: reviewId,
+                      ),
                     ),
                   ),
                   TextWithIcon(

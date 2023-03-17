@@ -76,3 +76,5 @@ void initData() async {
 //* 변수
 // late final memberId;
 const memberId = 13;
+const token =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwdWJoYW4zNUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuCmOybkOqyvSIsImlkIjoxMywiZXhwIjoxNjc5OTIwNDYyfQ.CNTbGdjf6G9cNRsBHDvoh9WN3EoIHaZb9G-lXPO4ACJ4b26fYsGSbZ988RpBQpcSJV-_DOyFLoQBsggQiOep1w';

@@ -104,6 +104,7 @@ class _SettingsState extends State<Settings> {
                 title: '어떤 것을 원하시나요?',
                 fontSize: FontSize.largeSize,
                 color: CustomColors.mainColor,
+                font: kimm,
               ),
             ),
             Flexible(
@@ -153,6 +154,7 @@ class _SettingsState extends State<Settings> {
             title: optionList[i][indexList[i]],
             fontSize: FontSize.defaultSize,
             color: CustomColors.mainColor,
+            font: kimm,
           )
         : Row(
             children: [
@@ -191,6 +193,7 @@ class _SettingsState extends State<Settings> {
               text: menuList[index],
               iconColor: CustomColors.blackColor,
               fontSize: FontSize.defaultSize,
+              font: kimm,
             ),
             child ?? const SizedBox()
           ],

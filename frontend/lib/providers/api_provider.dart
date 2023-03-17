@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final baseUrl = dotenv.env['baseUrl'];
 final options = BaseOptions(
   baseUrl: baseUrl!,
-  // headers: {
-  //   'Authorization':
-  //       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwdWJoYW4zNUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuCmOybkOqyvSIsImlkIjoxMywiZXhwIjoxNjc5ODEzNDE1fQ.QxSbAXsGLnz4R1Tj-DTYFie9BmU_-dln2tYYs5DBa-O4soDRTQ5EGbA-yiBzRXteYNFy77PM1GUOZhy-CFaGlg',
-  // },
+  headers: {
+    'Authorization': token,
+  },
 );
 final dio = Dio(options);
 

@@ -51,23 +51,34 @@ class _ReviewFormState extends State<ReviewForm> {
   void changeComment(String comment) => reviewData['comment'] = comment;
   void addOrEditReview() async {
     try {
-      if (widget.reviewId != null) {
+      late final String state;
+      if (widget.reviewId == null) {
         await ReviewProvider.postNewReview(
           memberId: memberId,
           toiletId: widget.toiletId,
           reviewData: reviewData,
         );
+        state = '등록';
       } else {
         await ReviewProvider.updateReview(
           reviewId: widget.reviewId!,
           reviewData: reviewData,
         );
+        state = '수정';
       }
+      showModal(
+        context,
+        page: AlertModal(
+          title: '리뷰 $state',
+          content: '리뷰가 성공적으로\n $state되었습니다',
+        ),
+      )();
     } catch (error) {
       final state = widget.reviewId != null ? '수정' : '등록';
       showModal(
         context,
-        page: ErrorModal(
+        page: AlertModal(
+          title: '오류 발생',
           content: '오류가 발생해 \n리뷰가 $state되지 않았습니다.',
         ),
       )();
@@ -90,6 +101,7 @@ class _ReviewFormState extends State<ReviewForm> {
                 title: widget.toiletName,
                 fontSize: FontSize.largeSize,
                 color: CustomColors.whiteColor,
+                font: kimm,
               ),
             ),
             const Flexible(
@@ -169,7 +181,7 @@ class _ReviewFormState extends State<ReviewForm> {
         ),
         CustomButton(
           onPressed: addOrEditReview,
-          buttonText: '등록',
+          buttonText: widget.reviewId != null ? '수정' : '등록',
           buttonColor: whiteColor,
         ),
       ],

@@ -13,7 +13,6 @@ class ReviewProvider {
         response.data.forEach((review) {
           reviewList.add(ReviewModel.fromJson(review));
         });
-        // print(reviewList);
         return reviewList;
       }
       throw Error();
