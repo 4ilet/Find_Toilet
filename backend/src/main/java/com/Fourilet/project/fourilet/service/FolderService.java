@@ -34,8 +34,10 @@ public class FolderService {
         LOGGER.info("call folderService.getFolderList");
         Member member = memberRepository.findById(memberId);
         List<Folder> memberFolderList = folderRepository.findAllByMember(member);
+        if (memberFolderList == null || memberFolderList.isEmpty()) {
+            throw new NullPointerException("즐겨찾기가 존재하지 않습니다.");
+        }
         List<FolderDto.FolderListDto> folderListDto = new ArrayList<>();
-
         for (Folder folder : memberFolderList) {
             FolderDto.FolderListDto folderListDto1 = new FolderDto.FolderListDto();
             folderListDto1.setFolderId(folder.getFolderId());
@@ -49,6 +51,9 @@ public class FolderService {
 
     public void deleteFolder(long folderId) {
         Folder folder = folderRepository.findById(folderId).orElse(null);
+        if (folder == null) {
+            throw new NullPointerException();
+        }
         List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
         if (bookmarkList.size() > 0) {
             for (BookMark bookmark : bookmarkList) {
@@ -77,36 +82,44 @@ public class FolderService {
         folderRepository.save(folder);
     }
 
-    public ResponseEntity<?> addToilet(long folderId, long toiletId){
+    public void addToilet(long folderId, long toiletId){
         LOGGER.info("CALL ADD TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+        if (folder == null | toilet == null){
+            throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
+        }
         BookMark bookMark = new BookMark();
-
         bookMark.setFolder(folder);
         bookMark.setToilet(toilet);
-
         bookMarkRepository.save(bookMark);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
-    public ResponseEntity<?> deleteToilet(long folderId, long toiletId){
+    public void deleteToilet(long folderId, long toiletId){
         LOGGER.info("CALL DELETE TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
 
+        if (folder == null){
+            throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
+        }
         List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
         for (BookMark bookmark : bookmarkList) {
             if (bookmark.getToilet() == toilet){
                 bookMarkRepository.delete(bookmark);
-
+            }
+            else {
+                throw new NullPointerException("화장실이 즐겨찾기에 포함되어 있지 않습니다.");
             }
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
     public List<ToiletDto2> getToiletList(long folderId){
         LOGGER.info("CALL GET TOILET LIST");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
+
+        if (folder == null) {
+            throw new NullPointerException("폴더가 존재하지 않습니다.");
+        }
 
         List<ToiletDto2> toiletDtoList = new ArrayList<>();
         List<Toilet> toiletList = new ArrayList<>();
