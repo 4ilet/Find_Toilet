@@ -55,74 +55,27 @@ class _ThemeBoxState extends State<ThemeBox> {
   }
 }
 
-//* 즐겨찾기 상자 한 줄
-class BookMarkBox extends StatelessWidget {
-  final bool onlyOne, add;
-  final String folderName1;
-  final String folderName2;
-  final int listCnt1;
-  final int listCnt2;
-  const BookMarkBox({
+//* 즐겨찾기 폴더
+class FolderBox extends StatelessWidget {
+  final DynamicMap folderInfo;
+  final bool add;
+  const FolderBox({
     super.key,
-    this.onlyOne = false,
-    this.folderName1 = '기본',
-    this.folderName2 = '기본',
-    this.listCnt1 = 0,
-    this.listCnt2 = 0,
+    required this.folderInfo,
     this.add = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 17),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          add && onlyOne
-              ? const AddBox()
-              : FolderBox(
-                  folderName: folderName1,
-                  add: onlyOne ? add : false,
-                  listCnt: listCnt1,
-                ),
-          onlyOne
-              ? const SizedBox()
-              : add
-                  ? const AddBox()
-                  : FolderBox(
-                      folderName: folderName2,
-                      add: add,
-                      listCnt: listCnt2,
-                    ),
-        ],
-      ),
-    );
-  }
-}
-
-//* 즐겨찾기 폴더
-class FolderBox extends StatelessWidget {
-  const FolderBox(
-      {super.key,
-      required this.folderName,
-      required this.folderId,
-      this.listCnt = 0,
-      this.add = false});
-
-  final String folderName;
-  final int listCnt, folderId;
-  final bool add;
-
-  @override
-  Widget build(BuildContext context) {
+    String folderName = folderInfo['folderName'];
+    final int bookmarkCnt, folderId;
     String printedName = folderName.length < 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
     return CustomBox(
       onTap: routerPush(
         context,
-        page: BookMarkList(folderName: folderName, listCnt: listCnt),
+        page: BookMarkList(folderName: folderName, bookmarkCnt: bookmarkCnt),
       ),
       height: 150,
       width: 150,
@@ -173,7 +126,7 @@ class FolderBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomText(
-                  title: '$listCnt 개',
+                  title: '$bookmarkCnt 개',
                   fontSize: FontSize.smallSize,
                   color: CustomColors.blackColor,
                 ),

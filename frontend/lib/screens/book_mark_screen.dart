@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -7,24 +8,29 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 //* 즐겨찾기 메인 화면 (폴더 존재)
-class BookMarkMain extends StatefulWidget {
+class BookMarkFolderList extends StatefulWidget {
   final String nickname;
-  final int folderCnt;
-  const BookMarkMain({super.key, this.nickname = '포일렛', this.folderCnt = 1});
+
+  const BookMarkFolderList({super.key, required this.nickname});
 
   @override
-  State<BookMarkMain> createState() => _BookMarkMainState();
+  State<BookMarkFolderList> createState() => _BookMarkFolderListState();
 }
 
-class _BookMarkMainState extends State<BookMarkMain> {
-  late int quot, remain;
-  StringList folderNameList = ['광주', '서울', '24시간 개방', '깔끔'];
-  IntList folderCntList = [12, 8, 5, 3];
+class _BookMarkFolderListState extends State<BookMarkFolderList> {
+  late List folderList;
+  late int folderCnt, quot, remain;
+  void initFolderList() async {
+    folderList = await FolderProvider.getFolderList(memberId: 1);
+    folderCnt = folderList.length;
+    quot = folderCnt ~/ 2;
+    remain = folderCnt % 2;
+  }
+
   @override
   void initState() {
     super.initState();
-    quot = widget.folderCnt ~/ 2;
-    remain = widget.folderCnt % 2;
+    initFolderList();
   }
 
   @override
@@ -41,15 +47,18 @@ class _BookMarkMainState extends State<BookMarkMain> {
               color: CustomColors.whiteColor,
             ),
             const SizedBox(height: 10),
-            for (int i = 0; i < (quot); i += 1)
-              BookMarkBox(
-                folderName1: folderNameList[2 * i],
-                folderName2: folderNameList[2 * i + 1],
-                listCnt1: folderCntList[2 * i],
-                listCnt2: folderCntList[2 * i + 1],
+            for (int i = 0; i < quot; i += 1)
+              Padding(
+                padding: const EdgeInsets.only(top: 17),
+                child: Row(
+                  children: [
+                    for (int j = 0; j < 2; j += 1)
+                      FolderBox(folderInfo: folderList[2 * i + j]),
+                  ],
+                ),
               ),
             remain == 0
-                ? const BookMarkBox(onlyOne: true, add: true)
+                ? const AddBox(add: true)
                 : BookMarkBox(
                     add: true,
                     folderName1: folderNameList.last,
@@ -66,9 +75,10 @@ class _BookMarkMainState extends State<BookMarkMain> {
 //* 폴더 내 즐겨찾기 목록
 class BookMarkList extends StatelessWidget {
   final String folderName;
-  final int listCnt;
+  final int bookmarkCnt;
+
   const BookMarkList(
-      {super.key, required this.folderName, required this.listCnt});
+      {super.key, required this.folderName, required this.bookmarkCnt});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +100,7 @@ class BookMarkList extends StatelessWidget {
                 width: 20,
               ),
               CustomText(
-                title: '$listCnt개',
+                title: '$bookmarkCnt',
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
               ),

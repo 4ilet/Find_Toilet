@@ -1,4 +1,6 @@
+import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +14,16 @@ typedef ReturnVoid = void Function();
 typedef VoidFuncList = List<ReturnVoid>;
 typedef ShadowList = List<BoxShadow>;
 
+//* model type
 typedef DynamicMap = Map<String, dynamic>;
+typedef DynamicMapList = List<DynamicMap>;
+typedef StringMap = Map<String, String>;
+typedef FutureList = Future<List>;
+typedef FutureVoid = Future<void>;
 
 typedef ReviewList = List<ReviewModel>;
+typedef FolderList = List<FolderModel>;
+typedef ToiletList = List<ToiletModel>;
 
 //* enums
 enum Themes { largeFont, defaultFont }
