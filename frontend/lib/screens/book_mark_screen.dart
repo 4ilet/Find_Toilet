@@ -19,12 +19,16 @@ class BookMarkFolderList extends StatefulWidget {
 
 class _BookMarkFolderListState extends State<BookMarkFolderList> {
   late List folderList;
-  late int folderCnt, quot, remain;
+  int folderCnt = 0;
+  int quot = 0;
+  int remain = 0;
   void initFolderList() async {
     folderList = await FolderProvider.getFolderList(memberId: 1);
-    folderCnt = folderList.length;
-    quot = folderCnt ~/ 2;
-    remain = folderCnt % 2;
+    print(folderList);
+    // folderCnt = folderList.length;
+    // print(folderCnt);
+    // quot = folderCnt ~/ 2;
+    // remain = folderCnt % 2;
   }
 
   @override
@@ -57,13 +61,16 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
                   ],
                 ),
               ),
-            remain == 0
-                ? const AddBox(add: true)
-                : BookMarkBox(
-                    add: true,
-                    folderName1: folderNameList.last,
-                    listCnt1: folderCntList.last,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(top: 17),
+              child: Row(
+                children: [
+                  for (int j = 0; j < remain; j += 1)
+                    FolderBox(folderInfo: folderList[-1]),
+                  quot < 5 ? const AddBox() : const SizedBox()
+                ],
+              ),
+            ),
             const ExitPage()
           ]),
         ),

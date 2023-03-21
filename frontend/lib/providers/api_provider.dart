@@ -50,7 +50,7 @@ String deleteToiletUrl({required int folderId, required int toiletId}) =>
 //* mixin
 class ApiProvider {
   //* 조회 전반
-  static Future<List> _getAPi({
+  static FutureList _getAPi({
     required List list,
     required String url,
     required dynamic model,
@@ -65,11 +65,12 @@ class ApiProvider {
       }
       throw Error();
     } catch (error) {
+      print(error);
       throw Error();
     }
   }
 
-  static Future<List> getApi({
+  static FutureList getApi({
     required List list,
     required String url,
     required dynamic model,
@@ -78,7 +79,7 @@ class ApiProvider {
   }
 
   //* 생성 전반
-  static Future<void> _createApi({
+  static FutureVoid _createApi({
     required String url,
     required DynamicMap data,
   }) async {
@@ -93,7 +94,7 @@ class ApiProvider {
     }
   }
 
-  static Future<void> createApi({
+  static FutureVoid createApi({
     required String url,
     required DynamicMap data,
   }) async {
@@ -101,7 +102,7 @@ class ApiProvider {
   }
 
   //* 수정 전반
-  static Future<void> _updateApi({
+  static FutureVoid _updateApi({
     required String url,
     required DynamicMap data,
   }) async {
@@ -116,7 +117,7 @@ class ApiProvider {
     }
   }
 
-  static Future<void> updateApi({
+  static FutureVoid updateApi({
     required String url,
     required DynamicMap data,
   }) async {
@@ -124,7 +125,7 @@ class ApiProvider {
   }
 
   //* 삭제 전반
-  static Future<void> _deleteApi({required String url}) async {
+  static FutureVoid _deleteApi({required String url}) async {
     try {
       final response = await dio.delete(url);
       if (response.statusCode == 200) {
@@ -136,7 +137,7 @@ class ApiProvider {
     }
   }
 
-  static Future<void> deleteApi({required String url}) async {
+  static FutureVoid deleteApi({required String url}) async {
     _deleteApi(url: url);
   }
 }

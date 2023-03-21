@@ -37,7 +37,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     });
   }
 
-  Future<ReviewList>? reviewList;
+  late FutureList reviewList;
 
   @override
   void initState() {
@@ -45,6 +45,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     selectedValue = sortOrder.first;
     if (widget.showReview) {
       reviewList = ReviewProvider.getReviewList(toiletId: 1);
+      print(reviewList);
     }
   }
 

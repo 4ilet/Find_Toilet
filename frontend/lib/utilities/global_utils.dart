@@ -77,4 +77,5 @@ void initData() async {
 // late final memberId;
 const memberId = 13;
 const token =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwdWJoYW4zNUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuCmOybkOqyvSIsImlkIjoxMywiZXhwIjoxNjc5OTIwNDYyfQ.CNTbGdjf6G9cNRsBHDvoh9WN3EoIHaZb9G-lXPO4ACJ4b26fYsGSbZ988RpBQpcSJV-_DOyFLoQBsggQiOep1w';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwdWJoYW4zNUBnbWFpbC5jb20iLCJuaWNrbmFtZSI6IuuCmOybkOqyvSIsImlkIjoxMywiZXhwIjoxNjgwMjUxNjUwfQ.UaLjdN0hNCcb4Bta9yS8sZ3M7Q5zyHsj62GbQgKNSjC3of08jBDvVUGdsv661zn5dW_tbyFBDlh8TPcu4eQi-Q';
+const nickname = '포일렛';

@@ -8,9 +8,10 @@ class ReviewProvider {
   static FutureList getReviewList({required int toiletId}) async {
     ReviewList reviewList = [];
     return ApiProvider.getApi(
-        list: reviewList,
-        url: reviewListUrl(toiletId: toiletId),
-        model: ReviewModel);
+      list: reviewList,
+      url: reviewListUrl(toiletId: toiletId),
+      model: ReviewModel,
+    );
     // try {
     //   final response = await dio.get(reviewListUrl(toiletId: toiletId));
     //   if (response.statusCode == 200) {

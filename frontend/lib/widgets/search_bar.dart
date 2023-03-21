@@ -64,14 +64,15 @@ class _SearchBarState extends State<SearchBar> {
               color: CustomColors.blackColor,
             )),
         CustomCircleButton(
-            width: 40,
-            height: 40,
-            child: CustomIconButton(
-              onPressed:
-                  routerPush(context, page: const BookMarkMain(folderCnt: 4)),
-              icon: bookMarkIcon,
-              color: CustomColors.blackColor,
-            )),
+          width: 40,
+          height: 40,
+          child: CustomIconButton(
+            onPressed: routerPush(context,
+                page: const BookMarkFolderList(nickname: nickname)),
+            icon: bookMarkIcon,
+            color: CustomColors.blackColor,
+          ),
+        ),
       ],
     );
   }

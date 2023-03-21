@@ -68,7 +68,8 @@ class FolderBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String folderName = folderInfo['folderName'];
-    final int bookmarkCnt, folderId;
+    int bookmarkCnt = folderInfo['bookmarkCnt'];
+    int folderId = folderInfo['folderId'];
     String printedName = folderName.length < 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';

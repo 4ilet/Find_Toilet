@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -164,15 +165,29 @@ class InputModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    StringMap folderData = {'folderName': ''};
+    void fillFolderData(String value) {
+      folderData['folderName'] = value;
+    }
+
+    void createFolder() {
+      FolderProvider.createNewFolder(
+        memberId: memberId,
+        folderData: folderData,
+      );
+    }
+
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: () {},
-      children: const [
+      onPressed: createFolder,
+      children: [
         Expanded(
             child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: TextField(
+            onChanged: fillFolderData,
+          ),
         )),
       ],
     );
