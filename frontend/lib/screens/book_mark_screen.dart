@@ -1,4 +1,5 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -18,17 +19,16 @@ class BookMarkFolderList extends StatefulWidget {
 }
 
 class _BookMarkFolderListState extends State<BookMarkFolderList> {
-  late List folderList;
-  int folderCnt = 0;
-  int quot = 0;
-  int remain = 0;
+  late Future<FolderList> folderList;
+  // late int folderCnt;
+  // List folderList = [];
+  // int folderCnt = 0;
+  late int folderCnt, quot, remain;
   void initFolderList() async {
-    folderList = await FolderProvider.getFolderList(memberId: 1);
-    print(folderList);
-    // folderCnt = folderList.length;
-    // print(folderCnt);
-    // quot = folderCnt ~/ 2;
-    // remain = folderCnt % 2;
+    folderList = await FolderProvider.getFolderList(memberId);
+    folderCnt = folderList.length;
+    quot = folderCnt ~/ 2;
+    remain = folderCnt % 2;
   }
 
   @override
@@ -51,6 +51,18 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
               color: CustomColors.whiteColor,
             ),
             const SizedBox(height: 10),
+            FutureBuilder(
+                future: folderList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        folderListView(snapshot),
+                      ],
+                    );
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }),
             for (int i = 0; i < quot; i += 1)
               Padding(
                 padding: const EdgeInsets.only(top: 17),
@@ -75,6 +87,17 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
           ]),
         ),
       ),
+    );
+  }
+
+  ListView folderListView(AsyncSnapshot<FolderList> snapshot) {
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        var folder = snapshot.data![index];
+        return FolderBox(folderInfo: folder);
+      },
+      separatorBuilder: (context, index) => const SizedBox(height: 20),
+      itemCount: folderCnt,
     );
   }
 }

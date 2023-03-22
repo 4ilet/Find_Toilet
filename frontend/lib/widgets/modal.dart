@@ -172,7 +172,7 @@ class InputModal extends StatelessWidget {
 
     void createFolder() {
       FolderProvider.createNewFolder(
-        memberId: memberId,
+        memberId,
         folderData: folderData,
       );
     }

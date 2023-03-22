@@ -5,25 +5,20 @@ import 'package:find_toilet/utilities/type_enum.dart';
 //* review CRUD
 class ReviewProvider {
   //* 리뷰 목록
-  static FutureList getReviewList({required int toiletId}) async {
+  static Future<ReviewList> getReviewList({required int toiletId}) async {
     ReviewList reviewList = [];
-    return ApiProvider.getApi(
-      list: reviewList,
-      url: reviewListUrl(toiletId: toiletId),
-      model: ReviewModel,
-    );
-    // try {
-    //   final response = await dio.get(reviewListUrl(toiletId: toiletId));
-    //   if (response.statusCode == 200) {
-    //     response.data.forEach((review) {
-    //       reviewList.add(ReviewModel.fromJson(review));
-    //     });
-    //     return reviewList;
-    //   }
-    //   throw Error();
-    // } catch (error) {
-    //   throw Error();
-    // }
+    try {
+      final response = await dio.get(reviewListUrl(toiletId: toiletId));
+      if (response.statusCode == 200) {
+        response.data.forEach((review) {
+          reviewList.add(ReviewModel.fromJson(review));
+        });
+        return reviewList;
+      }
+      throw Error();
+    } catch (error) {
+      throw Error();
+    }
   }
 
   //* 리뷰 생성

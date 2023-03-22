@@ -1,3 +1,4 @@
+import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -57,7 +58,7 @@ class _ThemeBoxState extends State<ThemeBox> {
 
 //* 즐겨찾기 폴더
 class FolderBox extends StatelessWidget {
-  final DynamicMap folderInfo;
+  final FolderModel folderInfo;
   final bool add;
   const FolderBox({
     super.key,
@@ -67,9 +68,9 @@ class FolderBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String folderName = folderInfo['folderName'];
-    int bookmarkCnt = folderInfo['bookmarkCnt'];
-    int folderId = folderInfo['folderId'];
+    String folderName = folderInfo.folderName;
+    int bookmarkCnt = folderInfo.bookmarkCnt;
+    int folderId = folderInfo.folderId;
     String printedName = folderName.length < 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';

@@ -32,7 +32,8 @@ String deleteReviewUrl({required int reviewId}) =>
 //* bookmark
 
 const bookmarkUrl = '/like';
-String folderListUrl({required int memberId}) => '$bookmarkUrl/$memberId';
+String folderListUrl({required int memberId}) =>
+    '$bookmarkUrl/folder/$memberId';
 String createFolderUrl({required int memberId}) =>
     '$bookmarkUrl/create/folder/$memberId';
 String updateFolderUrl({required int folderId}) =>
@@ -50,33 +51,33 @@ String deleteToiletUrl({required int folderId, required int toiletId}) =>
 //* mixin
 class ApiProvider {
   //* 조회 전반
-  static FutureList _getAPi({
-    required List list,
-    required String url,
-    required dynamic model,
-  }) async {
-    try {
-      final response = await dio.get(url);
-      if (response.statusCode == 200) {
-        response.data.forEach((element) {
-          list.add(model.fromJson(element));
-        });
-        return list;
-      }
-      throw Error();
-    } catch (error) {
-      print(error);
-      throw Error();
-    }
-  }
+  // static FutureList _getAPi({
+  //   required List list,
+  //   required String url,
+  //   required dynamic model,
+  // }) async {
+  //   try {
+  //     final response = await dio.get(url);
+  //     if (response.statusCode == 200) {
+  //       response.data.forEach((element) {
+  //         list.add(model.fromJson(element));
+  //       });
+  //       return list;
+  //     }
+  //     throw Error();
+  //   } catch (error) {
+  //     print(error);
+  //     throw Error();
+  //   }
+  // }
 
-  static FutureList getApi({
-    required List list,
-    required String url,
-    required dynamic model,
-  }) async {
-    return _getAPi(list: list, url: url, model: model);
-  }
+  // static FutureList getApi({
+  //   required List list,
+  //   required String url,
+  //   required dynamic model,
+  // }) async {
+  //   return _getAPi(list: list, url: url, model: model);
+  // }
 
   //* 생성 전반
   static FutureVoid _createApi({
@@ -125,7 +126,7 @@ class ApiProvider {
   }
 
   //* 삭제 전반
-  static FutureVoid _deleteApi({required String url}) async {
+  static FutureVoid _deleteApi(url) async {
     try {
       final response = await dio.delete(url);
       if (response.statusCode == 200) {
@@ -137,7 +138,7 @@ class ApiProvider {
     }
   }
 
-  static FutureVoid deleteApi({required String url}) async {
-    _deleteApi(url: url);
+  static FutureVoid deleteApi(String url) async {
+    _deleteApi(url);
   }
 }

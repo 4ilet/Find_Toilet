@@ -6,66 +6,68 @@ import 'package:find_toilet/utilities/type_enum.dart';
 //* folder CRUD
 class FolderProvider with ApiProvider {
   //* 폴더 목록
-  static FutureList getFolderList({required int memberId}) async {
+  static Future<FolderList> getFolderList(int memberId) async {
     FolderList folderList = [];
-    return ApiProvider.getApi(
-      list: folderList,
-      url: folderListUrl(memberId: memberId),
-      model: FolderModel,
-    );
-    // try {
-    //   final response = await dio.get(folderListUrl(memberId: memberId));
-    //   if (response.statusCode == 200) {
-    //     response.data.forEach((folder) {
-    //       folderList.add(FolderModel.fromJson(folder));
-    //     });
-    //     return folderList;
-    //   }
-    //   throw Error();
-    // } catch (error) {
-    //   throw Error();
-    // }
+    try {
+      final response = await dio.get(folderListUrl(memberId));
+      if (response.statusCode == 200) {
+        final data = response.data['data'];
+        for (var folder in data) {
+          folderList.add(FolderModel.fromJson(folder));
+        }
+        return folderList;
+      }
+      throw Error();
+    } catch (error) {
+      throw Error();
+    }
   }
 
   //* 폴더 생성
-  static FutureVoid createNewFolder({
-    required int memberId,
+  static FutureVoid createNewFolder(
+    int memberId, {
     required StringMap folderData,
   }) async {
     ApiProvider.createApi(
-      url: createFolderUrl(memberId: memberId),
+      url: createFolderUrl(memberId),
       data: folderData,
     );
   }
 
   //* 폴더 수정
-  static FutureVoid updateFolderName({
-    required int folderId,
+  static FutureVoid updateFolderName(
+    int folderId, {
     required StringMap folderData,
   }) async {
     ApiProvider.updateApi(
-      url: updateFolderUrl(folderId: folderId),
+      url: updateFolderUrl(folderId),
       data: folderData,
     );
   }
 
   //* 리뷰 삭제
-  static FutureVoid deleteFolder({required int folderId}) async {
-    ApiProvider.deleteApi(url: deleteFolderUrl(folderId: folderId));
+  static FutureVoid deleteFolder(int folderId) async {
+    ApiProvider.deleteApi(url: deleteFolderUrl(folderId));
   }
 }
 
 class BookMarkProvider {
   //* 즐겨찾기 목록 조회
-  static FutureList getToiletList({required int folderId}) async {
+  static FutureList getToiletList(int folderId) async {
     ToiletList toiletList = [];
-    return ApiProvider.getApi(
-      list: toiletList,
-      url: bookmarkListUrl(
-        folderId: folderId,
-      ),
-      model: ToiletModel,
-    );
+    try {
+      final response = await dio.get(bookmarkListUrl(folderId));
+      if (response.statusCode == 200) {
+        response.data.forEach((element) {
+          toiletList.add(ToiletModel.fromJson(element));
+        });
+        return toiletList;
+      }
+      throw Error();
+    } catch (error) {
+      print(error);
+      throw Error();
+    }
   }
 
   //* 즐겨찾기에 추가
