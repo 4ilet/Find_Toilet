@@ -139,6 +139,10 @@ public class FolderController {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage("폴더 혹은 화장실이 존재하지 않습니다");
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        } catch (IllegalStateException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러 발생");

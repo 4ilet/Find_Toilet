@@ -1,13 +1,7 @@
 package com.Fourilet.project.fourilet.service;
 
-import com.Fourilet.project.fourilet.data.entity.BookMark;
-import com.Fourilet.project.fourilet.data.entity.Folder;
-import com.Fourilet.project.fourilet.data.entity.Member;
-import com.Fourilet.project.fourilet.data.entity.Toilet;
-import com.Fourilet.project.fourilet.data.repository.BookMarkRepository;
-import com.Fourilet.project.fourilet.data.repository.FolderRepository;
-import com.Fourilet.project.fourilet.data.repository.MemberRepository;
-import com.Fourilet.project.fourilet.data.repository.ToiletRepository;
+import com.Fourilet.project.fourilet.data.entity.*;
+import com.Fourilet.project.fourilet.data.repository.*;
 import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto2;
@@ -19,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +25,7 @@ public class FolderService {
     private final MemberRepository memberRepository;
     private final BookMarkRepository bookMarkRepository;
     private final ToiletRepository toiletRepository;
+    private final ReviewRepository reviewRepository;
     public List<FolderDto.FolderListDto> getFolderList(long memberId) {
         LOGGER.info("call folderService.getFolderList");
         Member member = memberRepository.findById(memberId);
@@ -89,6 +85,12 @@ public class FolderService {
         if (folder == null | toilet == null){
             throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
         }
+        List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
+        for (BookMark bookmark : bookMarkList){
+            if(bookmark.getToilet() == toilet) {
+                throw new IllegalStateException("이미 즐겨찾기에 추가되어 있습니다.");
+            }
+        }
         BookMark bookMark = new BookMark();
         bookMark.setFolder(folder);
         bookMark.setToilet(toilet);
@@ -98,25 +100,35 @@ public class FolderService {
         LOGGER.info("CALL DELETE TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
+        List toiletList = new ArrayList<>();
+        for (BookMark bookmark : bookMarkList) {
+            toiletList.add(bookmark.getToilet());
+        }
         if (folder == null){
             throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
         }
         List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
         for (BookMark bookmark : bookmarkList) {
-            if (bookmark.getToilet() == toilet){
+//            for (Object toilet2 : toiletList) {
+//                if(toilet2.equals(toilet)){
+//                    if (bookmark.getToilet() == toilet) {
+//                        bookMarkRepository.delete(bookmark);
+//                    }
+//                } else {
+//                    throw new NullPointerException("즐겨찾기에 화장실이 존재하지 않습니다");
+//                }
+//            }
+            if (bookmark.getToilet() == toilet) {
                 bookMarkRepository.delete(bookmark);
             }
-            else {
-                throw new NullPointerException("화장실이 즐겨찾기에 포함되어 있지 않습니다.");
-            }
+
         }
     }
     public List<ToiletDto2> getToiletList(long folderId){
         LOGGER.info("CALL GET TOILET LIST");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
-
         if (folder == null) {
             throw new NullPointerException("폴더가 존재하지 않습니다.");
         }
@@ -126,12 +138,24 @@ public class FolderService {
 
         for (BookMark bookmark : bookMarkList){
             Toilet toilet = bookmark.getToilet();
-            System.out.println(toilet.getToiletName());
             toiletList.add(toilet);
         }
 
         for (Toilet toilet : toiletList){
             ToiletDto2 toiletDto2 = new ToiletDto2();
+            List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
+            float total = 0;
+            for (Review review : reviewList) {
+                float score = review.getScore();
+                total += score;
+            }
+            float average = 0;
+            if (reviewList.size() == 0){
+                toiletDto2.setScore(average);
+            } else {
+                average = total / reviewList.size();
+                toiletDto2.setScore(average);
+            }
             toiletDto2.setToiletId(toilet.getToiletId());
             toiletDto2.setToiletName(toilet.getToiletName());
             toiletDto2.setAddress(toilet.getAddress());
