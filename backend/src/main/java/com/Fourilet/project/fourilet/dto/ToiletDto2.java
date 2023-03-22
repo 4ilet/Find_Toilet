@@ -19,6 +19,7 @@ public class ToiletDto2 {
     private BigDecimal lat;
     private BigDecimal lon;
     private String phoneNumber;
+    private float score;
     private boolean dMalePee;
     private boolean dMalePoo;
     private boolean dFemalePoo;
