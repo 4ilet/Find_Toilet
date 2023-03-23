@@ -29,20 +29,28 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
 
-    public ResponseEntity<?> postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto){
+    public void postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto){
         LOGGER.info("CALL postReview");
         Member member = memberRepository.findById(memberId);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
 
-        Review newReview = new Review();
+        if (toilet == null){
+            throw new NullPointerException("존재하지 않는 화장실입니다");
+        }
+        if (postReviewDto.getComment().isEmpty()){
+            throw new IllegalArgumentException("리뷰를 작성하지 않았습니다");
+        }
+        float score = (float)postReviewDto.getScore();
+        if ( score < 0  || score > 5){
+            throw new IllegalArgumentException("점수는 0 ~ 5 사이의 점수를 입력해주세요");
+        }
 
+        Review newReview = new Review();
         newReview.setToilet(toilet);
         newReview.setMember(member);
         newReview.setComment(postReviewDto.getComment());
         newReview.setScore(postReviewDto.getScore());
-
         reviewRepository.save(newReview);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
     public List<ReviewDto.GetReviewDto> getReview(long toiletId){
         LOGGER.info("CALL GET REVIEW");
