@@ -61,7 +61,7 @@ class _ReviewFormState extends State<ReviewForm> {
         state = '등록';
       } else {
         await ReviewProvider.updateReview(
-          reviewId: widget.reviewId!,
+          widget.reviewId!,
           reviewData: reviewData,
         );
         state = '수정';

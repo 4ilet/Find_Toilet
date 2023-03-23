@@ -7,9 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final baseUrl = dotenv.env['baseUrl'];
 final options = BaseOptions(
   baseUrl: baseUrl!,
-  headers: {
-    'Authorization': token,
-  },
+  headers: {'Authorization': token},
 );
 final dio = Dio(options);
 
@@ -21,27 +19,21 @@ const userInfoUrl = '$userUrl/userinfo';
 
 //* review
 const reviewUrl = '/review';
-String reviewListUrl({required int toiletId}) => '$reviewUrl/$toiletId';
+String reviewListUrl(int toiletId) => '$reviewUrl/$toiletId';
 String postReviewUrl({required int memberId, required int toiletId}) =>
     '$reviewUrl/post/$memberId/$toiletId';
-String updateReviewUrl({required int reviewId}) =>
-    '$reviewUrl/update/$reviewId';
-String deleteReviewUrl({required int reviewId}) =>
-    '$reviewUrl/delete/$reviewId';
+String updateReviewUrl(int reviewId) => '$reviewUrl/update/$reviewId';
+String deleteReviewUrl(int reviewId) => '$reviewUrl/delete/$reviewId';
 
 //* bookmark
 
 const bookmarkUrl = '/like';
-String folderListUrl({required int memberId}) =>
-    '$bookmarkUrl/folder/$memberId';
-String createFolderUrl({required int memberId}) =>
-    '$bookmarkUrl/create/folder/$memberId';
-String updateFolderUrl({required int folderId}) =>
-    '$bookmarkUrl/update/folder/$folderId';
-String deleteFolderUrl({required int folderId}) =>
-    '$bookmarkUrl/delete/$folderId';
+String folderListUrl(int memberId) => '$bookmarkUrl/folder/$memberId';
+String createFolderUrl(int memberId) => '$bookmarkUrl/create/folder/$memberId';
+String updateFolderUrl(int folderId) => '$bookmarkUrl/update/folder/$folderId';
+String deleteFolderUrl(int folderId) => '$bookmarkUrl/delete/folder/$folderId';
 
-String bookmarkListUrl({required int folderId}) =>
+String bookmarkListUrl(int folderId) =>
     '$bookmarkUrl/folder/toiletlist/$folderId';
 String addToiletUrl({required int folderId, required int toiletId}) =>
     '$bookmarkUrl/add/folder/$folderId/$toiletId';
@@ -80,10 +72,7 @@ class ApiProvider {
   // }
 
   //* 생성 전반
-  static FutureVoid _createApi({
-    required String url,
-    required DynamicMap data,
-  }) async {
+  static FutureVoid _createApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dio.post(url, data: data);
       if (response.statusCode == 200) {
@@ -95,18 +84,12 @@ class ApiProvider {
     }
   }
 
-  static FutureVoid createApi({
-    required String url,
-    required DynamicMap data,
-  }) async {
-    _createApi(url: url, data: data);
+  static FutureVoid createApi(String url, {required DynamicMap data}) async {
+    _createApi(url, data: data);
   }
 
   //* 수정 전반
-  static FutureVoid _updateApi({
-    required String url,
-    required DynamicMap data,
-  }) async {
+  static FutureVoid _updateApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dio.put(url, data: data);
       if (response.statusCode == 200) {
@@ -118,15 +101,12 @@ class ApiProvider {
     }
   }
 
-  static FutureVoid updateApi({
-    required String url,
-    required DynamicMap data,
-  }) async {
-    _updateApi(url: url, data: data);
+  static FutureVoid updateApi(String url, {required DynamicMap data}) async {
+    _updateApi(url, data: data);
   }
 
   //* 삭제 전반
-  static FutureVoid _deleteApi(url) async {
+  static FutureVoid _deleteApi(String url) async {
     try {
       final response = await dio.delete(url);
       if (response.statusCode == 200) {
@@ -134,6 +114,7 @@ class ApiProvider {
       }
       throw Error();
     } catch (error) {
+      print(error);
       throw Error();
     }
   }

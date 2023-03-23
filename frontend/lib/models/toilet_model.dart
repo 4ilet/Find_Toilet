@@ -1,8 +1,9 @@
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletModel {
-  final int toiletId;
-  final String toiletName, address, operatingTime, phoneNo;
+  final int toiletId, reviewLen;
+  final double score, lat, lng;
+  final String toiletName, address, duration, phoneNo;
   final bool privateDisabledM1,
       privateDisabledM2,
       privateDisabledF,
@@ -15,14 +16,18 @@ class ToiletModel {
       : toiletId = json['toiletId'],
         toiletName = json['toiletName'],
         address = json['address'],
-        operatingTime = json['operatingTime'],
+        duration = json['operationTime'],
         phoneNo = json['phoneNumber'],
-        privateDisabledF = json['dFemalePoo'],
-        privateDisabledM1 = json['hasDisabledM1'],
-        privateDisabledM2 = json['dFemalePoo'],
-        privateChildM1 = json['cMalePee'],
-        privateChildM2 = json['cMalePoo'],
-        privateChildF = json['hasChildF'],
+        reviewLen = json['reviewLen'],
+        score = json['score'],
+        lat = json['lat'],
+        lng = json['lon'],
+        privateDisabledF = json['dfemalePoo'],
+        privateDisabledM1 = json['dmalePee'],
+        privateDisabledM2 = json['dmalePoo'],
+        privateChildM1 = json['cmalePee'],
+        privateChildM2 = json['cmalePoo'],
+        privateChildF = json['cfemalePoo'],
         privateDiaper = json['diaper'],
-        can24hour = json['24hour'];
+        can24hour = json['allDay'];
 }

@@ -1,5 +1,6 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -157,10 +158,12 @@ class PolicyContent extends StatelessWidget {
 //* 입력창 존재 모달
 class InputModal extends StatelessWidget {
   final String title, buttonText;
+  // final ReturnVoid onPressed;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
+    // required this.onPressed,
   });
 
   @override
@@ -170,17 +173,31 @@ class InputModal extends StatelessWidget {
       folderData['folderName'] = value;
     }
 
-    void createFolder() {
-      FolderProvider.createNewFolder(
-        memberId,
-        folderData: folderData,
-      );
+    void createFolder(BuildContext context) {
+      try {
+        FolderProvider.createNewFolder(
+          memberId,
+          folderData: folderData,
+        ).then((value) {
+          routerPop(context);
+          routerPush(context,
+              page: const BookMarkFolderList(nickname: nickname));
+        });
+      } catch (error) {
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '오류 발생',
+            content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
+          ),
+        );
+      }
     }
 
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: createFolder,
+      onPressed: () => createFolder(context),
       children: [
         Expanded(
             child: Padding(
@@ -348,9 +365,10 @@ class DeleteModal extends StatelessWidget {
       try {
         switch (deleteMode) {
           case 0:
-            await ReviewProvider.deleteReview(reviewId: id);
+            await ReviewProvider.deleteReview(id);
             break;
           case 1:
+            await FolderProvider.deleteFolder(id);
             break;
           default:
             break;

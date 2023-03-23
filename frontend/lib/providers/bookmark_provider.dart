@@ -7,14 +7,13 @@ import 'package:find_toilet/utilities/type_enum.dart';
 class FolderProvider with ApiProvider {
   //* 폴더 목록
   static Future<FolderList> getFolderList(int memberId) async {
-    FolderList folderList = [];
     try {
       final response = await dio.get(folderListUrl(memberId));
       if (response.statusCode == 200) {
         final data = response.data['data'];
-        for (var folder in data) {
-          folderList.add(FolderModel.fromJson(folder));
-        }
+        FolderList folderList = data.map<FolderModel>((json) {
+          return FolderModel.fromJson(json);
+        }).toList();
         return folderList;
       }
       throw Error();
@@ -29,7 +28,7 @@ class FolderProvider with ApiProvider {
     required StringMap folderData,
   }) async {
     ApiProvider.createApi(
-      url: createFolderUrl(memberId),
+      createFolderUrl(memberId),
       data: folderData,
     );
   }
@@ -40,14 +39,14 @@ class FolderProvider with ApiProvider {
     required StringMap folderData,
   }) async {
     ApiProvider.updateApi(
-      url: updateFolderUrl(folderId),
+      updateFolderUrl(folderId),
       data: folderData,
     );
   }
 
   //* 리뷰 삭제
   static FutureVoid deleteFolder(int folderId) async {
-    ApiProvider.deleteApi(url: deleteFolderUrl(folderId));
+    ApiProvider.deleteApi(deleteFolderUrl(folderId));
   }
 }
 
@@ -76,7 +75,7 @@ class BookMarkProvider {
     required int toiletId,
   }) async {
     ApiProvider.createApi(
-      url: addToiletUrl(
+      addToiletUrl(
         folderId: folderId,
         toiletId: toiletId,
       ),
@@ -90,7 +89,7 @@ class BookMarkProvider {
     required int toiletId,
   }) async {
     ApiProvider.createApi(
-      url: addToiletUrl(
+      addToiletUrl(
         folderId: folderId,
         toiletId: toiletId,
       ),

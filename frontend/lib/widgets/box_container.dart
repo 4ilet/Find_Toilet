@@ -60,9 +60,11 @@ class _ThemeBoxState extends State<ThemeBox> {
 class FolderBox extends StatelessWidget {
   final FolderModel folderInfo;
   final bool add;
+  // final ReturnVoid editFolder;
   const FolderBox({
     super.key,
     required this.folderInfo,
+    // required this.editFolder,
     this.add = false,
   });
 
@@ -106,6 +108,7 @@ class FolderBox extends StatelessWidget {
                         page: const InputModal(
                           title: '즐겨 찾기 폴더명 수정',
                           buttonText: '수정',
+                          // onPressed: editFolder,
                         ),
                       ),
                       iconSize: 25,
@@ -143,7 +146,11 @@ class FolderBox extends StatelessWidget {
 
 //* 즐겨찾기 폴더 생성
 class AddBox extends StatefulWidget {
-  const AddBox({super.key});
+  // final ReturnVoid createFolder;
+  const AddBox({
+    super.key,
+    // required this.createFolder,
+  });
 
   @override
   State<AddBox> createState() => _AddBoxState();
@@ -158,6 +165,7 @@ class _AddBoxState extends State<AddBox> {
         builder: (context) => const InputModal(
           title: '즐겨 찾기 폴더 생성',
           buttonText: '만들기',
+          // onPressed: widget.createFolder,
         ),
       ),
       height: 150,

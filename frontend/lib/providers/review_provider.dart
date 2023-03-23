@@ -5,10 +5,10 @@ import 'package:find_toilet/utilities/type_enum.dart';
 //* review CRUD
 class ReviewProvider {
   //* 리뷰 목록
-  static Future<ReviewList> getReviewList({required int toiletId}) async {
+  static Future<ReviewList> getReviewList(int toiletId) async {
     ReviewList reviewList = [];
     try {
-      final response = await dio.get(reviewListUrl(toiletId: toiletId));
+      final response = await dio.get(reviewListUrl(toiletId));
       if (response.statusCode == 200) {
         response.data.forEach((review) {
           reviewList.add(ReviewModel.fromJson(review));
@@ -28,7 +28,7 @@ class ReviewProvider {
     required DynamicMap reviewData,
   }) async {
     ApiProvider.createApi(
-      url: postReviewUrl(
+      postReviewUrl(
         memberId: memberId,
         toiletId: toiletId,
       ),
@@ -37,19 +37,15 @@ class ReviewProvider {
   }
 
   //* 리뷰 수정
-  static FutureVoid updateReview({
-    required int reviewId,
+  static FutureVoid updateReview(
+    int reviewId, {
     required DynamicMap reviewData,
   }) async {
-    ApiProvider.updateApi(
-        url: updateReviewUrl(
-          reviewId: reviewId,
-        ),
-        data: reviewData);
+    ApiProvider.updateApi(updateReviewUrl(reviewId), data: reviewData);
   }
 
   //* 리뷰 삭제
-  static FutureVoid deleteReview({required int reviewId}) async {
-    ApiProvider.deleteApi(url: deleteReviewUrl(reviewId: reviewId));
+  static FutureVoid deleteReview(int reviewId) async {
+    ApiProvider.deleteApi(deleteReviewUrl(reviewId));
   }
 }
