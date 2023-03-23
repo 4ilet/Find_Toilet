@@ -2,7 +2,9 @@ package com.Fourilet.project.fourilet.service;
 
 import com.Fourilet.project.fourilet.config.jwt.JwtProperties;
 import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
+import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Member;
+import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.dto.KakaoDto.KakaoProfile;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
@@ -98,6 +100,7 @@ public class MemberService {
                 .email(profile.getKakao_account().getEmail())
                 .userRole("USER")
                 .build());
+
         }
 
         String accessToken = jwtService.createAccessToken(email, member.getMemberId());
