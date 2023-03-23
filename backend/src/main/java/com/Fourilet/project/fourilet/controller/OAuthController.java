@@ -30,17 +30,13 @@ public class OAuthController {
 
         System.out.println("access!!" + oAuthToken);
 
-        Map<String, Object> result = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
+//        Map<String, Object> result = memberService.saveMemberAndGetToken(oAuthToken.getAccess_token());
 
-        Object jwtToken = result.get("jwtToken");
+//        Object member = result.get("member");
 
-        Object member = result.get("member");
-
-        System.out.println("JWT TOKEN!! " + jwtToken);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 
-        return ResponseEntity.ok().headers(headers).body(member);
+        return ResponseEntity.ok().headers(headers).body(oAuthToken.getAccess_token());
     }
 
     @GetMapping("/login")
