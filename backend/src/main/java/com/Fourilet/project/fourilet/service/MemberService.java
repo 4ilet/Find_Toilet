@@ -38,6 +38,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FolderRepository folderRepository;
     private final JwtService jwtService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
@@ -92,7 +93,7 @@ public class MemberService {
         String email = profile.getKakao_account().getEmail();
 
         Member member = memberRepository.findByEmail(email).orElse(null);
-
+        Folder folder = new Folder();
         if(member == null){
             member = memberRepository.save(Member.builder()
                 .kakaoId(profile.getId())
@@ -100,7 +101,10 @@ public class MemberService {
                 .email(profile.getKakao_account().getEmail())
                 .userRole("USER")
                 .build());
-
+            // 회원가입을 한 멤버를 저장할 때, 기본 즐겨찾기 폴더 설정
+            folder.setMember(member);
+            folder.setFolderName("기본 즐겨찾기 폴더");
+            folderRepository.save(folder);
         }
 
         String accessToken = jwtService.createAccessToken(email, member.getMemberId());
@@ -108,6 +112,10 @@ public class MemberService {
 
         member.setRefreshToken(refreshToken);
         memberRepository.save(member);
+////      회원을 저장할 때, 기본 즐겨찾기 폴더 설정 부분
+//        folder.setMember(member);
+//        folder.setFolderName("기본 즐겨찾기 폴더");
+//        folderRepository.save(folder);
 
         jwtService.updateRefreshToken(email, refreshToken);
 

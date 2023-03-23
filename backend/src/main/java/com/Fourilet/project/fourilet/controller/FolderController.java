@@ -4,6 +4,7 @@ import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.dto.*;
+import com.Fourilet.project.fourilet.exception.LimitException;
 import com.Fourilet.project.fourilet.service.FolderService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
@@ -69,7 +71,7 @@ public class FolderController {
 
         } catch (NullPointerException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("해당 폴더가 존재하지 않습니다.");
+            message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
@@ -80,12 +82,12 @@ public class FolderController {
 
     @PutMapping("/update/folder/{folderId}")
     @ApiOperation(value = "즐겨찾기 폴더 이름 수정", notes = "즐겨찾기 폴더의 이름을 변경한다")
-    public ResponseEntity<?> updateFolderName(@PathVariable long folderId, @RequestBody FolderDto folderDto){
+    public ResponseEntity<?> updateFolderName(@PathVariable long folderId, @RequestBody FolderDto.UpdateFolderDto update){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
-            folderService.updateFolderName(folderId, folderDto);
+            folderService.updateFolderName(folderId, update);
             message.setMessage("폴더 이름 변경 성공");
             message.setStatus(StatusEnum.OK);
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
@@ -117,7 +119,12 @@ public class FolderController {
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
 
-        } catch (Exception e){
+        } catch (LimitException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e){
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러 발생");
             return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -5,6 +5,7 @@ import com.Fourilet.project.fourilet.data.repository.*;
 import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto2;
+import com.Fourilet.project.fourilet.exception.LimitException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class FolderService {
     public void deleteFolder(long folderId) {
         Folder folder = folderRepository.findById(folderId).orElse(null);
         if (folder == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("해당 폴더가 존재하지 않습니다.");
         }
         List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
         if (bookmarkList.size() > 0) {
@@ -59,16 +60,22 @@ public class FolderService {
         folderRepository.delete(folder);
     }
 
-    public void updateFolderName(long folderId, FolderDto folderDto){
+    public void updateFolderName(long folderId, FolderDto.UpdateFolderDto update){
         LOGGER.info("CALL UPDATE FOLDER NAME");
         Folder folder = folderRepository.findById(folderId).orElse(null);
-        folder.setFolderName(folderDto.getFolderName());
+        folder.setFolderName(update.getFolderName());
         folderRepository.save(folder);
     }
 
     public void createFolder(long memberId, FolderDto.NewFolderDto newFolderDto) {
         LOGGER.info("CALL CREATE FOLDER");
         Member member =  memberRepository.findById(memberId);
+        List<Folder> folderList = folderRepository.findAllByMember(member);
+
+        if (folderList.size() > 10){
+            throw new LimitException("즐겨찾기는 10개 이상 생성하지 못합니다.");
+        }
+
         if (member == null) {
             throw new NullPointerException("존재하지 않는 회원입니다.");
         }
