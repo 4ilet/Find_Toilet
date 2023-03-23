@@ -27,7 +27,6 @@ public class ReviewController {
     @ApiOperation(value = "화장실 리뷰 생성", notes = "특정 화장실의 리뷰를 생성한다.")
     public ResponseEntity<?> postReview(@PathVariable("memberId") long memberId, @PathVariable("toiletId") long toiletId, @RequestBody ReviewDto.PostReviewDto postReviewDto){
         reviewService.postReview(memberId, toiletId, postReviewDto);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/{toiletId}")
