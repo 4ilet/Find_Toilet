@@ -91,21 +91,20 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(email).orElse(null);
 
-        String accessToken = jwtService.createAccessToken(email);
-        String refreshToken = jwtService.createRefreshToken();
-
         if(member == null){
-            memberRepository.save(Member.builder()
+            member = memberRepository.save(Member.builder()
                 .kakaoId(profile.getId())
                 .nickname(profile.getKakao_account().getProfile().getNickname())
                 .email(profile.getKakao_account().getEmail())
-                .refreshToken(refreshToken)
                 .userRole("USER")
                 .build());
-        }else{
-            member.setRefreshToken(refreshToken);
-            memberRepository.save(member);
         }
+
+        String accessToken = jwtService.createAccessToken(email, member.getMemberId());
+        String refreshToken = jwtService.createRefreshToken();
+
+        member.setRefreshToken(refreshToken);
+        memberRepository.save(member);
 
         jwtService.updateRefreshToken(email, refreshToken);
 
