@@ -29,7 +29,7 @@ spring:
           registration:
             kakao:
               client-id: 12a9eb103bcd45acefe504833d7f8f7e
-              redirect-uri: http://localhost:8080/oauth2/code/kakao
+              redirect-uri: http://43.201.124.70:8080/oauth2/code/kakao
               client-authentication-method: POST
               client-secret: rqzG2KZpFzRUH7fqbIkFgBlnnVeyz6zs
               authorization-grant-type: authorization_code
@@ -46,7 +46,7 @@ spring:
 jwt:
   secretKey: 'find_toilet_project_fourilet_backend_yoonju_find_toilet_project_fourilet_backend_yoonju'
   access:
-    expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+    expiration: 86400000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
     header: Authorization
 
   refresh:
