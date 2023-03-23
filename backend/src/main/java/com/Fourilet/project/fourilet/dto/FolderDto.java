@@ -33,7 +33,9 @@ public class FolderDto {
         private String folderName;
 
     }
-    public static class updateFolderDto {
+    @Getter
+    @Setter
+    public static class UpdateFolderDto {
         @ApiParam(value = "즐겨찾기 폴더 이름", type = "String")
         private String folderName;
     }
