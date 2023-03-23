@@ -26,11 +26,11 @@ public class Member {
     private String nickname;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Folder> folderList = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 
     @Column(name = "user_role")

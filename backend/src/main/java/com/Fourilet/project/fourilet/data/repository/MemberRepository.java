@@ -13,13 +13,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findById(long memberId);
     Optional<Member> findByEmail(String email);
-//    List<Member> findAllByMember(Member member);
     Optional<Member> findByRefreshToken(String refreshToken);
 
-
-    Member findByMemberId(Member member);
-
-    Optional<Member> findByKakaoId(Long kakaoId);
 
 }
 
