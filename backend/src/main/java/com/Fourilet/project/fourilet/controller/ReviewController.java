@@ -1,18 +1,23 @@
 package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.data.entity.Review;
+import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
+import com.Fourilet.project.fourilet.dto.StatusEnum;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -26,8 +31,24 @@ public class ReviewController {
     @PostMapping("/post/{memberId}/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 생성", notes = "특정 화장실의 리뷰를 생성한다.")
     public ResponseEntity<?> postReview(@PathVariable("memberId") long memberId, @PathVariable("toiletId") long toiletId, @RequestBody ReviewDto.PostReviewDto postReviewDto){
-        reviewService.postReview(memberId, toiletId, postReviewDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            reviewService.postReview(memberId, toiletId, postReviewDto);
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("리뷰 작성 성공");
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
+        } catch (NullPointerException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
     }
     @GetMapping("/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 목록", notes = "특정 화장실의 리뷰 목록들을 가져온다.")
