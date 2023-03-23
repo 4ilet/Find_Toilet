@@ -2,7 +2,9 @@ package com.Fourilet.project.fourilet.service;
 
 import com.Fourilet.project.fourilet.config.jwt.JwtProperties;
 import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
+import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Member;
+import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.dto.KakaoDto.KakaoProfile;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
@@ -93,7 +95,6 @@ public class MemberService {
 
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken();
-
         if(member == null){
             memberRepository.save(Member.builder()
                 .kakaoId(profile.getId())
@@ -102,6 +103,8 @@ public class MemberService {
                 .refreshToken(refreshToken)
                 .userRole("USER")
                 .build());
+
+
         }else{
             member.setRefreshToken(refreshToken);
             memberRepository.save(member);

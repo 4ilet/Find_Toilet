@@ -101,28 +101,18 @@ public class FolderService {
         Folder folder = folderRepository.findById(folderId).orElse(null);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
-        List toiletList = new ArrayList<>();
-        for (BookMark bookmark : bookMarkList) {
-            toiletList.add(bookmark.getToilet());
-        }
         if (folder == null){
             throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
         }
-        List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
-        for (BookMark bookmark : bookmarkList) {
-//            for (Object toilet2 : toiletList) {
-//                if(toilet2.equals(toilet)){
-//                    if (bookmark.getToilet() == toilet) {
-//                        bookMarkRepository.delete(bookmark);
-//                    }
-//                } else {
-//                    throw new NullPointerException("즐겨찾기에 화장실이 존재하지 않습니다");
-//                }
-//            }
+        boolean flag = false;
+        for (BookMark bookmark : bookMarkList) {
             if (bookmark.getToilet() == toilet) {
                 bookMarkRepository.delete(bookmark);
+                flag = true;
             }
-
+        }
+        if (!flag){
+            throw new NullPointerException("존재하지 않는 화장실입니다");
         }
     }
     public List<ToiletDto2> getToiletList(long folderId){
@@ -152,9 +142,11 @@ public class FolderService {
             float average = 0;
             if (reviewList.size() == 0){
                 toiletDto2.setScore(average);
+                toiletDto2.setReviewLen(reviewList.size());
             } else {
                 average = total / reviewList.size();
                 toiletDto2.setScore(average);
+                toiletDto2.setReviewLen(reviewList.size());
             }
             toiletDto2.setToiletId(toilet.getToiletId());
             toiletDto2.setToiletName(toilet.getToiletName());
