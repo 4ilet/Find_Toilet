@@ -4,9 +4,9 @@ import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.Fourilet.project.fourilet.config.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
-import com.Fourilet.project.fourilet.config.oauth2.handler.OAuth2LoginFailureHandler;
+//import com.Fourilet.project.fourilet.config.oauth2.handler.OAuth2LoginFailureHandler;
 //import com.Fourilet.project.fourilet.config.oauth2.handler.OAuth2LoginSuccessHandler;
-import com.Fourilet.project.fourilet.config.oauth2.service.CustomOAuth2UserService;
+//import com.Fourilet.project.fourilet.config.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +32,6 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
-//    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-//    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-//    private final CustomOAuth2UserService customOAuth2UserService;
 
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */

@@ -1,20 +1,19 @@
 package com.Fourilet.project.fourilet.service;
 
-import com.Fourilet.project.fourilet.config.jwt.JwtProperties;
-import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
+//import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
+import com.Fourilet.project.fourilet.data.entity.BookMark;
 import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Member;
+import com.Fourilet.project.fourilet.data.repository.BookMarkRepository;
 import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
+import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.KakaoDto.KakaoProfile;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -25,13 +24,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +34,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final FolderRepository folderRepository;
+    private final BookMarkRepository bookMarkRepository;
+    private final FolderService folderService;
     private final JwtService jwtService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
@@ -163,5 +160,24 @@ public class MemberService {
         Member member = memberRepository.findById(memberId);
         member.setNickname(nickname);
         return memberRepository.save(member);
+    }
+
+    public void deleteMember(long memberId){
+
+        Member member = memberRepository.findById(memberId);
+        List<Folder> memberFolderList = folderRepository.findAllByMember(member);
+
+        System.out.println("폴더리스트예용 " + memberFolderList);
+
+        for(Folder folder : memberFolderList) {
+            List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
+            if (bookmarkList.size() > 0) {
+                for (BookMark bookmark : bookmarkList) {
+                    bookMarkRepository.delete(bookmark);
+                }
+            }
+        }
+
+        memberRepository.deleteById(memberId);
     }
 }

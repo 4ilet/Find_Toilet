@@ -66,6 +66,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         // RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
         // 일치한다면 AccessToken을 재발급해준다.
         if (refreshToken != null) {
+
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return; // RefreshToken을 보낸 경우에는 AccessToken을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return으로 필터 진행 막기
         }
