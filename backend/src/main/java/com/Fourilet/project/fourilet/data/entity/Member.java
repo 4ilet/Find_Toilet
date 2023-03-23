@@ -38,6 +38,12 @@ public class Member {
 
     private Long kakaoId;
 
+    private String refreshToken;
+
+    public void updateRefreshToken(String updateRefreshToken){
+        this.refreshToken = updateRefreshToken;
+    }
+
 
      @Builder
     public Member(Long kakaoId, String email, String nickname, String refreshToken, String userRole){
@@ -45,5 +51,6 @@ public class Member {
          this.nickname = nickname;
          this.userRole = userRole;
          this.kakaoId = kakaoId;
+         this.refreshToken = refreshToken;
      }
 }
