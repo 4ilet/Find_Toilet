@@ -44,6 +44,7 @@ public interface ToiletDto {
     Boolean getAllDay();
 
     Boolean getDiaper();
+    Boolean getIsLike();
 
     int getDistance();
 

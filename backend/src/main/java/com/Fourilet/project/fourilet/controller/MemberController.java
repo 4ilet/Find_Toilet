@@ -11,10 +11,12 @@ import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +35,15 @@ public class MemberController {
 
         Map<String, Object> result = memberService.saveMemberAndGetToken(loginDto.getToken());
 
-        Object jwtToken = result.get("jwtToken");
+        Object accessToken = result.get("accessToken");
+
+        Object refreshToken = result.get("refreshToken");
 
         Object member = result.get("member");
 
-        System.out.println("JWT TOKEN!! " + jwtToken);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Authorization-refresh", "Bearer " + refreshToken);
 
         return ResponseEntity.ok().headers(headers).body(member);
     }
@@ -47,6 +51,9 @@ public class MemberController {
     @GetMapping("/userinfo")
     @ApiOperation(value="정보 조회 API", notes = "유저의 정보를 조회합니다. 유저의 memberId 값을 parameter에 담아주세요!")
     public ResponseEntity<Member> getUser(@ApiParam(value = "유저의 memberId") @RequestParam("user_id") Long memberId){
+//        System.out.println("안녕 " + );
+//        Long userCode = (Long) request.getAttribute("userCode");
+        System.out.println("뭐임?" + memberId);
         Member member = memberService.getMember(memberId);
         return ResponseEntity.ok().body(member);
     }
@@ -54,6 +61,7 @@ public class MemberController {
     @PutMapping("/update/nickname/{user_id}")
     @ApiOperation(value="닉네임 변경 API", notes = "유저의 닉네임을 변경합니다. 유저의 memberId 값을 path에 담아주시고, 변경할 닉네임을 Body에 담아주세요!")
     public ResponseEntity<Map<String, String>> updateNickname(@ApiParam(value = "유저의 memberId") @PathVariable Long user_id, @RequestBody UpdateNicknameDto updateNicknameDto){
+
         Member member = memberService.updateNickname(user_id, updateNicknameDto.getNickname());
         Map<String, String> result = new HashMap<String, String>();
         result.put("success", member.getNickname());

@@ -1,14 +1,17 @@
 package com.Fourilet.project.fourilet.service;
 
 import com.Fourilet.project.fourilet.config.jwt.JwtProperties;
+import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
 import com.Fourilet.project.fourilet.data.entity.Member;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.dto.KakaoDto.KakaoProfile;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
+import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,15 +24,19 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
-    @Autowired
-    MemberRepository memberRepository;
+
+    private final MemberRepository memberRepository;
+    private final JwtService jwtService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     String client_secret;
@@ -82,35 +89,31 @@ public class MemberService {
 
         String email = profile.getKakao_account().getEmail();
 
-        Member member = memberRepository.findByEmail(email);
+        Member member = memberRepository.findByEmail(email).orElse(null);
 
-        if(member == null) {
-            member = Member.builder()
-                    .kakaoId(profile.getId())
-                    .nickname(profile.getKakao_account().getProfile().getNickname())
-                    .email(profile.getKakao_account().getEmail())
-                    .userRole("ROLE_USER")
-                    .build();
+        String accessToken = jwtService.createAccessToken(email);
+        String refreshToken = jwtService.createRefreshToken();
 
+        if(member == null){
+            memberRepository.save(Member.builder()
+                .kakaoId(profile.getId())
+                .nickname(profile.getKakao_account().getProfile().getNickname())
+                .email(profile.getKakao_account().getEmail())
+                .refreshToken(refreshToken)
+                .userRole("USER")
+                .build());
+        }else{
+            member.setRefreshToken(refreshToken);
             memberRepository.save(member);
         }
 
-        String jwtToken = createToken(member);
+        jwtService.updateRefreshToken(email, refreshToken);
 
         result.put("member", member);
-        result.put("jwtToken", jwtToken);
+        result.put("accessToken", accessToken);
+        result.put("refreshToken", refreshToken);
 
         return result;
-    }
-
-    public String createToken(Member member){
-        String jwtToken = JWT.create()
-                .withSubject(member.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
-                .withClaim("id", member.getMemberId())
-                .withClaim("nickname", member.getNickname())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-        return jwtToken;
     }
 
     public KakaoProfile findProfile(String token){
@@ -142,6 +145,7 @@ public class MemberService {
     }
 
     public Member getMember(long memberId){
+        System.out.println("엥?? " + memberRepository.findById(memberId));
         return memberRepository.findById(memberId);
     }
 

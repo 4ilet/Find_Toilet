@@ -21,7 +21,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius " +
@@ -30,7 +32,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius " +
@@ -41,7 +45,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.all_day is true" +
@@ -50,7 +56,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.all_day is true" +
@@ -61,7 +69,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -70,7 +80,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -81,7 +93,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -90,7 +104,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -101,7 +117,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius and t.diaper is true" +
@@ -110,7 +128,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true" +
@@ -121,7 +141,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -130,7 +152,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -141,7 +165,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -150,7 +176,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -161,7 +189,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius and t.diaper is true and t.all_day is true" +
@@ -170,7 +200,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true and t.all_day is true" +
@@ -181,7 +213,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -190,7 +224,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -201,7 +237,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -210,7 +248,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -221,7 +261,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -230,7 +272,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -241,7 +285,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -251,7 +297,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -263,7 +311,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true and " +
@@ -273,7 +323,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and t.diaper is true and " +
@@ -285,7 +337,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -295,7 +349,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -307,7 +363,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -317,7 +375,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) <= :radius) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -330,7 +390,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -338,7 +400,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -348,7 +412,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -356,7 +422,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -366,7 +434,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -374,7 +444,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -384,7 +456,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -392,7 +466,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -402,7 +478,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true" +
@@ -410,7 +488,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true" +
@@ -420,7 +500,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -428,7 +510,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -438,7 +522,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -446,7 +532,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -456,7 +544,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true and t.all_day is true" +
@@ -464,7 +554,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and t.all_day is true" +
@@ -474,7 +566,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -482,7 +576,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -492,7 +588,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -500,7 +598,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -510,7 +610,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -518,7 +620,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -528,7 +632,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -537,7 +643,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -548,7 +656,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -557,7 +667,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -568,7 +680,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -577,7 +691,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -588,7 +704,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -597,7 +715,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -608,7 +728,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -616,7 +738,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -626,7 +750,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -634,7 +760,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -644,7 +772,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -652,7 +782,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -662,7 +794,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -670,7 +804,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -680,7 +816,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true" +
@@ -688,7 +826,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true" +
@@ -698,7 +838,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -706,7 +848,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -716,7 +860,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -724,7 +870,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -734,7 +882,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true and t.all_day is true" +
@@ -742,7 +892,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and t.all_day is true" +
@@ -752,7 +904,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -760,7 +914,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -770,7 +926,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -778,7 +936,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -788,7 +948,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -796,7 +958,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -806,7 +970,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -815,7 +981,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -826,7 +994,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -835,7 +1005,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -846,7 +1018,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -855,7 +1029,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -866,7 +1042,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -875,7 +1053,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -886,7 +1066,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -894,7 +1076,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%" +
@@ -904,7 +1088,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -912,7 +1098,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN  review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.all_day is true" +
@@ -922,7 +1110,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -930,7 +1120,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -940,7 +1132,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -948,7 +1142,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true)" +
@@ -958,7 +1154,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true" +
@@ -966,7 +1164,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true" +
@@ -976,7 +1176,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -984,7 +1186,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true) and t.all_day is true" +
@@ -994,7 +1198,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -1002,7 +1208,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.all_day is true" +
@@ -1012,7 +1220,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address% and t.diaper is true and t.all_day is true" +
@@ -1020,7 +1230,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and t.all_day is true" +
@@ -1030,7 +1242,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -1038,7 +1252,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -1048,7 +1264,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -1056,7 +1274,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and (t.d_female_poo is true or t.d_male_pee is true or t.d_male_poo is true)" +
@@ -1066,7 +1286,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -1074,7 +1296,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and t.diaper is true" +
@@ -1084,7 +1308,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -1093,7 +1319,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -1104,7 +1332,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -1113,7 +1343,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and t.diaper is true and " +
@@ -1124,7 +1356,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -1133,7 +1367,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -1144,7 +1380,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
     @Query(value = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
@@ -1153,7 +1391,9 @@ public interface ToiletRepository extends JpaRepository<Toilet, Long> {
             , countQuery = "SELECT t.toilet_id as toiletId, t.toilet_name as toiletName, t.address as address, t.operation_time as operationTime, t.lon as lon, t.lat as lat, " +
             "t.phone_number as phoneNumber, t.d_male_pee as dMalePee, t.d_male_poo as dMalePoo, t.d_female_poo as dFemalePoo, t.c_female_poo as cFemalePoo, " +
             "t.c_male_pee as cMalePee, t.c_male_poo as cMalePoo, t.all_day as allDay, t.diaper as diaper, Round(ST_Distance_Sphere(Point(:nowLon,:nowLat),POINT(t.lon, t.lat)), 0) as distance," +
-            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment  " +
+            "COALESCE(avg(r.score), 0) as score, COUNT(r.review_id) as comment, CASE WHEN toilet_id in (SELECT toilet FROM bookmark" +
+            "WHERE FOLDER IN (SELECT folder_id FROM folder where member = 16)) " +
+            "THEN TRUE ELSE FALSE END AS isLike " +
             "FROM toilet as t " +
             "LEFT JOIN review as r ON r.toilet_id = t.toilet_id " +
             "WHERE (t.toilet_Name LIKE %:toiletName% or t.address LIKE %:address%) and (t.c_female_poo is true or t.c_male_pee is true or t.c_male_poo is true) and " +
