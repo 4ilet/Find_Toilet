@@ -5,8 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider {
   var _memberId = 13;
-  var _token =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImlkIjoxMywiZXhwIjoxNjc5NzQzNDk1LCJlbWFpbCI6InB1YmhhbjM1QGdtYWlsLmNvbSJ9.zLyoHr5PDLhDxcYrjahZpnKWYZ8x2tNPSRGrtnXXoNp3R8AniZtdYgZoFVQJDuDq2zK70k9kQFCZB6hsTLBtxA';
+  var _token = '';
   var _refresh = '';
   var _nickname = '포일렛';
 
