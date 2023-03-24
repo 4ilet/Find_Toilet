@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -33,38 +34,33 @@ class _SettingsState extends State<Settings> {
   }
 
   void sendEmail() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    final deviceInfo = await deviceInfoPlugin.deviceInfo;
-    final info = deviceInfo.data;
-    final version = info['version'];
-    final manufacturer = info['manufacturer'];
-    final model = info['model'];
-    final brand = info['brand'];
-    final device = info['device'];
-    final hardware = info['hardware'];
-
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appVersion = packageInfo.version;
-    // String appName = packageInfo.appName;
-    // String packageName = packageInfo.packageName;
-    // String buildNumber = packageInfo.buildNumber;
-
-    final Email email = Email(
-      subject: '[화장실을 찾아서 문의]',
-      recipients: ['team.4ilet@gmail.com'],
-      body: body(
-        release: version['release'],
-        sdkInt: version['sdkInt'],
-        manufacturer: manufacturer,
-        model: model,
-        brand: brand,
-        device: device,
-        hardware: hardware,
-      ),
-      isHTML: false,
-    );
     try {
+      WidgetsFlutterBinding.ensureInitialized();
+      DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final deviceInfo = await deviceInfoPlugin.deviceInfo;
+      final info = deviceInfo.data;
+      final version = info['version'];
+      final manufacturer = info['manufacturer'];
+      final model = info['model'];
+      final device = info['device'];
+
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appVersion = packageInfo.version;
+
+      final Email email = Email(
+        subject: '[화장실을 찾아서 문의]',
+        recipients: ['team.4ilet@gmail.com'],
+        body: body(
+          release: version['release'],
+          sdkInt: version['sdkInt'],
+          manufacturer: manufacturer,
+          model: model,
+          device: device,
+          appVersion: appVersion,
+        ),
+        isHTML: false,
+      );
+
       await FlutterEmailSender.send(email);
     } catch (error) {
       showModal(context, page: errorModal('email'))();
@@ -85,7 +81,7 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => login(context, errorModal('login')),
+                    onTap: () => UserProvider().login(context),
                     child: accessToken == ''
                         ? Image.asset(kakaoLogin)
                         : const TextWithIcon(

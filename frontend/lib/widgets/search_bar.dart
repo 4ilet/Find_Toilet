@@ -67,8 +67,7 @@ class _SearchBarState extends State<SearchBar> {
           width: 40,
           height: 40,
           child: CustomIconButton(
-            onPressed: routerPush(context,
-                page: const BookMarkFolderList(nickname: nickname)),
+            onPressed: routerPush(context, page: const BookMarkFolderList()),
             icon: bookMarkIcon,
             color: CustomColors.blackColor,
           ),

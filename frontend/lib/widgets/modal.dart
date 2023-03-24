@@ -175,13 +175,9 @@ class InputModal extends StatelessWidget {
 
     void createFolder(BuildContext context) {
       try {
-        FolderProvider.createNewFolder(
-          memberId,
-          folderData: folderData,
-        ).then((value) {
+        FolderProvider.createNewFolder(folderData).then((value) {
           routerPop(context);
-          routerPush(context,
-              page: const BookMarkFolderList(nickname: nickname));
+          routerPush(context, page: const BookMarkFolderList());
         });
       } catch (error) {
         showModal(

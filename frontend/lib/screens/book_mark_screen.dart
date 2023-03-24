@@ -1,5 +1,5 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
-import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -10,9 +10,7 @@ import 'package:flutter/material.dart';
 
 //* 즐겨찾기 메인 화면 (폴더 존재)
 class BookMarkFolderList extends StatefulWidget {
-  final String nickname;
-
-  const BookMarkFolderList({super.key, required this.nickname});
+  const BookMarkFolderList({super.key});
 
   @override
   State<BookMarkFolderList> createState() => _BookMarkFolderListState();
@@ -31,12 +29,12 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
-                title: '${widget.nickname}님의 즐겨 찾기 폴더',
+                title: '${UserProvider().getName()}님의 즐겨 찾기 폴더',
                 fontSize: FontSize.largeSize,
                 color: CustomColors.whiteColor,
               ),
               FutureBuilder(
-                future: FolderProvider.getFolderList(memberId),
+                future: FolderProvider.getFolderList(UserProvider().getId()!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Flexible(child: folderListView(snapshot));

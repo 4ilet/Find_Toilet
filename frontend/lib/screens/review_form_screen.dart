@@ -54,7 +54,6 @@ class _ReviewFormState extends State<ReviewForm> {
       late final String state;
       if (widget.reviewId == null) {
         await ReviewProvider.postNewReview(
-          memberId: memberId,
           toiletId: widget.toiletId,
           reviewData: reviewData,
         );

@@ -15,10 +15,15 @@ class Intro extends StatefulWidget {
 
 class _IntroState extends State<Intro> {
   @override
-  Widget build(BuildContext context) {
-    initWidthHeight(context);
+  void initState() {
+    super.initState();
     Future.delayed(const Duration(seconds: 5),
         routerPush(context, page: const SelectFontTheme()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    initWidthHeight(context);
 
     return Scaffold(
       backgroundColor: mainColor,

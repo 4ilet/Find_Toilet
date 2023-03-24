@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final baseUrl = dotenv.env['baseUrl'];
 final options = BaseOptions(
   baseUrl: baseUrl!,
-  headers: {'Authorization': token},
+  headers: {'Authorization': UserProvider().getToken()},
 );
 final dio = Dio(options);
 
@@ -20,16 +20,17 @@ const userInfoUrl = '$userUrl/userinfo';
 //* review
 const reviewUrl = '/review';
 String reviewListUrl(int toiletId) => '$reviewUrl/$toiletId';
-String postReviewUrl({required int memberId, required int toiletId}) =>
-    '$reviewUrl/post/$memberId/$toiletId';
+String postReviewUrl(int toiletId) =>
+    '$reviewUrl/post/${UserProvider().getId()}/$toiletId';
 String updateReviewUrl(int reviewId) => '$reviewUrl/update/$reviewId';
 String deleteReviewUrl(int reviewId) => '$reviewUrl/delete/$reviewId';
 
 //* bookmark
 
 const bookmarkUrl = '/like';
-String folderListUrl(int memberId) => '$bookmarkUrl/folder/$memberId';
-String createFolderUrl(int memberId) => '$bookmarkUrl/create/folder/$memberId';
+String folderListUrl() => '$bookmarkUrl/folder/${UserProvider().getId()}';
+String createFolderUrl() =>
+    '$bookmarkUrl/create/folder/${UserProvider().getId()}';
 String updateFolderUrl(int folderId) => '$bookmarkUrl/update/folder/$folderId';
 String deleteFolderUrl(int folderId) => '$bookmarkUrl/delete/folder/$folderId';
 
@@ -114,7 +115,6 @@ class ApiProvider {
       }
       throw Error();
     } catch (error) {
-      print(error);
       throw Error();
     }
   }

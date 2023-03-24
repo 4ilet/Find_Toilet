@@ -72,10 +72,3 @@ void initData() async {
     // mapRadius =
   }
 }
-
-//* 변수
-// late final memberId;
-const memberId = 13;
-const token =
-    'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImlkIjoxMywiZXhwIjoxNjc5NjQ0Nzg5LCJlbWFpbCI6InB1YmhhbjM1QGdtYWlsLmNvbSJ9.17yNuUPRNE87hJyPa2UIGl32bskYQoclI56EbNioNSSgu9F_dxRcfm81WNOclH0vis3K16We5kMRVQewjfIMvg';
-const nickname = '포일렛';

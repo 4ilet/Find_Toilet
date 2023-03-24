@@ -8,7 +8,7 @@ class FolderProvider with ApiProvider {
   //* 폴더 목록
   static Future<FolderList> getFolderList(int memberId) async {
     try {
-      final response = await dio.get(folderListUrl(memberId));
+      final response = await dio.get(folderListUrl());
       if (response.statusCode == 200) {
         final data = response.data['data'];
         FolderList folderList = data.map<FolderModel>((json) {
@@ -24,11 +24,10 @@ class FolderProvider with ApiProvider {
 
   //* 폴더 생성
   static FutureVoid createNewFolder(
-    int memberId, {
-    required StringMap folderData,
-  }) async {
+    StringMap folderData,
+  ) async {
     ApiProvider.createApi(
-      createFolderUrl(memberId),
+      createFolderUrl(),
       data: folderData,
     );
   }

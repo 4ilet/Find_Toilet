@@ -23,15 +23,11 @@ class ReviewProvider {
 
   //* 리뷰 생성
   static FutureVoid postNewReview({
-    required int memberId,
     required int toiletId,
     required DynamicMap reviewData,
   }) async {
     ApiProvider.createApi(
-      postReviewUrl(
-        memberId: memberId,
-        toiletId: toiletId,
-      ),
+      postReviewUrl(toiletId),
       data: reviewData,
     );
   }
