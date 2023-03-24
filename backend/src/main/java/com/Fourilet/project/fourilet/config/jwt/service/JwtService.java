@@ -3,6 +3,7 @@ package com.Fourilet.project.fourilet.config.jwt.service;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -191,8 +192,8 @@ public class JwtService {
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;
-        } catch (Exception e) {
-            System.out.println("토큰이 유효하지 않음");
+        } catch (TokenExpiredException e) {
+            e.printStackTrace();
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
             return false;
         }

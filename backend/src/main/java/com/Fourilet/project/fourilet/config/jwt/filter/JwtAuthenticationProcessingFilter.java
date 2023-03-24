@@ -4,8 +4,13 @@ import com.Fourilet.project.fourilet.config.jwt.util.PasswordUtil;
 import com.Fourilet.project.fourilet.data.entity.Member;
 import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -43,6 +48,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
 
+    @Value("${jwt.secretKey}")
+    private String secretKey;
+
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
@@ -60,13 +68,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
 
-        System.out.println("리프레시 토큰을 확인해봅시다 " + refreshToken);
 
         // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
         // RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
         // 일치한다면 AccessToken을 재발급해준다.
         if (refreshToken != null) {
-
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return; // RefreshToken을 보낸 경우에는 AccessToken을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return으로 필터 진행 막기
         }
@@ -118,12 +124,25 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
         log.info("checkAccessTokenAndAuthentication() 호출");
-        System.out.println("액세스 토큰 유효한지 확인!");
-        jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid)
-                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-                        .ifPresent(email -> memberRepository.findByEmail(email)
-                                .ifPresent(this::saveAuthentication)));
+
+        try{
+            String token = jwtService.extractAccessToken(request).orElse(null);
+            String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
+            Member member = memberRepository.findByEmail(email).orElse(null);
+            saveAuthentication(member);
+
+        }catch (TokenExpiredException e){
+            e.printStackTrace();
+            request.setAttribute("Authorization", "토큰 만료");
+        }catch (JWTVerificationException e){
+            e.printStackTrace();
+            request.setAttribute("Authorization", "유효하지 않은 토큰");
+        }
+//        jwtService.extractAccessToken(request)
+//                .filter(jwtService::isTokenValid)
+//                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+//                        .ifPresent(email -> memberRepository.findByEmail(email)
+//                                .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
     }
@@ -144,6 +163,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
      */
     public void saveAuthentication(Member myUser) {
+
+        System.out.println("넘어왔다" + myUser);
 
         String password = PasswordUtil.generateRandomPassword();
 
