@@ -112,6 +112,4 @@ public class MemberController {
             return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
