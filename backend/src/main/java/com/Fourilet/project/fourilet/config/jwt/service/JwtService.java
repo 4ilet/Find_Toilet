@@ -84,7 +84,7 @@ public class JwtService {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.setHeader(accessHeader, accessToken);
-        log.info("재발급된 Access Token : {}", accessToken);
+//        log.info("재발급된 Access Token : {}", accessToken);
     }
 
     /**
@@ -95,7 +95,7 @@ public class JwtService {
 
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
-        log.info("Access Token, Refresh Token 헤더 설정 완료");
+//        log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
     /**
@@ -115,10 +115,6 @@ public class JwtService {
      * 헤더를 가져온 후 "Bearer"를 삭제(""로 replace)
      */
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-        System.out.println("나와라 액세스토큰");
-        System.out.println(Optional.ofNullable(request.getHeader(accessHeader))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, "")));
         return Optional.ofNullable(request.getHeader(accessHeader))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
@@ -140,8 +136,7 @@ public class JwtService {
                     .getClaim(EMAIL_CLAIM) // claim(Emial) 가져오기
                     .asString());
         } catch (Exception e) {
-            System.out.println("이메일 추출에서 문제 발생");
-            log.error("액세스 토큰이 유효하지 않습니다.");
+//            log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }
@@ -155,8 +150,7 @@ public class JwtService {
                     .getClaim(ID_CLAIM) // claim(id) 가져오기
                     .asLong());
         } catch (Exception e) {
-            System.out.println("아이디 추출에서 문제 발생");
-            log.error("액세스 토큰이 유효하지 않습니다.");
+//            log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }

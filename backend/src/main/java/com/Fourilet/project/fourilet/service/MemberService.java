@@ -152,7 +152,6 @@ public class MemberService {
     }
 
     public Member getMember(long memberId){
-        System.out.println("엥?? " + memberRepository.findById(memberId));
         return memberRepository.findById(memberId);
     }
 
@@ -166,8 +165,6 @@ public class MemberService {
 
         Member member = memberRepository.findById(memberId);
         List<Folder> memberFolderList = folderRepository.findAllByMember(member);
-
-        System.out.println("폴더리스트예용 " + memberFolderList);
 
         for(Folder folder : memberFolderList) {
             List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
