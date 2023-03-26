@@ -123,7 +123,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      */
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
-        log.info("checkAccessTokenAndAuthentication() 호출");
 
         try{
             String token = jwtService.extractAccessToken(request).orElse(null);
@@ -163,8 +162,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
      */
     public void saveAuthentication(Member myUser) {
-
-        System.out.println("넘어왔다" + myUser);
 
         String password = PasswordUtil.generateRandomPassword();
 
