@@ -1,6 +1,5 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -173,12 +172,11 @@ class InputModal extends StatelessWidget {
       folderData['folderName'] = value;
     }
 
-    void createFolder(BuildContext context) {
+    void createFolder(BuildContext context) async {
       try {
-        FolderProvider.createNewFolder(folderData).then((value) {
-          routerPop(context);
-          routerPush(context, page: const BookMarkFolderList());
-        });
+        await FolderProvider.createNewFolder(folderData);
+        // routerPop(context)();
+        // routerPush(context, page: const BookMarkFolderList())();
       } catch (error) {
         showModal(
           context,
@@ -198,9 +196,7 @@ class InputModal extends StatelessWidget {
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(
-            onChanged: fillFolderData,
-          ),
+          child: TextField(onChanged: fillFolderData),
         )),
       ],
     );

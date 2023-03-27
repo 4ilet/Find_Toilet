@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider {
   var _memberId = 13;
-  var _token = '';
-  var _refresh = '';
+  var _token =
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImlkIjoxMywiZXhwIjoxNjc5OTkxNzE0LCJlbWFpbCI6InB1YmhhbjM1QGdtYWlsLmNvbSJ9.hbUZNKt9bELRQF76JooTXUHmnoobK2McIHNqTZG7KW4FMnpXmc3Z6sEw7FsDCuHCHKm74ATiy1lQ02gxOdWwcg';
+  var _refresh =
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2ODExMTQ5MTR9.M6Op-o85eKii9yoE1iipQE2RIZAjN7pR7TObU7lA6y_W4OYPKHU0dxhOtBrqggoeqztCDr1CK39i8KebPxWrcA';
   var _nickname = '포일렛';
 
   String? getToken() => _token;
@@ -55,14 +57,15 @@ class UserProvider {
   }
 
   void login(BuildContext context) {
-    final token = getToken();
-    if (token == null || token == '') {
-      try {
-        return _kakaoLogin(context);
-      } catch (error) {
-        throw Error();
-      }
-    }
+    _kakaoLogin(context);
+    // final token = getToken();
+    // if (token == null || token == '') {
+    //   try {
+    //     return _kakaoLogin(context);
+    //   } catch (error) {
+    //     throw Error();
+    //   }
+    // }
   }
 
   void logout() async {
