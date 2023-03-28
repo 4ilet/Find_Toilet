@@ -82,7 +82,7 @@ class _SettingsState extends State<Settings> {
                 children: [
                   GestureDetector(
                     onTap: () => UserProvider().login(context),
-                    child: accessToken == ''
+                    child: UserProvider().getToken() == null
                         ? Image.asset(kakaoLogin)
                         : const TextWithIcon(
                             icon: logoutIcon,
