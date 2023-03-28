@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 //import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +34,14 @@ public class ReviewService {
         LOGGER.info("CALL postReview");
         Member member = memberRepository.findById(memberId);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+        if (member == null) {
+            throw new NullPointerException("존재하지 않는 회원입니다");
+        }
 
         if (toilet == null){
             throw new NullPointerException("존재하지 않는 화장실입니다");
         }
+
         if (postReviewDto.getComment().isEmpty()){
             throw new IllegalArgumentException("리뷰를 작성하지 않았습니다");
         }
@@ -56,6 +61,10 @@ public class ReviewService {
         LOGGER.info("CALL GET REVIEW");
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
         List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
+        if (toilet == null) {
+            throw new NullPointerException("존재하지 않는 화장실입니다.");
+        }
+
         if (reviewList.size() > 0 ) {
             List<ReviewDto.GetReviewDto> result = new ArrayList<>();
             for (Review review : reviewList) {
@@ -70,7 +79,7 @@ public class ReviewService {
             return result;
         }
         else {
-            return null;
+            throw new NoSuchElementException("리뷰가 존재하지 않습니다");
         }
 
 
@@ -78,12 +87,26 @@ public class ReviewService {
     public void deleteReview(long reviewId){
         LOGGER.info("CALL DELETE REVIEW");
         Review review = reviewRepository.findById(reviewId).orElse(null);
-        reviewRepository.delete(review);
+        if (review == null) {
+            throw new NullPointerException("존재하지 않는 리뷰입니다.");
+        } else {
+            reviewRepository.delete(review);
+        }
     }
 
     public void updateReview(long reviewId, ReviewDto.UpdateReviewDto updateReviewDto){
         LOGGER.info("CALL UPDATE REVIEW");
         Review review = reviewRepository.findById(reviewId).orElse(null);
+        if (review == null) {
+            throw new NullPointerException("존재하지 않는 리뷰입니다.");
+        }
+        if (updateReviewDto.getComment().isEmpty()){
+            throw new NullPointerException("리뷰가 비어있습니다.");
+        }
+        if ( updateReviewDto.getScore() < 0  || updateReviewDto.getScore() > 5){
+            throw new IllegalArgumentException("점수는 0 ~ 5 이하의 점수를 입력해주세요");
+        }
+
         review.setComment(updateReviewDto.getComment());
         review.setScore(updateReviewDto.getScore());
         reviewRepository.save(review);

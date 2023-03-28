@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/review")
@@ -52,20 +53,67 @@ public class ReviewController {
     }
     @GetMapping("/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 목록", notes = "특정 화장실의 리뷰 목록들을 가져온다.")
-    public List<ReviewDto.GetReviewDto> getReviewList(@PathVariable("toiletId") long toiletId){
-        List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId);
-        return result;
+    public ResponseEntity<?> getReviewList(@PathVariable("toiletId") long toiletId){
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId);
+            message.setStatus(StatusEnum.OK);
+            message.setData(result);
+            message.setMessage("화장실 리뷰 가져오기 성공");
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        } catch (NoSuchElementException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        } catch (NullPointerException e) {
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+
     }
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "화장실 리뷰 삭제", notes = "특정 화장실의 리뷰를 삭제한다..")
     public ResponseEntity<?> deleteReview(@PathVariable("reviewId") long reviewId){
-        reviewService.deleteReview(reviewId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            reviewService.deleteReview(reviewId);
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("리뷰 삭제 성공");
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
+        } catch (NullPointerException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
+        }
     }
     @PutMapping("/update/{reviewId}")
     @ApiOperation(value = "화장실 리뷰 수정", notes = "특정 화장실의 리뷰를 수정한다.")
-    public void updateReview(@PathVariable("reviewId") long reviewId, @RequestBody ReviewDto.UpdateReviewDto updateReviewDto){
-        reviewService.updateReview(reviewId, updateReviewDto);
+    public ResponseEntity<?> updateReview(@PathVariable("reviewId") long reviewId, @RequestBody ReviewDto.UpdateReviewDto updateReviewDto){
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        try {
+            reviewService.updateReview(reviewId, updateReviewDto);
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("리뷰 수정 완료");
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
+        } catch (NullPointerException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
 
     }
 

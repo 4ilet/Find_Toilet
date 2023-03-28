@@ -5,12 +5,14 @@ import com.Fourilet.project.fourilet.data.repository.*;
 import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto2;
+import com.Fourilet.project.fourilet.exception.DuplicationNameException;
 import com.Fourilet.project.fourilet.exception.LimitException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
@@ -69,22 +71,28 @@ public class FolderService {
 
     public void createFolder(long memberId, FolderDto.NewFolderDto newFolderDto) {
         LOGGER.info("CALL CREATE FOLDER");
-        Member member =  memberRepository.findById(memberId);
+        Member member = memberRepository.findById(memberId);
         List<Folder> folderList = folderRepository.findAllByMember(member);
+        String DtoName = newFolderDto.getFolderName().toString();
 
-        if (folderList.size() > 10){
+        for (Folder EachFolder : folderList) {
+            String EachFolderName = EachFolder.getFolderName().toString();
+            if (EachFolderName.equals(DtoName)) {
+                throw new DuplicationNameException("중복된 즐겨찾기 이름입니다.");
+            }
+        }
+        if (folderList.size() > 10) {
             throw new LimitException("즐겨찾기는 10개 이상 생성하지 못합니다.");
         }
-
         if (member == null) {
             throw new NullPointerException("존재하지 않는 회원입니다.");
         }
+
         Folder folder = new Folder();
         folder.setFolderName(newFolderDto.getFolderName());
         folder.setMember(member);
         folderRepository.save(folder);
-    }
-
+        }
     public void addToilet(long folderId, long toiletId){
         LOGGER.info("CALL ADD TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
