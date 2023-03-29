@@ -19,10 +19,10 @@ class BookMarkFolderList extends StatefulWidget {
 class _BookMarkFolderListState extends State<BookMarkFolderList> {
   late int memberId;
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    print(UserProvider().getId());
-    memberId = UserProvider().getId()!;
+    // print(StateProvide().memberId());
+    // memberId = await UserProvider().memberId() ?? 0;
   }
 
   @override
@@ -37,7 +37,7 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
-                title: '${UserProvider().getName()}님의 즐겨 찾기 폴더',
+                title: '${UserProvider().nickname()}님의 즐겨 찾기 폴더',
                 fontSize: FontSize.largeSize,
                 color: CustomColors.whiteColor,
               ),

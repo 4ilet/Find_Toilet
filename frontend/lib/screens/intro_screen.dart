@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/select_theme_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Intro extends StatefulWidget {
   const Intro({super.key});

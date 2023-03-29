@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 final baseUrl = dotenv.env['baseUrl'];
 final options = BaseOptions(
   baseUrl: baseUrl!,
-  headers: {'Authorization': UserProvider().getToken()},
+  headers: {'Authorization': UserProvider().token()},
 );
 final dio = Dio(options);
 
@@ -21,16 +21,16 @@ const userInfoUrl = '$userUrl/userinfo';
 const reviewUrl = '/review';
 String reviewListUrl(int toiletId) => '$reviewUrl/$toiletId';
 String postReviewUrl(int toiletId) =>
-    '$reviewUrl/post/${UserProvider().getId()}/$toiletId';
+    '$reviewUrl/post/${UserProvider().memberId()}/$toiletId';
 String updateReviewUrl(int reviewId) => '$reviewUrl/update/$reviewId';
 String deleteReviewUrl(int reviewId) => '$reviewUrl/delete/$reviewId';
 
 //* bookmark
 
 const bookmarkUrl = '/like';
-String folderListUrl() => '$bookmarkUrl/folder/${UserProvider().getId()}';
+String folderListUrl() => '$bookmarkUrl/folder/${UserProvider().memberId()}';
 String createFolderUrl() =>
-    '$bookmarkUrl/create/folder/${UserProvider().getId()}';
+    '$bookmarkUrl/create/folder/${UserProvider().memberId()}';
 String updateFolderUrl(int folderId) => '$bookmarkUrl/update/folder/$folderId';
 String deleteFolderUrl(int folderId) => '$bookmarkUrl/delete/folder/$folderId';
 
