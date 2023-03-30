@@ -21,6 +21,17 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  String? token;
+  void awaitToken() async {
+    token = await UserProvider().token();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    awaitToken();
+  }
+
   ReturnVoid changeIndex(int i) {
     return () {
       setState(() {
@@ -81,15 +92,8 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => UserProvider().login(context),
-                    child: UserProvider().token() == null
-                        ? Image.asset(kakaoLogin)
-                        : const TextWithIcon(
-                            icon: logoutIcon,
-                            text: '로그아웃',
-                            iconColor: CustomColors.blackColor,
-                            fontSize: FontSize.defaultSize,
-                          ),
+                    onTap: () => UserProvider().loginOrLogout(context),
+                    child: loginOrLogout(),
                   ),
                 ],
               ),
@@ -142,6 +146,17 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
+  }
+
+  Widget loginOrLogout() {
+    return token == null || token == ''
+        ? Image.asset(kakaoLogin)
+        : const TextWithIcon(
+            icon: logoutIcon,
+            text: '로그아웃',
+            iconColor: CustomColors.blackColor,
+            fontSize: FontSize.defaultSize,
+          );
   }
 
   Widget option(int i) {

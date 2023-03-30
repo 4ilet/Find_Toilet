@@ -4,6 +4,13 @@ import 'package:find_toilet/utilities/type_enum.dart';
 
 //* review CRUD
 class ReviewProvider {
+  //* url
+  static const reviewUrl = '/review';
+  static String reviewListUrl(int toiletId) => '$reviewUrl/$toiletId';
+  static String postReviewUrl(int toiletId) => '$reviewUrl/post/$toiletId';
+  static String updateReviewUrl(int reviewId) => '$reviewUrl/update/$reviewId';
+  static String deleteReviewUrl(int reviewId) => '$reviewUrl/delete/$reviewId';
+
   //* 리뷰 목록
   static Future<ReviewList> getReviewList(int toiletId) async {
     ReviewList reviewList = [];

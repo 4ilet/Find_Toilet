@@ -5,41 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //* baseUrl
 final baseUrl = dotenv.env['baseUrl'];
-final options = BaseOptions(
-  baseUrl: baseUrl!,
-  headers: {'Authorization': UserProvider().token()},
-);
-final dio = Dio(options);
-
-//* user
-const userUrl = '/user';
-const loginUrl = '$userUrl/login';
-const changeNameUrl = '$userUrl/update/nickname/';
-const userInfoUrl = '$userUrl/userinfo';
-
-//* review
-const reviewUrl = '/review';
-String reviewListUrl(int toiletId) => '$reviewUrl/$toiletId';
-String postReviewUrl(int toiletId) =>
-    '$reviewUrl/post/${UserProvider().memberId()}/$toiletId';
-String updateReviewUrl(int reviewId) => '$reviewUrl/update/$reviewId';
-String deleteReviewUrl(int reviewId) => '$reviewUrl/delete/$reviewId';
-
-//* bookmark
-
-const bookmarkUrl = '/like';
-String folderListUrl() => '$bookmarkUrl/folder/${UserProvider().memberId()}';
-String createFolderUrl() =>
-    '$bookmarkUrl/create/folder/${UserProvider().memberId()}';
-String updateFolderUrl(int folderId) => '$bookmarkUrl/update/folder/$folderId';
-String deleteFolderUrl(int folderId) => '$bookmarkUrl/delete/folder/$folderId';
-
-String bookmarkListUrl(int folderId) =>
-    '$bookmarkUrl/folder/toiletlist/$folderId';
-String addToiletUrl({required int folderId, required int toiletId}) =>
-    '$bookmarkUrl/add/folder/$folderId/$toiletId';
-String deleteToiletUrl({required int folderId, required int toiletId}) =>
-    '$bookmarkUrl/delete/$folderId/$toiletId';
+final dio = Dio(BaseOptions(baseUrl: baseUrl!));
 
 //* mixin
 class ApiProvider {
@@ -73,53 +39,76 @@ class ApiProvider {
   // }
 
   //* 생성 전반
-  static FutureVoid _createApi(String url, {required DynamicMap data}) async {
+  static FutureBool _createApi(String url, {required DynamicMap data}) async {
     try {
-      final response = await dio.post(url, data: data);
-      if (response.statusCode == 200) {
-        return;
+      //* token
+      final token = await UserProvider().token();
+      if (token != null && token != '') {
+        final options =
+            BaseOptions(baseUrl: baseUrl!, headers: {'Authorization': token});
+        final dioWithToken = Dio(options);
+
+        final response = await dioWithToken.post(url, data: data);
+        switch (response.statusCode) {
+          case 200:
+            return true;
+          case 401:
+            return false;
+          default:
+            throw Error();
+        }
+      } else {
+        //* 로그인 할 것인지 묻는 팝업
+        return false;
       }
-      throw Error();
     } catch (error) {
       throw Error();
     }
   }
 
-  static FutureVoid createApi(String url, {required DynamicMap data}) async {
-    _createApi(url, data: data);
+  static FutureBool createApi(String url, {required DynamicMap data}) async {
+    return _createApi(url, data: data);
   }
 
   //* 수정 전반
-  static FutureVoid _updateApi(String url, {required DynamicMap data}) async {
+  static FutureBool _updateApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dio.put(url, data: data);
-      if (response.statusCode == 200) {
-        return;
+      switch (response.statusCode) {
+        case 200:
+          return true;
+        case 401:
+          return false;
+        default:
+          throw Error();
       }
-      throw Error();
     } catch (error) {
       throw Error();
     }
   }
 
-  static FutureVoid updateApi(String url, {required DynamicMap data}) async {
-    _updateApi(url, data: data);
+  static FutureBool updateApi(String url, {required DynamicMap data}) async {
+    return _updateApi(url, data: data);
   }
 
   //* 삭제 전반
-  static FutureVoid _deleteApi(String url) async {
+  static FutureBool _deleteApi(String url) async {
     try {
       final response = await dio.delete(url);
-      if (response.statusCode == 200) {
-        return;
+      switch (response.statusCode) {
+        case 200:
+          return true;
+        case 401:
+          return false;
+        default:
+          throw Error();
       }
-      throw Error();
     } catch (error) {
       throw Error();
     }
   }
 
-  static FutureVoid deleteApi(String url) async {
-    _deleteApi(url);
+  static FutureBool deleteApi(String url) async {
+    return _deleteApi(url);
   }
 }

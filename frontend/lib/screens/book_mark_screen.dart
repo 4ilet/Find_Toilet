@@ -17,12 +17,9 @@ class BookMarkFolderList extends StatefulWidget {
 }
 
 class _BookMarkFolderListState extends State<BookMarkFolderList> {
-  late int memberId;
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    // print(StateProvide().memberId());
-    // memberId = await UserProvider().memberId() ?? 0;
   }
 
   @override
@@ -42,7 +39,7 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
                 color: CustomColors.whiteColor,
               ),
               FutureBuilder(
-                future: FolderProvider.getFolderList(memberId),
+                future: FolderProvider.getFolderList(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Flexible(child: folderListView(snapshot));
