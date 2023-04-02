@@ -1,5 +1,7 @@
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/screens/intro_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
+import 'package:find_toilet/screens/settings_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,7 +12,25 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => StateProvider(),
+          child: const Intro(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StateProvider(),
+          child: const Main(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StateProvider(),
+          child: const Settings(),
+        ),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -22,10 +42,7 @@ class App extends StatelessWidget {
       title: 'Find Toilet',
       theme: ThemeData(fontFamily: 'Noto Sans'),
       // home: const Intro(),
-      home: ChangeNotifierProvider(
-        create: (_) => StateProvider(),
-        child: const Main(),
-      ),
+      home: const Intro(),
     );
   }
 }

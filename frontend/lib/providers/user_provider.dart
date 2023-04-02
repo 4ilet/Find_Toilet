@@ -13,41 +13,14 @@ class UserProvider {
   static const _changeNameUrl = '$_userUrl/update/nickname/';
   static const _userInfoUrl = '$_userUrl/userinfo';
 
-  //* storage
-  final storage = const FlutterSecureStorage();
-
-  //* read storage
-  Future<String?> token() => storage.read(key: 'token');
-  Future<String?> refresh() => storage.read(key: 'refresh');
-  Future<String?> nickname() => storage.read(key: 'nickname');
-
-  //* write storage
-  void _setToken(String newToken) =>
-      storage.write(key: 'token', value: newToken);
-  void _setRefresh(String newRefresh) =>
-      storage.write(key: 'refresh', value: newRefresh);
-  void _setName(String newName) =>
-      storage.write(key: 'nickname', value: newName);
-
   //* public function
-  void loginOrLogout() async {
-    try {
-      final accessToken = await token();
-      if (accessToken == null || accessToken == '') {
-        return _login();
-      } else {
-        return _logout();
-      }
-    } catch (error) {
-      throw Error();
-    }
-  }
+  void login() => _login();
+  void logout() => _logout();
 
-  void autoLogin() async {
+  void autoLogin(String? accessToken) async {
     try {
-      final accessToken = await token();
-      if (accessToken != null || accessToken != '') {
-        _sendToken(accessToken!);
+      if (accessToken != null && accessToken != '') {
+        _sendToken(accessToken);
       }
     } catch (error) {
       return _logout();
@@ -80,6 +53,7 @@ class UserProvider {
         case 200:
           return _setVar(response);
         case 401:
+          //* refresh token
           return;
         default:
           throw Error();
@@ -120,8 +94,10 @@ class UserProvider {
   }
 
   void _logout() async {
+    print('로그아웃 함수 들어옴');
     const storage = FlutterSecureStorage();
     await storage.deleteAll();
+    print(await storage.readAll());
   }
 
   void _deleteUser() {

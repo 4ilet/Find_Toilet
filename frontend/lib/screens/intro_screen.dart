@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/select_theme_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Intro extends StatefulWidget {
   const Intro({super.key});
@@ -20,7 +22,7 @@ class _IntroState extends State<Intro> {
     super.initState();
     Future.delayed(const Duration(seconds: 5),
         routerPush(context, page: const SelectFontTheme()));
-    UserProvider().loginOrLogout();
+    UserProvider().autoLogin(context.read<StateProvider>().token);
   }
 
   @override

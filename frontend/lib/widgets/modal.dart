@@ -1,5 +1,6 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -551,6 +552,37 @@ class AlertModal extends StatelessWidget {
           isCentered: true,
         )
       ],
+    );
+  }
+}
+
+//* 로그인 확인 모달
+class LoginConfirmModal extends StatelessWidget {
+  const LoginConfirmModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: '로그인 확인',
+      children: const [
+        CustomText(
+          title: '로그인하시겠습니까?',
+        )
+      ],
+      onPressed: () => UserProvider().login(),
+    );
+  }
+}
+
+class ErrorModal extends StatelessWidget {
+  final String feature;
+  const ErrorModal({super.key, required this.feature});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertModal(
+      title: '$feature 오류',
+      content: '오류가 발생해 $feature(이)가 처리되지 않았습니다.',
     );
   }
 }

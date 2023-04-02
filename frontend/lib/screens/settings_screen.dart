@@ -12,6 +12,7 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -21,15 +22,14 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String? token;
-  void awaitToken() async {
-    token = await UserProvider().token();
-  }
+  late Widget loginOrLogoutBtn;
+  late String? token;
 
   @override
   void initState() {
     super.initState();
-    awaitToken();
+    changeBtn();
+    token = context.watch().token;
   }
 
   ReturnVoid changeIndex(int i) {
@@ -42,6 +42,19 @@ class _SettingsState extends State<Settings> {
         }
       });
     };
+  }
+
+  void changeBtn() {
+    setState(() {
+      loginOrLogoutBtn = token == null || token == ''
+          ? Image.asset(kakaoLogin)
+          : const TextWithIcon(
+              icon: logoutIcon,
+              text: '로그아웃',
+              iconColor: CustomColors.blackColor,
+              fontSize: FontSize.defaultSize,
+            );
+    });
   }
 
   void sendEmail() async {
@@ -78,6 +91,22 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  void loginOrLogout() {
+    try {
+      print('버튼 눌림');
+      if (token == null || token == '') {
+        print('로그인');
+        return UserProvider().login();
+      } else {
+        print('로그아웃');
+        print(token);
+        return UserProvider().logout();
+      }
+    } catch (error) {
+      return showModal(context, page: errorModal('login'))();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,8 +121,8 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => UserProvider().loginOrLogout(),
-                    child: loginOrLogout(),
+                    onTap: () => loginOrLogout(),
+                    child: loginOrLogoutBtn,
                   ),
                 ],
               ),
@@ -146,17 +175,6 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
-  }
-
-  Widget loginOrLogout() {
-    return token == null || token == ''
-        ? Image.asset(kakaoLogin)
-        : const TextWithIcon(
-            icon: logoutIcon,
-            text: '로그아웃',
-            iconColor: CustomColors.blackColor,
-            fontSize: FontSize.defaultSize,
-          );
   }
 
   Widget option(int i) {

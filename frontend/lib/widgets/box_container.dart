@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:find_toilet/models/bookmark_model.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -218,6 +220,19 @@ class _ListItemState extends State<ListItem> {
     });
   }
 
+  void addIntoBookmark() async {
+    final token = await UserProvider().token();
+    if (token == null || token == '') {
+      routerPush(context,
+          page: ReviewForm(
+            toiletName: widget.toiletName,
+            toiletId: widget.toiletId,
+          ))();
+    } else {
+      showModal(context, page: const LoginConfirmModal())();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -331,11 +346,7 @@ class _ListItemState extends State<ListItem> {
                     ),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: routerPush(context,
-                        page: ReviewForm(
-                          toiletName: widget.toiletName,
-                          toiletId: widget.toiletId,
-                        )),
+                    onPressed: addIntoBookmark,
                     buttonText: '리뷰 남기기',
                   )
                 ],
