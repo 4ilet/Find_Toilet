@@ -26,15 +26,22 @@ class FolderProvider with ApiProvider {
       final dioWithToken = Dio(options);
       //*
       final response = await dioWithToken.get(_folderListUrl);
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        FolderList folderList = data.map<FolderModel>((json) {
-          return FolderModel.fromJson(json);
-        }).toList();
-        return folderList;
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data['data'];
+          FolderList folderList = data.map<FolderModel>((json) {
+            return FolderModel.fromJson(json);
+          }).toList();
+          return folderList;
+        case 401:
+          break;
+        default:
+          throw Error();
       }
+
       throw Error();
     } catch (error) {
+      print(error);
       throw Error();
     }
   }

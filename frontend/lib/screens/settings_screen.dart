@@ -92,7 +92,7 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => UserProvider().loginOrLogout(context),
+                    onTap: () => UserProvider().loginOrLogout(),
                     child: loginOrLogout(),
                   ),
                 ],

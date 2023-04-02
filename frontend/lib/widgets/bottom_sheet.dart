@@ -64,7 +64,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
           slivers: [
             SliverAppBar(
               automaticallyImplyLeading: false,
-              toolbarHeight: 40,
+              toolbarHeight: 80,
               backgroundColor: Colors.white10,
               pinned: true,
               expandedHeight: widget.showReview ? 40 : 80,
@@ -86,7 +86,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                               : const Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 10,
-                                    vertical: 5,
+                                    // vertical: 5,
                                   ),
                                   child: CustomText(
                                     title: '필터를 적용한 결과입니다',

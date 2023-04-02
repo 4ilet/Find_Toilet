@@ -53,6 +53,13 @@ class ApiProvider {
           case 200:
             return true;
           case 401:
+            final success = await UserProvider().refreshToken(
+              url: url,
+              options: options,
+              method: 'POST',
+              data: data,
+            );
+            _createApi(url, data: data);
             return false;
           default:
             throw Error();
@@ -62,6 +69,7 @@ class ApiProvider {
         return false;
       }
     } catch (error) {
+      print(error);
       throw Error();
     }
   }
