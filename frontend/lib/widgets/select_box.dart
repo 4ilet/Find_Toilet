@@ -35,7 +35,6 @@ class SelectBox extends StatelessWidget {
           children: [
             CustomText(
               title: value,
-              font: notoSans,
               fontSize: FontSize.smallSize,
             ),
             const CustomIcon(icon: toDownIcon)

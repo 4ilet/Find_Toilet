@@ -1,8 +1,9 @@
+import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -55,73 +56,30 @@ class _ThemeBoxState extends State<ThemeBox> {
   }
 }
 
-//* 즐겨찾기 상자 한 줄
-class BookMarkBox extends StatelessWidget {
-  final bool onlyOne, add;
-  final String folderName1;
-  final String folderName2;
-  final int listCnt1;
-  final int listCnt2;
-  const BookMarkBox({
+//* 즐겨찾기 폴더
+class FolderBox extends StatelessWidget {
+  final FolderModel folderInfo;
+  final bool add;
+  // final ReturnVoid editFolder;
+  const FolderBox({
     super.key,
-    this.onlyOne = false,
-    this.folderName1 = '기본',
-    this.folderName2 = '기본',
-    this.listCnt1 = 0,
-    this.listCnt2 = 0,
+    required this.folderInfo,
+    // required this.editFolder,
     this.add = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 17),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          add && onlyOne
-              ? const AddBox()
-              : FolderBox(
-                  folderName: folderName1,
-                  add: onlyOne ? add : false,
-                  listCnt: listCnt1,
-                ),
-          onlyOne
-              ? const SizedBox()
-              : add
-                  ? const AddBox()
-                  : FolderBox(
-                      folderName: folderName2,
-                      add: add,
-                      listCnt: listCnt2,
-                    ),
-        ],
-      ),
-    );
-  }
-}
-
-//* 즐겨찾기 폴더
-class FolderBox extends StatelessWidget {
-  const FolderBox(
-      {super.key,
-      required this.folderName,
-      this.listCnt = 0,
-      this.add = false});
-
-  final String folderName;
-  final int listCnt;
-  final bool add;
-
-  @override
-  Widget build(BuildContext context) {
+    String folderName = folderInfo.folderName;
+    int bookmarkCnt = folderInfo.bookmarkCnt;
+    int folderId = folderInfo.folderId;
     String printedName = folderName.length < 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
     return CustomBox(
       onTap: routerPush(
-        context: context,
-        page: BookMarkList(folderName: folderName, listCnt: listCnt),
+        context,
+        page: BookMarkList(folderName: folderName, bookmarkCnt: bookmarkCnt),
       ),
       height: 150,
       width: 150,
@@ -146,10 +104,11 @@ class FolderBox extends StatelessWidget {
                       icon: editIcon,
                       color: CustomColors.mainColor,
                       onPressed: showModal(
-                        context: context,
+                        context,
                         page: const InputModal(
                           title: '즐겨 찾기 폴더명 수정',
                           buttonText: '수정',
+                          // onPressed: editFolder,
                         ),
                       ),
                       iconSize: 25,
@@ -157,8 +116,11 @@ class FolderBox extends StatelessWidget {
                     CustomIconButton(
                       icon: deleteIcon,
                       color: CustomColors.redColor,
-                      onPressed: showModal(
-                          context: context, page: const DeleteModal()),
+                      onPressed: showModal(context,
+                          page: DeleteModal(
+                            deleteMode: 1,
+                            id: folderId,
+                          )),
                       iconSize: 25,
                     ),
                   ],
@@ -169,10 +131,9 @@ class FolderBox extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomText(
-                  title: '$listCnt 개',
+                  title: '$bookmarkCnt 개',
                   fontSize: FontSize.smallSize,
                   color: CustomColors.blackColor,
-                  font: notoSans,
                 ),
               ],
             )
@@ -185,7 +146,11 @@ class FolderBox extends StatelessWidget {
 
 //* 즐겨찾기 폴더 생성
 class AddBox extends StatefulWidget {
-  const AddBox({super.key});
+  // final ReturnVoid createFolder;
+  const AddBox({
+    super.key,
+    // required this.createFolder,
+  });
 
   @override
   State<AddBox> createState() => _AddBoxState();
@@ -200,6 +165,7 @@ class _AddBoxState extends State<AddBox> {
         builder: (context) => const InputModal(
           title: '즐겨 찾기 폴더 생성',
           buttonText: '만들기',
+          // onPressed: widget.createFolder,
         ),
       ),
       height: 150,
@@ -216,12 +182,12 @@ class _AddBoxState extends State<AddBox> {
   }
 }
 
-//* 장소 목록 아이템
+//* 화장실 목록 아이템
 class ListItem extends StatefulWidget {
-  final String font, toiletName, address, phoneNo, duration;
+  final String toiletName, address, phoneNo, duration;
   final StringList available;
   final double score;
-  final int reviewCnt;
+  final int reviewCnt, toiletId;
   final bool isLiked, showReview, isMain;
   const ListItem({
     super.key,
@@ -233,9 +199,9 @@ class ListItem extends StatefulWidget {
     this.reviewCnt = 30,
     this.available = const ['장애인용', '유아용', '기저귀 교환대'],
     this.isLiked = false,
-    this.font = notoSans,
     required this.showReview,
     this.isMain = true,
+    this.toiletId = 13,
   });
 
   @override
@@ -270,10 +236,14 @@ class _ListItemState extends State<ListItem> {
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
         onTap: routerPush(
-            context: context,
-            page: widget.isMain
-                ? const Main(showReview: true)
-                : const Search(query: '', showReview: true)),
+          context,
+          page: widget.isMain
+              ? const Main(showReview: true)
+              : const Search(
+                  query: '',
+                  showReview: true,
+                ),
+        ),
         color: whiteColor,
         height: 200,
         width: 500,
@@ -290,22 +260,20 @@ class _ListItemState extends State<ListItem> {
                   CustomText(
                       color: CustomColors.mainColor,
                       title: widget.toiletName,
-                      fontSize: FontSize.defaultSize,
-                      font: widget.font),
+                      fontSize: FontSize.defaultSize),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: showModal(
-                            context: context, page: const AddToBookMarkModal()),
+                        onPressed: showModal(context,
+                            page: const AddToBookMarkModal()),
                         icon: CustomIcon(
                           icon: liked ? heartIcon : emptyHeartIcon,
                           color: redColor,
                         ),
                       ),
                       IconButton(
-                        onPressed: showModal(
-                            context: context,
+                        onPressed: showModal(context,
                             page: NavigationModal(
                               startPoint: const [37.537229, 127.005515],
                               endPoint: const [37.4979502, 127.0276368],
@@ -327,12 +295,10 @@ class _ListItemState extends State<ListItem> {
                   TextWithIcon(
                     icon: locationIcon,
                     text: widget.address,
-                    font: widget.font,
                   ),
                   TextWithIcon(
                     icon: phoneIcon,
                     text: widget.phoneNo,
-                    font: widget.font,
                   ),
                 ],
               ),
@@ -342,20 +308,18 @@ class _ListItemState extends State<ListItem> {
                   TextWithIcon(
                     icon: clockIcon,
                     text: widget.duration,
-                    font: widget.font,
                   ),
                   TextWithIcon(
-                      icon: starIcon,
-                      text: '${widget.score} (${widget.reviewCnt}개)',
-                      iconColor: CustomColors.yellowColor,
-                      font: widget.font),
+                    icon: starIcon,
+                    text: '${widget.score} (${widget.reviewCnt}개)',
+                    iconColor: CustomColors.yellowColor,
+                  ),
                 ],
               ),
-              CustomText(
+              const CustomText(
                 title: '이용 가능 시설',
                 fontSize: FontSize.smallSize,
                 color: CustomColors.mainColor,
-                font: widget.font,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -364,13 +328,14 @@ class _ListItemState extends State<ListItem> {
                     CustomText(
                       title: each,
                       fontSize: FontSize.smallSize,
-                      font: widget.font,
                     ),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: routerPush(
-                        context: context,
-                        page: ReviewForm(toiletName: widget.toiletName)),
+                    onPressed: routerPush(context,
+                        page: ReviewForm(
+                          toiletName: widget.toiletName,
+                          toiletId: widget.toiletId,
+                        )),
                     buttonText: '리뷰 남기기',
                   )
                 ],
@@ -392,7 +357,6 @@ class _ListItemState extends State<ListItem> {
             color: CustomColors.mainColor,
             title: widget.toiletName,
             fontSize: FontSize.defaultSize,
-            font: widget.font,
           ),
         ),
         Flexible(
@@ -402,7 +366,7 @@ class _ListItemState extends State<ListItem> {
             children: [
               CustomIconButton(
                 onPressed: showModal(
-                  context: context,
+                  context,
                   page: const AddToBookMarkModal(),
                 ),
                 icon: liked ? heartIcon : emptyHeartIcon,
@@ -410,7 +374,7 @@ class _ListItemState extends State<ListItem> {
               ),
               CustomIconButton(
                 onPressed: showModal(
-                  context: context,
+                  context,
                   page: NavigationModal(
                     startPoint: const [37.537229, 127.005515],
                     endPoint: const [37.4979502, 127.0276368],
@@ -437,7 +401,6 @@ class _ListItemState extends State<ListItem> {
           child: TextWithIcon(
             icon: iconList[2 * i],
             text: infoList[2 * i],
-            font: widget.font,
           ),
         ),
         Flexible(
@@ -446,13 +409,11 @@ class _ListItemState extends State<ListItem> {
               ? TextWithIcon(
                   icon: iconList[2 * i + 1],
                   text: infoList[2 * i + 1],
-                  font: widget.font,
                 )
               : TextWithIcon(
                   icon: iconList[2 * i + 1],
                   text: infoList[2 * i + 1],
                   iconColor: CustomColors.yellowColor,
-                  font: widget.font,
                 ),
         )
       ],
@@ -514,6 +475,7 @@ class _FilterBoxState extends State<FilterBox> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 child: CustomText(
                   title: showedFilter[i],
+                  font: kimm,
                   fontSize: FontSize.smallSize,
                   color: selectedList[i]
                       ? CustomColors.whiteColor
@@ -577,13 +539,17 @@ class CustomBox extends StatelessWidget {
 
 //* review 상자
 class ReviewBox extends StatelessWidget {
-  final String nickname, content;
+  final String nickname, content, toiletName;
+  final int toiletId, reviewId;
   final double score;
   const ReviewBox({
     super.key,
     required this.nickname,
     required this.score,
     required this.content,
+    required this.toiletName,
+    required this.toiletId,
+    required this.reviewId,
   });
 
   @override
@@ -604,17 +570,42 @@ class ReviewBox extends StatelessWidget {
                   CustomText(
                     color: CustomColors.mainColor,
                     title: nickname,
-                    font: notoSans,
+                  ),
+                  CustomIconButton(
+                    color: CustomColors.mainColor,
+                    icon: editIcon,
+                    iconSize: 20,
+                    onPressed: routerPush(
+                      context,
+                      page: ReviewForm(
+                        toiletName: toiletName,
+                        toiletId: toiletId,
+                        reviewId: reviewId,
+                        preComment: content,
+                        preScore: score,
+                      ),
+                    ),
+                  ),
+                  CustomIconButton(
+                    color: CustomColors.redColor,
+                    icon: deleteIcon,
+                    iconSize: 20,
+                    onPressed: showModal(
+                      context,
+                      page: DeleteModal(
+                        deleteMode: 0,
+                        id: reviewId,
+                      ),
+                    ),
                   ),
                   TextWithIcon(
                     icon: starIcon,
                     text: '$score',
                     iconColor: CustomColors.yellowColor,
-                    font: notoSans,
                   ),
                 ],
               ),
-              CustomText(title: content, font: notoSans)
+              CustomText(title: content)
             ],
           ),
         ),

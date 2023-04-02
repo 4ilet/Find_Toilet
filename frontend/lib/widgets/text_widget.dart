@@ -2,23 +2,26 @@ import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
-  final String title, font;
+  final String title;
+  final String? font;
   final FontSize fontSize;
   final CustomColors color;
-  final bool isBoldText;
+  final bool isBoldText, isCentered;
   const CustomText({
     super.key,
     required this.title,
     this.fontSize = FontSize.defaultSize,
     this.color = CustomColors.blackColor,
-    this.font = 'Kimm',
+    this.font,
     this.isBoldText = false,
+    this.isCentered = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
+      textAlign: isCentered ? TextAlign.center : null,
       style: TextStyle(
         color: convertedColor(color),
         fontSize: convertedSize(fontSize),
@@ -31,7 +34,8 @@ class CustomText extends StatelessWidget {
 
 class TextWithIcon extends StatelessWidget {
   final IconData icon;
-  final String text, font;
+  final String text;
+  final String? font;
   final FontSize fontSize;
   final CustomColors textColor, iconColor;
   const TextWithIcon({
@@ -41,7 +45,7 @@ class TextWithIcon extends StatelessWidget {
     this.fontSize = FontSize.smallSize,
     this.iconColor = CustomColors.mainColor,
     this.textColor = CustomColors.blackColor,
-    this.font = 'Kimm',
+    this.font,
   });
 
   @override

@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -20,6 +21,17 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  String? token;
+  void awaitToken() async {
+    token = await UserProvider().token();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    awaitToken();
+  }
+
   ReturnVoid changeIndex(int i) {
     return () {
       setState(() {
@@ -33,41 +45,36 @@ class _SettingsState extends State<Settings> {
   }
 
   void sendEmail() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    final deviceInfo = await deviceInfoPlugin.deviceInfo;
-    final info = deviceInfo.data;
-    final version = info['version'];
-    final manufacturer = info['manufacturer'];
-    final model = info['model'];
-    final brand = info['brand'];
-    final device = info['device'];
-    final hardware = info['hardware'];
-
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appVersion = packageInfo.version;
-    // String appName = packageInfo.appName;
-    // String packageName = packageInfo.packageName;
-    // String buildNumber = packageInfo.buildNumber;
-
-    final Email email = Email(
-      subject: '[화장실을 찾아서 문의]',
-      recipients: ['team.4ilet@gmail.com'],
-      body: body(
-        release: version['release'],
-        sdkInt: version['sdkInt'],
-        manufacturer: manufacturer,
-        model: model,
-        brand: brand,
-        device: device,
-        hardware: hardware,
-      ),
-      isHTML: false,
-    );
     try {
+      WidgetsFlutterBinding.ensureInitialized();
+      DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final deviceInfo = await deviceInfoPlugin.deviceInfo;
+      final info = deviceInfo.data;
+      final version = info['version'];
+      final manufacturer = info['manufacturer'];
+      final model = info['model'];
+      final device = info['device'];
+
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appVersion = packageInfo.version;
+
+      final Email email = Email(
+        subject: '[화장실을 찾아서 문의]',
+        recipients: ['team.4ilet@gmail.com'],
+        body: body(
+          release: version['release'],
+          sdkInt: version['sdkInt'],
+          manufacturer: manufacturer,
+          model: model,
+          device: device,
+          appVersion: appVersion,
+        ),
+        isHTML: false,
+      );
+
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context: context, page: errorModal('email'))();
+      showModal(context, page: errorModal('email'))();
     }
   }
 
@@ -85,15 +92,8 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => login(context, errorModal('login')),
-                    child: accessToken == ''
-                        ? Image.asset(kakaoLogin)
-                        : const TextWithIcon(
-                            icon: logoutIcon,
-                            text: '로그아웃',
-                            iconColor: CustomColors.blackColor,
-                            fontSize: FontSize.defaultSize,
-                          ),
+                    onTap: () => UserProvider().loginOrLogout(),
+                    child: loginOrLogout(),
                   ),
                 ],
               ),
@@ -104,6 +104,7 @@ class _SettingsState extends State<Settings> {
                 title: '어떤 것을 원하시나요?',
                 fontSize: FontSize.largeSize,
                 color: CustomColors.mainColor,
+                font: kimm,
               ),
             ),
             Flexible(
@@ -125,7 +126,7 @@ class _SettingsState extends State<Settings> {
                     eachMenu(
                       index: i,
                       onTap: showModal(
-                        context: context,
+                        context,
                         page: pages[i - 4],
                       ),
                     ),
@@ -147,12 +148,24 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Widget loginOrLogout() {
+    return token == null || token == ''
+        ? Image.asset(kakaoLogin)
+        : const TextWithIcon(
+            icon: logoutIcon,
+            text: '로그아웃',
+            iconColor: CustomColors.blackColor,
+            fontSize: FontSize.defaultSize,
+          );
+  }
+
   Widget option(int i) {
     return i < 2
         ? CustomText(
             title: optionList[i][indexList[i]],
             fontSize: FontSize.defaultSize,
             color: CustomColors.mainColor,
+            font: kimm,
           )
         : Row(
             children: [
@@ -162,6 +175,7 @@ class _SettingsState extends State<Settings> {
               ),
               CustomText(
                 title: optionList[i][indexList[i]],
+                font: kimm,
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.mainColor,
               ),
@@ -190,6 +204,7 @@ class _SettingsState extends State<Settings> {
               text: menuList[index],
               iconColor: CustomColors.blackColor,
               fontSize: FontSize.defaultSize,
+              font: kimm,
             ),
             child ?? const SizedBox()
           ],
@@ -209,7 +224,6 @@ class _SettingsState extends State<Settings> {
         CustomText(
           title: feature == 'email' ? emailError : loginError,
           fontSize: FontSize.defaultSize,
-          font: notoSans,
         ),
       ],
     );

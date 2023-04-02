@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/search_bar.dart';

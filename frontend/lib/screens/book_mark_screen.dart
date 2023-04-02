@@ -1,3 +1,5 @@
+import 'package:find_toilet/providers/bookmark_provider.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -7,24 +9,17 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 //* 즐겨찾기 메인 화면 (폴더 존재)
-class BookMarkMain extends StatefulWidget {
-  final String nickname;
-  final int folderCnt;
-  const BookMarkMain({super.key, this.nickname = '포일렛', this.folderCnt = 1});
+class BookMarkFolderList extends StatefulWidget {
+  const BookMarkFolderList({super.key});
 
   @override
-  State<BookMarkMain> createState() => _BookMarkMainState();
+  State<BookMarkFolderList> createState() => _BookMarkFolderListState();
 }
 
-class _BookMarkMainState extends State<BookMarkMain> {
-  late int quot, remain;
-  StringList folderNameList = ['광주', '서울', '24시간 개방', '깔끔'];
-  IntList folderCntList = [12, 8, 5, 3];
+class _BookMarkFolderListState extends State<BookMarkFolderList> {
   @override
   void initState() {
     super.initState();
-    quot = widget.folderCnt ~/ 2;
-    remain = widget.folderCnt % 2;
   }
 
   @override
@@ -34,31 +29,82 @@ class _BookMarkMainState extends State<BookMarkMain> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
         child: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            CustomText(
-              title: '${widget.nickname}님의 즐겨 찾기 폴더',
-              fontSize: FontSize.largeSize,
-              color: CustomColors.whiteColor,
-            ),
-            const SizedBox(height: 10),
-            for (int i = 0; i < (quot); i += 1)
-              BookMarkBox(
-                folderName1: folderNameList[2 * i],
-                folderName2: folderNameList[2 * i + 1],
-                listCnt1: folderCntList[2 * i],
-                listCnt2: folderCntList[2 * i + 1],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                title: '${UserProvider().nickname()}님의 즐겨 찾기 폴더',
+                fontSize: FontSize.largeSize,
+                color: CustomColors.whiteColor,
               ),
-            remain == 0
-                ? const BookMarkBox(onlyOne: true, add: true)
-                : BookMarkBox(
-                    add: true,
-                    folderName1: folderNameList.last,
-                    listCnt1: folderCntList.last,
-                  ),
-            const ExitPage()
-          ]),
+              FutureBuilder(
+                future: FolderProvider.getFolderList(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Flexible(child: folderListView(snapshot));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
+              const ExitPage()
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  ListView folderListView(AsyncSnapshot<FolderList> snapshot) {
+    var length = snapshot.data!.length;
+    var quot = length ~/ 2;
+    var remain = length % 2;
+
+    Row folderRow(int index) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          for (int di = 0; di < 2; di += 1)
+            FolderBox(folderInfo: snapshot.data![2 * index + di]),
+        ],
+      );
+    }
+
+    Widget addRow(int index) {
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween;
+      late final WidgetList children;
+      if (length >= 10) {
+        if (index > 5) {
+          return const SizedBox();
+        }
+        children = [
+          for (int di = 0; di < 2; di += 1)
+            FolderBox(folderInfo: snapshot.data![2 * index + di]),
+        ];
+      } else if (remain == 0) {
+        mainAxisAlignment = MainAxisAlignment.start;
+        children = [const AddBox()];
+      } else {
+        children = [
+          FolderBox(folderInfo: snapshot.data![2 * index]),
+          const AddBox()
+        ];
+      }
+
+      return Row(
+        mainAxisAlignment: mainAxisAlignment,
+        children: children,
+      );
+    }
+
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return index < quot ? folderRow(index) : addRow(index);
+      },
+      separatorBuilder: (context, index) => const SizedBox(height: 20),
+      itemCount: quot + 1,
     );
   }
 }
@@ -66,9 +112,10 @@ class _BookMarkMainState extends State<BookMarkMain> {
 //* 폴더 내 즐겨찾기 목록
 class BookMarkList extends StatelessWidget {
   final String folderName;
-  final int listCnt;
+  final int bookmarkCnt;
+
   const BookMarkList(
-      {super.key, required this.folderName, required this.listCnt});
+      {super.key, required this.folderName, required this.bookmarkCnt});
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +137,9 @@ class BookMarkList extends StatelessWidget {
                 width: 20,
               ),
               CustomText(
-                title: '$listCnt개',
+                title: '$bookmarkCnt',
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
-                font: notoSans,
               ),
               const Padding(
                 padding: EdgeInsets.all(20),

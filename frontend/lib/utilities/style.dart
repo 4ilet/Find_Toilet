@@ -14,7 +14,7 @@ const lightBlueColor = Colors.lightBlue;
 const double titleSize = 30;
 const double largeSize = 24;
 const double defaultSize = 19;
-const double smallSize = 15;
+const double smallSize = 13;
 
 //* 그림자
 const defaultShadow = BoxShadow(
@@ -32,4 +32,4 @@ const highlightShadow = BoxShadow(
 const redShadow = BoxShadow(blurRadius: 10, spreadRadius: 5, color: Colors.red);
 
 //* 글씨체 관련
-const notoSans = 'Noto Sans';
+const kimm = 'Kimm';

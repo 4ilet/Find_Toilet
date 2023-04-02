@@ -1,5 +1,5 @@
 import 'package:find_toilet/screens/main_screen.dart';
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -34,7 +34,7 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
     theme = selected;
     isFirstVisit = false;
     setVisited();
-    routerPush(context: context, page: const Main())();
+    routerPush(context, page: const Main())();
   }
 
   @override

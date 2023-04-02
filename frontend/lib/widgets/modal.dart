@@ -1,4 +1,6 @@
-import 'package:find_toilet/utilities/global_func.dart';
+import 'package:find_toilet/providers/bookmark_provider.dart';
+import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -29,7 +31,6 @@ class HelpModal extends StatelessWidget {
                       child: CustomText(
                         title: '여기에 내용이 들어감',
                         fontSize: FontSize.defaultSize,
-                        font: notoSans,
                       ),
                     ),
                   )
@@ -133,7 +134,6 @@ class PolicyContent extends StatelessWidget {
                         ? '개인 정보 처리 방침'
                         : '위치 정보 처리 방침',
                 fontSize: FontSize.largeSize,
-                font: notoSans,
               ),
             ),
             Padding(
@@ -145,7 +145,6 @@ class PolicyContent extends StatelessWidget {
                         ? privatePolicy
                         : gpsPolicy,
                 fontSize: FontSize.smallSize,
-                font: notoSans,
               ),
             ),
           ],
@@ -158,23 +157,46 @@ class PolicyContent extends StatelessWidget {
 //* 입력창 존재 모달
 class InputModal extends StatelessWidget {
   final String title, buttonText;
+  // final ReturnVoid onPressed;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
+    // required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
+    StringMap folderData = {'folderName': ''};
+    void fillFolderData(String value) {
+      folderData['folderName'] = value;
+    }
+
+    void createFolder(BuildContext context) async {
+      try {
+        await FolderProvider.createNewFolder(folderData);
+        // routerPop(context)();
+        // routerPush(context, page: const BookMarkFolderList())();
+      } catch (error) {
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '오류 발생',
+            content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
+          ),
+        );
+      }
+    }
+
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: () {},
-      children: const [
+      onPressed: () => createFolder(context),
+      children: [
         Expanded(
             child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: TextField(onChanged: fillFolderData),
         )),
       ],
     );
@@ -202,32 +224,46 @@ class CustomModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: CustomText(
-            title: title, fontSize: FontSize.largeSize, color: titleColor),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Flexible(
+          child: Center(
+            child: CustomText(
+              title: title,
+              fontSize: FontSize.largeSize,
+              color: titleColor,
+            ),
+          ),
+        ),
       ),
       children: [
         ...children,
         isAlert
-            ? modalButton(
-                context: context,
-                onPressed: onPressed ?? routerPop(context: context),
-                buttonText: buttonText,
+            ? Flexible(
+                child: modalButton(
+                  context: context,
+                  onPressed: onPressed ?? routerPop(context),
+                  buttonText: buttonText,
+                ),
               )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  modalButton(
-                    context: context,
-                    onPressed: onPressed ?? routerPop(context: context),
-                    buttonText: buttonText,
+            : Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      modalButton(
+                        context: context,
+                        onPressed: onPressed ?? routerPop(context),
+                        buttonText: buttonText,
+                      ),
+                      modalButton(
+                        context: context,
+                        onPressed: routerPop(context),
+                        buttonText: '취소',
+                      ),
+                    ],
                   ),
-                  modalButton(
-                    context: context,
-                    onPressed: routerPop(context: context),
-                    buttonText: '취소',
-                  ),
-                ],
+                ),
               ),
       ],
     );
@@ -272,7 +308,7 @@ class CustomModalWithClose extends StatelessWidget {
                 CustomIconButton(
                     color: CustomColors.blackColor,
                     icon: closeIcon,
-                    onPressed: routerPop(context: context))
+                    onPressed: routerPop(context))
               ],
             ),
             title != null
@@ -294,19 +330,66 @@ class CustomModalWithClose extends StatelessWidget {
 
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
-  const DeleteModal({super.key});
+  final int deleteMode, id;
+  const DeleteModal({super.key, required this.deleteMode, required this.id});
 
   @override
   Widget build(BuildContext context) {
+    late final String target, message;
+    void applyString() {
+      switch (deleteMode) {
+        case 0:
+          target = '리뷰';
+          message = '이 리뷰를\n삭제하시겠습니까?';
+          break;
+        case 1:
+          target = '폴더';
+          message = '폴더 삭제 시\n내부의 즐겨찾기도\n모두 삭제됩니다.\n그래도 삭제하시겠습니까?';
+          break;
+        default:
+          target = '즐겨찾기';
+          message = '즐겨 찾기 목록에서\n이 화장실을 삭제하시겠습니까?';
+          break;
+      }
+    }
+
+    void onPressed() async {
+      try {
+        switch (deleteMode) {
+          case 0:
+            await ReviewProvider.deleteReview(id);
+            break;
+          case 1:
+            await FolderProvider.deleteFolder(id);
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        showModal(
+          context,
+          page: AlertModal(
+            title: '오류 발생',
+            content: '오류가 발생해\n$target 삭제에 실패했습니다.',
+          ),
+        );
+      }
+    }
+
+    applyString();
+
     return CustomModal(
-      title: '폴더 삭제 확인',
-      children: const [
-        CustomText(
-            title: '폴더 삭제 시 내부의 즐겨찾기도 모두 삭제됩니다. 그래도 삭제하시겠습니까?',
-            fontSize: FontSize.defaultSize,
-            color: CustomColors.blackColor),
+      title: '$target 삭제 확인',
+      onPressed: onPressed,
+      children: [
+        Center(
+          child: CustomText(
+              title: message,
+              isCentered: true,
+              fontSize: FontSize.defaultSize,
+              color: CustomColors.blackColor),
+        ),
       ],
-      onPressed: () {},
     );
   }
 }
@@ -434,13 +517,39 @@ class NavigationModal extends StatelessWidget {
                     child: CustomText(
                       title: appList[i],
                       fontSize: FontSize.defaultSize,
-                      font: notoSans,
                     ),
                   )
                 ],
               ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+//* 확인 버튼만 존재하는 모달
+class AlertModal extends StatelessWidget {
+  final String title, content;
+  final ReturnVoid? onPressed;
+  const AlertModal({
+    super.key,
+    required this.title,
+    required this.content,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: title,
+      isAlert: true,
+      onPressed: onPressed,
+      children: [
+        CustomText(
+          title: content,
+          isCentered: true,
+        )
       ],
     );
   }

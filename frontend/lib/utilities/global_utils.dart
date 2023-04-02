@@ -3,19 +3,21 @@ import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//* 함수
+
 //* 화면 이동
-ReturnVoid routerPush({required BuildContext context, required Widget page}) {
+ReturnVoid routerPush(BuildContext context, {required Widget page}) {
   return () =>
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }
 
 //* 나가기, 뒤로 가기
-ReturnVoid routerPop({required BuildContext context}) {
+ReturnVoid routerPop(BuildContext context) {
   return () => Navigator.pop(context);
 }
 
 //* 모달 띄우기
-ReturnVoid showModal({required BuildContext context, required Widget page}) {
+ReturnVoid showModal(BuildContext context, {required Widget page}) {
   return () {
     showDialog(context: context, builder: (context) => page);
   };
