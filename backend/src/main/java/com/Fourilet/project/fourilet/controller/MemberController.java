@@ -42,12 +42,19 @@ public class MemberController {
 
         Object member = result.get("member");
 
+        Object state = result.get("state");
+
+        Map<String, Object> body_value = new HashMap<String, Object>();
+
+        body_value.put("data", member);
+        body_value.put("state", state);
+
         HttpHeaders headers = new HttpHeaders();
 
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Authorization-refresh", "Bearer " + refreshToken);
 
-        return ResponseEntity.ok().headers(headers).body(member);
+        return ResponseEntity.ok().headers(headers).body(body_value);
     }
 
     @GetMapping("/userinfo")
@@ -78,10 +85,16 @@ public class MemberController {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         // 일치하면 작업 수행
-        Member member = memberService.updateNickname(reqMemberId, updateNicknameDto.getNickname());
-        Map<String, String> result = new HashMap<String, String>();
-        result.put("success", member.getNickname());
-        return ResponseEntity.ok().headers(headers).body(result);
+        try{
+            Member member = memberService.updateNickname(reqMemberId, updateNicknameDto.getNickname());
+            Map<String, String> result = new HashMap<String, String>();
+            result.put("success", member.getNickname());
+            return ResponseEntity.ok().headers(headers).body(result);
+        }catch (IllegalArgumentException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage("이미 존재하는 닉네임입니다.");
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete")

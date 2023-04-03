@@ -90,6 +90,7 @@ public class MemberService {
         String email = profile.getKakao_account().getEmail();
 
         Member member = memberRepository.findByEmail(email).orElse(null);
+
         Folder folder = new Folder();
         if(member == null){
             member = memberRepository.save(Member.builder()
@@ -102,6 +103,9 @@ public class MemberService {
             folder.setMember(member);
             folder.setFolderName("기본 즐겨찾기 폴더");
             folderRepository.save(folder);
+            result.put("state", "sign up");
+        } else {
+            result.put("state", "login");
         }
 
         String accessToken = jwtService.createAccessToken(email, member.getMemberId());
@@ -156,9 +160,14 @@ public class MemberService {
     }
 
     public Member updateNickname(long memberId, String nickname){
-        Member member = memberRepository.findById(memberId);
-        member.setNickname(nickname);
-        return memberRepository.save(member);
+        Member member = memberRepository.findByNickname(nickname).orElse(null);
+        if(member == null) {
+            member = memberRepository.findById(memberId);
+            member.setNickname(nickname);
+            return memberRepository.save(member);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public void deleteMember(long memberId){
