@@ -1,11 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:find_toilet/providers/api_provider.dart';
-import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
-class UserProvider {
+class UserProvider extends ApiProvider {
   //* url
   static const _userUrl = '/user';
   static const _loginUrl = '$_userUrl/login';
@@ -17,10 +15,10 @@ class UserProvider {
   void login() => _login();
   void logout() => _logout();
 
-  void autoLogin(String? accessToken) async {
+  void autoLogin() async {
     try {
-      if (accessToken != null && accessToken != '') {
-        _sendToken(accessToken);
+      if (token != null && token != '') {
+        _sendToken(token!);
       }
     } catch (error) {
       return _logout();
@@ -29,31 +27,24 @@ class UserProvider {
 
   void deleteUser() => _deleteUser();
 
-  FutureBool refreshToken({
-    required String url,
-    required BaseOptions options,
-    required String method,
-    dynamic data,
-  }) =>
-      _refreshToken(url: url, options: options, method: method, data: data);
-
   void changeName(String newName) => _changeName(newName);
 
   //* private function
   void _setVar(dynamic response) {
     final headers = response.headers;
-    _setToken(headers['Authorization']!.first);
-    _setRefresh(headers['Authorization-refresh']!.first);
+    setStoreToken(headers['Authorization']!.first);
+    setStoreRefresh(headers['Authorization-refresh']!.first);
   }
 
   void _sendToken(String token) async {
     try {
-      final response = await dio.post(_loginUrl, data: {'token': token});
+      final response =
+          await dioWithToken().post(_loginUrl, data: {'token': token});
       switch (response.statusCode) {
         case 200:
           return _setVar(response);
         case 401:
-          //* refresh token
+          refreshToken(url: _loginUrl, method: 'POST');
           return;
         default:
           throw Error();
@@ -94,15 +85,13 @@ class UserProvider {
   }
 
   void _logout() async {
-    print('로그아웃 함수 들어옴');
     const storage = FlutterSecureStorage();
     await storage.deleteAll();
-    print(await storage.readAll());
   }
 
   void _deleteUser() {
     try {
-      ApiProvider.deleteApi(_deleteUserUrl);
+      deleteApi(_deleteUserUrl);
     } catch (error) {
       throw Error();
     }
@@ -110,37 +99,13 @@ class UserProvider {
 
   void _changeName(String newName) async {
     try {
-      final success = await ApiProvider.updateApi(
+      final success = await updateApi(
         _changeNameUrl,
         data: {'nickname': newName},
       );
       if (success) {
-        _setName(newName);
+        setStoreName(newName);
       } else {}
     } catch (error) {}
-  }
-
-  FutureBool _refreshToken({
-    required String url,
-    required BaseOptions options,
-    required String method,
-    dynamic data,
-  }) async {
-    try {
-      final refreshToken = await refresh();
-      options.headers['Authorization-refresh'] = refreshToken;
-      options.method = method;
-      final dioWithRefresh = Dio(options);
-      final response = await dioWithRefresh.request(url, data: data);
-      switch (response.statusCode) {
-        case 200:
-          _setVar(response);
-          return true;
-        default:
-          throw Error();
-      }
-    } catch (error) {
-      throw Error();
-    }
   }
 }

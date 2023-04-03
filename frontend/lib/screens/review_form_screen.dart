@@ -53,13 +53,13 @@ class _ReviewFormState extends State<ReviewForm> {
     try {
       late final String state;
       if (widget.reviewId == null) {
-        await ReviewProvider.postNewReview(
+        await ReviewProvider().postNewReview(
           toiletId: widget.toiletId,
           reviewData: reviewData,
         );
         state = '등록';
       } else {
-        await ReviewProvider.updateReview(
+        await ReviewProvider().updateReview(
           widget.reviewId!,
           reviewData: reviewData,
         );

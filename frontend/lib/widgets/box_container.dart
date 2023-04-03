@@ -221,7 +221,7 @@ class _ListItemState extends State<ListItem> {
   }
 
   void addIntoBookmark() async {
-    final token = await UserProvider().token();
+    final token = UserProvider().token;
     if (token == null || token == '') {
       routerPush(context,
           page: ReviewForm(

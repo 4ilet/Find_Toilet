@@ -1,12 +1,14 @@
+import 'package:find_toilet/providers/api_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class StateProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class UserInfoProvider
+    with ChangeNotifier, DiagnosticableTreeMixin, DioProvider {
   String? _token, _refresh, _nickname;
   String? get token => _token;
   String? get refresh => _refresh;
   String? get nickname => _nickname;
-  var storage = const FlutterSecureStorage();
+  static var storage = const FlutterSecureStorage();
 
   void debugFillProperites(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);

@@ -1,12 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/api_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 //* folder CRUD
-class FolderProvider with ApiProvider {
+class FolderProvider extends ApiProvider {
   //* url
   static const _bookmarkUrl = '/like';
   static const _folderListUrl = '$_bookmarkUrl/folder';
@@ -17,15 +15,10 @@ class FolderProvider with ApiProvider {
       '$_bookmarkUrl/delete/folder/$folderId';
 
   //* 폴더 목록
-  static Future<FolderList> getFolderList() async {
+  Future<FolderList> getFolderList(String token) async {
     try {
-      //* token
-      final token = await UserProvider().token();
-      final options =
-          BaseOptions(baseUrl: baseUrl!, headers: {'Authorization': token});
-      final dioWithToken = Dio(options);
       //*
-      final response = await dioWithToken.get(_folderListUrl);
+      final response = await dioWithToken().get(_folderListUrl);
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -47,33 +40,33 @@ class FolderProvider with ApiProvider {
   }
 
   //* 폴더 생성
-  static FutureVoid createNewFolder(
+  FutureVoid createNewFolder(
     StringMap folderData,
   ) async {
-    ApiProvider.createApi(
+    createApi(
       _createFolderUrl,
       data: folderData,
     );
   }
 
   //* 폴더 수정
-  static FutureVoid updateFolderName(
+  FutureVoid updateFolderName(
     int folderId, {
     required StringMap folderData,
   }) async {
-    ApiProvider.updateApi(
+    updateApi(
       _updateFolderUrl(folderId),
       data: folderData,
     );
   }
 
   //* 리뷰 삭제
-  static FutureVoid deleteFolder(int folderId) async {
-    ApiProvider.deleteApi(_deleteFolderUrl(folderId));
+  FutureVoid deleteFolder(int folderId) async {
+    deleteApi(_deleteFolderUrl(folderId));
   }
 }
 
-class BookMarkProvider {
+class BookMarkProvider extends ApiProvider {
   //* url
   static const _bookmarkUrl = '/like';
   static String _bookmarkListUrl(int folderId) =>
@@ -85,10 +78,10 @@ class BookMarkProvider {
       '$_bookmarkUrl/delete/$folderId/$toiletId';
 
   //* 즐겨찾기 목록 조회
-  static FutureList getToiletList(int folderId) async {
+  FutureList getToiletList(int folderId) async {
     ToiletList toiletList = [];
     try {
-      final response = await dio.get(_bookmarkListUrl(folderId));
+      final response = await dioWithToken().get(_bookmarkListUrl(folderId));
       if (response.statusCode == 200) {
         response.data.forEach((element) {
           toiletList.add(ToiletModel.fromJson(element));
@@ -103,11 +96,11 @@ class BookMarkProvider {
   }
 
   //* 즐겨찾기에 추가
-  static FutureVoid addToilet({
+  FutureVoid addToilet({
     required int folderId,
     required int toiletId,
   }) async {
-    ApiProvider.createApi(
+    createApi(
       _addToiletUrl(
         folderId: folderId,
         toiletId: toiletId,
@@ -117,11 +110,11 @@ class BookMarkProvider {
   }
 
   //* 즐겨찾기 삭제
-  static FutureVoid deleteBookMark({
+  FutureVoid deleteBookMark({
     required int folderId,
     required int toiletId,
   }) async {
-    ApiProvider.deleteApi(
+    deleteApi(
       _deleteToiletUrl(
         folderId: folderId,
         toiletId: toiletId,

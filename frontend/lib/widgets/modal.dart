@@ -175,7 +175,7 @@ class InputModal extends StatelessWidget {
 
     void createFolder(BuildContext context) async {
       try {
-        await FolderProvider.createNewFolder(folderData);
+        await FolderProvider().createNewFolder(folderData);
         // routerPop(context)();
         // routerPush(context, page: const BookMarkFolderList())();
       } catch (error) {
@@ -358,10 +358,10 @@ class DeleteModal extends StatelessWidget {
       try {
         switch (deleteMode) {
           case 0:
-            await ReviewProvider.deleteReview(id);
+            await ReviewProvider().deleteReview(id);
             break;
           case 1:
-            await FolderProvider.deleteFolder(id);
+            await FolderProvider().deleteFolder(id);
             break;
           default:
             break;
