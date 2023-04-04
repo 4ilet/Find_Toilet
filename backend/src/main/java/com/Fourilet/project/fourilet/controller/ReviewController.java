@@ -8,8 +8,11 @@ import com.Fourilet.project.fourilet.dto.StatusEnum;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,23 +63,32 @@ public class ReviewController {
     }
     @GetMapping("/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 목록", notes = "특정 화장실의 리뷰 목록들을 가져온다.")
-    public ResponseEntity<?> getReviewList(@PathVariable("toiletId") long toiletId){
+    public ResponseEntity<?> getReviewList(@PathVariable("toiletId") long toiletId, @ApiParam(value = "page=int(시작은 0)") int page){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
         try {
-            List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId);
+            List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId,  page);
+
             message.setStatus(StatusEnum.OK);
             message.setData(result);
             message.setMessage("화장실 리뷰 가져오기 성공");
+
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
         } catch (NoSuchElementException e){
+
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
+
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         } catch (NullPointerException e) {
+
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
+
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
 

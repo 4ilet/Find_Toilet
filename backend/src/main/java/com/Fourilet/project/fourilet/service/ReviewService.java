@@ -10,9 +10,13 @@ import com.Fourilet.project.fourilet.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 //import javax.xml.ws.Response;
 //import java.sql.Array;
@@ -57,10 +61,17 @@ public class ReviewService {
         newReview.setScore(postReviewDto.getScore());
         reviewRepository.save(newReview);
     }
-    public List<ReviewDto.GetReviewDto> getReview(long toiletId){
+    public List<ReviewDto.GetReviewDto> getReview(long toiletId, int page){
         LOGGER.info("CALL GET REVIEW");
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-        List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
+        if (toilet == null) {
+            throw new NullPointerException("존재하지 않는 화장실입니다.");
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest);
+
+
         if (toilet == null) {
             throw new NullPointerException("존재하지 않는 화장실입니다.");
         }
