@@ -15,5 +15,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
       List<Review> findAllByToilet(Toilet toilet);
       Optional<Review> findById(long reviewId);
-
 }

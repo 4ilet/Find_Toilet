@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.controller;
 
+import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
 import com.Fourilet.project.fourilet.data.entity.Review;
 import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
@@ -29,14 +31,19 @@ public class ReviewController {
     private final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
     private final ReviewService reviewService;
 
-    @PostMapping("/post/{memberId}/{toiletId}")
+    private final JwtService jwtService;
+
+    @PostMapping("/post/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 생성", notes = "특정 화장실의 리뷰를 생성한다.")
-    public ResponseEntity<?> postReview(@PathVariable("memberId") long memberId, @PathVariable("toiletId") long toiletId, @RequestBody ReviewDto.PostReviewDto postReviewDto){
+    public ResponseEntity<?> postReview(HttpServletRequest request, @PathVariable("toiletId") long toiletId, @RequestBody ReviewDto.PostReviewDto postReviewDto){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+        // accessToken으로 id 추출
+        Long reqMemberId = jwtService.extractId(accessToken).get();
         try {
-            reviewService.postReview(memberId, toiletId, postReviewDto);
+            reviewService.postReview(reqMemberId, toiletId, postReviewDto);
             message.setStatus(StatusEnum.OK);
             message.setMessage("리뷰 작성 성공");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
