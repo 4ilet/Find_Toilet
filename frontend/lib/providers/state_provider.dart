@@ -1,14 +1,12 @@
-import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class UserInfoProvider
-    with ChangeNotifier, DiagnosticableTreeMixin, DioProvider {
+class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String? _token, _refresh, _nickname;
   String? get token => _token;
   String? get refresh => _refresh;
   String? get nickname => _nickname;
-  static var storage = const FlutterSecureStorage();
 
   void debugFillProperites(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -17,39 +15,48 @@ class UserInfoProvider
     properties.add(StringProperty('nickname', nickname));
   }
 
-  void _setToken(String? newToken) => _token = newToken;
-  void _setRefresh(String? newRefresh) => _refresh = newRefresh;
-  void _setName(String? newName) => _nickname = newName;
+  //* public
 
-  void initVar() {
-    final dynamic userInfo = storage.read(key: 'userInfo');
-    if (userInfo != null) {
-      _setToken(userInfo['token']);
-      _setRefresh(userInfo['refresh']);
-      _setName(userInfo['nickname']);
-      storage = const FlutterSecureStorage();
-      notifyListeners();
-    }
+  FutureBool initVar() async {
+    final userInfo = await _readStore();
+    _setStoreToken(userInfo['token']);
+    _setStoreRefresh(userInfo['refresh']);
+    _setStoreName(userInfo['nickname']);
+    notifyListeners();
+    return true;
   }
 
-  void setStoreToken(String newToken) {
-    _setToken(newToken);
-    storage.write(key: 'token', value: newToken);
-    storage = const FlutterSecureStorage();
+  void setStoreToken(String newToken) async {
+    _setStoreToken(newToken);
+    _setStore('token', newToken);
     notifyListeners();
   }
 
   void setStoreRefresh(String newRefresh) {
-    _setRefresh(newRefresh);
-    storage.write(key: 'refresh', value: newRefresh);
-    storage = const FlutterSecureStorage();
+    _setStoreRefresh(newRefresh);
+    _setStore('refresh', newRefresh);
     notifyListeners();
   }
 
   void setStoreName(String newName) {
-    _setRefresh(newName);
-    storage.write(key: 'nickname', value: newName);
-    storage = const FlutterSecureStorage();
+    _setStoreName(newName);
+    _setStore('nickname', newName);
     notifyListeners();
+  }
+
+  //* private
+  void _setStoreToken(String? newToken) => _token = newToken;
+  void _setStoreRefresh(String? newRefresh) => _refresh = newRefresh;
+  void _setStoreName(String? newName) => _nickname = newName;
+
+  void _setStore(String key, String? value) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(key: key, value: value);
+  }
+
+  Future<StringMap> _readStore() async {
+    const storage = FlutterSecureStorage();
+    final userInfo = await storage.readAll();
+    return userInfo;
   }
 }

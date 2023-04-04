@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -23,13 +24,11 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   late Widget loginOrLogoutBtn;
-  late String? token;
 
   @override
   void initState() {
     super.initState();
     changeBtn();
-    token = context.watch().token;
   }
 
   ReturnVoid changeIndex(int i) {
@@ -44,7 +43,10 @@ class _SettingsState extends State<Settings> {
     };
   }
 
-  void changeBtn() {
+  bool changeBtn() {
+    // print(context.read<UserInfoProvider>().token);
+    final token = context.read<UserInfoProvider>().token;
+    // final token = Provider.of<UserInfoProvider>(context).token;
     setState(() {
       loginOrLogoutBtn = token == null || token == ''
           ? Image.asset(kakaoLogin)
@@ -55,6 +57,7 @@ class _SettingsState extends State<Settings> {
               fontSize: FontSize.defaultSize,
             );
     });
+    return true;
   }
 
   void sendEmail() async {
@@ -91,19 +94,18 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  void loginOrLogout() {
+  FutureBool loginOrLogout() async {
     try {
-      print('버튼 눌림');
+      final token = context.read<UserInfoProvider>().token;
       if (token == null || token == '') {
-        print('로그인');
-        return UserProvider().login();
+        final result = await UserProvider().login();
+        return changeBtn();
       } else {
-        print('로그아웃');
-        print(token);
         return UserProvider().logout();
       }
     } catch (error) {
-      return showModal(context, page: errorModal('login'))();
+      showModal(context, page: errorModal('login'))();
+      return false;
     }
   }
 
@@ -127,15 +129,15 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
-            const Flexible(
-              flex: 1,
-              child: CustomText(
-                title: '어떤 것을 원하시나요?',
-                fontSize: FontSize.largeSize,
-                color: CustomColors.mainColor,
-                font: kimm,
-              ),
-            ),
+            Flexible(
+                flex: 1,
+                child: CustomText(
+                  title:
+                      '어떤 것을 원하시나요? \n ${context.read<UserInfoProvider>().token}',
+                  fontSize: FontSize.largeSize,
+                  color: CustomColors.mainColor,
+                  font: kimm,
+                )),
             Flexible(
               flex: 6,
               child: Column(

@@ -1,4 +1,3 @@
-import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,25 +49,4 @@ void setTheme(Themes theme) async {
 void setRadius(MapRadius radius) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('radiusIdx', convertedRadius(radius));
-}
-
-//* 앱 데이터 가져오기/초기화
-void initData() async {
-  final prefs = await SharedPreferences.getInstance();
-  final hasVisited = prefs.getBool('hasVisited');
-  final loggedIn = prefs.getString('accessToken');
-  final themeIdx = prefs.getInt('themeIdx');
-  final radiusIdx = prefs.getInt('radiusIdx');
-  if (hasVisited != null) {
-    isFirstVisit = false;
-  }
-  if (loggedIn != null) {
-    accessToken = loggedIn;
-  }
-  if (themeIdx != null) {
-    // theme = ;
-  }
-  if (radiusIdx != null) {
-    // mapRadius =
-  }
 }

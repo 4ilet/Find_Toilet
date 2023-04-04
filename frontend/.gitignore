@@ -48,3 +48,6 @@ app.*.map.json
 
 #keystore
 /android/keystore
+
+#test
+/lib/counter_main.dart

@@ -1,4 +1,5 @@
 import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -12,14 +13,15 @@ class UserProvider extends ApiProvider {
   static const _userInfoUrl = '$_userUrl/userinfo';
 
   //* public function
-  void login() => _login();
-  void logout() => _logout();
+  FutureBool login() => _login();
+  FutureBool logout() => _logout();
 
-  void autoLogin() async {
+  FutureBool autoLogin() async {
     try {
       if (token != null && token != '') {
-        _sendToken(token!);
+        return _sendToken(token!);
       }
+      return true;
     } catch (error) {
       return _logout();
     }
@@ -30,13 +32,14 @@ class UserProvider extends ApiProvider {
   void changeName(String newName) => _changeName(newName);
 
   //* private function
-  void _setVar(dynamic response) {
+  bool _setVar(dynamic response) {
     final headers = response.headers;
     setStoreToken(headers['Authorization']!.first);
     setStoreRefresh(headers['Authorization-refresh']!.first);
+    return true;
   }
 
-  void _sendToken(String token) async {
+  FutureBool _sendToken(String token) async {
     try {
       final response =
           await dioWithToken().post(_loginUrl, data: {'token': token});
@@ -44,8 +47,8 @@ class UserProvider extends ApiProvider {
         case 200:
           return _setVar(response);
         case 401:
-          refreshToken(url: _loginUrl, method: 'POST');
-          return;
+          final result = await refreshToken(url: _loginUrl, method: 'POST');
+          return result;
         default:
           throw Error();
       }
@@ -54,7 +57,7 @@ class UserProvider extends ApiProvider {
     }
   }
 
-  void _kakaoLogin(bool withKakaoTalk) async {
+  FutureBool _kakaoLogin(bool withKakaoTalk) async {
     try {
       OAuthToken kakaoResponse;
       if (withKakaoTalk) {
@@ -62,16 +65,16 @@ class UserProvider extends ApiProvider {
       } else {
         kakaoResponse = await UserApi.instance.loginWithKakaoAccount();
       }
-      _sendToken(kakaoResponse.accessToken);
+      return _sendToken(kakaoResponse.accessToken);
     } catch (error) {
       if (error is PlatformException && error.code == 'CANCELED') {
-        return;
+        return false;
       }
       throw Error();
     }
   }
 
-  void _login() async {
+  FutureBool _login() async {
     //* 카카오톡 설치 여부 확인
     if (await isKakaoTalkInstalled()) {
       try {
@@ -84,9 +87,10 @@ class UserProvider extends ApiProvider {
     return _kakaoLogin(false);
   }
 
-  void _logout() async {
+  FutureBool _logout() async {
     const storage = FlutterSecureStorage();
     await storage.deleteAll();
+    return true;
   }
 
   void _deleteUser() {

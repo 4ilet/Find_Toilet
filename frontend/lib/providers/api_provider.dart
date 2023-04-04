@@ -3,26 +3,22 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class DioProvider {
-  final _userInfo = UserInfoProvider();
+class ApiProvider extends UserInfoProvider {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
   dioWithToken() => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
-          headers: {'Authorization': _userInfo.token},
+          headers: {'Authorization': token},
         ),
       );
   dioWithRefresh(String method) => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
           method: method,
-          headers: {'Authorization-refresh': _userInfo.refresh},
+          headers: {'Authorization-refresh': refresh},
         ),
       );
-}
-
-class ApiProvider extends UserInfoProvider {
   //*
   FutureBool _refreshToken({
     required String url,
@@ -36,6 +32,7 @@ class ApiProvider extends UserInfoProvider {
           final headers = response.headers;
           setStoreToken(headers['Authorization'].first);
           setStoreRefresh(headers['Authorization'].first);
+          notifyListeners();
           return true;
         default:
           throw Error();
@@ -64,6 +61,7 @@ class ApiProvider extends UserInfoProvider {
         response.data.forEach((element) {
           list.add(model.fromJson(element));
         });
+        notifyListeners();
         return list;
       }
       throw Error();
@@ -84,7 +82,6 @@ class ApiProvider extends UserInfoProvider {
   //* 생성 전반
   FutureBool _createApi(String url, {required DynamicMap data}) async {
     try {
-      final token = _userInfo.token;
       //* token
       if (token != null && token != '') {
         final response = await dioWithToken().post(url, data: data);
@@ -98,6 +95,7 @@ class ApiProvider extends UserInfoProvider {
               data: data,
             );
             _createApi(url, data: data);
+            notifyListeners();
             return false;
           default:
             throw Error();
