@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.controller;
 
+import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
 import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.data.repository.FolderRepository;
@@ -20,6 +21,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.DuplicateFormatFlagsException;
@@ -31,16 +33,20 @@ import java.util.List;
 public class FolderController {
     private final Logger LOGGER = LoggerFactory.getLogger(FolderController.class);
     private final FolderService folderService;
+    private final JwtService jwtService;
 
-    @GetMapping("/folder/{memberId}")
+    @GetMapping("/folder")
     @ApiOperation(value = "즐겨찾기 목록", notes = "해당 멤버의 즐겨찾기 목록을 가져온다.")
-    public ResponseEntity<?> getFolderList(@PathVariable long memberId) {
+    public ResponseEntity<?> getFolderList(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+        // accessToken으로 id 추출
+        Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         LOGGER.info("Call getFolderList");
         try {
-            List<FolderDto.FolderListDto> folderList = folderService.getFolderList(memberId);
+            List<FolderDto.FolderListDto> folderList = folderService.getFolderList(reqMemberId);
             message.setStatus(StatusEnum.OK);
             message.setMessage("즐겨찾기 목록 가져오기 성공");
             message.setData(folderList);
@@ -101,9 +107,12 @@ public class FolderController {
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/create/folder/{memberId}")
+    @PostMapping("/create/folder")
     @ApiOperation(value = "즐겨찾기 생성", notes = "해당 멤버의 즐겨찾기 폴더를 생성한다.")
-    public ResponseEntity<?> createFolder(@PathVariable("memberId") long memberId, @RequestBody FolderDto.NewFolderDto newFolderDto) throws IOException {
+    public ResponseEntity<?> createFolder(HttpServletRequest request, @RequestBody FolderDto.NewFolderDto newFolderDto) throws IOException {
+        String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+        // accessToken으로 id 추출
+        Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -113,7 +122,7 @@ public class FolderController {
                 message.setMessage("잘못된 요청입니다");
                 return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
             }
-            folderService.createFolder(memberId, newFolderDto);
+            folderService.createFolder(reqMemberId, newFolderDto);
             message.setStatus(StatusEnum.OK);
             message.setMessage("폴더 생성 성공");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
@@ -195,7 +204,11 @@ public class FolderController {
         try {
             List<ToiletDto2> toiletDtoList = folderService.getToiletList(folderId);
             message.setStatus(StatusEnum.OK);
-            message.setMessage("목록 가져오기 성공");
+            if (toiletDtoList.size() > 0) {
+                message.setMessage("목록 가져오기 성공");
+            } else {
+                message.setMessage("화장실이 즐겨찾기에 없습니다.");
+            }
             message.setData(toiletDtoList);
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
         } catch (NullPointerException e) {
