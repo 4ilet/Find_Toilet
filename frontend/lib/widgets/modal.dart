@@ -158,24 +158,28 @@ class PolicyContent extends StatelessWidget {
 //* 입력창 존재 모달
 class InputModal extends StatelessWidget {
   final String title, buttonText;
-  // final ReturnVoid onPressed;
+  final bool isAlert;
+  final String kindOf;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
-    // required this.onPressed,
+    required this.isAlert,
+    required this.kindOf,
   });
 
   @override
   Widget build(BuildContext context) {
-    StringMap folderData = {'folderName': ''};
+    String? data;
     void fillFolderData(String value) {
-      folderData['folderName'] = value;
+      data = value;
     }
 
     void createFolder(BuildContext context) async {
       try {
-        await FolderProvider().createNewFolder(folderData);
+        if (data != null && data != '') {
+          await FolderProvider().createNewFolder({'folderName': data!});
+        }
         // routerPop(context)();
         // routerPush(context, page: const BookMarkFolderList())();
       } catch (error) {
@@ -192,7 +196,10 @@ class InputModal extends StatelessWidget {
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: () => createFolder(context),
+      onPressed: kindOf == 'folder'
+          ? () => createFolder(context)
+          : () => UserProvider().changeName(data!),
+      isAlert: isAlert,
       children: [
         Expanded(
             child: Padding(

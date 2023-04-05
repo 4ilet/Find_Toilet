@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
@@ -110,7 +109,8 @@ class FolderBox extends StatelessWidget {
                         page: const InputModal(
                           title: '즐겨 찾기 폴더명 수정',
                           buttonText: '수정',
-                          // onPressed: editFolder,
+                          isAlert: false,
+                          kindOf: 'folder',
                         ),
                       ),
                       iconSize: 25,
@@ -167,6 +167,8 @@ class _AddBoxState extends State<AddBox> {
         builder: (context) => const InputModal(
           title: '즐겨 찾기 폴더 생성',
           buttonText: '만들기',
+          isAlert: true,
+          kindOf: 'folder',
           // onPressed: widget.createFolder,
         ),
       ),

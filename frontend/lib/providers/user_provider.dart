@@ -1,8 +1,10 @@
 import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 
 class UserProvider extends ApiProvider {
   //* url
@@ -13,17 +15,15 @@ class UserProvider extends ApiProvider {
   static const _userInfoUrl = '$_userUrl/userinfo';
 
   //* public function
-  FutureBool login() => _login();
-  FutureBool logout() => _logout();
-
-  FutureBool autoLogin() async {
+  FutureDynamicMap login() => _login();
+  FutureDynamicMap autoLogin() async {
     try {
       if (token != null && token != '') {
         return _sendToken(token!);
       }
-      return true;
+      throw Error();
     } catch (error) {
-      return _logout();
+      throw Error();
     }
   }
 
@@ -32,23 +32,26 @@ class UserProvider extends ApiProvider {
   void changeName(String newName) => _changeName(newName);
 
   //* private function
-  bool _setVar(dynamic response) {
+  StringMap _returnTokens(dynamic response) {
     final headers = response.headers;
-    setStoreToken(headers['Authorization']!.first);
-    setStoreRefresh(headers['Authorization-refresh']!.first);
-    return true;
+    return {
+      'token': headers['Authorization']!.first,
+      'refresh': headers['Authorization-refresh']!.first,
+      'state': response.data['state']
+    };
   }
 
-  FutureBool _sendToken(String token) async {
+  FutureDynamicMap _sendToken(String token) async {
     try {
       final response =
           await dioWithToken().post(_loginUrl, data: {'token': token});
       switch (response.statusCode) {
         case 200:
-          return _setVar(response);
+          print(response);
+          return _returnTokens(response);
         case 401:
           final result = await refreshToken(url: _loginUrl, method: 'POST');
-          return result;
+          return {'result': result};
         default:
           throw Error();
       }
@@ -57,7 +60,7 @@ class UserProvider extends ApiProvider {
     }
   }
 
-  FutureBool _kakaoLogin(bool withKakaoTalk) async {
+  FutureDynamicMap _kakaoLogin(bool withKakaoTalk) async {
     try {
       OAuthToken kakaoResponse;
       if (withKakaoTalk) {
@@ -68,13 +71,13 @@ class UserProvider extends ApiProvider {
       return _sendToken(kakaoResponse.accessToken);
     } catch (error) {
       if (error is PlatformException && error.code == 'CANCELED') {
-        return false;
+        return {'result': false};
       }
       throw Error();
     }
   }
 
-  FutureBool _login() async {
+  FutureDynamicMap _login() async {
     //* 카카오톡 설치 여부 확인
     if (await isKakaoTalkInstalled()) {
       try {
@@ -85,12 +88,6 @@ class UserProvider extends ApiProvider {
     }
     //* 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
     return _kakaoLogin(false);
-  }
-
-  FutureBool _logout() async {
-    const storage = FlutterSecureStorage();
-    await storage.deleteAll();
-    return true;
   }
 
   void _deleteUser() {
@@ -112,4 +109,15 @@ class UserProvider extends ApiProvider {
       } else {}
     } catch (error) {}
   }
+}
+
+//* 토큰 받아오기
+String? getToken(BuildContext context) =>
+    context.read<UserInfoProvider>().token;
+
+//* 토큰 변경
+void changeToken(BuildContext context, {String? token, String? refresh}) {
+  final userInfo = context.read<UserInfoProvider>();
+  userInfo.setStoreToken(token);
+  userInfo.setStoreRefresh(refresh);
 }

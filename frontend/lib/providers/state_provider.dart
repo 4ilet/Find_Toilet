@@ -26,13 +26,13 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return true;
   }
 
-  void setStoreToken(String newToken) async {
+  void setStoreToken(String? newToken) async {
     _setStoreToken(newToken);
     _setStore('token', newToken);
     notifyListeners();
   }
 
-  void setStoreRefresh(String newRefresh) {
+  void setStoreRefresh(String? newRefresh) {
     _setStoreRefresh(newRefresh);
     _setStore('refresh', newRefresh);
     notifyListeners();

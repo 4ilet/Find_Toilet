@@ -21,6 +21,7 @@ typedef StringMap = Map<String, String>;
 typedef FutureList = Future<List>;
 typedef FutureVoid = Future<void>;
 typedef FutureBool = Future<bool>;
+typedef FutureDynamicMap = Future<DynamicMap>;
 
 typedef ReviewList = List<ReviewModel>;
 typedef FolderList = List<FolderModel>;

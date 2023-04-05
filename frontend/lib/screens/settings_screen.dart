@@ -1,5 +1,4 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -13,7 +12,6 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -31,6 +29,7 @@ class _SettingsState extends State<Settings> {
     changeBtn();
   }
 
+  //* 옵션 변경
   ReturnVoid changeIndex(int i) {
     return () {
       setState(() {
@@ -43,10 +42,9 @@ class _SettingsState extends State<Settings> {
     };
   }
 
+  //* 버튼 변경
   bool changeBtn() {
-    // print(context.read<UserInfoProvider>().token);
-    final token = context.read<UserInfoProvider>().token;
-    // final token = Provider.of<UserInfoProvider>(context).token;
+    final token = getToken(context);
     setState(() {
       loginOrLogoutBtn = token == null || token == ''
           ? Image.asset(kakaoLogin)
@@ -60,6 +58,7 @@ class _SettingsState extends State<Settings> {
     return true;
   }
 
+  //* 문의하기
   void sendEmail() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
@@ -94,15 +93,29 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  //* 로그인/로그아웃
   FutureBool loginOrLogout() async {
     try {
-      final token = context.read<UserInfoProvider>().token;
+      final token = getToken(context);
       if (token == null || token == '') {
         final result = await UserProvider().login();
-        return changeBtn();
+        if (!mounted) return false;
+        changeToken(context,
+            token: result['token'], refresh: result['refresh']);
+        if (result['state'] == 'login') {
+          showModal(context,
+              page: const InputModal(
+                title: '닉네임 설정',
+                buttonText: '확인',
+                isAlert: true,
+                kindOf: 'nickname',
+              ))();
+        }
       } else {
-        return UserProvider().logout();
+        if (!mounted) return false;
+        changeToken(context, token: null, refresh: null);
       }
+      return changeBtn();
     } catch (error) {
       showModal(context, page: errorModal('login'))();
       return false;
@@ -129,11 +142,10 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
-            Flexible(
+            const Flexible(
                 flex: 1,
                 child: CustomText(
-                  title:
-                      '어떤 것을 원하시나요? \n ${context.read<UserInfoProvider>().token}',
+                  title: '어떤 것을 원하시나요?',
                   fontSize: FontSize.largeSize,
                   color: CustomColors.mainColor,
                   font: kimm,

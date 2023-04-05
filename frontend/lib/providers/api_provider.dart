@@ -29,10 +29,6 @@ class ApiProvider extends UserInfoProvider {
       final response = await dioWithRefresh(method).request(url, data: data);
       switch (response.statusCode) {
         case 200:
-          final headers = response.headers;
-          setStoreToken(headers['Authorization'].first);
-          setStoreRefresh(headers['Authorization'].first);
-          notifyListeners();
           return true;
         default:
           throw Error();
@@ -61,7 +57,6 @@ class ApiProvider extends UserInfoProvider {
         response.data.forEach((element) {
           list.add(model.fromJson(element));
         });
-        notifyListeners();
         return list;
       }
       throw Error();
@@ -95,7 +90,6 @@ class ApiProvider extends UserInfoProvider {
               data: data,
             );
             _createApi(url, data: data);
-            notifyListeners();
             return false;
           default:
             throw Error();
