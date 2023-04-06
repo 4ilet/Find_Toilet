@@ -65,6 +65,10 @@ public class FolderService {
     public void updateFolderName(long folderId, FolderDto.UpdateFolderDto update){
         LOGGER.info("CALL UPDATE FOLDER NAME");
         Folder folder = folderRepository.findById(folderId).orElse(null);
+        if (update.getFolderName().length() > 10){
+            throw new IllegalArgumentException("폴더명은 10자 이내로 정해주세요");
+        }
+
         folder.setFolderName(update.getFolderName());
         folderRepository.save(folder);
     }
@@ -80,6 +84,9 @@ public class FolderService {
             if (EachFolderName.equals(DtoName)) {
                 throw new DuplicationNameException("중복된 즐겨찾기 이름입니다.");
             }
+        }
+        if (newFolderDto.getFolderName().length() > 10){
+            throw new IllegalArgumentException("폴더명은 10자 이내로 정해주세요");
         }
         if (folderList.size() > 10) {
             throw new LimitException("즐겨찾기는 10개 이상 생성하지 못합니다.");
