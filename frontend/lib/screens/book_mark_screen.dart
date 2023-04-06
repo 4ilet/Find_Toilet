@@ -1,5 +1,7 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -26,23 +28,37 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: mainColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomText(
-                title:
-                    '${context.read<UserInfoProvider>().nickname}님의 즐겨 찾기 폴더',
-                fontSize: FontSize.largeSize,
-                color: CustomColors.whiteColor,
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomIconButton(
+                      icon: exitIcon,
+                      color: CustomColors.whiteColor,
+                      onPressed: routerPop(context),
+                      iconSize: 50,
+                    ),
+                    CustomText(
+                      title:
+                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더',
+                      fontSize: FontSize.largeSize,
+                      color: CustomColors.whiteColor,
+                      font: kimm,
+                    ),
+                  ],
+                ),
               ),
               FutureBuilder(
-                future: FolderProvider()
-                    .getFolderList(context.read<UserInfoProvider>().token!),
+                future: FolderProvider().getFolderList(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Flexible(child: folderListView(snapshot));
@@ -50,7 +66,6 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
                   return const Center(child: CircularProgressIndicator());
                 },
               ),
-              const ExitPage()
             ],
           ),
         ),

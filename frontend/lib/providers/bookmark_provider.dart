@@ -5,20 +5,11 @@ import 'package:find_toilet/utilities/type_enum.dart';
 
 //* folder CRUD
 class FolderProvider extends ApiProvider {
-  //* url
-  static const _bookmarkUrl = '/like';
-  static const _folderListUrl = '$_bookmarkUrl/folder';
-  static const _createFolderUrl = '$_bookmarkUrl/create/folder';
-  static String _updateFolderUrl(int folderId) =>
-      '$_bookmarkUrl/update/folder/$folderId';
-  static String _deleteFolderUrl(int folderId) =>
-      '$_bookmarkUrl/delete/folder/$folderId';
-
   //* 폴더 목록
-  Future<FolderList> getFolderList(String token) async {
+  Future<FolderList> getFolderList() async {
     try {
       //*
-      final response = await dioWithToken().get(_folderListUrl);
+      final response = await dioWithToken().get(folderListUrl);
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -40,30 +31,17 @@ class FolderProvider extends ApiProvider {
   }
 
   //* 폴더 생성
-  FutureVoid createNewFolder(
-    StringMap folderData,
-  ) async {
-    createApi(
-      _createFolderUrl,
-      data: folderData,
-    );
-  }
+  FutureBool createNewFolder(StringMap folderData) async =>
+      await createApi(createFolderUrl, data: folderData);
 
   //* 폴더 수정
-  FutureVoid updateFolderName(
-    int folderId, {
-    required StringMap folderData,
-  }) async {
-    updateApi(
-      _updateFolderUrl(folderId),
-      data: folderData,
-    );
-  }
+  FutureVoid updateFolderName(int folderId,
+          {required StringMap folderData}) async =>
+      updateApi(updateFolderUrl(folderId), data: folderData);
 
   //* 리뷰 삭제
-  FutureVoid deleteFolder(int folderId) async {
-    deleteApi(_deleteFolderUrl(folderId));
-  }
+  FutureVoid deleteFolder(int folderId) async =>
+      deleteApi(deleteFolderUrl(folderId));
 }
 
 class BookMarkProvider extends ApiProvider {

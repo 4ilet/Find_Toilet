@@ -1,10 +1,7 @@
 import 'package:find_toilet/providers/api_provider.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:provider/provider.dart';
 
 class UserProvider extends ApiProvider {
   //* url
@@ -17,9 +14,11 @@ class UserProvider extends ApiProvider {
   //* public function
   FutureDynamicMap login() => _login();
   FutureDynamicMap autoLogin() async {
+    print('token: $token');
     try {
       if (token != null && token != '') {
-        return _sendToken(token!);
+        print('sned');
+        return _sendOldToken(token!);
       }
       throw Error();
     } catch (error) {
@@ -29,7 +28,7 @@ class UserProvider extends ApiProvider {
 
   void deleteUser() => _deleteUser();
 
-  void changeName(String newName) => _changeName(newName);
+  FutureDynamicMap changeName(String newName) => _changeName(newName);
 
   //* private function
   StringMap _returnTokens(dynamic response) {
@@ -41,13 +40,29 @@ class UserProvider extends ApiProvider {
     };
   }
 
+  FutureDynamicMap _sendOldToken(String token) async {
+    try {
+      final response = await dioWithToken().get(_userInfoUrl);
+      switch (response.statusCode) {
+        case 200:
+          return {};
+        case 401:
+          final result = await refreshToken(url: _userInfoUrl, method: 'GET');
+          return result;
+        default:
+          throw Error();
+      }
+    } catch (error) {
+      throw Error();
+    }
+  }
+
   FutureDynamicMap _sendToken(String token) async {
     try {
       final response =
           await dioWithToken().post(_loginUrl, data: {'token': token});
       switch (response.statusCode) {
         case 200:
-          print(response);
           return _returnTokens(response);
         case 401:
           final result = await refreshToken(url: _loginUrl, method: 'POST');
@@ -98,26 +113,30 @@ class UserProvider extends ApiProvider {
     }
   }
 
-  void _changeName(String newName) async {
+  FutureDynamicMap _changeName(String newName) async {
     try {
-      final success = await updateApi(
+      final response = await dioWithToken().put(
         _changeNameUrl,
         data: {'nickname': newName},
       );
-      if (success) {
-        setStoreName(newName);
-      } else {}
-    } catch (error) {}
+      switch (response.statusCode) {
+        case 200:
+          return response.data;
+        case 400:
+          return {'message': '이미 존재하는 닉네임입니다.'};
+        case 401:
+          final success = await refreshToken(
+            url: _changeNameUrl,
+            method: 'POST',
+            data: {'nickname': newName},
+          );
+          return _changeName(newName);
+        default:
+          throw Error();
+      }
+    } catch (error) {
+      print(error);
+      throw Error();
+    }
   }
-}
-
-//* 토큰 받아오기
-String? getToken(BuildContext context) =>
-    context.read<UserInfoProvider>().token;
-
-//* 토큰 변경
-void changeToken(BuildContext context, {String? token, String? refresh}) {
-  final userInfo = context.read<UserInfoProvider>();
-  userInfo.setStoreToken(token);
-  userInfo.setStoreRefresh(refresh);
 }

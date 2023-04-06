@@ -1,5 +1,7 @@
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //* 함수
@@ -18,7 +20,11 @@ ReturnVoid routerPop(BuildContext context) {
 //* 모달 띄우기
 ReturnVoid showModal(BuildContext context, {required Widget page}) {
   return () {
-    showDialog(context: context, builder: (context) => page);
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => page,
+    );
   };
 }
 
@@ -49,4 +55,15 @@ void setTheme(Themes theme) async {
 void setRadius(MapRadius radius) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setInt('radiusIdx', convertedRadius(radius));
+}
+
+//* 토큰 받아오기
+String? getToken(BuildContext context) =>
+    context.read<UserInfoProvider>().token;
+
+//* 토큰 변경
+void changeToken(BuildContext context, {String? token, String? refresh}) {
+  final userInfo = context.read<UserInfoProvider>();
+  userInfo.setStoreToken(token);
+  userInfo.setStoreRefresh(refresh);
 }

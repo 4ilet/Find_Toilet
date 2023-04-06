@@ -3,7 +3,20 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class ApiProvider extends UserInfoProvider {
+class UrlClass extends UserInfoProvider {
+  //* bookmark
+  static const _bookmarkUrl = '/like';
+  final folderListUrl = '$_bookmarkUrl/folder';
+  final createFolderUrl = '$_bookmarkUrl/create/folder';
+  String updateFolderUrl(int folderId) =>
+      '$_bookmarkUrl/update/folder/$folderId';
+  String deleteFolderUrl(int folderId) =>
+      '$_bookmarkUrl/delete/folder/$folderId';
+
+  //*
+}
+
+class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
   dioWithToken() => Dio(
@@ -20,7 +33,7 @@ class ApiProvider extends UserInfoProvider {
         ),
       );
   //*
-  FutureBool _refreshToken({
+  FutureDynamicMap _refreshToken({
     required String url,
     required String method,
     dynamic data,
@@ -29,7 +42,11 @@ class ApiProvider extends UserInfoProvider {
       final response = await dioWithRefresh(method).request(url, data: data);
       switch (response.statusCode) {
         case 200:
-          return true;
+          final headers = response.headers;
+          return {
+            'token': headers['Authorization']!.first,
+            'refresh': headers['Authorization-refresh']!.first,
+          };
         default:
           throw Error();
       }
@@ -38,7 +55,7 @@ class ApiProvider extends UserInfoProvider {
     }
   }
 
-  FutureBool refreshToken({
+  FutureDynamicMap refreshToken({
     required String url,
     required String method,
     dynamic data,
@@ -78,7 +95,7 @@ class ApiProvider extends UserInfoProvider {
   FutureBool _createApi(String url, {required DynamicMap data}) async {
     try {
       //* token
-      if (token != null && token != '') {
+      if (token != '') {
         final response = await dioWithToken().post(url, data: data);
         switch (response.statusCode) {
           case 200:
@@ -115,20 +132,19 @@ class ApiProvider extends UserInfoProvider {
   }
 
   //* 수정 전반
-  FutureBool _updateApi(String url, {required DynamicMap data}) async {
+  FutureDynamicMap _updateApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dioWithToken().put(url, data: data);
       switch (response.statusCode) {
         case 200:
-          return true;
+          return response.data;
         case 401:
           final success = await refreshToken(
             url: url,
             method: 'POST',
             data: data,
           );
-          _updateApi(url, data: data);
-          return false;
+          return _updateApi(url, data: data);
         default:
           throw Error();
       }
@@ -137,7 +153,7 @@ class ApiProvider extends UserInfoProvider {
     }
   }
 
-  FutureBool updateApi(String url, {required DynamicMap data}) async {
+  FutureDynamicMap updateApi(String url, {required DynamicMap data}) async {
     return _updateApi(url, data: data);
   }
 

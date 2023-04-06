@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  String? _token, _refresh, _nickname;
+  static String? _token, _refresh, _nickname;
   String? get token => _token;
   String? get refresh => _refresh;
   String? get nickname => _nickname;

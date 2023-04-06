@@ -17,16 +17,17 @@ class Intro extends StatefulWidget {
 
 class _IntroState extends State<Intro> {
   void preparation() async {
-    final userInfo = context.read<UserInfoProvider>();
     try {
-      await userInfo.initVar();
+      await context.read<UserInfoProvider>().initVar();
       final result = await UserProvider().autoLogin();
       if (!mounted) return;
-      changeToken(
-        context,
-        token: result['token'],
-        refresh: result['refresh'],
-      );
+      if (result.isNotEmpty) {
+        changeToken(
+          context,
+          token: result['token'],
+          refresh: result['refresh'],
+        );
+      }
     } catch (error) {
       if (!mounted) return;
       changeToken(

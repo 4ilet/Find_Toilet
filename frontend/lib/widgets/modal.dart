@@ -1,5 +1,6 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -10,6 +11,7 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //* 도움말, 라이선스 모달
@@ -171,15 +173,25 @@ class InputModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? data;
-    void fillFolderData(String value) {
-      data = value;
+    void fillData(String value) {
+      data = value.trim();
     }
 
     void createFolder(BuildContext context) async {
       try {
         if (data != null && data != '') {
-          await FolderProvider().createNewFolder({'folderName': data!});
-        }
+          final result =
+              await FolderProvider().createNewFolder({'folderName': data!});
+          if (!context.mounted) return;
+          routerPop(context)();
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '폴더 생성 성공',
+              content: '성공적으로 폴더가 생성되었습니다.',
+            ),
+          )();
+        } else {}
         // routerPop(context)();
         // routerPush(context, page: const BookMarkFolderList())();
       } catch (error) {
@@ -189,7 +201,56 @@ class InputModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
           ),
-        );
+        )();
+      }
+    }
+
+    void setNickname(String? data) async {
+      try {
+        if (data != null && data != '') {
+          final result = await UserProvider().changeName(data);
+          print('result: $result');
+          if (result['success'] != null) {
+            context.read<UserInfoProvider>().setStoreName(result['success']);
+            if (!context.mounted) return;
+            routerPop(context)();
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '닉네임 적용 성공',
+                content: '닉네임이 적용되었습니다.',
+              ),
+            )();
+            return;
+          } else {
+            if (!context.mounted) return;
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '닉네임 중복',
+                content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
+              ),
+            )();
+            return;
+          }
+        }
+        if (!context.mounted) return;
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '올바르지 않은 닉네임',
+            content: '닉네임을 바르게 입력해주세요.',
+          ),
+        )();
+      } catch (error) {
+        print(error);
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '오류 발생',
+            content: '오류가 발생해\n 닉네임이 변경되지 않았습니다',
+          ),
+        )();
       }
     }
 
@@ -198,13 +259,13 @@ class InputModal extends StatelessWidget {
       buttonText: buttonText,
       onPressed: kindOf == 'folder'
           ? () => createFolder(context)
-          : () => UserProvider().changeName(data!),
+          : () => setNickname(data),
       isAlert: isAlert,
       children: [
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(onChanged: fillFolderData),
+          child: TextField(onChanged: fillData),
         )),
       ],
     );

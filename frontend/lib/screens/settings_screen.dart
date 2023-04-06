@@ -102,7 +102,7 @@ class _SettingsState extends State<Settings> {
         if (!mounted) return false;
         changeToken(context,
             token: result['token'], refresh: result['refresh']);
-        if (result['state'] == 'login') {
+        if (result['state'] != 'login') {
           showModal(context,
               page: const InputModal(
                 title: '닉네임 설정',
@@ -125,6 +125,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
         child: Column(
