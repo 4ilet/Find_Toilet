@@ -103,7 +103,7 @@ public class FolderController {
 
         } catch (IllegalArgumentException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("잘못된 요청입니다.");
+            message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
     }
@@ -140,7 +140,12 @@ public class FolderController {
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
 
-        } catch (Exception e){
+        } catch (IllegalArgumentException e) {
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e){
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러 발생");
             return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
