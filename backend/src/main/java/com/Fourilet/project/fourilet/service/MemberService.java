@@ -11,6 +11,7 @@ import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.KakaoDto.KakaoProfile;
 import com.Fourilet.project.fourilet.dto.KakaoDto.OauthToken;
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
+import com.Fourilet.project.fourilet.exception.LimitException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -161,12 +162,15 @@ public class MemberService {
 
     public Member updateNickname(long memberId, String nickname){
         Member member = memberRepository.findByNickname(nickname).orElse(null);
+        if(nickname.length() > 10){
+            throw new IllegalArgumentException("닉네임이 10자를 초과했습니다.");
+        }
         if(member == null) {
             member = memberRepository.findById(memberId);
             member.setNickname(nickname);
             return memberRepository.save(member);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("중복된 닉네임입니다.");
         }
     }
 

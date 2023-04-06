@@ -92,7 +92,12 @@ public class MemberController {
             return ResponseEntity.ok().headers(headers).body(result);
         }catch (IllegalArgumentException e){
             message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("이미 존재하는 닉네임입니다.");
+            if(e.getMessage() == "중복된 닉네임입니다."){
+                message.setMessage("이미 존재하는 닉네임입니다.");
+            }
+            else if(e.getMessage() == "닉네임이 10자를 초과했습니다.") {
+                message.setMessage("닉네임이 10자를 초과했습니다.");
+            }
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
     }
