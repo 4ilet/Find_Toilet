@@ -50,7 +50,6 @@ class ReviewProvider extends ApiProvider {
   }
 
   //* 리뷰 삭제
-  FutureVoid deleteReview(int reviewId) async {
-    deleteApi(_deleteReviewUrl(reviewId));
-  }
+  FutureBool deleteReview(int reviewId) async =>
+      deleteApi(_deleteReviewUrl(reviewId));
 }

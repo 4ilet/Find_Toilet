@@ -1,8 +1,4 @@
-import 'package:find_toilet/providers/api_provider.dart';
-import 'package:find_toilet/providers/bookmark_provider.dart';
-import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/state_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,11 +19,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
-        ChangeNotifierProvider(create: (context) => ApiProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => ReviewProvider()),
-        ChangeNotifierProvider(create: (context) => FolderProvider()),
-        ChangeNotifierProvider(create: (context) => BookMarkProvider()),
+        ChangeNotifierProvider(create: (context) => ApplyChangeProvider()),
       ],
       child: MaterialApp(
         title: 'Find Toilet',

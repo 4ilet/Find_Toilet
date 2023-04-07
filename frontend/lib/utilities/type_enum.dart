@@ -43,6 +43,8 @@ enum CustomColors {
 
 enum MapRadius { three, five, seven }
 
+enum Space { empty, one }
+
 //* enum to Color, double, int, ...
 Color convertedColor(CustomColors color) {
   switch (color) {
@@ -92,4 +94,8 @@ int convertedRadius(MapRadius radius) {
     default:
       return 2;
   }
+}
+
+String convertedSpace(Space space) {
+  return space == Space.empty ? '' : ' ';
 }

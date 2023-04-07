@@ -60,3 +60,18 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return userInfo;
   }
 }
+
+class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  static Space _bookmarkRefresh = Space.empty;
+  static String _convertedVar = '';
+  get bookmarkRefresh => _convertedVar;
+  void refreshPage() {
+    _changeRefresh();
+    _spaceToString();
+    notifyListeners();
+  }
+
+  void _changeRefresh() => _bookmarkRefresh =
+      _bookmarkRefresh == Space.empty ? Space.one : Space.empty;
+  void _spaceToString() => _convertedVar = convertedSpace(_bookmarkRefresh);
+}

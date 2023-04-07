@@ -20,9 +20,12 @@ class BookMarkFolderList extends StatefulWidget {
 }
 
 class _BookMarkFolderListState extends State<BookMarkFolderList> {
+  // late bool needRefesh;
+
   @override
   void initState() {
     super.initState();
+    // needRefesh = context.read<ApplyChangeProvider>().bookmarkRefresh;
   }
 
   @override
@@ -49,7 +52,7 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
                     ),
                     CustomText(
                       title:
-                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더',
+                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${context.watch<ApplyChangeProvider>().bookmarkRefresh.trim()}',
                       fontSize: FontSize.largeSize,
                       color: CustomColors.whiteColor,
                       font: kimm,
@@ -83,7 +86,9 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (int di = 0; di < 2; di += 1)
-            FolderBox(folderInfo: snapshot.data![2 * index + di]),
+            FolderBox(
+              folderInfo: snapshot.data![2 * index + di],
+            ),
         ],
       );
     }
@@ -92,12 +97,14 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween;
       late final WidgetList children;
       if (length >= 10) {
-        if (index > 5) {
+        if (index >= 5) {
           return const SizedBox();
         }
         children = [
           for (int di = 0; di < 2; di += 1)
-            FolderBox(folderInfo: snapshot.data![2 * index + di]),
+            FolderBox(
+              folderInfo: snapshot.data![2 * index + di],
+            ),
         ];
       } else if (remain == 0) {
         mainAxisAlignment = MainAxisAlignment.start;

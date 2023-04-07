@@ -626,3 +626,58 @@ class ReviewBox extends StatelessWidget {
     );
   }
 }
+
+//* 성공 시 알림
+class SuccessBox extends StatefulWidget {
+  final String feature, page;
+  const SuccessBox({
+    super.key,
+    required this.feature,
+    required this.page,
+  });
+
+  @override
+  State<SuccessBox> createState() => _SuccessBoxState();
+}
+
+class _SuccessBoxState extends State<SuccessBox> {
+  bool isShown = true;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        routerPop(context)();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isShown
+        ? CustomBox(
+            color: whiteColor,
+            child: CustomText(
+                title: '성공적으로 ${widget.page}가 ${widget.feature}되었습니다'))
+        : const SizedBox();
+  }
+}
+
+//* 실패 시 알림
+class FailBox extends StatelessWidget {
+  final String feature, page;
+  final String? message;
+  const FailBox({
+    super.key,
+    required this.feature,
+    required this.page,
+    this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomBox(
+        child:
+            CustomText(title: message ?? '오류가 발생해 $page $feature 처리되지 않았습니다'));
+  }
+}

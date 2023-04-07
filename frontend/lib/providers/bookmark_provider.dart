@@ -18,6 +18,11 @@ class FolderProvider extends ApiProvider {
           }).toList();
           return folderList;
         case 401:
+          final success = await refreshToken(
+            url: folderListUrl,
+            method: 'GET',
+          );
+          getFolderList();
           break;
         default:
           throw Error();
@@ -40,7 +45,7 @@ class FolderProvider extends ApiProvider {
       updateApi(updateFolderUrl(folderId), data: folderData);
 
   //* 리뷰 삭제
-  FutureVoid deleteFolder(int folderId) async =>
+  FutureBool deleteFolder(int folderId) async =>
       deleteApi(deleteFolderUrl(folderId));
 }
 
@@ -88,15 +93,9 @@ class BookMarkProvider extends ApiProvider {
   }
 
   //* 즐겨찾기 삭제
-  FutureVoid deleteBookMark({
+  FutureBool deleteBookMark({
     required int folderId,
     required int toiletId,
-  }) async {
-    deleteApi(
-      _deleteToiletUrl(
-        folderId: folderId,
-        toiletId: toiletId,
-      ),
-    );
-  }
+  }) async =>
+      deleteApi(_deleteToiletUrl(folderId: folderId, toiletId: toiletId));
 }

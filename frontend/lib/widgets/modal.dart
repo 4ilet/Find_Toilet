@@ -400,7 +400,9 @@ class CustomModalWithClose extends StatelessWidget {
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
-  const DeleteModal({super.key, required this.deleteMode, required this.id});
+  final int? folderId;
+  const DeleteModal(
+      {super.key, required this.deleteMode, required this.id, this.folderId});
 
   @override
   Widget build(BuildContext context) {
@@ -424,16 +426,22 @@ class DeleteModal extends StatelessWidget {
 
     void onPressed() async {
       try {
+        late bool response;
         switch (deleteMode) {
           case 0:
-            await ReviewProvider().deleteReview(id);
+            response = await ReviewProvider().deleteReview(id);
             break;
           case 1:
-            await FolderProvider().deleteFolder(id);
+            response = await FolderProvider().deleteFolder(id);
             break;
           default:
+            response = await BookMarkProvider()
+                .deleteBookMark(folderId: id, toiletId: id);
             break;
         }
+        if (!context.mounted) return;
+        routerPop(context)();
+        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'))();
       } catch (error) {
         showModal(
           context,
@@ -441,7 +449,7 @@ class DeleteModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n$target 삭제에 실패했습니다.',
           ),
-        );
+        )();
       }
     }
 
@@ -613,7 +621,10 @@ class AlertModal extends StatelessWidget {
     return CustomModal(
       title: title,
       isAlert: true,
-      onPressed: onPressed,
+      onPressed: () {
+        context.read<ApplyChangeProvider>().refreshPage();
+        routerPop(context)();
+      },
       children: [
         CustomText(
           title: content,
