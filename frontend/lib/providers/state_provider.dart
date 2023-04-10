@@ -1,7 +1,9 @@
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+//* user info
 class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static String? _token, _refresh, _nickname;
   String? get token => _token;
@@ -61,6 +63,7 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 }
 
+//* refresh
 class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static Space _bookmarkRefresh = Space.empty;
   static String _convertedVar = '';
@@ -74,4 +77,68 @@ class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void _changeRefresh() => _bookmarkRefresh =
       _bookmarkRefresh == Space.empty ? Space.one : Space.empty;
   void _spaceToString() => _convertedVar = convertedSpace(_bookmarkRefresh);
+}
+
+//* setttings
+class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  static bool? _hasLargeFont, _showMagnify;
+  static MapRadius? _radius;
+  get hasLargeFont => _hasLargeFont;
+  get radius => _radius;
+  get showMagnify => _showMagnify;
+  void initTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _hasLargeFont = prefs.getBool('hasLargeFont');
+    final radiusIdx = prefs.getInt('radiusIdx');
+    _radius = radiusIdx != null ? toMapRadius(radiusIdx) : null;
+    _showMagnify = prefs.getBool('showMagnify');
+  }
+
+//* public
+  void applyHasLargeFont(bool newValue) {
+    _setHasLargeFont(newValue);
+    _applyHasLargeFont(newValue);
+  }
+
+  void applyRadius(MapRadius radius) {
+    _setRadius(radius);
+    _applyRadius(radius);
+  }
+
+  void applyShowMagnify(bool newValue) {
+    _setShowMagnify(newValue);
+    _applyShowMagnify(newValue);
+  }
+
+//* private
+
+  void _setHasLargeFont(bool newValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasLargeFont', newValue);
+  }
+
+  void _applyHasLargeFont(bool newValue) {
+    _hasLargeFont = newValue;
+    notifyListeners();
+  }
+
+  void _setRadius(MapRadius radius) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('radiusIdx', convertedRadius(radius));
+  }
+
+  void _applyRadius(MapRadius newValue) {
+    _radius = newValue;
+    notifyListeners();
+  }
+
+  void _setShowMagnify(bool newValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('applyShowMagnify', newValue);
+  }
+
+  void _applyShowMagnify(bool newValue) {
+    _hasLargeFont = newValue;
+    notifyListeners();
+  }
 }

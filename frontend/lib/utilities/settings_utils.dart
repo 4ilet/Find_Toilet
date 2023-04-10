@@ -46,15 +46,6 @@ const privatePolicy = '서비스 제공자(포일렛)은 사용자의 개인 정
 const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
 const license = '글꼴\n위치 정보';
 
-//* 첫 방문 여부
-var isFirstVisit = true;
-//* access token
-var accessToken = '';
-//* 테마
-var theme = Themes.defaultFont;
-//* 지도 반경
-var mapRadius = MapRadius.three;
-
 //* 문의하기 내부 내용
 String body({
   required String release,

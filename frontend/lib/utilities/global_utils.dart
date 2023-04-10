@@ -2,7 +2,6 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //* 함수
 
@@ -36,27 +35,6 @@ void initWidthHeight(BuildContext context) {
   screenHeight = size.height;
 }
 
-//* 앱 데이터 저장
-void setVisited() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('hasVisited', true);
-}
-
-void setToken(String token) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('accessToken', token);
-}
-
-void setTheme(Themes theme) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('themeIdx', convertedTheme(theme));
-}
-
-void setRadius(MapRadius radius) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('radiusIdx', convertedRadius(radius));
-}
-
 //* 토큰 받아오기
 String? getToken(BuildContext context) =>
     context.read<UserInfoProvider>().token;
@@ -66,4 +44,13 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
   final userInfo = context.read<UserInfoProvider>();
   userInfo.setStoreToken(token);
   userInfo.setStoreRefresh(refresh);
+}
+
+//* 현재 글자 크기
+void getFontSize(BuildContext context) {
+  context.read<SettingsProvider>().hasLargeFont;
+}
+
+void changeFontSize(BuildContext context, bool newValue) {
+  context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }

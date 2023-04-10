@@ -1,6 +1,5 @@
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
-import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -16,15 +15,13 @@ class SelectFontTheme extends StatefulWidget {
 }
 
 class _SelectFontThemeState extends State<SelectFontTheme> {
-  Themes selected = Themes.largeFont;
-  bool isLarge = true;
+  bool isLargeSize = true;
 
-  ReturnVoid changeTheme(bool isLargeTheme) {
+  ReturnVoid changeFontSize(bool isLargeTheme) {
     return () {
       setState(() {
-        if (isLarge != isLargeTheme) {
-          selected = isLargeTheme ? Themes.largeFont : Themes.defaultFont;
-          isLarge = !isLarge;
+        if (isLargeSize != isLargeTheme) {
+          isLargeSize = isLargeTheme;
         }
       });
     };
@@ -32,8 +29,6 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
 
   void applyTheme() {
     theme = selected;
-    isFirstVisit = false;
-    setVisited();
     routerPush(context, page: const Main())();
   }
 
@@ -59,12 +54,12 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
             children: [
               ThemeBox(
                 text: '큰 글씨',
-                selected: isLarge,
+                selected: isLargeSize,
                 onTap: changeTheme(true),
               ),
               ThemeBox(
                 text: '기본',
-                selected: !isLarge,
+                selected: !isLargeSize,
                 onTap: changeTheme(false),
               ),
             ],

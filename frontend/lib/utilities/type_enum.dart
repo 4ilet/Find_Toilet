@@ -28,7 +28,6 @@ typedef FolderList = List<FolderModel>;
 typedef ToiletList = List<ToiletModel>;
 
 //* enums
-enum Themes { largeFont, defaultFont }
 
 enum FontSize { titleSize, largeSize, defaultSize, smallSize }
 
@@ -76,15 +75,6 @@ double convertedSize(FontSize size) {
   }
 }
 
-int convertedTheme(Themes theme) {
-  switch (theme) {
-    case Themes.largeFont:
-      return 1;
-    default:
-      return 0;
-  }
-}
-
 int convertedRadius(MapRadius radius) {
   switch (radius) {
     case MapRadius.three:
@@ -96,6 +86,15 @@ int convertedRadius(MapRadius radius) {
   }
 }
 
-String convertedSpace(Space space) {
-  return space == Space.empty ? '' : ' ';
+MapRadius toMapRadius(int index) {
+  switch (index) {
+    case 0:
+      return MapRadius.three;
+    case 1:
+      return MapRadius.five;
+    default:
+      return MapRadius.seven;
+  }
 }
+
+String convertedSpace(Space space) => space == Space.empty ? '' : ' ';
