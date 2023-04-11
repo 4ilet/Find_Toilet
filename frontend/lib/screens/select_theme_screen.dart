@@ -28,7 +28,7 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
   }
 
   void applyTheme() {
-    theme = selected;
+    applyFontSize(context, isLargeSize);
     routerPush(context, page: const Main())();
   }
 
@@ -44,10 +44,12 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
             title: '어서오세요',
             fontSize: FontSize.titleSize,
             color: CustomColors.whiteColor,
+            font: kimm,
           )),
           const CustomText(
             title: '사용하실 테마를 선택해주세요.',
             color: CustomColors.whiteColor,
+            font: kimm,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,12 +57,12 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
               ThemeBox(
                 text: '큰 글씨',
                 selected: isLargeSize,
-                onTap: changeTheme(true),
+                onTap: changeFontSize(true),
               ),
               ThemeBox(
                 text: '기본',
                 selected: !isLargeSize,
-                onTap: changeTheme(false),
+                onTap: changeFontSize(false),
               ),
             ],
           ),

@@ -86,18 +86,21 @@ class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   get hasLargeFont => _hasLargeFont;
   get radius => _radius;
   get showMagnify => _showMagnify;
-  void initTheme() async {
+
+  Future<bool> initSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _hasLargeFont = prefs.getBool('hasLargeFont');
     final radiusIdx = prefs.getInt('radiusIdx');
     _radius = radiusIdx != null ? toMapRadius(radiusIdx) : null;
     _showMagnify = prefs.getBool('showMagnify');
+    return true;
   }
 
 //* public
   void applyHasLargeFont(bool newValue) {
     _setHasLargeFont(newValue);
     _applyHasLargeFont(newValue);
+    print('result: $_hasLargeFont');
   }
 
   void applyRadius(MapRadius radius) {

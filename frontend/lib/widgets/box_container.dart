@@ -360,78 +360,78 @@ class _ListItemState extends State<ListItem> {
     );
   }
 
-  Row toiletTopInfo(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          flex: 7,
-          child: CustomText(
-            color: CustomColors.mainColor,
-            title: widget.toiletName,
-            fontSize: FontSize.defaultSize,
-          ),
-        ),
-        Flexible(
-          flex: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomIconButton(
-                onPressed: showModal(
-                  context,
-                  page: const AddToBookMarkModal(),
-                ),
-                icon: liked ? heartIcon : emptyHeartIcon,
-                color: CustomColors.redColor,
-              ),
-              CustomIconButton(
-                onPressed: showModal(
-                  context,
-                  page: NavigationModal(
-                    startPoint: const [37.537229, 127.005515],
-                    endPoint: const [37.4979502, 127.0276368],
-                    destination: widget.toiletName,
-                  ),
-                ),
-                icon: planeIcon,
-                color: CustomColors.lightBlueColor,
-                iconSize: 35,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Row toiletTopInfo(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Flexible(
+  //         flex: 7,
+  //         child: CustomText(
+  //           color: CustomColors.mainColor,
+  //           title: widget.toiletName,
+  //           fontSize: FontSize.defaultSize,
+  //         ),
+  //       ),
+  //       Flexible(
+  //         flex: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             CustomIconButton(
+  //               onPressed: showModal(
+  //                 context,
+  //                 page: const AddToBookMarkModal(),
+  //               ),
+  //               icon: liked ? heartIcon : emptyHeartIcon,
+  //               color: CustomColors.redColor,
+  //             ),
+  //             CustomIconButton(
+  //               onPressed: showModal(
+  //                 context,
+  //                 page: NavigationModal(
+  //                   startPoint: const [37.537229, 127.005515],
+  //                   endPoint: const [37.4979502, 127.0276368],
+  //                   destination: widget.toiletName,
+  //                 ),
+  //               ),
+  //               icon: planeIcon,
+  //               color: CustomColors.lightBlueColor,
+  //               iconSize: 35,
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Row toiletInfo(int i) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          flex: 7,
-          child: TextWithIcon(
-            icon: iconList[2 * i],
-            text: infoList[2 * i],
-          ),
-        ),
-        Flexible(
-          flex: 4,
-          child: i == 0
-              ? TextWithIcon(
-                  icon: iconList[2 * i + 1],
-                  text: infoList[2 * i + 1],
-                )
-              : TextWithIcon(
-                  icon: iconList[2 * i + 1],
-                  text: infoList[2 * i + 1],
-                  iconColor: CustomColors.yellowColor,
-                ),
-        )
-      ],
-    );
-  }
+  // Row toiletInfo(int i) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Flexible(
+  //         flex: 7,
+  //         child: TextWithIcon(
+  //           icon: iconList[2 * i],
+  //           text: infoList[2 * i],
+  //         ),
+  //       ),
+  //       Flexible(
+  //         flex: 4,
+  //         child: i == 0
+  //             ? TextWithIcon(
+  //                 icon: iconList[2 * i + 1],
+  //                 text: infoList[2 * i + 1],
+  //               )
+  //             : TextWithIcon(
+  //                 icon: iconList[2 * i + 1],
+  //                 text: infoList[2 * i + 1],
+  //                 iconColor: CustomColors.yellowColor,
+  //               ),
+  //       )
+  //     ],
+  //   );
+  // }
 }
 
 //* filter 상자, 화살표

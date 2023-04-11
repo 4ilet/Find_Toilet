@@ -47,10 +47,9 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
 }
 
 //* 현재 글자 크기
-void getFontSize(BuildContext context) {
-  context.read<SettingsProvider>().hasLargeFont;
-}
+bool? getFontSize(BuildContext context) =>
+    context.read<SettingsProvider>().hasLargeFont;
 
-void changeFontSize(BuildContext context, bool newValue) {
+void applyFontSize(BuildContext context, bool newValue) {
   context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }
