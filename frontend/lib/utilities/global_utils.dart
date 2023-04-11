@@ -1,7 +1,7 @@
-import 'package:find_toilet/utilities/settings_utils.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 //* 함수
 
@@ -19,7 +19,11 @@ ReturnVoid routerPop(BuildContext context) {
 //* 모달 띄우기
 ReturnVoid showModal(BuildContext context, {required Widget page}) {
   return () {
-    showDialog(context: context, builder: (context) => page);
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => page,
+    );
   };
 }
 
@@ -31,44 +35,22 @@ void initWidthHeight(BuildContext context) {
   screenHeight = size.height;
 }
 
-//* 앱 데이터 저장
-void setVisited() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('hasVisited', true);
+//* 토큰 받아오기
+String? getToken(BuildContext context) =>
+    context.read<UserInfoProvider>().token;
+
+//* 토큰 변경
+void changeToken(BuildContext context, {String? token, String? refresh}) {
+  final userInfo = context.read<UserInfoProvider>();
+  userInfo.setStoreToken(token);
+  userInfo.setStoreRefresh(refresh);
 }
 
-void setToken(String token) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('accessToken', token);
+//* 현재 글자 크기
+void getFontSize(BuildContext context) {
+  context.read<SettingsProvider>().hasLargeFont;
 }
 
-void setTheme(Themes theme) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('themeIdx', convertedTheme(theme));
-}
-
-void setRadius(MapRadius radius) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('radiusIdx', convertedRadius(radius));
-}
-
-//* 앱 데이터 가져오기/초기화
-void initData() async {
-  final prefs = await SharedPreferences.getInstance();
-  final hasVisited = prefs.getBool('hasVisited');
-  final loggedIn = prefs.getString('accessToken');
-  final themeIdx = prefs.getInt('themeIdx');
-  final radiusIdx = prefs.getInt('radiusIdx');
-  if (hasVisited != null) {
-    isFirstVisit = false;
-  }
-  if (loggedIn != null) {
-    accessToken = loggedIn;
-  }
-  if (themeIdx != null) {
-    // theme = ;
-  }
-  if (radiusIdx != null) {
-    // mapRadius =
-  }
+void changeFontSize(BuildContext context, bool newValue) {
+  context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }

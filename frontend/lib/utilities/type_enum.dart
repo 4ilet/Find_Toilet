@@ -21,13 +21,13 @@ typedef StringMap = Map<String, String>;
 typedef FutureList = Future<List>;
 typedef FutureVoid = Future<void>;
 typedef FutureBool = Future<bool>;
+typedef FutureDynamicMap = Future<DynamicMap>;
 
 typedef ReviewList = List<ReviewModel>;
 typedef FolderList = List<FolderModel>;
 typedef ToiletList = List<ToiletModel>;
 
 //* enums
-enum Themes { largeFont, defaultFont }
 
 enum FontSize { titleSize, largeSize, defaultSize, smallSize }
 
@@ -41,6 +41,8 @@ enum CustomColors {
 }
 
 enum MapRadius { three, five, seven }
+
+enum Space { empty, one }
 
 //* enum to Color, double, int, ...
 Color convertedColor(CustomColors color) {
@@ -73,15 +75,6 @@ double convertedSize(FontSize size) {
   }
 }
 
-int convertedTheme(Themes theme) {
-  switch (theme) {
-    case Themes.largeFont:
-      return 1;
-    default:
-      return 0;
-  }
-}
-
 int convertedRadius(MapRadius radius) {
   switch (radius) {
     case MapRadius.three:
@@ -92,3 +85,16 @@ int convertedRadius(MapRadius radius) {
       return 2;
   }
 }
+
+MapRadius toMapRadius(int index) {
+  switch (index) {
+    case 0:
+      return MapRadius.three;
+    case 1:
+      return MapRadius.five;
+    default:
+      return MapRadius.seven;
+  }
+}
+
+String convertedSpace(Space space) => space == Space.empty ? '' : ' ';

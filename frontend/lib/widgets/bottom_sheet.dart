@@ -44,7 +44,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     super.initState();
     selectedValue = sortOrder.first;
     if (widget.showReview) {
-      reviewList = ReviewProvider.getReviewList(1);
+      reviewList = ReviewProvider().getReviewList(1);
     }
   }
 

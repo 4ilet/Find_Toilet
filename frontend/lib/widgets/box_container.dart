@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/bookmark_model.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -108,7 +109,8 @@ class FolderBox extends StatelessWidget {
                         page: const InputModal(
                           title: '즐겨 찾기 폴더명 수정',
                           buttonText: '수정',
-                          // onPressed: editFolder,
+                          isAlert: false,
+                          kindOf: 'folder',
                         ),
                       ),
                       iconSize: 25,
@@ -165,6 +167,8 @@ class _AddBoxState extends State<AddBox> {
         builder: (context) => const InputModal(
           title: '즐겨 찾기 폴더 생성',
           buttonText: '만들기',
+          isAlert: true,
+          kindOf: 'folder',
           // onPressed: widget.createFolder,
         ),
       ),
@@ -216,6 +220,19 @@ class _ListItemState extends State<ListItem> {
     setState(() {
       liked = !liked;
     });
+  }
+
+  void addIntoBookmark() async {
+    final token = UserProvider().token;
+    if (token == null || token == '') {
+      routerPush(context,
+          page: ReviewForm(
+            toiletName: widget.toiletName,
+            toiletId: widget.toiletId,
+          ))();
+    } else {
+      showModal(context, page: const LoginConfirmModal())();
+    }
   }
 
   @override
@@ -331,11 +348,7 @@ class _ListItemState extends State<ListItem> {
                     ),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: routerPush(context,
-                        page: ReviewForm(
-                          toiletName: widget.toiletName,
-                          toiletId: widget.toiletId,
-                        )),
+                    onPressed: addIntoBookmark,
                     buttonText: '리뷰 남기기',
                   )
                 ],
@@ -611,5 +624,60 @@ class ReviewBox extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+//* 성공 시 알림
+class SuccessBox extends StatefulWidget {
+  final String feature, page;
+  const SuccessBox({
+    super.key,
+    required this.feature,
+    required this.page,
+  });
+
+  @override
+  State<SuccessBox> createState() => _SuccessBoxState();
+}
+
+class _SuccessBoxState extends State<SuccessBox> {
+  bool isShown = true;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        routerPop(context)();
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isShown
+        ? CustomBox(
+            color: whiteColor,
+            child: CustomText(
+                title: '성공적으로 ${widget.page}가 ${widget.feature}되었습니다'))
+        : const SizedBox();
+  }
+}
+
+//* 실패 시 알림
+class FailBox extends StatelessWidget {
+  final String feature, page;
+  final String? message;
+  const FailBox({
+    super.key,
+    required this.feature,
+    required this.page,
+    this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomBox(
+        child:
+            CustomText(title: message ?? '오류가 발생해 $page $feature 처리되지 않았습니다'));
   }
 }

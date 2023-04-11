@@ -1,5 +1,7 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
@@ -9,6 +11,7 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //* 도움말, 라이선스 모달
@@ -157,24 +160,38 @@ class PolicyContent extends StatelessWidget {
 //* 입력창 존재 모달
 class InputModal extends StatelessWidget {
   final String title, buttonText;
-  // final ReturnVoid onPressed;
+  final bool isAlert;
+  final String kindOf;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
-    // required this.onPressed,
+    required this.isAlert,
+    required this.kindOf,
   });
 
   @override
   Widget build(BuildContext context) {
-    StringMap folderData = {'folderName': ''};
-    void fillFolderData(String value) {
-      folderData['folderName'] = value;
+    String? data;
+    void fillData(String value) {
+      data = value.trim();
     }
 
     void createFolder(BuildContext context) async {
       try {
-        await FolderProvider.createNewFolder(folderData);
+        if (data != null && data != '') {
+          final result =
+              await FolderProvider().createNewFolder({'folderName': data!});
+          if (!context.mounted) return;
+          routerPop(context)();
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '폴더 생성 성공',
+              content: '성공적으로 폴더가 생성되었습니다.',
+            ),
+          )();
+        } else {}
         // routerPop(context)();
         // routerPush(context, page: const BookMarkFolderList())();
       } catch (error) {
@@ -184,19 +201,71 @@ class InputModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
           ),
-        );
+        )();
+      }
+    }
+
+    void setNickname(String? data) async {
+      try {
+        if (data != null && data != '') {
+          final result = await UserProvider().changeName(data);
+          print('result: $result');
+          if (result['success'] != null) {
+            context.read<UserInfoProvider>().setStoreName(result['success']);
+            if (!context.mounted) return;
+            routerPop(context)();
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '닉네임 적용 성공',
+                content: '닉네임이 적용되었습니다.',
+              ),
+            )();
+            return;
+          } else {
+            if (!context.mounted) return;
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '닉네임 중복',
+                content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
+              ),
+            )();
+            return;
+          }
+        }
+        if (!context.mounted) return;
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '올바르지 않은 닉네임',
+            content: '닉네임을 바르게 입력해주세요.',
+          ),
+        )();
+      } catch (error) {
+        print(error);
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '오류 발생',
+            content: '오류가 발생해\n 닉네임이 변경되지 않았습니다',
+          ),
+        )();
       }
     }
 
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: () => createFolder(context),
+      onPressed: kindOf == 'folder'
+          ? () => createFolder(context)
+          : () => setNickname(data),
+      isAlert: isAlert,
       children: [
         Expanded(
             child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(onChanged: fillFolderData),
+          child: TextField(onChanged: fillData),
         )),
       ],
     );
@@ -331,7 +400,9 @@ class CustomModalWithClose extends StatelessWidget {
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
-  const DeleteModal({super.key, required this.deleteMode, required this.id});
+  final int? folderId;
+  const DeleteModal(
+      {super.key, required this.deleteMode, required this.id, this.folderId});
 
   @override
   Widget build(BuildContext context) {
@@ -355,16 +426,22 @@ class DeleteModal extends StatelessWidget {
 
     void onPressed() async {
       try {
+        late bool response;
         switch (deleteMode) {
           case 0:
-            await ReviewProvider.deleteReview(id);
+            response = await ReviewProvider().deleteReview(id);
             break;
           case 1:
-            await FolderProvider.deleteFolder(id);
+            response = await FolderProvider().deleteFolder(id);
             break;
           default:
+            response = await BookMarkProvider()
+                .deleteBookMark(folderId: id, toiletId: id);
             break;
         }
+        if (!context.mounted) return;
+        routerPop(context)();
+        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'))();
       } catch (error) {
         showModal(
           context,
@@ -372,7 +449,7 @@ class DeleteModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n$target 삭제에 실패했습니다.',
           ),
-        );
+        )();
       }
     }
 
@@ -544,13 +621,47 @@ class AlertModal extends StatelessWidget {
     return CustomModal(
       title: title,
       isAlert: true,
-      onPressed: onPressed,
+      onPressed: () {
+        context.read<ApplyChangeProvider>().refreshPage();
+        routerPop(context)();
+      },
       children: [
         CustomText(
           title: content,
           isCentered: true,
         )
       ],
+    );
+  }
+}
+
+//* 로그인 확인 모달
+class LoginConfirmModal extends StatelessWidget {
+  const LoginConfirmModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModal(
+      title: '로그인 확인',
+      children: const [
+        CustomText(
+          title: '로그인하시겠습니까?',
+        )
+      ],
+      onPressed: () => UserProvider().login(),
+    );
+  }
+}
+
+class ErrorModal extends StatelessWidget {
+  final String feature;
+  const ErrorModal({super.key, required this.feature});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertModal(
+      title: '$feature 오류',
+      content: '오류가 발생해 $feature(이)가 처리되지 않았습니다.',
     );
   }
 }

@@ -21,17 +21,15 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String? token;
-  void awaitToken() async {
-    token = await UserProvider().token();
-  }
+  late Widget loginOrLogoutBtn;
 
   @override
   void initState() {
     super.initState();
-    awaitToken();
+    changeBtn();
   }
 
+  //* 옵션 변경
   ReturnVoid changeIndex(int i) {
     return () {
       setState(() {
@@ -44,6 +42,23 @@ class _SettingsState extends State<Settings> {
     };
   }
 
+  //* 버튼 변경
+  bool changeBtn() {
+    final token = getToken(context);
+    setState(() {
+      loginOrLogoutBtn = token == null || token == ''
+          ? Image.asset(kakaoLogin)
+          : const TextWithIcon(
+              icon: logoutIcon,
+              text: '로그아웃',
+              iconColor: CustomColors.blackColor,
+              fontSize: FontSize.defaultSize,
+            );
+    });
+    return true;
+  }
+
+  //* 문의하기
   void sendEmail() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
@@ -78,9 +93,39 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  //* 로그인/로그아웃
+  FutureBool loginOrLogout() async {
+    try {
+      final token = getToken(context);
+      if (token == null || token == '') {
+        final result = await UserProvider().login();
+        if (!mounted) return false;
+        changeToken(context,
+            token: result['token'], refresh: result['refresh']);
+        if (result['state'] != 'login') {
+          showModal(context,
+              page: const InputModal(
+                title: '닉네임 설정',
+                buttonText: '확인',
+                isAlert: true,
+                kindOf: 'nickname',
+              ))();
+        }
+      } else {
+        if (!mounted) return false;
+        changeToken(context, token: null, refresh: null);
+      }
+      return changeBtn();
+    } catch (error) {
+      showModal(context, page: errorModal('login'))();
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
         child: Column(
@@ -92,21 +137,20 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: () => UserProvider().loginOrLogout(),
-                    child: loginOrLogout(),
+                    onTap: () => loginOrLogout(),
+                    child: loginOrLogoutBtn,
                   ),
                 ],
               ),
             ),
             const Flexible(
-              flex: 1,
-              child: CustomText(
-                title: '어떤 것을 원하시나요?',
-                fontSize: FontSize.largeSize,
-                color: CustomColors.mainColor,
-                font: kimm,
-              ),
-            ),
+                flex: 1,
+                child: CustomText(
+                  title: '어떤 것을 원하시나요?',
+                  fontSize: FontSize.largeSize,
+                  color: CustomColors.mainColor,
+                  font: kimm,
+                )),
             Flexible(
               flex: 6,
               child: Column(
@@ -146,17 +190,6 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
-  }
-
-  Widget loginOrLogout() {
-    return token == null || token == ''
-        ? Image.asset(kakaoLogin)
-        : const TextWithIcon(
-            icon: logoutIcon,
-            text: '로그아웃',
-            iconColor: CustomColors.blackColor,
-            fontSize: FontSize.defaultSize,
-          );
   }
 
   Widget option(int i) {

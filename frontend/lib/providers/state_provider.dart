@@ -1,52 +1,144 @@
-import 'package:flutter/material.dart';
+import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class StateProvider extends ChangeNotifier {
-  int? _memberId;
-  String? _token, _refresh, _nickname;
+//* user info
+class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  static String? _token, _refresh, _nickname;
+  String? get token => _token;
+  String? get refresh => _refresh;
+  String? get nickname => _nickname;
 
-  String? token() => _token;
-  int? memberId() => _memberId;
-  String? refresh() => _refresh;
-  String? nickname() => _nickname;
-
-  void _setToken(String? newToken) => _token = newToken;
-  void _setRefresh(String? newRefresh) => _refresh = newRefresh;
-  void _setName(String? newName) => _nickname = newName;
-  void _setId(int? newId) => _memberId = newId;
-
-  void initVar() {
-    const storage = FlutterSecureStorage();
-    final dynamic userInfo = storage.read(key: 'userInfo');
-    if (userInfo != null) {
-      _setId(userInfo['memberId']);
-      _setToken(userInfo['token']);
-      _setRefresh(userInfo['refresh']);
-      _setName(userInfo['nickname']);
-    }
+  void debugFillProperites(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('token', token));
+    properties.add(StringProperty('refresh', refresh));
+    properties.add(StringProperty('nickname', nickname));
   }
 
-  void setStoreToken(String newToken) {
-    _setToken(newToken);
-    const storage = FlutterSecureStorage();
-    storage.write(key: 'token', value: newToken);
+  //* public
+
+  FutureBool initVar() async {
+    final userInfo = await _readStore();
+    _setStoreToken(userInfo['token']);
+    _setStoreRefresh(userInfo['refresh']);
+    _setStoreName(userInfo['nickname']);
+    notifyListeners();
+    return true;
   }
 
-  void setStoreRefresh(String newRefresh) {
-    _setRefresh(newRefresh);
-    const storage = FlutterSecureStorage();
-    storage.write(key: 'refresh', value: newRefresh);
+  void setStoreToken(String? newToken) async {
+    _setStoreToken(newToken);
+    _setStore('token', newToken);
+    notifyListeners();
+  }
+
+  void setStoreRefresh(String? newRefresh) {
+    _setStoreRefresh(newRefresh);
+    _setStore('refresh', newRefresh);
+    notifyListeners();
   }
 
   void setStoreName(String newName) {
-    _setRefresh(newName);
-    const storage = FlutterSecureStorage();
-    storage.write(key: 'nickname', value: newName);
+    _setStoreName(newName);
+    _setStore('nickname', newName);
+    notifyListeners();
   }
 
-  void setStoreId(int newId) {
-    _setId(newId);
+  //* private
+  void _setStoreToken(String? newToken) => _token = newToken;
+  void _setStoreRefresh(String? newRefresh) => _refresh = newRefresh;
+  void _setStoreName(String? newName) => _nickname = newName;
+
+  void _setStore(String key, String? value) async {
     const storage = FlutterSecureStorage();
-    storage.write(key: 'memberId', value: newId.toString());
+    await storage.write(key: key, value: value);
+  }
+
+  Future<StringMap> _readStore() async {
+    const storage = FlutterSecureStorage();
+    final userInfo = await storage.readAll();
+    return userInfo;
+  }
+}
+
+//* refresh
+class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  static Space _bookmarkRefresh = Space.empty;
+  static String _convertedVar = '';
+  get bookmarkRefresh => _convertedVar;
+  void refreshPage() {
+    _changeRefresh();
+    _spaceToString();
+    notifyListeners();
+  }
+
+  void _changeRefresh() => _bookmarkRefresh =
+      _bookmarkRefresh == Space.empty ? Space.one : Space.empty;
+  void _spaceToString() => _convertedVar = convertedSpace(_bookmarkRefresh);
+}
+
+//* setttings
+class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  static bool? _hasLargeFont, _showMagnify;
+  static MapRadius? _radius;
+  get hasLargeFont => _hasLargeFont;
+  get radius => _radius;
+  get showMagnify => _showMagnify;
+  void initTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    _hasLargeFont = prefs.getBool('hasLargeFont');
+    final radiusIdx = prefs.getInt('radiusIdx');
+    _radius = radiusIdx != null ? toMapRadius(radiusIdx) : null;
+    _showMagnify = prefs.getBool('showMagnify');
+  }
+
+//* public
+  void applyHasLargeFont(bool newValue) {
+    _setHasLargeFont(newValue);
+    _applyHasLargeFont(newValue);
+  }
+
+  void applyRadius(MapRadius radius) {
+    _setRadius(radius);
+    _applyRadius(radius);
+  }
+
+  void applyShowMagnify(bool newValue) {
+    _setShowMagnify(newValue);
+    _applyShowMagnify(newValue);
+  }
+
+//* private
+
+  void _setHasLargeFont(bool newValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasLargeFont', newValue);
+  }
+
+  void _applyHasLargeFont(bool newValue) {
+    _hasLargeFont = newValue;
+    notifyListeners();
+  }
+
+  void _setRadius(MapRadius radius) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('radiusIdx', convertedRadius(radius));
+  }
+
+  void _applyRadius(MapRadius newValue) {
+    _radius = newValue;
+    notifyListeners();
+  }
+
+  void _setShowMagnify(bool newValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('applyShowMagnify', newValue);
+  }
+
+  void _applyShowMagnify(bool newValue) {
+    _hasLargeFont = newValue;
+    notifyListeners();
   }
 }
