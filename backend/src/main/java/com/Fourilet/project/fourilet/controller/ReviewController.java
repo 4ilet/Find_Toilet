@@ -1,29 +1,23 @@
 package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
-import com.Fourilet.project.fourilet.data.entity.Review;
 import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
-import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 
