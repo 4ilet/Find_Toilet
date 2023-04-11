@@ -6,15 +6,19 @@ import com.Fourilet.project.fourilet.dto.ToiletGetCondition;
 import com.Fourilet.project.fourilet.dto.ToiletSearchCondition;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QuerydslUtils;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.Fourilet.project.fourilet.data.entity.QReview.review;
@@ -89,7 +93,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
     }
 
     @Override
-    public Page<ToiletDto> searchToilet(ToiletSearchCondition condition, Pageable pageable){
+    public Page<ToiletDto> searchToiletDistance(ToiletSearchCondition condition, Pageable pageable){
         QueryResults<ToiletDto> result = queryFactory.select(
                         new QToiletDto(
                                 toilet.toiletId,
@@ -121,7 +125,8 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                         alldayEq(condition.isAllDay())
                 )
                 .groupBy(toilet.toiletId)
-                .orderBy(Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
+                .orderBy(
+                        Expressions.stringTemplate("ST_Distance_Sphere({0}, {1})",
                         Expressions.stringTemplate("POINT({0}, {1})",
                                 condition.getNowLon(),
                                 condition.getNowLat()
@@ -129,7 +134,100 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                         Expressions.stringTemplate("POINT({0}, {1})",
                                 toilet.lon,
                                 toilet.lat
-                        )).asc())
+                        )).asc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ToiletDto> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<ToiletDto> searchToiletScore(ToiletSearchCondition condition, Pageable pageable){
+        QueryResults<ToiletDto> result = queryFactory.select(
+                        new QToiletDto(
+                                toilet.toiletId,
+                                toilet.toiletName,
+                                toilet.address,
+                                toilet.operationTime,
+                                toilet.lat,
+                                toilet.lon,
+                                toilet.phoneNumber,
+                                review.score.coalesce((float)0).avg().as("score"),
+                                review.count().as("comment"),
+                                toilet.dMalePee,
+                                toilet.dMalePoo,
+                                toilet.dFemalePoo,
+                                toilet.cFemalePoo,
+                                toilet.cMalePee,
+                                toilet.cMalePoo,
+                                toilet.allDay,
+                                toilet.diaper,
+                                toilet.diaper,
+                                toilet.toiletId
+                        )).from(toilet)
+                .leftJoin(toilet.reviewList, review)
+                .where(
+                        keywordEq(condition.getKeyword()),
+                        disabledEq(condition.isDisabled()),
+                        diaperEq(condition.isDiaper()),
+                        kidsEq(condition.isKids()),
+                        alldayEq(condition.isAllDay())
+                )
+                .groupBy(toilet.toiletId)
+                .orderBy(
+                        review.score.coalesce((float)0).avg().desc(), review.count().desc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ToiletDto> content = result.getResults();
+        long total = result.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<ToiletDto> searchToiletComment(ToiletSearchCondition condition, Pageable pageable){
+        QueryResults<ToiletDto> result = queryFactory.select(
+                        new QToiletDto(
+                                toilet.toiletId,
+                                toilet.toiletName,
+                                toilet.address,
+                                toilet.operationTime,
+                                toilet.lat,
+                                toilet.lon,
+                                toilet.phoneNumber,
+                                review.score.coalesce((float)0).avg().as("score"),
+                                review.count().as("comment"),
+                                toilet.dMalePee,
+                                toilet.dMalePoo,
+                                toilet.dFemalePoo,
+                                toilet.cFemalePoo,
+                                toilet.cMalePee,
+                                toilet.cMalePoo,
+                                toilet.allDay,
+                                toilet.diaper,
+                                toilet.diaper,
+                                toilet.toiletId
+                        )).from(toilet)
+                .leftJoin(toilet.reviewList, review)
+                .where(
+                        keywordEq(condition.getKeyword()),
+                        disabledEq(condition.isDisabled()),
+                        diaperEq(condition.isDiaper()),
+                        kidsEq(condition.isKids()),
+                        alldayEq(condition.isAllDay())
+                )
+                .groupBy(toilet.toiletId)
+                .orderBy(
+                        review.count().desc(), review.score.coalesce((float)0).avg().desc()
+                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
