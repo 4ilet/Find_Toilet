@@ -1,9 +1,12 @@
 package com.Fourilet.project.fourilet.data.repository;
 
 import com.Fourilet.project.fourilet.dto.ToiletDto;
-
-import java.util.List;
+import com.Fourilet.project.fourilet.dto.ToiletGetCondition;
+import com.Fourilet.project.fourilet.dto.ToiletSearchCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ToiletRepositoryCustom {
-    String search();
+    Page<ToiletDto> nearByToilet(ToiletGetCondition condition, Pageable pageable);
+    Page<ToiletDto> searchToilet(ToiletSearchCondition condition, Pageable pageable);
 }

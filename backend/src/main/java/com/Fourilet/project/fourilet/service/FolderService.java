@@ -3,20 +3,14 @@ package com.Fourilet.project.fourilet.service;
 import com.Fourilet.project.fourilet.data.entity.*;
 import com.Fourilet.project.fourilet.data.repository.*;
 import com.Fourilet.project.fourilet.dto.FolderDto;
-import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto2;
 import com.Fourilet.project.fourilet.exception.DuplicationNameException;
 import com.Fourilet.project.fourilet.exception.LimitException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
