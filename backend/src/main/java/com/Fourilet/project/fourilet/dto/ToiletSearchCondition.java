@@ -18,4 +18,5 @@ public class ToiletSearchCondition {
     private boolean kids;
     private boolean diaper;
     private String keyword;
+    private String order;
 }

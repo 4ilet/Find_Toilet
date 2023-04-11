@@ -8,5 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ToiletRepositoryCustom {
     Page<ToiletDto> nearByToilet(ToiletGetCondition condition, Pageable pageable);
-    Page<ToiletDto> searchToilet(ToiletSearchCondition condition, Pageable pageable);
+    Page<ToiletDto> searchToiletDistance(ToiletSearchCondition condition, Pageable pageable);
+    Page<ToiletDto> searchToiletScore(ToiletSearchCondition condition, Pageable pageable);
+    Page<ToiletDto> searchToiletComment(ToiletSearchCondition condition, Pageable pageable);
 }

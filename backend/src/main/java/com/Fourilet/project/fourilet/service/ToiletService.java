@@ -39,9 +39,22 @@ public class ToiletService {
         return result;
     }
 
-    public Page<ToiletDto> getSearchToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, String keyword, Pageable pageable) {
-        ToiletSearchCondition condition = new ToiletSearchCondition(memberId, nowLat, nowLon, allDay, disabled, kids, diaper, keyword);
-        Page<ToiletDto> result = toiletRepository.searchToilet(condition, pageable);
+    public Page<ToiletDto> getSearchToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, String keyword, String order, Pageable pageable) {
+        ToiletSearchCondition condition = new ToiletSearchCondition(memberId, nowLat, nowLon, allDay, disabled, kids, diaper, keyword, order);
+
+
+        Page<ToiletDto> result = null;
+
+        if(order.equals("distance") || order == null){
+            result = toiletRepository.searchToiletDistance(condition, pageable);
+        }else if(order.equals("score")){
+            result = toiletRepository.searchToiletScore(condition, pageable);
+        }else if(order.equals("comment")){
+            result = toiletRepository.searchToiletComment(condition, pageable);
+        }else{
+            throw new IllegalArgumentException();
+        }
+
         for(ToiletDto toiletDto : result) {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);

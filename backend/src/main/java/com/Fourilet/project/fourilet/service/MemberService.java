@@ -96,7 +96,7 @@ public class MemberService {
         if(member == null){
             member = memberRepository.save(Member.builder()
                 .kakaoId(profile.getId())
-                .nickname(profile.getKakao_account().getProfile().getNickname())
+                .nickname(null)
                 .email(profile.getKakao_account().getEmail())
                 .userRole("USER")
                 .build());
