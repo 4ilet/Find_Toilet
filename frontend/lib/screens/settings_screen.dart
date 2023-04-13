@@ -26,17 +26,29 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
+    initIndexList();
     changeBtn();
   }
 
+  void initIndexList() {
+    if (getFontSize(context) != true) {
+      changeIndex(1, false)();
+    }
+  }
+
   //* 옵션 변경
-  ReturnVoid changeIndex(int i) {
+  ReturnVoid changeIndex(int i, bool apply) {
     return () {
       setState(() {
         if (indexList[i] < optionList[i].length - 1) {
           indexList[i] += 1;
         } else {
           indexList[i] = 0;
+        }
+        if (apply) {
+          if (i == 1) {
+            applyFontSize(context, indexList[i] == 0);
+          }
         }
       });
     };
@@ -89,7 +101,7 @@ class _SettingsState extends State<Settings> {
 
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context, page: errorModal('email'))();
+      showModal(context, page: errorModal('email'));
     }
   }
 
@@ -109,7 +121,7 @@ class _SettingsState extends State<Settings> {
                 buttonText: '확인',
                 isAlert: true,
                 kindOf: 'nickname',
-              ))();
+              ));
         }
       } else {
         if (!mounted) return false;
@@ -117,7 +129,7 @@ class _SettingsState extends State<Settings> {
       }
       return changeBtn();
     } catch (error) {
-      showModal(context, page: errorModal('login'))();
+      showModal(context, page: errorModal('login'));
       return false;
     }
   }
@@ -158,7 +170,7 @@ class _SettingsState extends State<Settings> {
                   for (int i = 0; i < 3; i += 1)
                     eachMenu(
                       index: i,
-                      onTap: changeIndex(i),
+                      onTap: changeIndex(i, true),
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       child: option(i),
                     ),
@@ -169,7 +181,7 @@ class _SettingsState extends State<Settings> {
                   for (int i = 4; i < 7; i += 1)
                     eachMenu(
                       index: i,
-                      onTap: showModal(
+                      onTap: () => showModal(
                         context,
                         page: pages[i - 4],
                       ),

@@ -65,18 +65,36 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
 //* refresh
 class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  static Space _bookmarkRefresh = Space.empty;
+  static Space _refresh = Space.empty;
   static String _convertedVar = '';
-  get bookmarkRefresh => _convertedVar;
+  static bool _pressedOnce = false;
+  get refresh => _convertedVar;
+  get pressedOnce => _pressedOnce;
+
   void refreshPage() {
     _changeRefresh();
     _spaceToString();
     notifyListeners();
   }
 
-  void _changeRefresh() => _bookmarkRefresh =
-      _bookmarkRefresh == Space.empty ? Space.one : Space.empty;
-  void _spaceToString() => _convertedVar = convertedSpace(_bookmarkRefresh);
+  void _changeRefresh() =>
+      _refresh = _refresh == Space.empty ? Space.one : Space.empty;
+  void _spaceToString() => _convertedVar = convertedSpace(_refresh);
+
+  FutureBool changePressed() => _changePressed();
+
+  FutureBool _changePressed() {
+    if (!_pressedOnce) {
+      _pressedOnce = true;
+      notifyListeners();
+      Future.delayed(const Duration(seconds: 2), () {
+        _pressedOnce = false;
+        notifyListeners();
+      });
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 }
 
 //* setttings
@@ -86,18 +104,21 @@ class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   get hasLargeFont => _hasLargeFont;
   get radius => _radius;
   get showMagnify => _showMagnify;
-  void initTheme() async {
+
+  Future<bool> initSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _hasLargeFont = prefs.getBool('hasLargeFont');
     final radiusIdx = prefs.getInt('radiusIdx');
     _radius = radiusIdx != null ? toMapRadius(radiusIdx) : null;
     _showMagnify = prefs.getBool('showMagnify');
+    return true;
   }
 
 //* public
   void applyHasLargeFont(bool newValue) {
     _setHasLargeFont(newValue);
     _applyHasLargeFont(newValue);
+    print('result: $_hasLargeFont');
   }
 
   void applyRadius(MapRadius radius) {

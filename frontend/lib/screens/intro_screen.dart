@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/select_theme_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -41,11 +42,14 @@ class _IntroState extends State<Intro> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      const Duration(seconds: 5),
-      routerPush(context, page: const SelectFontTheme()),
-    );
     preparation();
+    context.read<SettingsProvider>().initSettings();
+    Future.delayed(const Duration(seconds: 5), () {
+      removedRouterPush(context,
+          page: getFontSize(context) == null
+              ? const SelectFontTheme()
+              : const Main());
+    });
   }
 
   @override

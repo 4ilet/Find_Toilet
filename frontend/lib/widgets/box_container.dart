@@ -104,7 +104,7 @@ class FolderBox extends StatelessWidget {
                     CustomIconButton(
                       icon: editIcon,
                       color: CustomColors.mainColor,
-                      onPressed: showModal(
+                      onPressed: () => showModal(
                         context,
                         page: const InputModal(
                           title: '즐겨 찾기 폴더명 수정',
@@ -118,7 +118,7 @@ class FolderBox extends StatelessWidget {
                     CustomIconButton(
                       icon: deleteIcon,
                       color: CustomColors.redColor,
-                      onPressed: showModal(context,
+                      onPressed: () => showModal(context,
                           page: DeleteModal(
                             deleteMode: 1,
                             id: folderId,
@@ -231,7 +231,7 @@ class _ListItemState extends State<ListItem> {
             toiletId: widget.toiletId,
           ))();
     } else {
-      showModal(context, page: const LoginConfirmModal())();
+      showModal(context, page: const LoginConfirmModal());
     }
   }
 
@@ -282,7 +282,7 @@ class _ListItemState extends State<ListItem> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: showModal(context,
+                        onPressed: () => showModal(context,
                             page: const AddToBookMarkModal()),
                         icon: CustomIcon(
                           icon: liked ? heartIcon : emptyHeartIcon,
@@ -290,7 +290,7 @@ class _ListItemState extends State<ListItem> {
                         ),
                       ),
                       IconButton(
-                        onPressed: showModal(context,
+                        onPressed: () => showModal(context,
                             page: NavigationModal(
                               startPoint: const [37.537229, 127.005515],
                               endPoint: const [37.4979502, 127.0276368],
@@ -360,78 +360,78 @@ class _ListItemState extends State<ListItem> {
     );
   }
 
-  Row toiletTopInfo(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          flex: 7,
-          child: CustomText(
-            color: CustomColors.mainColor,
-            title: widget.toiletName,
-            fontSize: FontSize.defaultSize,
-          ),
-        ),
-        Flexible(
-          flex: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomIconButton(
-                onPressed: showModal(
-                  context,
-                  page: const AddToBookMarkModal(),
-                ),
-                icon: liked ? heartIcon : emptyHeartIcon,
-                color: CustomColors.redColor,
-              ),
-              CustomIconButton(
-                onPressed: showModal(
-                  context,
-                  page: NavigationModal(
-                    startPoint: const [37.537229, 127.005515],
-                    endPoint: const [37.4979502, 127.0276368],
-                    destination: widget.toiletName,
-                  ),
-                ),
-                icon: planeIcon,
-                color: CustomColors.lightBlueColor,
-                iconSize: 35,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Row toiletTopInfo(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Flexible(
+  //         flex: 7,
+  //         child: CustomText(
+  //           color: CustomColors.mainColor,
+  //           title: widget.toiletName,
+  //           fontSize: FontSize.defaultSize,
+  //         ),
+  //       ),
+  //       Flexible(
+  //         flex: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             CustomIconButton(
+  //               onPressed: showModal(
+  //                 context,
+  //                 page: const AddToBookMarkModal(),
+  //               ),
+  //               icon: liked ? heartIcon : emptyHeartIcon,
+  //               color: CustomColors.redColor,
+  //             ),
+  //             CustomIconButton(
+  //               onPressed: showModal(
+  //                 context,
+  //                 page: NavigationModal(
+  //                   startPoint: const [37.537229, 127.005515],
+  //                   endPoint: const [37.4979502, 127.0276368],
+  //                   destination: widget.toiletName,
+  //                 ),
+  //               ),
+  //               icon: planeIcon,
+  //               color: CustomColors.lightBlueColor,
+  //               iconSize: 35,
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Row toiletInfo(int i) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          flex: 7,
-          child: TextWithIcon(
-            icon: iconList[2 * i],
-            text: infoList[2 * i],
-          ),
-        ),
-        Flexible(
-          flex: 4,
-          child: i == 0
-              ? TextWithIcon(
-                  icon: iconList[2 * i + 1],
-                  text: infoList[2 * i + 1],
-                )
-              : TextWithIcon(
-                  icon: iconList[2 * i + 1],
-                  text: infoList[2 * i + 1],
-                  iconColor: CustomColors.yellowColor,
-                ),
-        )
-      ],
-    );
-  }
+  // Row toiletInfo(int i) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Flexible(
+  //         flex: 7,
+  //         child: TextWithIcon(
+  //           icon: iconList[2 * i],
+  //           text: infoList[2 * i],
+  //         ),
+  //       ),
+  //       Flexible(
+  //         flex: 4,
+  //         child: i == 0
+  //             ? TextWithIcon(
+  //                 icon: iconList[2 * i + 1],
+  //                 text: infoList[2 * i + 1],
+  //               )
+  //             : TextWithIcon(
+  //                 icon: iconList[2 * i + 1],
+  //                 text: infoList[2 * i + 1],
+  //                 iconColor: CustomColors.yellowColor,
+  //               ),
+  //       )
+  //     ],
+  //   );
+  // }
 }
 
 //* filter 상자, 화살표
@@ -603,7 +603,7 @@ class ReviewBox extends StatelessWidget {
                     color: CustomColors.redColor,
                     icon: deleteIcon,
                     iconSize: 20,
-                    onPressed: showModal(
+                    onPressed: () => showModal(
                       context,
                       page: DeleteModal(
                         deleteMode: 0,

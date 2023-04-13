@@ -28,44 +28,65 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
   }
 
   void applyTheme() {
-    theme = selected;
-    routerPush(context, page: const Main())();
+    applyFontSize(context, isLargeSize);
+    removedRouterPush(context, page: const Main());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: mainColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Center(
-              child: CustomText(
-            title: '어서오세요',
-            fontSize: FontSize.titleSize,
-            color: CustomColors.whiteColor,
-          )),
-          const CustomText(
-            title: '사용하실 테마를 선택해주세요.',
-            color: CustomColors.whiteColor,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ThemeBox(
-                text: '큰 글씨',
-                selected: isLargeSize,
-                onTap: changeTheme(true),
-              ),
-              ThemeBox(
-                text: '기본',
-                selected: !isLargeSize,
-                onTap: changeTheme(false),
-              ),
-            ],
-          ),
-          CustomButton(onPressed: applyTheme)
-        ],
+    return WillPopScope(
+      onWillPop: () => exitApp(context),
+      child: Scaffold(
+        backgroundColor: mainColor,
+        body: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Center(
+                    child: CustomText(
+                  title: '어서오세요',
+                  fontSize: FontSize.titleSize,
+                  color: CustomColors.whiteColor,
+                  font: kimm,
+                )),
+                const CustomText(
+                  title: '사용하실 테마를 선택해주세요.',
+                  color: CustomColors.whiteColor,
+                  font: kimm,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ThemeBox(
+                      text: '큰 글씨',
+                      selected: isLargeSize,
+                      onTap: changeFontSize(true),
+                    ),
+                    ThemeBox(
+                      text: '기본',
+                      selected: !isLargeSize,
+                      onTap: changeFontSize(false),
+                    ),
+                  ],
+                ),
+                CustomButton(onPressed: applyTheme)
+              ],
+            ),
+            watchPressed(context)
+                ? const Center(
+                    child: CustomBox(
+                      height: 60,
+                      width: 300,
+                      color: whiteColor,
+                      child: CustomText(
+                        title: '뒤로 가기 버튼을 한 번 더 누르시면 앱이 종료됩니다',
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+          ],
+        ),
       ),
     );
   }

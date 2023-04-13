@@ -12,21 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //* 즐겨찾기 메인 화면 (폴더 존재)
-class BookMarkFolderList extends StatefulWidget {
+class BookMarkFolderList extends StatelessWidget {
   const BookMarkFolderList({super.key});
-
-  @override
-  State<BookMarkFolderList> createState() => _BookMarkFolderListState();
-}
-
-class _BookMarkFolderListState extends State<BookMarkFolderList> {
-  // late bool needRefesh;
-
-  @override
-  void initState() {
-    super.initState();
-    // needRefesh = context.read<ApplyChangeProvider>().bookmarkRefresh;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +39,7 @@ class _BookMarkFolderListState extends State<BookMarkFolderList> {
                     ),
                     CustomText(
                       title:
-                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${context.watch<ApplyChangeProvider>().bookmarkRefresh.trim()}',
+                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${context.watch<ApplyChangeProvider>().refresh.trim()}',
                       fontSize: FontSize.largeSize,
                       color: CustomColors.whiteColor,
                       font: kimm,
