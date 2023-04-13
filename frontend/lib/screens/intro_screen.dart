@@ -44,12 +44,12 @@ class _IntroState extends State<Intro> {
     super.initState();
     preparation();
     context.read<SettingsProvider>().initSettings();
-    Future.delayed(
-        const Duration(seconds: 5),
-        () => routerPush(context,
-            page: getFontSize(context) == null
-                ? const SelectFontTheme()
-                : const Main())());
+    Future.delayed(const Duration(seconds: 5), () {
+      removedRouterPush(context,
+          page: getFontSize(context) == null
+              ? const SelectFontTheme()
+              : const Main());
+    });
   }
 
   @override

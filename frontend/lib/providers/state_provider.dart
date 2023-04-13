@@ -65,18 +65,36 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
 //* refresh
 class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  static Space _bookmarkRefresh = Space.empty;
+  static Space _refresh = Space.empty;
   static String _convertedVar = '';
-  get bookmarkRefresh => _convertedVar;
+  static bool _pressedOnce = false;
+  get refresh => _convertedVar;
+  get pressedOnce => _pressedOnce;
+
   void refreshPage() {
     _changeRefresh();
     _spaceToString();
     notifyListeners();
   }
 
-  void _changeRefresh() => _bookmarkRefresh =
-      _bookmarkRefresh == Space.empty ? Space.one : Space.empty;
-  void _spaceToString() => _convertedVar = convertedSpace(_bookmarkRefresh);
+  void _changeRefresh() =>
+      _refresh = _refresh == Space.empty ? Space.one : Space.empty;
+  void _spaceToString() => _convertedVar = convertedSpace(_refresh);
+
+  FutureBool changePressed() => _changePressed();
+
+  FutureBool _changePressed() {
+    if (!_pressedOnce) {
+      _pressedOnce = true;
+      notifyListeners();
+      Future.delayed(const Duration(seconds: 2), () {
+        _pressedOnce = false;
+        notifyListeners();
+      });
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 }
 
 //* setttings

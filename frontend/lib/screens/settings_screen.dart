@@ -101,7 +101,7 @@ class _SettingsState extends State<Settings> {
 
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context, page: errorModal('email'))();
+      showModal(context, page: errorModal('email'));
     }
   }
 
@@ -121,7 +121,7 @@ class _SettingsState extends State<Settings> {
                 buttonText: '확인',
                 isAlert: true,
                 kindOf: 'nickname',
-              ))();
+              ));
         }
       } else {
         if (!mounted) return false;
@@ -129,7 +129,7 @@ class _SettingsState extends State<Settings> {
       }
       return changeBtn();
     } catch (error) {
-      showModal(context, page: errorModal('login'))();
+      showModal(context, page: errorModal('login'));
       return false;
     }
   }
@@ -181,7 +181,7 @@ class _SettingsState extends State<Settings> {
                   for (int i = 4; i < 7; i += 1)
                     eachMenu(
                       index: i,
-                      onTap: showModal(
+                      onTap: () => showModal(
                         context,
                         page: pages[i - 4],
                       ),

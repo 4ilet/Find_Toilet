@@ -65,13 +65,14 @@ class _ReviewFormState extends State<ReviewForm> {
         );
         state = '수정';
       }
+      if (!mounted) return;
       showModal(
         context,
         page: AlertModal(
           title: '리뷰 $state',
           content: '리뷰가 성공적으로\n $state되었습니다',
         ),
-      )();
+      );
     } catch (error) {
       final state = widget.reviewId != null ? '수정' : '등록';
       showModal(
@@ -80,7 +81,7 @@ class _ReviewFormState extends State<ReviewForm> {
           title: '오류 발생',
           content: '오류가 발생해 \n리뷰가 $state되지 않았습니다.',
         ),
-      )();
+      );
     }
   }
 

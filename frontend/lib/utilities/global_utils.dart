@@ -5,6 +5,14 @@ import 'package:provider/provider.dart';
 
 //* 함수
 
+//* 화면 이동 (뒤로 가기 적용 X)
+Future<bool?> removedRouterPush(BuildContext context, {required Widget page}) =>
+    Navigator.pushAndRemoveUntil<bool>(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+      (router) => false,
+    );
+
 //* 화면 이동
 ReturnVoid routerPush(BuildContext context, {required Widget page}) {
   return () =>
@@ -17,15 +25,12 @@ ReturnVoid routerPop(BuildContext context) {
 }
 
 //* 모달 띄우기
-ReturnVoid showModal(BuildContext context, {required Widget page}) {
-  return () {
-    showDialog(
+Future<bool?> showModal(BuildContext context, {required Widget page}) =>
+    showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (context) => page,
     );
-  };
-}
 
 //* 화면 너비, 높이 (intro에서 실행)
 late var screenWidth, screenHeight;
@@ -53,3 +58,7 @@ bool? getFontSize(BuildContext context) =>
 void applyFontSize(BuildContext context, bool newValue) {
   context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }
+
+FutureBool exitApp(context) =>
+    context.read<ApplyChangeProvider>().changePressed();
+bool watchPressed(context) => context.watch<ApplyChangeProvider>().pressedOnce;

@@ -190,7 +190,7 @@ class InputModal extends StatelessWidget {
               title: '폴더 생성 성공',
               content: '성공적으로 폴더가 생성되었습니다.',
             ),
-          )();
+          );
         } else {}
         // routerPop(context)();
         // routerPush(context, page: const BookMarkFolderList())();
@@ -201,7 +201,7 @@ class InputModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
           ),
-        )();
+        );
       }
     }
 
@@ -220,7 +220,7 @@ class InputModal extends StatelessWidget {
                 title: '닉네임 적용 성공',
                 content: '닉네임이 적용되었습니다.',
               ),
-            )();
+            );
             return;
           } else {
             if (!context.mounted) return;
@@ -230,7 +230,7 @@ class InputModal extends StatelessWidget {
                 title: '닉네임 중복',
                 content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
               ),
-            )();
+            );
             return;
           }
         }
@@ -241,7 +241,7 @@ class InputModal extends StatelessWidget {
             title: '올바르지 않은 닉네임',
             content: '닉네임을 바르게 입력해주세요.',
           ),
-        )();
+        );
       } catch (error) {
         print(error);
         showModal(
@@ -250,7 +250,7 @@ class InputModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n 닉네임이 변경되지 않았습니다',
           ),
-        )();
+        );
       }
     }
 
@@ -441,7 +441,7 @@ class DeleteModal extends StatelessWidget {
         }
         if (!context.mounted) return;
         routerPop(context)();
-        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'))();
+        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'));
       } catch (error) {
         showModal(
           context,
@@ -449,7 +449,7 @@ class DeleteModal extends StatelessWidget {
             title: '오류 발생',
             content: '오류가 발생해\n$target 삭제에 실패했습니다.',
           ),
-        )();
+        );
       }
     }
 
