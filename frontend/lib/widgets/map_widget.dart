@@ -25,13 +25,36 @@ class MapScreenState extends State<MapScreen> {
   );
   final bool _darkMode = false;
 
+  List<LatLng> markers = [];
+
   void getLocation() async {
     LocationPermission permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    controller.center =
-        LatLng(position.latitude.abs(), position.longitude.abs());
-    controller.zoom = 16;
+    controller.center = LatLng(position.latitude, position.longitude);
+    if (markers == []) {
+      markers.add(LatLng(position.latitude, position.longitude));
+    } else {
+      markers.clear();
+      markers.add(LatLng(position.latitude, position.longitude));
+    }
+    // controller.zoom = 16;
+    setState(() {});
+  }
+
+  void zoomIn() {
+    var zoom = controller.zoom;
+    if (zoom < 19) {
+      controller.zoom = zoom + 1;
+    }
+    setState(() {});
+  }
+
+  void zoomOut() {
+    var zoom = controller.zoom;
+    if (zoom > 7) {
+      controller.zoom = zoom - 1;
+    }
     setState(() {});
   }
 
@@ -84,6 +107,29 @@ class MapScreenState extends State<MapScreen> {
     }
   }
 
+  Widget _buildMarkerWidget(Offset pos, Color color, double size,
+      [IconData icon = Icons.location_on]) {
+    return Positioned(
+      left: pos.dx - 24,
+      top: pos.dy - 48,
+      width: size,
+      height: size,
+      child: GestureDetector(
+        child: Icon(
+          icon,
+          color: color,
+          size: size,
+        ),
+        onTap: () {
+          if (controller.zoom < 16) {
+            controller.zoom = 16;
+          }
+          getLocation();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +150,20 @@ class MapScreenState extends State<MapScreen> {
       body: MapLayout(
         controller: controller,
         builder: (context, transformer) {
+          late final Iterable<Widget> markerWidgets;
+          if (markers != []) {
+            final markerPositions = markers.map(transformer.toOffset).toList();
+            markerWidgets = markerPositions.map(
+              (pos) => _buildMarkerWidget(pos, Colors.red, 60),
+            );
+          } else {
+            final markerPositions = [const LatLng(35.203, 126.809)]
+                .map(transformer.toOffset)
+                .toList();
+            markerWidgets = markerPositions.map(
+              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 60),
+            );
+          }
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onDoubleTapDown: (details) => _onDoubleTap(
@@ -151,24 +211,66 @@ class MapScreenState extends State<MapScreen> {
                       transformer.getViewport(),
                     ),
                   ),
+                  ...markerWidgets,
                 ],
               ),
             ),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        // onPressed: _gotoDefault,
-        onPressed: () {
-          getLocation();
-        },
-        backgroundColor: whiteColor,
-        mini: true,
-        tooltip: 'My Location',
-        child: const Icon(
-          Icons.my_location_rounded,
-          color: mainColor,
-        ),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment(
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.4),
+            child: GestureDetector(
+              onTap: () => zoomIn(),
+              child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(6))),
+                  child: const Center(
+                    child: Icon(Icons.add),
+                  )),
+            ),
+          ),
+          Align(
+            alignment: Alignment(
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.3),
+            child: GestureDetector(
+              onTap: () => zoomOut(),
+              child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: const BoxDecoration(
+                      color: whiteColor,
+                      borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(6))),
+                  child: const Center(
+                    child: Icon(Icons.remove),
+                  )),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              // onPressed: _gotoDefault,
+              onPressed: () {
+                getLocation();
+              },
+              backgroundColor: whiteColor,
+              mini: true,
+              tooltip: 'My Location',
+              child: const Icon(
+                Icons.my_location_rounded,
+                color: mainColor,
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar:
           BottomAppBar(height: MediaQuery.of(context).size.height * 0.08),

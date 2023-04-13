@@ -17,7 +17,10 @@ class Main extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () => exitApp(context),
+      child: GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             Column(
