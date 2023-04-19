@@ -20,38 +20,39 @@ class Main extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => exitApp(context),
       child: GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: screenWidth,
-                  height: screenHeight,
-                  child: const MapScreen(),
-                ),
-              ],
-            ),
-            Column(children: const [SearchBar(isMain: true), FilterBox()]),
-            // watchPressed(context)
-            false
-                ? const Center(
-                    child: CustomBox(
-                      height: 60,
-                      width: 300,
-                      color: whiteColor,
-                      child: CustomText(
-                        title: '뒤로 가기 버튼을 한 번 더 누르시면 앱이 종료됩니다',
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: screenWidth,
+                    height: screenHeight,
+                    child: const MapScreen(),
+                  ),
+                ],
+              ),
+              Column(children: const [SearchBar(isMain: true), FilterBox()]),
+              // watchPressed(context)
+              false
+                  ? const Center(
+                      child: CustomBox(
+                        height: 60,
+                        width: 300,
+                        color: whiteColor,
+                        child: CustomText(
+                          title: '뒤로 가기 버튼을 한 번 더 누르시면 앱이 종료됩니다',
+                        ),
                       ),
-                    ),
-                  )
-                : const SizedBox(),
-            ToiletBottomSheet(isMain: true, showReview: showReview)
-          ],
+                    )
+                  : const SizedBox(),
+              ToiletBottomSheet(isMain: true, showReview: showReview)
+            ],
+          ),
         ),
       ),
     );
