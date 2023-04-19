@@ -4,18 +4,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //* user info
-class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class UserInfoProvider with ChangeNotifier {
   static String? _token, _refresh, _nickname;
   String? get token => _token;
   String? get refresh => _refresh;
   String? get nickname => _nickname;
 
-  void debugFillProperites(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(StringProperty('token', token));
-    properties.add(StringProperty('refresh', refresh));
-    properties.add(StringProperty('nickname', nickname));
-  }
+  // void debugFillProperites(DiagnosticPropertiesBuilder properties) {
+  //   super.debugFillProperties(properties);
+  //   properties.add(StringProperty('token', token));
+  //   properties.add(StringProperty('refresh', refresh));
+  //   properties.add(StringProperty('nickname', nickname));
+  // }
 
   //* public
 
@@ -64,7 +64,7 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
 }
 
 //* refresh
-class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class ApplyChangeProvider with ChangeNotifier {
   static Space _refresh = Space.empty;
   static String _convertedVar = '';
   static bool _pressedOnce = false;
@@ -98,7 +98,7 @@ class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
 }
 
 //* setttings
-class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class SettingsProvider with ChangeNotifier {
   static bool? _hasLargeFont, _showMagnify;
   static MapRadius? _radius;
   get hasLargeFont => _hasLargeFont;

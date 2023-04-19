@@ -18,7 +18,7 @@ class FolderProvider extends ApiProvider {
           }).toList();
           return folderList;
         case 401:
-          final success = await refreshToken(
+          await refreshToken(
             url: folderListUrl,
             method: 'GET',
           );

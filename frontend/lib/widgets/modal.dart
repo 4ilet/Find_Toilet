@@ -648,7 +648,12 @@ class LoginConfirmModal extends StatelessWidget {
           title: '로그인하시겠습니까?',
         )
       ],
-      onPressed: () => UserProvider().login(),
+      onPressed: () async {
+        await login(context);
+        if (!context.mounted) return;
+        routerPop(context)();
+        context.read<ApplyChangeProvider>().refreshPage();
+      },
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -61,4 +63,20 @@ void applyFontSize(BuildContext context, bool newValue) {
 
 FutureBool exitApp(context) =>
     context.read<ApplyChangeProvider>().changePressed();
-bool watchPressed(context) => context.watch<ApplyChangeProvider>().pressedOnce;
+bool watchPressed(context) => context.read<ApplyChangeProvider>().pressedOnce;
+
+FutureBool login(context) async {
+  final result = await UserProvider().login();
+  if (!context.mounted) throw Error();
+  changeToken(context, token: result['token'], refresh: result['refresh']);
+  if (result['state'] != 'login') {
+    showModal(context,
+        page: const InputModal(
+          title: '닉네임 설정',
+          buttonText: '확인',
+          isAlert: true,
+          kindOf: 'nickname',
+        ));
+  }
+  return true;
+}

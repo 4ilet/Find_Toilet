@@ -73,7 +73,8 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                 CustomButton(onPressed: applyTheme)
               ],
             ),
-            watchPressed(context)
+            // watchPressed(context)
+            false
                 ? const Center(
                     child: CustomBox(
                       height: 60,

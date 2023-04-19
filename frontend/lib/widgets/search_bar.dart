@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
@@ -8,7 +9,9 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final bool isMain;
@@ -38,7 +41,8 @@ class _SearchBarState extends State<SearchBar> {
                 : TextEditingController(text: widget.query),
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: '검색어를 입력하세요',
+              hintText:
+                  '검색어를 입력하세요${context.watch<ApplyChangeProvider>().refresh.trim()}',
               prefixIcon: CustomIconButton(
                 icon: hamburgerIcon,
                 onPressed: routerPush(context, page: const Settings()),
@@ -67,7 +71,9 @@ class _SearchBarState extends State<SearchBar> {
           width: 40,
           height: 40,
           child: CustomIconButton(
-            onPressed: routerPush(context, page: const BookMarkFolderList()),
+            onPressed: getToken(context) != null
+                ? routerPush(context, page: const BookMarkFolderList())
+                : () => showModal(context, page: const LoginConfirmModal()),
             icon: bookMarkIcon,
             color: CustomColors.blackColor,
           ),

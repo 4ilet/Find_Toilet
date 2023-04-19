@@ -61,6 +61,7 @@ class UserProvider extends ApiProvider {
     try {
       final response =
           await dioWithToken().post(_loginUrl, data: {'token': token});
+      print(response);
       switch (response.statusCode) {
         case 200:
           return _returnTokens(response);

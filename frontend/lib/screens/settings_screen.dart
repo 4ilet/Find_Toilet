@@ -1,5 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -12,6 +12,7 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -110,19 +111,7 @@ class _SettingsState extends State<Settings> {
     try {
       final token = getToken(context);
       if (token == null || token == '') {
-        final result = await UserProvider().login();
-        if (!mounted) return false;
-        changeToken(context,
-            token: result['token'], refresh: result['refresh']);
-        if (result['state'] != 'login') {
-          showModal(context,
-              page: const InputModal(
-                title: '닉네임 설정',
-                buttonText: '확인',
-                isAlert: true,
-                kindOf: 'nickname',
-              ));
-        }
+        login(context);
       } else {
         if (!mounted) return false;
         changeToken(context, token: null, refresh: null);
@@ -130,6 +119,7 @@ class _SettingsState extends State<Settings> {
       return changeBtn();
     } catch (error) {
       showModal(context, page: errorModal('login'));
+      context.read<ApplyChangeProvider>().refreshPage();
       return false;
     }
   }

@@ -14,6 +14,8 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initWidthHeight(context);
+    // bool pressedOnce = watchPressed(context);
+    // print(watchPressed(context));
 
     return WillPopScope(
       onWillPop: () => exitApp(context),
@@ -35,7 +37,8 @@ class Main extends StatelessWidget {
               ],
             ),
             Column(children: const [SearchBar(isMain: true), FilterBox()]),
-            watchPressed(context)
+            // watchPressed(context)
+            false
                 ? const Center(
                     child: CustomBox(
                       height: 60,
