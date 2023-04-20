@@ -158,11 +158,11 @@ public class FolderService {
             float average = 0;
             if (reviewList.size() == 0){
                 toiletDto2.setScore(average);
-                toiletDto2.setReviewLen(reviewList.size());
+                toiletDto2.setComment(reviewList.size());
             } else {
                 average = total / reviewList.size();
                 toiletDto2.setScore(average);
-                toiletDto2.setReviewLen(reviewList.size());
+                toiletDto2.setComment(reviewList.size());
             }
             toiletDto2.setToiletId(toilet.getToiletId());
             toiletDto2.setToiletName(toilet.getToiletName());
@@ -179,6 +179,7 @@ public class FolderService {
             toiletDto2.setCMalePoo(toilet.isCMalePoo());
             toiletDto2.setAllDay(toilet.isAllDay());
             toiletDto2.setDiaper(toilet.isDiaper());
+            toiletDto2.setBookmark(true);
             toiletDtoList.add(toiletDto2);
         }
         return toiletDtoList;

@@ -20,7 +20,7 @@ public class ToiletDto2 {
     private BigDecimal lon;
     private String phoneNumber;
     private float score;
-    private long reviewLen;
+    private long comment;
     private boolean dMalePee;
     private boolean dMalePoo;
     private boolean dFemalePoo;
@@ -29,8 +29,6 @@ public class ToiletDto2 {
     private boolean cMalePoo;
     private boolean allDay;
     private boolean diaper;
-
-
-
+    private boolean isBookmark;
 
 }
