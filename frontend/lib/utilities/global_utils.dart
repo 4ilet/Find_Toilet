@@ -63,7 +63,7 @@ void applyFontSize(BuildContext context, bool newValue) {
 
 FutureBool exitApp(context) =>
     context.read<ApplyChangeProvider>().changePressed();
-bool watchPressed(context) => context.read<ApplyChangeProvider>().pressedOnce;
+// bool watchPressed(context) => context.read<ApplyChangeProvider>().pressedOnce;
 
 FutureBool login(context) async {
   final result = await UserProvider().login();

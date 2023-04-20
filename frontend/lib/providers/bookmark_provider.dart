@@ -22,13 +22,12 @@ class FolderProvider extends ApiProvider {
             url: folderListUrl,
             method: 'GET',
           );
-          getFolderList();
-          break;
+          return getFolderList();
         default:
           throw Error();
       }
 
-      throw Error();
+      // throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -61,17 +60,32 @@ class BookMarkProvider extends ApiProvider {
       '$_bookmarkUrl/delete/$folderId/$toiletId';
 
   //* 즐겨찾기 목록 조회
-  FutureList getToiletList(int folderId) async {
+  Future<ToiletList> getToiletList(int folderId) async {
     ToiletList toiletList = [];
     try {
       final response = await dioWithToken().get(_bookmarkListUrl(folderId));
-      if (response.statusCode == 200) {
-        response.data.forEach((element) {
-          toiletList.add(ToiletModel.fromJson(element));
-        });
-        return toiletList;
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data;
+          if (data['data'].isEmpty) {
+            print('empty');
+            return [];
+          }
+          data.forEach((element) {
+            toiletList.add(ToiletModel.fromJson(element));
+          });
+          return toiletList;
+        case 401:
+          await refreshToken(
+            url: folderListUrl,
+            method: 'GET',
+          );
+          return getToiletList(folderId);
+        // break;
+        default:
+          throw Error();
       }
-      throw Error();
+      // throw Error();
     } catch (error) {
       print(error);
       throw Error();

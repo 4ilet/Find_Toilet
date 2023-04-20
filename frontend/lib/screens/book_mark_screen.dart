@@ -124,16 +124,22 @@ class BookMarkFolderList extends StatelessWidget {
 //* 폴더 내 즐겨찾기 목록
 class BookMarkList extends StatelessWidget {
   final String folderName;
-  final int bookmarkCnt;
+  final int bookmarkCnt, folderId;
 
-  const BookMarkList(
-      {super.key, required this.folderName, required this.bookmarkCnt});
+  const BookMarkList({
+    super.key,
+    required this.folderName,
+    required this.bookmarkCnt,
+    required this.folderId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
       body: ToiletScrollView(
+        bookmarkCnt: bookmarkCnt,
+        folderId: folderId,
         toolbarHeight: 50,
         expandedHeight: 80,
         flexibleSpace: Padding(

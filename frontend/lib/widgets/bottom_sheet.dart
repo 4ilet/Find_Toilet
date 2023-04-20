@@ -1,16 +1,21 @@
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/select_box.dart';
+import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool isMain;
   final bool showReview;
-  const ToiletBottomSheet(
-      {super.key, required this.isMain, this.showReview = false});
+  const ToiletBottomSheet({
+    super.key,
+    required this.isMain,
+    this.showReview = false,
+  });
 
   @override
   State<ToiletBottomSheet> createState() => _ToiletBottomSheet();
@@ -62,11 +67,9 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
         return CustomScrollView(
           controller: scrollController,
           slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
+            CustomSilverAppBar(
               toolbarHeight: 80,
               backgroundColor: Colors.white10,
-              pinned: true,
               expandedHeight: widget.showReview ? 40 : 80,
               flexibleSpace: CustomBox(
                 color: mainColor,
@@ -102,6 +105,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                 ),
               ),
             ),
+            // CustomSilverFutureList(future: future, showReview: false, itemCount: 0)
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 childCount: widget.showReview ? 1 : 10,
@@ -114,6 +118,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                       child: Column(
                         children: [
                           ListItem(
+                            data: ToiletModel.fromJson(),
                             showReview: widget.showReview,
                             isMain: widget.isMain,
                           ),

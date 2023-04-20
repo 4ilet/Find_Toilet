@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/bookmark_model.dart';
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
@@ -80,7 +81,11 @@ class FolderBox extends StatelessWidget {
     return CustomBox(
       onTap: routerPush(
         context,
-        page: BookMarkList(folderName: folderName, bookmarkCnt: bookmarkCnt),
+        page: BookMarkList(
+          folderName: folderName,
+          bookmarkCnt: bookmarkCnt,
+          folderId: folderId,
+        ),
       ),
       height: 150,
       width: 150,
@@ -187,74 +192,51 @@ class _AddBoxState extends State<AddBox> {
 }
 
 //* 화장실 목록 아이템
-class ListItem extends StatefulWidget {
-  final String toiletName, address, phoneNo, duration;
-  final StringList available;
-  final double score;
-  final int reviewCnt, toiletId;
-  final bool isLiked, showReview, isMain;
+class ListItem extends StatelessWidget {
+  final ToiletModel data;
+  final bool showReview, isMain;
   const ListItem({
     super.key,
-    this.toiletName = '광주시립도서관화장실',
-    this.address = '광주광역시 북구 어쩌고길',
-    this.phoneNo = '062-xxx-xxxx',
-    this.duration = '00:00 - 00:00',
-    this.score = 4.3,
-    this.reviewCnt = 30,
-    this.available = const ['장애인용', '유아용', '기저귀 교환대'],
-    this.isLiked = false,
+    required this.data,
     required this.showReview,
-    this.isMain = true,
-    this.toiletId = 13,
+    required this.isMain,
   });
 
   @override
-  State<ListItem> createState() => _ListItemState();
-}
-
-class _ListItemState extends State<ListItem> {
-  late bool liked;
-  final IconDataList iconList = [locationIcon, phoneIcon, clockIcon, starIcon];
-  late final StringList infoList;
-  void changeLiked() {
-    setState(() {
-      liked = !liked;
-    });
-  }
-
-  void addIntoBookmark() async {
-    final token = UserProvider().token;
-    if (token == null || token == '') {
-      routerPush(context,
-          page: ReviewForm(
-            toiletName: widget.toiletName,
-            toiletId: widget.toiletId,
-          ))();
-    } else {
-      showModal(context, page: const LoginConfirmModal());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    liked = widget.isLiked;
-    infoList = [
-      widget.address,
-      widget.phoneNo,
-      widget.duration,
-      '${widget.score} (${widget.reviewCnt}개)'
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
+    late bool liked;
+    final IconDataList iconList = [
+      locationIcon,
+      phoneIcon,
+      clockIcon,
+      starIcon
+    ];
+
+    void addIntoBookmark() async {
+      final token = UserProvider().token;
+      if (token == null || token == '') {
+        routerPush(context,
+            page: ReviewForm(
+              toiletName: data.toiletName,
+              toiletId: data.toiletId,
+            ))();
+      } else {
+        showModal(context, page: const LoginConfirmModal());
+      }
+    }
+
+    final infoList = [
+      data.address,
+      data.phoneNo,
+      data.duration,
+      '${data.score} (${data.reviewLen}개)'
+    ];
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
         onTap: routerPush(
           context,
-          page: widget.isMain
+          page: isMain
               ? const Main(showReview: true)
               : const Search(
                   query: '',
@@ -276,16 +258,17 @@ class _ListItemState extends State<ListItem> {
                   // for (int i = 0; i < 2; i += 1) toiletInfo(i),
                   CustomText(
                       color: CustomColors.mainColor,
-                      title: widget.toiletName,
+                      title: data.toiletName,
                       fontSize: FontSize.defaultSize),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
                         onPressed: () => showModal(context,
+                            //* 현재 추가 여부에 따라 다르게
                             page: const AddToBookMarkModal()),
-                        icon: CustomIcon(
-                          icon: liked ? heartIcon : emptyHeartIcon,
+                        icon: const CustomIcon(
+                          icon: true ? heartIcon : emptyHeartIcon,
                           color: redColor,
                         ),
                       ),
@@ -293,8 +276,8 @@ class _ListItemState extends State<ListItem> {
                         onPressed: () => showModal(context,
                             page: NavigationModal(
                               startPoint: const [37.537229, 127.005515],
-                              endPoint: const [37.4979502, 127.0276368],
-                              destination: widget.toiletName,
+                              endPoint: [data.lat, data.lng],
+                              destination: data.toiletName,
                             )),
                         icon: const CustomIcon(
                           icon: planeIcon,
@@ -311,11 +294,11 @@ class _ListItemState extends State<ListItem> {
                 children: [
                   TextWithIcon(
                     icon: locationIcon,
-                    text: widget.address,
+                    text: data.address,
                   ),
                   TextWithIcon(
                     icon: phoneIcon,
-                    text: widget.phoneNo,
+                    text: data.phoneNo,
                   ),
                 ],
               ),
@@ -324,11 +307,11 @@ class _ListItemState extends State<ListItem> {
                 children: [
                   TextWithIcon(
                     icon: clockIcon,
-                    text: widget.duration,
+                    text: data.duration,
                   ),
                   TextWithIcon(
                     icon: starIcon,
-                    text: '${widget.score} (${widget.reviewCnt}개)',
+                    text: '${data.score} (${data.reviewLen}개)',
                     iconColor: CustomColors.yellowColor,
                   ),
                 ],
@@ -341,11 +324,26 @@ class _ListItemState extends State<ListItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  for (String each in widget.available)
-                    CustomText(
-                      title: each,
-                      fontSize: FontSize.smallSize,
-                    ),
+                  data.can24hour
+                      ? const CustomText(
+                          title: '24시간 이용 가능',
+                          fontSize: FontSize.smallSize,
+                        )
+                      : const SizedBox(),
+                  data.privateDiaper
+                      ? const CustomText(
+                          title: '기저귀 교환대',
+                          fontSize: FontSize.smallSize,
+                        )
+                      : const SizedBox(),
+                  data.privateDisabledM1 ||
+                          data.privateDisabledM2 ||
+                          data.privateDisabledF
+                      ? const CustomText(
+                          title: '장애인용',
+                          fontSize: FontSize.smallSize,
+                        )
+                      : const SizedBox(),
                   CustomButton(
                     fontSize: FontSize.smallSize,
                     onPressed: addIntoBookmark,
