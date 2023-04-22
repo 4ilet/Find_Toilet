@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/bookmark_model.dart';
+import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
@@ -75,7 +76,7 @@ class FolderBox extends StatelessWidget {
     String folderName = folderInfo.folderName;
     int bookmarkCnt = folderInfo.bookmarkCnt;
     int folderId = folderInfo.folderId;
-    String printedName = folderName.length < 3
+    String printedName = folderName.length <= 3
         ? folderName
         : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
     return CustomBox(
@@ -111,11 +112,12 @@ class FolderBox extends StatelessWidget {
                       color: CustomColors.mainColor,
                       onPressed: () => showModal(
                         context,
-                        page: const InputModal(
+                        page: InputModal(
                           title: '즐겨 찾기 폴더명 수정',
                           buttonText: '수정',
                           isAlert: false,
                           kindOf: 'folder',
+                          folderId: folderId,
                         ),
                       ),
                       iconSize: 25,
@@ -550,17 +552,14 @@ class CustomBox extends StatelessWidget {
 
 //* review 상자
 class ReviewBox extends StatelessWidget {
-  final String nickname, content, toiletName;
-  final int toiletId, reviewId;
-  final double score;
+  final String toiletName;
+  final ReviewModel review;
+  final int toiletId;
   const ReviewBox({
     super.key,
-    required this.nickname,
-    required this.score,
-    required this.content,
-    required this.toiletName,
+    required this.review,
     required this.toiletId,
-    required this.reviewId,
+    required this.toiletName,
   });
 
   @override
@@ -580,7 +579,7 @@ class ReviewBox extends StatelessWidget {
                 children: [
                   CustomText(
                     color: CustomColors.mainColor,
-                    title: nickname,
+                    title: review.nickname,
                   ),
                   CustomIconButton(
                     color: CustomColors.mainColor,
@@ -592,8 +591,8 @@ class ReviewBox extends StatelessWidget {
                         toiletName: toiletName,
                         toiletId: toiletId,
                         reviewId: reviewId,
-                        preComment: content,
-                        preScore: score,
+                        preComment: review.comment,
+                        preScore: review.score,
                       ),
                     ),
                   ),
@@ -611,12 +610,12 @@ class ReviewBox extends StatelessWidget {
                   ),
                   TextWithIcon(
                     icon: starIcon,
-                    text: '$score',
+                    text: '${review.score}',
                     iconColor: CustomColors.yellowColor,
                   ),
                 ],
               ),
-              CustomText(title: content)
+              CustomText(title: review.comment)
             ],
           ),
         ),

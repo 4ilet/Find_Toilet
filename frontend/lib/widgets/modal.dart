@@ -162,12 +162,14 @@ class InputModal extends StatelessWidget {
   final String title, buttonText;
   final bool isAlert;
   final String kindOf;
+  final int? folderId;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
     required this.isAlert,
     required this.kindOf,
+    this.folderId,
   });
 
   @override
@@ -180,26 +182,38 @@ class InputModal extends StatelessWidget {
     void createFolder(BuildContext context) async {
       try {
         if (data != null && data != '') {
-          final result =
-              await FolderProvider().createNewFolder({'folderName': data!});
+          folderId == null
+              ? await FolderProvider().createNewFolder({'folderName': data!})
+              : await FolderProvider().updateFolderName(folderId!,
+                  folderData: {'folderName': data!});
           if (!context.mounted) return;
           routerPop(context)();
           showModal(
             context,
-            page: const AlertModal(
-              title: '폴더 생성 성공',
-              content: '성공적으로 폴더가 생성되었습니다.',
+            page: AlertModal(
+              title: folderId == null ? '폴더 생성 성공' : '폴더 수정 성공',
+              content: folderId == null
+                  ? '성공적으로 폴더가 생성되었습니다.'
+                  : '성공적으로 폴더가 수정되었습니다.',
             ),
           );
-        } else {}
-        // routerPop(context)();
-        // routerPush(context, page: const BookMarkFolderList())();
+        } else {
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '폴더명 확인',
+              content: '폴더명을 올바르게 입력해주세요.',
+            ),
+          );
+        }
       } catch (error) {
         showModal(
           context,
-          page: const AlertModal(
+          page: AlertModal(
             title: '오류 발생',
-            content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
+            content: folderId == null
+                ? '오류가 발생해\n 폴더가 생성되지 않았습니다'
+                : '오류가 발생해\n 폴더 이름이 변경되지 않았습니다',
           ),
         );
       }
@@ -257,9 +271,9 @@ class InputModal extends StatelessWidget {
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: kindOf == 'folder'
-          ? () => createFolder(context)
-          : () => setNickname(data),
+      onPressed: kindOf == 'nickname'
+          ? () => setNickname(data)
+          : () => createFolder(context),
       isAlert: isAlert,
       children: [
         Expanded(
@@ -436,7 +450,7 @@ class DeleteModal extends StatelessWidget {
             break;
           default:
             response = await BookMarkProvider()
-                .deleteBookMark(folderId: id, toiletId: id);
+                .deleteBookMark(folderId: folderId!, toiletId: id);
             break;
         }
         if (!context.mounted) return;

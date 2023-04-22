@@ -4,6 +4,7 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
+//* app bar
 class CustomSilverAppBar extends StatelessWidget {
   final double toolbarHeight, expandedHeight;
   final Widget flexibleSpace;
@@ -30,6 +31,7 @@ class CustomSilverAppBar extends StatelessWidget {
   }
 }
 
+//* silver list
 class CustomSilverFutureList extends StatelessWidget {
   final Future<ToiletList> future;
   final bool showReview;

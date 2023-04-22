@@ -24,7 +24,15 @@ class ToiletBottomSheet extends StatefulWidget {
 class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
   late String selectedValue;
+  ToiletModel? eachToilet;
   bool showList = false;
+
+  void fillEachToilet(ToiletModel toiletModel) {
+    setState(() {
+      eachToilet = toiletModel;
+    });
+  }
+
   void changeShowState() {
     setState(() {
       if (!showList) {
@@ -42,15 +50,10 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     });
   }
 
-  late FutureList reviewList;
-
   @override
   void initState() {
     super.initState();
     selectedValue = sortOrder.first;
-    if (widget.showReview) {
-      reviewList = ReviewProvider().getReviewList(1);
-    }
   }
 
   @override
@@ -105,68 +108,98 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                 ),
               ),
             ),
-            // CustomSilverFutureList(future: future, showReview: false, itemCount: 0)
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                childCount: widget.showReview ? 1 : 10,
-                (BuildContext context, int index) {
-                  return CustomBox(
-                    radius: 0,
-                    color: mainColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        children: [
-                          ListItem(
-                            data: ToiletModel.fromJson(),
-                            showReview: widget.showReview,
-                            isMain: widget.isMain,
-                          ),
-                          for (int i = 0; i < 5; i += 1)
-                            widget.showReview
-                                ? const ReviewBox(
-                                    nickname: '아나',
-                                    score: 4.0,
-                                    content: '아주 좋아요',
-                                    toiletName: '광주시립도서관화장실',
-                                    toiletId: 2,
-                                    reviewId: 13,
-                                  )
-                                : const SizedBox(),
-                          // widget.showReview
-                          //     ? FutureBuilder(
-                          //         future: reviewList,
-                          //         builder: (context, snapshot) {
-                          //           if (snapshot.hasData) {
-                          //             return Column(
-                          //               children: const [
-                          //                 Expanded(
-                          //                   child: ReviewBox(
-                          //                     nickname: '아아',
-                          //                     score: 4.0,
-                          //                     content: '아주 좋아요',
-                          //                   ),
-                          //                 )
-                          //               ],
-                          //             );
-                          //           }
-                          //           return const Center(
-                          //             child: CircularProgressIndicator(),
-                          //           );
-                          //         },
-                          //       )
-                          //     : const SizedBox(),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            // CustomSilverFutureList(future: isMain? , showReview: false, itemCount: 0),
+            // silverList(),
           ],
         );
       },
     );
+  }
+
+//* silver list
+  SliverList silverList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        childCount: widget.showReview ? 1 : 10,
+        (BuildContext context, int index) {
+          return CustomBox(
+            radius: 0,
+            color: mainColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  ListItem(
+                    data: const [],
+                    showReview: widget.showReview,
+                    isMain: widget.isMain,
+                  ),
+                  widget.showReview
+                      ? FutureBuilder(
+                          future: ReviewProvider().getReviewList(index),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return CustomBox(
+                                color: mainColor,
+                                child: snapshot.data!.isNotEmpty
+                                    ? reviewListView(snapshot.data!, index)
+                                    : const Center(
+                                        child: Center(
+                                          child: CustomText(
+                                            title: '이 화장실에 대한 리뷰가 없습니다',
+                                            color: CustomColors.whiteColor,
+                                          ),
+                                        ),
+                                      ),
+                              );
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          })
+                      : const SizedBox(),
+                  // widget.showReview
+                  //     ? FutureBuilder(
+                  //         future: reviewList,
+                  //         builder: (context, snapshot) {
+                  //           if (snapshot.hasData) {
+                  //             return Column(
+                  //               children: const [
+                  //                 Expanded(
+                  //                   child: ReviewBox(
+                  //                     nickname: '아아',
+                  //                     score: 4.0,
+                  //                     content: '아주 좋아요',
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             );
+                  //           }
+                  //           return const Center(
+                  //             child: CircularProgressIndicator(),
+                  //           );
+                  //         },
+                  //       )
+                  //     : const SizedBox(),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  ListView reviewListView(ReviewList data, int toiletId) {
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return ReviewBox(
+            review: data[index],
+            toiletId: toiletId,
+            toiletName: to,
+          );
+        });
   }
 
   //* app bar 맨 윗 부분
