@@ -33,14 +33,20 @@ class CustomSilverAppBar extends StatelessWidget {
 
 //* silver list
 class CustomSilverFutureList extends StatelessWidget {
-  final Future<ToiletList> future;
+  final Future<List> future;
   final bool showReview;
   final int itemCount;
+  final bool isReview;
+  final int? toiletId;
+  final String? toiletName;
   const CustomSilverFutureList({
     super.key,
     required this.future,
     required this.showReview,
     required this.itemCount,
+    this.isReview = false,
+    this.toiletId,
+    this.toiletName,
   });
 
   @override
@@ -56,10 +62,13 @@ class CustomSilverFutureList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: snapshot.data!.isNotEmpty
-                        ? toiletListView(snapshot.data!)
-                        : const Center(
+                        ? isReview
+                            ? reviewListView(snapshot.data! as ReviewList)
+                            : toiletListView(snapshot.data! as ToiletList)
+                        : Center(
                             child: CustomText(
-                              title: '즐겨찾기한 화장실이 없습니다',
+                              title:
+                                  '${isReview ? '화장실 리뷰가' : '즐겨찾기한 화장실이'} 없습니다',
                               color: CustomColors.whiteColor,
                             ),
                           ),
@@ -82,6 +91,21 @@ class CustomSilverFutureList extends StatelessWidget {
           showReview: false,
           data: data[index],
           isMain: false,
+        );
+      },
+    );
+  }
+
+  ListView reviewListView(ReviewList data) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        return ReviewBox(
+          review: data[index],
+          toiletId: toiletId!,
+          toiletName: toiletName!,
         );
       },
     );

@@ -590,7 +590,7 @@ class ReviewBox extends StatelessWidget {
                       page: ReviewForm(
                         toiletName: toiletName,
                         toiletId: toiletId,
-                        reviewId: reviewId,
+                        reviewId: review.id,
                         preComment: review.comment,
                         preScore: review.score,
                       ),
@@ -604,7 +604,7 @@ class ReviewBox extends StatelessWidget {
                       context,
                       page: DeleteModal(
                         deleteMode: 0,
-                        id: reviewId,
+                        id: review.id,
                       ),
                     ),
                   ),

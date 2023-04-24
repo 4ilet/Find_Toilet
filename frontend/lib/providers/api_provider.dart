@@ -13,7 +13,10 @@ class UrlClass extends UserInfoProvider {
   String deleteFolderUrl(int folderId) =>
       '$_bookmarkUrl/delete/folder/$folderId';
 
-  //*
+  //* toilet
+  static const _toiletUrl = '/toilet';
+  final nearToiletUrl = '$_toiletUrl/near';
+  final searchToiletUrl = '$_toiletUrl/search';
 }
 
 class ApiProvider extends UrlClass {
@@ -64,19 +67,27 @@ class ApiProvider extends UrlClass {
 
   //* 조회 전반
   FutureList _getAPi({
-    required List list,
     required String url,
     required dynamic model,
   }) async {
     try {
       final response = await dioWithToken().get(url);
-      if (response.statusCode == 200) {
-        response.data.forEach((element) {
-          list.add(model.fromJson(element));
-        });
-        return list;
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data['data'];
+          List list = data.map((json) {
+            return model.fromJson(json);
+          }).toList();
+          return list;
+        case 401:
+          await refreshToken(
+            url: url,
+            method: 'GET',
+          );
+          return _getAPi(url: url, model: model);
+        default:
+          throw Error();
       }
-      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -84,11 +95,10 @@ class ApiProvider extends UrlClass {
   }
 
   FutureList getApi({
-    required List list,
     required String url,
     required dynamic model,
   }) async {
-    return _getAPi(list: list, url: url, model: model);
+    return _getAPi(url: url, model: model);
   }
 
   //* 생성 전반

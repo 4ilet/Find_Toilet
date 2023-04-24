@@ -11,6 +11,7 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -440,22 +441,25 @@ class DeleteModal extends StatelessWidget {
 
     void onPressed() async {
       try {
-        late bool response;
         switch (deleteMode) {
           case 0:
-            response = await ReviewProvider().deleteReview(id);
+            await ReviewProvider().deleteReview(id);
             break;
           case 1:
-            response = await FolderProvider().deleteFolder(id);
+            await FolderProvider().deleteFolder(id);
             break;
           default:
-            response = await BookMarkProvider()
+            await BookMarkProvider()
                 .deleteBookMark(folderId: folderId!, toiletId: id);
             break;
         }
         if (!context.mounted) return;
         routerPop(context)();
-        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'));
+        showModal(
+          context,
+          page: const AlertModal(
+              title: '삭제 확인', content: '성공적으로 삭제 작업이 완료되었습니다.'),
+        );
       } catch (error) {
         showModal(
           context,
@@ -565,6 +569,7 @@ class NavigationModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final packageNmae = dotenv.env['packageName'];
     const StringList appList = ['네이버맵', '카카오맵', 'T맵'];
     List<Image> imgList = [
       Image.asset(naverMap),
@@ -573,7 +578,7 @@ class NavigationModal extends StatelessWidget {
     ];
     List<Uri> uriList = [
       Uri.parse(
-          'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=com.example.myapp'),
+          'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=$packageNmae'),
       Uri.parse(
           'kakaomap://route?sp=${startPoint[0]},${startPoint[1]}&ep=${endPoint[0]},${endPoint[1]}&by=CAR'),
       Uri.parse('tmap://open')
@@ -582,11 +587,11 @@ class NavigationModal extends StatelessWidget {
       return () async {
         // final uri = uriList[i];
         // await launchUrl(uri, mode: LaunchMode.externalApplication);
-        final newUri = Uri.parse(
-            'https://map.naver.com/v5/directions/14134997.483033512,4519704.42999858,광화문,13161322,PLACE_POI/14130204.52216987,4512164.397202961,대교아파트,19000666,PLACE_POI/-/transit?c=12,0,0,0,dh'
-            // 'https://apis.openapi.sk.com/tmap/routes/prediction?version=1&callback={callback}'
-            );
-        await launchUrl(newUri);
+        // final newUri = Uri.parse(
+        //     'https://map.naver.com/v5/directions/14134997.483033512,4519704.42999858,광화문,13161322,PLACE_POI/14130204.52216987,4512164.397202961,대교아파트,19000666,PLACE_POI/-/transit?c=12,0,0,0,dh'
+        //     // 'https://apis.openapi.sk.com/tmap/routes/prediction?version=1&callback={callback}'
+        //     );
+        await launchUrl(uriList[i]);
       };
     }
 

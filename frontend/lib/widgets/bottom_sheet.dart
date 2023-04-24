@@ -1,5 +1,6 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -11,10 +12,12 @@ import 'package:flutter/material.dart';
 class ToiletBottomSheet extends StatefulWidget {
   final bool isMain;
   final bool showReview;
+  final ToiletModel? toiletModel;
   const ToiletBottomSheet({
     super.key,
     required this.isMain,
     this.showReview = false,
+    this.toiletModel,
   });
 
   @override
@@ -24,14 +27,7 @@ class ToiletBottomSheet extends StatefulWidget {
 class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
   late String selectedValue;
-  ToiletModel? eachToilet;
   bool showList = false;
-
-  void fillEachToilet(ToiletModel toiletModel) {
-    setState(() {
-      eachToilet = toiletModel;
-    });
-  }
 
   void changeShowState() {
     setState(() {
@@ -108,7 +104,19 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                 ),
               ),
             ),
-            // CustomSilverFutureList(future: isMain? , showReview: false, itemCount: 0),
+            widget.showReview
+                ? ListItem(
+                    data: widget.toiletModel!,
+                    showReview: true,
+                    isMain: widget.isMain,
+                  )
+                : CustomSilverFutureList(
+                    future: widget.isMain
+                        ? ToiletProvider().getNearToilet()
+                        : ToiletProvider().searchToilet(),
+                    showReview: false,
+                    itemCount: 0,
+                  ),
             // silverList(),
           ],
         );
@@ -120,7 +128,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   SliverList silverList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        childCount: widget.showReview ? 1 : 10,
         (BuildContext context, int index) {
           return CustomBox(
             radius: 0,
@@ -197,7 +204,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
           return ReviewBox(
             review: data[index],
             toiletId: toiletId,
-            toiletName: to,
+            toiletName: widget.toiletModel!.toiletName,
           );
         });
   }
