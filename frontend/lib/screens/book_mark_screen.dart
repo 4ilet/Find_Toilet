@@ -138,7 +138,6 @@ class BookMarkList extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainColor,
       body: ToiletScrollView(
-        bookmarkCnt: bookmarkCnt,
         folderId: folderId,
         toolbarHeight: 50,
         expandedHeight: 80,

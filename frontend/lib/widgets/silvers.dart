@@ -1,6 +1,7 @@
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
+import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,6 @@ class CustomSilverAppBar extends StatelessWidget {
 class CustomSilverFutureList extends StatelessWidget {
   final Future<List> future;
   final bool showReview;
-  final int itemCount;
   final bool isReview;
   final int? toiletId;
   final String? toiletName;
@@ -43,7 +43,6 @@ class CustomSilverFutureList extends StatelessWidget {
     super.key,
     required this.future,
     required this.showReview,
-    required this.itemCount,
     this.isReview = false,
     this.toiletId,
     this.toiletName,
@@ -64,7 +63,12 @@ class CustomSilverFutureList extends StatelessWidget {
                     child: snapshot.data!.isNotEmpty
                         ? isReview
                             ? reviewListView(snapshot.data! as ReviewList)
-                            : toiletListView(snapshot.data! as ToiletList)
+                            : CustomListView(
+                                itemBuilder: (context, index) => ListItem(
+                                      isMain: false,
+                                      showReview: false,
+                                      data: snapshot.data![index],
+                                    ))
                         : Center(
                             child: CustomText(
                               title:
@@ -81,26 +85,24 @@ class CustomSilverFutureList extends StatelessWidget {
     );
   }
 
-  ListView toiletListView(ToiletList data) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        return ListItem(
-          showReview: false,
-          data: data[index],
-          isMain: false,
-        );
-      },
-    );
-  }
+  // ListView toiletListView(ToiletList data) {
+  //   return ListView.builder(
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     shrinkWrap: true,
+  //     itemBuilder: (context, index) {
+  //       return ListItem(
+  //         showReview: false,
+  //         data: data[index],
+  //         isMain: false,
+  //       );
+  //     },
+  //   );
+  // }
 
   ListView reviewListView(ReviewList data) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: itemCount,
       itemBuilder: (context, index) {
         return ReviewBox(
           review: data[index],

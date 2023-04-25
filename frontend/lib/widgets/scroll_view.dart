@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 class ToiletScrollView extends StatelessWidget {
   final double toolbarHeight, expandedHeight;
   final Widget flexibleSpace;
-  final int folderId, bookmarkCnt;
+  final int folderId;
   const ToiletScrollView({
     super.key,
     required this.toolbarHeight,
     required this.expandedHeight,
     required this.flexibleSpace,
     required this.folderId,
-    required this.bookmarkCnt,
   });
 
   @override
@@ -29,7 +28,6 @@ class ToiletScrollView extends StatelessWidget {
         CustomSilverFutureList(
           future: BookMarkProvider().getToiletList(folderId),
           showReview: false,
-          itemCount: bookmarkCnt,
         )
       ],
     );

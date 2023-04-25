@@ -78,6 +78,7 @@ class ApiProvider extends UrlClass {
           List list = data.map((json) {
             return model.fromJson(json);
           }).toList();
+          print(list);
           return list;
         case 401:
           await refreshToken(

@@ -87,7 +87,7 @@ class _SettingsState extends State<Settings> {
       String appVersion = packageInfo.version;
 
       final Email email = Email(
-        subject: '[화장실을 찾아서 문의]',
+        subject: '[화장실을 찾아서] 문의사항',
         recipients: ['team.4ilet@gmail.com'],
         body: body(
           release: version['release'],

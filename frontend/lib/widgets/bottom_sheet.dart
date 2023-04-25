@@ -4,6 +4,7 @@ import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
+import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/select_box.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
@@ -104,20 +105,20 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                 ),
               ),
             ),
+            // CustomSilverFutureList(
+            //   future: ToiletProvider().getNearToilet(),
+            //   showReview: false,
+            // )
+            // reviewSilverList(),
+            //*
             widget.showReview
-                ? ListItem(
-                    data: widget.toiletModel!,
-                    showReview: true,
-                    isMain: widget.isMain,
-                  )
+                ? reviewSilverList()
                 : CustomSilverFutureList(
                     future: widget.isMain
                         ? ToiletProvider().getNearToilet()
                         : ToiletProvider().searchToilet(),
                     showReview: false,
-                    itemCount: 0,
                   ),
-            // silverList(),
           ],
         );
       },
@@ -125,7 +126,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   }
 
 //* silver list
-  SliverList silverList() {
+  SliverList reviewSilverList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -137,33 +138,40 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               child: Column(
                 children: [
                   ListItem(
-                    data: const [],
-                    showReview: widget.showReview,
+                    data: widget.toiletModel!,
+                    showReview: true,
                     isMain: widget.isMain,
                   ),
-                  widget.showReview
-                      ? FutureBuilder(
-                          future: ReviewProvider().getReviewList(index),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return CustomBox(
-                                color: mainColor,
-                                child: snapshot.data!.isNotEmpty
-                                    ? reviewListView(snapshot.data!, index)
-                                    : const Center(
-                                        child: Center(
-                                          child: CustomText(
-                                            title: '이 화장실에 대한 리뷰가 없습니다',
-                                            color: CustomColors.whiteColor,
-                                          ),
-                                        ),
-                                      ),
-                              );
-                            }
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          })
-                      : const SizedBox(),
+                  FutureBuilder(
+                    future: ReviewProvider().getReviewList(index),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return CustomBox(
+                          color: mainColor,
+                          child: snapshot.data!.isNotEmpty
+                              ? CustomListView(
+                                  itemBuilder: (context, i) => ReviewBox(
+                                    review: snapshot.data![i],
+                                    toiletId: widget.toiletModel!.toiletId,
+                                    toiletName: widget.toiletModel!.toiletName,
+                                  ),
+                                )
+
+                              // reviewListView(snapshot.data!, index)
+                              : const Center(
+                                  child: Center(
+                                    child: CustomText(
+                                      title: '이 화장실에 대한 리뷰가 없습니다',
+                                      color: CustomColors.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                        );
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  )
+
                   // widget.showReview
                   //     ? FutureBuilder(
                   //         future: reviewList,
@@ -196,18 +204,19 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     );
   }
 
-  ListView reviewListView(ReviewList data, int toiletId) {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return ReviewBox(
-            review: data[index],
-            toiletId: toiletId,
-            toiletName: widget.toiletModel!.toiletName,
-          );
-        });
-  }
+  // ListView reviewListView(ReviewList data, int toiletId) {
+  //   return ListView.builder(
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     shrinkWrap: true,
+  //     itemBuilder: (context, index) {
+  //       return ReviewBox(
+  //         review: data[index],
+  //         toiletId: toiletId,
+  //         toiletName: widget.toiletModel!.toiletName,
+  //       );
+  //     },
+  //   );
+  // }
 
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {

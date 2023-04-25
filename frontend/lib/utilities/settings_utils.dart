@@ -56,11 +56,13 @@ String body({
   required String appVersion,
 }) =>
     '''
-제목 말머리로 [오류]/[문의]/[제안]/[기타] 중 한 가지를 작성해주세요.\n
-문의 사항
-\n\n\n\n
---------------------
+안녕하세요, 화장실을 찾아서 개발팀입니다.\n
+저희 서비스에 관심을 보내주셔서 감사합니다.\n
+아래 양식에 맞추어 문의사항을 작성해 주시면 빠르게 검토하여 답변 드리겠습니다.\n
+카테고리 : 오류 / 기능 제안 / 기타\n
+답변 받으실 이메일 : \n
+문의 내용 : \n
 OS 버전: Android $release (SDK $sdkInt)
-기기: $manufacturer $model $device
-앱 버전: $appVersion
+사용 기종 : $manufacturer $model $device \n
+사용 버전 : $appVersion \n
 ''';
