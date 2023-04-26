@@ -9,6 +9,7 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -491,8 +492,8 @@ class DeleteModal extends StatelessWidget {
 
 //* 즐겨찾기 추가 모달
 class AddToBookMarkModal extends StatefulWidget {
-  final int folderCnt;
-  const AddToBookMarkModal({super.key, this.folderCnt = 10});
+  final int toiletId;
+  const AddToBookMarkModal({super.key, required this.toiletId});
 
   @override
   State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
@@ -500,10 +501,10 @@ class AddToBookMarkModal extends StatefulWidget {
 
 class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   int? selected;
-  ReturnVoid selectFolder(int idx) {
+  ReturnVoid selectFolder(int id) {
     return () {
       setState(() {
-        selected = idx;
+        selected = id;
       });
     };
   }
@@ -512,43 +513,47 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   Widget build(BuildContext context) {
     return CustomModal(
       title: '즐겨찾기 추가',
-      onPressed: () {},
+      onPressed: () {
+        if (selected != null) {
+          BookMarkProvider().addToilet(
+            folderId: selected!,
+            toiletId: widget.toiletId,
+          );
+        }
+      },
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              for (int i = 0; i < widget.folderCnt ~/ 2; i += 1)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int j = 0; j < 2; j += 1)
-                      Padding(
+          child: FutureBuilder(
+            future: FolderProvider().getFolderList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Flexible(
+                  child: CustomListView(itemBuilder: (context, index) {
+                    final folderInfo = snapshot.data![index];
+                    return CustomBox(
+                      onTap: selectFolder(folderInfo.folderId),
+                      color: whiteColor,
+                      border: Border.all(),
+                      boxShadow: selected == folderInfo.folderId
+                          ? const [highlightShadow]
+                          : null,
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Column(
-                          children: [
-                            CustomBox(
-                              onTap: selectFolder(2 * i + j),
-                              color: whiteColor,
-                              border: Border.all(),
-                              boxShadow: selected == 2 * i + j
-                                  ? const [highlightShadow]
-                                  : null,
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                child: CustomText(
-                                    title: '폴더명',
-                                    fontSize: FontSize.defaultSize),
-                              ),
-                            ),
-                          ],
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        child: CustomText(
+                          title: folderInfo.folderName,
+                          fontSize: FontSize.defaultSize,
                         ),
                       ),
-                  ],
-                )
-            ],
+                    );
+                  }),
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
         ),
       ],

@@ -61,11 +61,12 @@ void applyFontSize(BuildContext context, bool newValue) {
   context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }
 
-FutureBool exitApp(context) =>
+FutureBool exitApp(BuildContext context) =>
     context.read<ApplyChangeProvider>().changePressed();
-// bool watchPressed(context) => context.read<ApplyChangeProvider>().pressedOnce;
+bool watchPressed(BuildContext context) =>
+    context.watch<ApplyChangeProvider>().pressedOnce;
 
-FutureBool login(context) async {
+FutureBool login(BuildContext context) async {
   final result = await UserProvider().login();
   if (!context.mounted) throw Error();
   changeToken(context, token: result['token'], refresh: result['refresh']);

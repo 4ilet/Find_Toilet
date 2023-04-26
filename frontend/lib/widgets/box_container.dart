@@ -1,6 +1,7 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
@@ -15,6 +16,7 @@ import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
@@ -125,11 +127,13 @@ class FolderBox extends StatelessWidget {
                     CustomIconButton(
                       icon: deleteIcon,
                       color: CustomColors.redColor,
-                      onPressed: () => showModal(context,
-                          page: DeleteModal(
-                            deleteMode: 1,
-                            id: folderId,
-                          )),
+                      onPressed: () => showModal(
+                        context,
+                        page: DeleteModal(
+                          deleteMode: 1,
+                          id: folderId,
+                        ),
+                      ),
                       iconSize: 25,
                     ),
                   ],
@@ -206,7 +210,6 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late bool liked;
     final IconDataList iconList = [
       locationIcon,
       phoneIcon,
@@ -266,11 +269,14 @@ class ListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: () => showModal(context,
-                            //* 현재 추가 여부에 따라 다르게
-                            page: const AddToBookMarkModal()),
-                        icon: const CustomIcon(
-                          icon: true ? heartIcon : emptyHeartIcon,
+                        onPressed: () => showModal(
+                          context,
+                          page: data.bookmark
+                              ? DeleteModal(deleteMode: 2, id: data.toiletId)
+                              : AddToBookMarkModal(toiletId: data.toiletId),
+                        ),
+                        icon: CustomIcon(
+                          icon: data.bookmark ? heartIcon : emptyHeartIcon,
                           color: redColor,
                         ),
                       ),
@@ -581,33 +587,39 @@ class ReviewBox extends StatelessWidget {
                     color: CustomColors.mainColor,
                     title: review.nickname,
                   ),
-                  CustomIconButton(
-                    color: CustomColors.mainColor,
-                    icon: editIcon,
-                    iconSize: 20,
-                    onPressed: routerPush(
-                      context,
-                      page: ReviewForm(
-                        toiletName: toiletName,
-                        toiletId: toiletId,
-                        reviewId: review.id,
-                        preComment: review.comment,
-                        preScore: review.score,
-                      ),
-                    ),
-                  ),
-                  CustomIconButton(
-                    color: CustomColors.redColor,
-                    icon: deleteIcon,
-                    iconSize: 20,
-                    onPressed: () => showModal(
-                      context,
-                      page: DeleteModal(
-                        deleteMode: 0,
-                        id: review.id,
-                      ),
-                    ),
-                  ),
+                  review.nickname == context.read<UserInfoProvider>().nickname
+                      ? Column(
+                          children: [
+                            CustomIconButton(
+                              color: CustomColors.mainColor,
+                              icon: editIcon,
+                              iconSize: 20,
+                              onPressed: routerPush(
+                                context,
+                                page: ReviewForm(
+                                  toiletName: toiletName,
+                                  toiletId: toiletId,
+                                  reviewId: review.id,
+                                  preComment: review.comment,
+                                  preScore: review.score,
+                                ),
+                              ),
+                            ),
+                            CustomIconButton(
+                              color: CustomColors.redColor,
+                              icon: deleteIcon,
+                              iconSize: 20,
+                              onPressed: () => showModal(
+                                context,
+                                page: DeleteModal(
+                                  deleteMode: 0,
+                                  id: review.id,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   TextWithIcon(
                     icon: starIcon,
                     text: '${review.score}',

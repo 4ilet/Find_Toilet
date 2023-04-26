@@ -4,7 +4,8 @@ class ToiletModel {
   final int toiletId, reviewLen;
   final double score, lat, lng;
   final String toiletName, address, duration, phoneNo;
-  final bool privateDisabledM1,
+  final bool bookmark,
+      privateDisabledM1,
       privateDisabledM2,
       privateDisabledF,
       privateChildM1,
@@ -22,6 +23,7 @@ class ToiletModel {
         score = json['score'],
         lat = json['lat'],
         lng = json['lon'],
+        bookmark = json['bookmark'],
         privateDisabledF = json['dfemalePoo'],
         privateDisabledM1 = json['dmalePee'],
         privateDisabledM2 = json['dmalePoo'],

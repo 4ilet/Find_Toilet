@@ -65,10 +65,11 @@ class CustomSilverFutureList extends StatelessWidget {
                             ? reviewListView(snapshot.data! as ReviewList)
                             : CustomListView(
                                 itemBuilder: (context, index) => ListItem(
-                                      isMain: false,
-                                      showReview: false,
-                                      data: snapshot.data![index],
-                                    ))
+                                  isMain: false,
+                                  showReview: false,
+                                  data: snapshot.data![index],
+                                ),
+                              )
                         : Center(
                             child: CustomText(
                               title:

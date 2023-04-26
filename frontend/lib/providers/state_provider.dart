@@ -68,8 +68,8 @@ class ApplyChangeProvider with ChangeNotifier {
   static Space _refresh = Space.empty;
   static String _convertedVar = '';
   static bool _pressedOnce = false;
-  get refresh => _convertedVar;
-  get pressedOnce => _pressedOnce;
+  String get refresh => _convertedVar;
+  bool get pressedOnce => _pressedOnce;
 
   void refreshPage() {
     _changeRefresh();
@@ -84,6 +84,7 @@ class ApplyChangeProvider with ChangeNotifier {
   FutureBool changePressed() => _changePressed();
 
   FutureBool _changePressed() {
+    print(_pressedOnce);
     if (!_pressedOnce) {
       _pressedOnce = true;
       notifyListeners();
