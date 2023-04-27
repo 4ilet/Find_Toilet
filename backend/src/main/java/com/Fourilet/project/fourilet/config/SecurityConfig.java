@@ -47,7 +47,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/user/login",
             "/toilet/**",
-            "/oauth2/**"
+            "/oauth2/**",
+            "/review/{toiletId}"
     };
 
     @Bean
