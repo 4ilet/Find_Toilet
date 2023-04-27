@@ -26,13 +26,13 @@ public class ToiletService {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
             if(memberId == null){
-                toiletDto.setBookmark(false);
+                toiletDto.setFolderId(0L);
             }else{
-                int isBookmark = toiletRepository.isBookmark(memberId, toiletDto.getToiletId()).intValue();
-                if(isBookmark == 1){
-                    toiletDto.setBookmark(true);
+                Long isBookmark = toiletRepository.isBookmark(memberId, toiletDto.getToiletId());
+                if(isBookmark != 0){
+                    toiletDto.setFolderId(isBookmark);
                 }else{
-                    toiletDto.setBookmark(false);
+                    toiletDto.setFolderId(0L);
                 }
             }
         }
@@ -59,13 +59,13 @@ public class ToiletService {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
             if(memberId == null){
-                toiletDto.setBookmark(false);
+                toiletDto.setFolderId(0L);
             }else{
-                int isBookmark = toiletRepository.isBookmark(memberId, toiletDto.getToiletId()).intValue();
-                if(isBookmark == 1){
-                    toiletDto.setBookmark(true);
+                Long isBookmark = toiletRepository.isBookmark(memberId, toiletDto.getToiletId());
+                if(isBookmark != 0){
+                    toiletDto.setFolderId(isBookmark);
                 }else{
-                    toiletDto.setBookmark(false);
+                    toiletDto.setFolderId(0L);
                 }
             }
         }

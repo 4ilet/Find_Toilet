@@ -24,14 +24,14 @@ public class ToiletDto {
     private boolean cMalePoo;
     private boolean allDay;
     private boolean diaper;
-    private boolean isBookmark;
+    private Long folderId;
     private Long distance;
 
     @QueryProjection
     public ToiletDto(Long toiletId, String toiletName, String address, String operationTime, BigDecimal lat,
                      BigDecimal lon, String phoneNumber, Double score, Long comment, boolean dMalePee, boolean dMalePoo,
                      boolean dFemalePoo, boolean cFemalePoo, boolean cMalePee, boolean cMalePoo, boolean allDay, boolean diaper,
-                     boolean isBookmark, Long distance
+                     Long folderId, Long distance
     ){
         this.toiletId = toiletId;
         this.toiletName = toiletName;
@@ -50,7 +50,7 @@ public class ToiletDto {
         this.cMalePoo = cMalePoo;
         this.allDay = allDay;
         this.diaper = diaper;
-        this.isBookmark = isBookmark;
+        this.folderId = folderId;
         this.distance = distance;
     }
 }
