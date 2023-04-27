@@ -529,27 +529,29 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Flexible(
-                  child: CustomListView(itemBuilder: (context, index) {
-                    final folderInfo = snapshot.data![index];
-                    return CustomBox(
-                      onTap: selectFolder(folderInfo.folderId),
-                      color: whiteColor,
-                      border: Border.all(),
-                      boxShadow: selected == folderInfo.folderId
-                          ? const [highlightShadow]
-                          : null,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        child: CustomText(
-                          title: folderInfo.folderName,
-                          fontSize: FontSize.defaultSize,
-                        ),
-                      ),
-                    );
-                  }),
+                  child: CustomListView(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final folderInfo = snapshot.data![index];
+                        return CustomBox(
+                          onTap: selectFolder(folderInfo.folderId),
+                          color: whiteColor,
+                          border: Border.all(),
+                          boxShadow: selected == folderInfo.folderId
+                              ? const [highlightShadow]
+                              : null,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 10,
+                            ),
+                            child: CustomText(
+                              title: folderInfo.folderName,
+                              fontSize: FontSize.defaultSize,
+                            ),
+                          ),
+                        );
+                      }),
                 );
               }
               return const Center(child: CircularProgressIndicator());

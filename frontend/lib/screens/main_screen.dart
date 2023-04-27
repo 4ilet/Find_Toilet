@@ -1,3 +1,4 @@
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
@@ -9,7 +10,12 @@ import 'package:flutter/material.dart';
 
 class Main extends StatelessWidget {
   final bool showReview;
-  const Main({super.key, this.showReview = false});
+  final ToiletModel? toiletModel;
+  const Main({
+    super.key,
+    this.showReview = false,
+    this.toiletModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,11 @@ class Main extends StatelessWidget {
                       ),
                     )
                   : const SizedBox(),
-              ToiletBottomSheet(isMain: true, showReview: showReview)
+              ToiletBottomSheet(
+                isMain: true,
+                showReview: showReview,
+                toiletModel: toiletModel,
+              )
             ],
           ),
         ),

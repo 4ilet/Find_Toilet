@@ -13,6 +13,7 @@ class FolderProvider extends ApiProvider {
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
+          print(data);
           FolderList folderList = data.map<FolderModel>((json) {
             return FolderModel.fromJson(json);
           }).toList();
@@ -66,8 +67,8 @@ class BookMarkProvider extends ApiProvider {
       final response = await dioWithToken().get(_bookmarkListUrl(folderId));
       switch (response.statusCode) {
         case 200:
-          final data = response.data;
-          if (data['data'].isEmpty) {
+          final data = response.data['data'];
+          if (data.isEmpty) {
             print('empty');
             return [];
           }

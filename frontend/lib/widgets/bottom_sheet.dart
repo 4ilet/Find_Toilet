@@ -150,6 +150,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                           color: mainColor,
                           child: snapshot.data!.isNotEmpty
                               ? CustomListView(
+                                  itemCount: snapshot.data!.length,
                                   itemBuilder: (context, i) => ReviewBox(
                                     review: snapshot.data![i],
                                     toiletId: widget.toiletModel!.toiletId,

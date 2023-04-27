@@ -234,7 +234,7 @@ class ListItem extends StatelessWidget {
       data.address,
       data.phoneNo,
       data.duration,
-      '${data.score} (${data.reviewLen}개)'
+      '${data.score} (${data.commentCnt}개)'
     ];
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
@@ -242,10 +242,14 @@ class ListItem extends StatelessWidget {
         onTap: routerPush(
           context,
           page: isMain
-              ? const Main(showReview: true)
-              : const Search(
+              ? Main(
+                  showReview: true,
+                  toiletModel: data,
+                )
+              : Search(
                   query: '',
                   showReview: true,
+                  toiletModel: data,
                 ),
         ),
         color: whiteColor,
@@ -319,7 +323,7 @@ class ListItem extends StatelessWidget {
                   ),
                   TextWithIcon(
                     icon: starIcon,
-                    text: '${data.score} (${data.reviewLen}개)',
+                    text: '${data.score} (${data.commentCnt}개)',
                     iconColor: CustomColors.yellowColor,
                   ),
                 ],

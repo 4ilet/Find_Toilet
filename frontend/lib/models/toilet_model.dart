@@ -1,7 +1,7 @@
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletModel {
-  final int toiletId, reviewLen;
+  final int toiletId, commentCnt;
   final double score, lat, lng;
   final String toiletName, address, duration, phoneNo;
   final bool bookmark,
@@ -19,7 +19,7 @@ class ToiletModel {
         address = json['address'],
         duration = json['operationTime'],
         phoneNo = json['phoneNumber'],
-        reviewLen = json['reviewLen'],
+        commentCnt = json['comment'],
         score = json['score'],
         lat = json['lat'],
         lng = json['lon'],
