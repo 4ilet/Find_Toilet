@@ -38,10 +38,12 @@ class Search extends StatelessWidget {
               const FilterBox()
             ],
           ),
-          ToiletBottomSheet(
-            isMain: false,
-            showReview: showReview,
-            toiletModel: toiletModel,
+          Positioned.fill(
+            child: ToiletBottomSheet(
+              isMain: false,
+              showReview: showReview,
+              toiletModel: toiletModel,
+            ),
           ),
         ],
       ),

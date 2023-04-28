@@ -4,13 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class UserProvider extends ApiProvider {
-  //* url
-  static const _userUrl = '/user';
-  static const _loginUrl = '$_userUrl/login';
-  static const _deleteUserUrl = '$_userUrl/delete';
-  static const _changeNameUrl = '$_userUrl/update/nickname/';
-  static const _userInfoUrl = '$_userUrl/userinfo';
-
   //* public function
   FutureDynamicMap login() => _login();
   FutureDynamicMap autoLogin() async {
@@ -42,12 +35,12 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _sendOldToken(String token) async {
     try {
-      final response = await dioWithToken().get(_userInfoUrl);
+      final response = await dioWithToken().get(userInfoUrl);
       switch (response.statusCode) {
         case 200:
           return {};
         case 401:
-          final result = await refreshToken(url: _userInfoUrl, method: 'GET');
+          final result = await refreshToken(url: userInfoUrl, method: 'GET');
           return result;
         default:
           throw Error();
@@ -60,13 +53,13 @@ class UserProvider extends ApiProvider {
   FutureDynamicMap _sendToken(String token) async {
     try {
       final response =
-          await dioWithToken().post(_loginUrl, data: {'token': token});
+          await dioWithToken().post(loginUrl, data: {'token': token});
       print(response);
       switch (response.statusCode) {
         case 200:
           return _returnTokens(response);
         case 401:
-          final result = await refreshToken(url: _loginUrl, method: 'POST');
+          final result = await refreshToken(url: loginUrl, method: 'POST');
           return {'result': result};
         default:
           throw Error();
@@ -108,7 +101,7 @@ class UserProvider extends ApiProvider {
 
   void _deleteUser() {
     try {
-      deleteApi(_deleteUserUrl);
+      deleteApi(deleteUserUrl);
     } catch (error) {
       throw Error();
     }
@@ -117,7 +110,7 @@ class UserProvider extends ApiProvider {
   FutureDynamicMap _changeName(String newName) async {
     try {
       final response = await dioWithToken().put(
-        _changeNameUrl,
+        changeNameUrl,
         data: {'nickname': newName},
       );
       switch (response.statusCode) {
@@ -127,7 +120,7 @@ class UserProvider extends ApiProvider {
           return {'message': '이미 존재하는 닉네임입니다.'};
         case 401:
           final success = await refreshToken(
-            url: _changeNameUrl,
+            url: changeNameUrl,
             method: 'POST',
             data: {'nickname': newName},
           );

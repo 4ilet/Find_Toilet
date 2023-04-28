@@ -4,28 +4,25 @@ import 'package:find_toilet/utilities/type_enum.dart';
 
 //* review CRUD
 class ReviewProvider extends ApiProvider {
-  //* url
-  static const _reviewUrl = '/review';
-  static String _reviewListUrl(int toiletId) => '$_reviewUrl/$toiletId';
-  static String _postReviewUrl(int toiletId) => '$_reviewUrl/post/$toiletId';
-  static String _updateReviewUrl(int reviewId) =>
-      '$_reviewUrl/update/$reviewId';
-  static String _deleteReviewUrl(int reviewId) =>
-      '$_reviewUrl/delete/$reviewId';
-
   //* 리뷰 목록
-  Future<ReviewList> getReviewList(int toiletId) async {
+  Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
-      final response = await dioWithToken().get(_reviewListUrl(toiletId));
+      final response = await dioWithToken().get(
+        reviewListUrl(toiletId),
+        queryParameters: {'page': page},
+      );
+      print(response);
       if (response.statusCode == 200) {
-        response.data.forEach((review) {
+        final data = response.data['data'];
+        data.forEach((review) {
           reviewList.add(ReviewModel.fromJson(review));
         });
         return reviewList;
       }
       throw Error();
     } catch (error) {
+      print(error);
       throw Error();
     }
   }
@@ -36,7 +33,7 @@ class ReviewProvider extends ApiProvider {
     required DynamicMap reviewData,
   }) async {
     return createApi(
-      _postReviewUrl(toiletId),
+      postReviewUrl(toiletId),
       data: reviewData,
     );
   }
@@ -46,10 +43,10 @@ class ReviewProvider extends ApiProvider {
     int reviewId, {
     required DynamicMap reviewData,
   }) async {
-    updateApi(_updateReviewUrl(reviewId), data: reviewData);
+    updateApi(updateReviewUrl(reviewId), data: reviewData);
   }
 
   //* 리뷰 삭제
   FutureBool deleteReview(int reviewId) async =>
-      deleteApi(_deleteReviewUrl(reviewId));
+      deleteApi(deleteReviewUrl(reviewId));
 }

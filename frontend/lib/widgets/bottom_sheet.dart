@@ -64,62 +64,65 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
-        return CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            CustomSilverAppBar(
-              toolbarHeight: 80,
-              backgroundColor: Colors.white10,
-              expandedHeight: widget.showReview ? 40 : 80,
-              flexibleSpace: CustomBox(
-                color: mainColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(10)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          topOfAppBar(),
-                          widget.showReview
-                              ? const SizedBox()
-                              : const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    // vertical: 5,
+        return CustomBox(
+          color: mainColor,
+          child: CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              CustomSilverAppBar(
+                toolbarHeight: 80,
+                backgroundColor: Colors.white10,
+                expandedHeight: widget.showReview ? 40 : 80,
+                flexibleSpace: CustomBox(
+                  color: mainColor,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(10)),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            topOfAppBar(),
+                            widget.showReview
+                                ? const SizedBox()
+                                : const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      // vertical: 5,
+                                    ),
+                                    child: CustomText(
+                                      title: '필터를 적용한 결과입니다',
+                                      fontSize: FontSize.smallSize,
+                                      color: CustomColors.whiteColor,
+                                    ),
                                   ),
-                                  child: CustomText(
-                                    title: '필터를 적용한 결과입니다',
-                                    fontSize: FontSize.smallSize,
-                                    color: CustomColors.whiteColor,
-                                  ),
-                                ),
-                        ],
-                      ),
-                      showList ? sortList() : const SizedBox()
-                    ],
+                          ],
+                        ),
+                        showList ? sortList() : const SizedBox()
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            // CustomSilverFutureList(
-            //   future: ToiletProvider().getNearToilet(),
-            //   showReview: false,
-            // )
-            // reviewSilverList(),
-            //*
-            widget.showReview
-                ? reviewSilverList()
-                : CustomSilverFutureList(
-                    future: widget.isMain
-                        ? ToiletProvider().getNearToilet()
-                        : ToiletProvider().searchToilet(),
-                    showReview: false,
-                  ),
-          ],
+              // CustomSilverFutureList(
+              //   future: ToiletProvider().getNearToilet(),
+              //   showReview: false,
+              // )
+              // reviewSilverList(),
+              //*
+              widget.showReview
+                  ? reviewSilverList()
+                  : CustomSilverFutureList(
+                      future: widget.isMain
+                          ? ToiletProvider().getNearToilet()
+                          : ToiletProvider().searchToilet(),
+                      showReview: false,
+                    ),
+            ],
+          ),
         );
       },
     );
@@ -129,6 +132,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   SliverList reviewSilverList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
+        childCount: 1,
         (BuildContext context, int index) {
           return CustomBox(
             radius: 0,
@@ -143,7 +147,8 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                     isMain: widget.isMain,
                   ),
                   FutureBuilder(
-                    future: ReviewProvider().getReviewList(index),
+                    future: ReviewProvider()
+                        .getReviewList(widget.toiletModel!.toiletId, 0),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return CustomBox(

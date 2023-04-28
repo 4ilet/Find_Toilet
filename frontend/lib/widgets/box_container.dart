@@ -2,7 +2,6 @@ import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/state_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -217,16 +216,17 @@ class ListItem extends StatelessWidget {
       starIcon
     ];
 
-    void addIntoBookmark() async {
-      final token = UserProvider().token;
-      if (token == null || token == '') {
-        routerPush(context,
+    void addReview() async {
+      final token = getToken(context);
+      if (token != null && token != '') {
+        removedRouterPush(context,
             page: ReviewForm(
               toiletName: data.toiletName,
               toiletId: data.toiletId,
-            ))();
+            ));
       } else {
-        showModal(context, page: const LoginConfirmModal());
+        await showModal(context, page: const LoginConfirmModal());
+        routerPop(context);
       }
     }
 
@@ -358,7 +358,7 @@ class ListItem extends StatelessWidget {
                       : const SizedBox(),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: addIntoBookmark,
+                    onPressed: addReview,
                     buttonText: '리뷰 남기기',
                   )
                 ],
@@ -590,15 +590,16 @@ class ReviewBox extends StatelessWidget {
                   CustomText(
                     color: CustomColors.mainColor,
                     title: review.nickname,
+                    fontSize: FontSize.smallSize,
                   ),
                   review.nickname == context.read<UserInfoProvider>().nickname
-                      ? Column(
+                      ? Row(
                           children: [
                             CustomIconButton(
                               color: CustomColors.mainColor,
                               icon: editIcon,
                               iconSize: 20,
-                              onPressed: routerPush(
+                              onPressed: () => removedRouterPush(
                                 context,
                                 page: ReviewForm(
                                   toiletName: toiletName,

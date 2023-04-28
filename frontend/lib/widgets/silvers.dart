@@ -66,7 +66,6 @@ class CustomSilverFutureList extends StatelessWidget {
                             : CustomListView(
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
-                                  print(index);
                                   return ListItem(
                                     isMain: false,
                                     showReview: false,

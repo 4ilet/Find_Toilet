@@ -50,21 +50,11 @@ class FolderProvider extends ApiProvider {
 }
 
 class BookMarkProvider extends ApiProvider {
-  //* url
-  static const _bookmarkUrl = '/like';
-  static String _bookmarkListUrl(int folderId) =>
-      '$_bookmarkUrl/folder/toiletlist/$folderId';
-  static String _addToiletUrl({required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/add/folder/$folderId/$toiletId';
-  static String _deleteToiletUrl(
-          {required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/delete/$folderId/$toiletId';
-
   //* 즐겨찾기 목록 조회
   Future<ToiletList> getToiletList(int folderId) async {
     ToiletList toiletList = [];
     try {
-      final response = await dioWithToken().get(_bookmarkListUrl(folderId));
+      final response = await dioWithToken().get(bookmarkListUrl(folderId));
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -72,6 +62,7 @@ class BookMarkProvider extends ApiProvider {
             print('empty');
             return [];
           }
+          print(data);
           data.forEach((element) {
             toiletList.add(ToiletModel.fromJson(element));
           });
@@ -99,7 +90,7 @@ class BookMarkProvider extends ApiProvider {
     required int toiletId,
   }) async {
     createApi(
-      _addToiletUrl(
+      addToiletUrl(
         folderId: folderId,
         toiletId: toiletId,
       ),
@@ -112,5 +103,5 @@ class BookMarkProvider extends ApiProvider {
     required int folderId,
     required int toiletId,
   }) async =>
-      deleteApi(_deleteToiletUrl(folderId: folderId, toiletId: toiletId));
+      deleteApi(deleteToiletUrl(folderId: folderId, toiletId: toiletId));
 }
