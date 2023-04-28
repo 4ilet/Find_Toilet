@@ -29,6 +29,6 @@ public class ToiletDto2 {
     private boolean cMalePoo;
     private boolean allDay;
     private boolean diaper;
-    private boolean isBookmark;
+    private Long folderId;
 
 }
