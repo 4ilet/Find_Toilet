@@ -131,7 +131,7 @@ public class FolderService {
             throw new NullPointerException("존재하지 않는 화장실입니다");
         }
     }
-    public List<ToiletDto2> getToiletList(long folderId){
+    public List<ToiletDto2> getToiletList(long folderId, Long memberId){
         LOGGER.info("CALL GET TOILET LIST");
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
@@ -164,6 +164,7 @@ public class FolderService {
                 toiletDto2.setScore(average);
                 toiletDto2.setComment(reviewList.size());
             }
+
             toiletDto2.setToiletId(toilet.getToiletId());
             toiletDto2.setToiletName(toilet.getToiletName());
             toiletDto2.setAddress(toilet.getAddress());
@@ -179,8 +180,18 @@ public class FolderService {
             toiletDto2.setCMalePoo(toilet.isCMalePoo());
             toiletDto2.setAllDay(toilet.isAllDay());
             toiletDto2.setDiaper(toilet.isDiaper());
-            toiletDto2.setBookmark(true);
             toiletDtoList.add(toiletDto2);
+
+            if(memberId == null){
+                toiletDto2.setFolderId(0L);
+            }else{
+                Long isBookmark = toiletRepository.isBookmark(memberId, toilet.getToiletId());
+                if(isBookmark != 0){
+                    toiletDto2.setFolderId(isBookmark);
+                }else{
+                    toiletDto2.setFolderId(0L);
+                }
+            }
         }
         return toiletDtoList;
     }

@@ -202,12 +202,21 @@ public class FolderController {
 
     @GetMapping("/folder/toiletlist/{folderId}")
     @ApiOperation(value = "즐겨찾기 화장실 목록 가져오기", notes = "즐겨찾기 폴더 안에 있는 화장실 목록을 가져온다.")
-    public ResponseEntity<?> getToiletList(@PathVariable("folderId") long folderId){
+    public ResponseEntity<?> getToiletList(HttpServletRequest request, @PathVariable("folderId") long folderId){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        String accessToken = request.getHeader("Authorization");
+
+        Long reqMemberId = null;
+
+        if(accessToken != null){
+            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+        }
+
         try {
-            List<ToiletDto2> toiletDtoList = folderService.getToiletList(folderId);
+            List<ToiletDto2> toiletDtoList = folderService.getToiletList(folderId, reqMemberId);
             message.setStatus(StatusEnum.OK);
             if (toiletDtoList.size() > 0) {
                 message.setMessage("목록 가져오기 성공");
