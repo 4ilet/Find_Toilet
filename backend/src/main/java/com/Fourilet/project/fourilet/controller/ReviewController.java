@@ -73,17 +73,17 @@ public class ReviewController {
 
         } catch (NoSuchElementException e){
 
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage(String.valueOf(e));
-
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-
-        } catch (NullPointerException e) {
-
             message.setStatus(StatusEnum.NO_CONTENT);
             message.setMessage(String.valueOf(e));
 
             return new ResponseEntity<>(message, headers, HttpStatus.NO_CONTENT);
+
+        } catch (NullPointerException e) {
+
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
 
     }
