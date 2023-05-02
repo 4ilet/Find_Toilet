@@ -133,14 +133,17 @@ public class FolderService {
     }
     public List<ToiletDto2> getToiletList(long folderId, Long memberId){
         LOGGER.info("CALL GET TOILET LIST");
+        Member member = memberRepository.findById(memberId).orElse(null);
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
+
         if (folder == null) {
             throw new NullPointerException("폴더가 존재하지 않습니다.");
         }
 
         List<ToiletDto2> toiletDtoList = new ArrayList<>();
         List<Toilet> toiletList = new ArrayList<>();
+        long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
 
         for (BookMark bookmark : bookMarkList){
             Toilet toilet = bookmark.getToilet();
@@ -149,16 +152,23 @@ public class FolderService {
 
         for (Toilet toilet : toiletList){
             ToiletDto2 toiletDto2 = new ToiletDto2();
+            // 해당 화장실의 모든 리뷰 목록을 reviewList에 저장,
             List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
             float total = 0;
+
             for (Review review : reviewList) {
                 float score = review.getScore();
                 total += score;
+                if(review.getMember() == member){ // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
+                    alreadyReviewed = review.getReviewId();
+                }
             }
+
             float average = 0;
             if (reviewList.size() == 0){
                 toiletDto2.setScore(average);
                 toiletDto2.setComment(reviewList.size());
+
             } else {
                 average = total / reviewList.size();
                 toiletDto2.setScore(average);
@@ -180,11 +190,12 @@ public class FolderService {
             toiletDto2.setCMalePoo(toilet.isCMalePoo());
             toiletDto2.setAllDay(toilet.isAllDay());
             toiletDto2.setDiaper(toilet.isDiaper());
-            toiletDtoList.add(toiletDto2);
 
             if(memberId == null){
-                toiletDto2.setFolderId(0L);
+                toiletDto2.setFolderId(0L); // 0L : 롱타입 0으로~
+                toiletDto2.setReviewId(0L); // 0 인거죠 ~ 리뷰 작성하기 버튼이 보일꺼고,
             }else{
+                toiletDto2.setReviewId(alreadyReviewed); // 0인 경우 리뷰 쓴 적 없음, 0이 아니면 해당 리뷰 쓴거임~!
                 Long isBookmark = toiletRepository.isBookmark(memberId, toilet.getToiletId());
                 if(isBookmark != 0){
                     toiletDto2.setFolderId(isBookmark);
@@ -192,6 +203,9 @@ public class FolderService {
                     toiletDto2.setFolderId(0L);
                 }
             }
+
+            toiletDtoList.add(toiletDto2);
+
         }
         return toiletDtoList;
     }
