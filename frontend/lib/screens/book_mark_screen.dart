@@ -39,7 +39,7 @@ class BookMarkFolderList extends StatelessWidget {
                     ),
                     CustomText(
                       title:
-                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${context.watch<ApplyChangeProvider>().refresh.trim()}',
+                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
                       fontSize: FontSize.largeSize,
                       color: CustomColors.whiteColor,
                       font: kimm,
@@ -146,7 +146,7 @@ class BookMarkList extends StatelessWidget {
           child: Row(
             children: [
               CustomText(
-                title: folderName,
+                title: '$folderName${onRefresh(context)}',
                 fontSize: FontSize.titleSize,
                 color: CustomColors.whiteColor,
               ),

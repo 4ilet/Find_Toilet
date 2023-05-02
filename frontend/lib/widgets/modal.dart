@@ -461,7 +461,9 @@ class DeleteModal extends StatelessWidget {
           page: const AlertModal(
               title: '삭제 확인', content: '성공적으로 삭제 작업이 완료되었습니다.'),
         );
+        changeRefresh(context);
       } catch (error) {
+        routerPop(context)();
         showModal(
           context,
           page: AlertModal(
@@ -648,7 +650,7 @@ class AlertModal extends StatelessWidget {
       title: title,
       isAlert: true,
       onPressed: () {
-        context.read<ApplyChangeProvider>().refreshPage();
+        changeRefresh(context);
         routerPop(context)();
       },
       children: [
@@ -678,7 +680,7 @@ class LoginConfirmModal extends StatelessWidget {
         await login(context);
         if (!context.mounted) return;
         routerPop(context)();
-        context.read<ApplyChangeProvider>().refreshPage();
+        changeRefresh(context);
       },
     );
   }

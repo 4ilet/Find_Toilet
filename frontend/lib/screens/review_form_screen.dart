@@ -34,11 +34,11 @@ class _ReviewFormState extends State<ReviewForm> {
   @override
   void initState() {
     super.initState();
-    if (widget.preComment != null) {
-      reviewData['comment'] = widget.preComment!;
-    }
-    if (widget.preScore != null) {
-      reviewData['score'] = widget.preScore!;
+    if (widget.reviewId != null) {
+      if (widget.preComment != null && widget.preScore != null) {
+        reviewData['comment'] = widget.preComment!;
+        reviewData['score'] = widget.preScore!;
+      } else {}
     }
   }
 

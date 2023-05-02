@@ -1,5 +1,5 @@
 import 'package:find_toilet/utilities/type_enum.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -163,4 +163,18 @@ class SettingsProvider with ChangeNotifier {
     _hasLargeFont = newValue;
     notifyListeners();
   }
+}
+
+//* width, height
+class SizeProvider with ChangeNotifier {
+  static late final _screenWidth, _screenHeight;
+  double get screenWidth => _screenWidth;
+  double get screenHeight => _screenHeight;
+  void _initWidthHeight(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    _screenWidth = size.width;
+    _screenHeight = size.height;
+  }
+
+  void initWidthHeight(BuildContext context) => _initWidthHeight(context);
 }

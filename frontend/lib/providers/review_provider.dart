@@ -12,15 +12,20 @@ class ReviewProvider extends ApiProvider {
         reviewListUrl(toiletId),
         queryParameters: {'page': page},
       );
-      print(response);
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        data.forEach((review) {
-          reviewList.add(ReviewModel.fromJson(review));
-        });
-        return reviewList;
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data['data'];
+          data.forEach((review) {
+            reviewList.add(ReviewModel.fromJson(review));
+          });
+          return reviewList;
+        case 204:
+          return reviewList;
+        case 401:
+          return reviewList;
+        default:
+          throw Error();
       }
-      throw Error();
     } catch (error) {
       print(error);
       throw Error();

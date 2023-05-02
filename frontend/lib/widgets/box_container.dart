@@ -40,17 +40,17 @@ class _ThemeBoxState extends State<ThemeBox> {
       child: CustomBox(
         onTap: widget.onTap,
         height: 220,
-        width: 170,
+        width: screenWidth(context) * 0.8,
         color: whiteColor,
         boxShadow: widget.selected ? [redShadow] : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const CustomBox(
+            CustomBox(
               color: greyColor,
               height: 130,
-              width: 130,
-              child: SizedBox(),
+              width: screenWidth(context) * 0.6,
+              child: const SizedBox(),
             ),
             CustomText(title: widget.text)
           ],
@@ -77,9 +77,9 @@ class FolderBox extends StatelessWidget {
     String folderName = folderInfo.folderName;
     int bookmarkCnt = folderInfo.bookmarkCnt;
     int folderId = folderInfo.folderId;
-    String printedName = folderName.length <= 3
+    String printedName = folderName.length <= 5
         ? folderName
-        : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
+        : '${folderName.substring(0, 5)}\n${folderName.substring(5)}';
     return CustomBox(
       onTap: routerPush(
         context,
@@ -97,57 +97,60 @@ class FolderBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  title: printedName,
-                  fontSize: FontSize.defaultSize,
-                  color: CustomColors.mainColor,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomIconButton(
-                      icon: editIcon,
-                      color: CustomColors.mainColor,
-                      onPressed: () => showModal(
-                        context,
-                        page: InputModal(
-                          title: '즐겨 찾기 폴더명 수정',
-                          buttonText: '수정',
-                          isAlert: false,
-                          kindOf: 'folder',
-                          folderId: folderId,
-                        ),
-                      ),
-                      iconSize: 25,
-                    ),
-                    CustomIconButton(
-                      icon: deleteIcon,
-                      color: CustomColors.redColor,
-                      onPressed: () => showModal(
-                        context,
-                        page: DeleteModal(
-                          deleteMode: 1,
-                          id: folderId,
-                        ),
-                      ),
-                      iconSize: 25,
-                    ),
-                  ],
-                ),
-              ],
+            Flexible(
+              child: Row(
+                children: [
+                  CustomText(
+                    title: printedName,
+                    fontSize: FontSize.defaultSize,
+                    color: CustomColors.mainColor,
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CustomText(
-                  title: '$bookmarkCnt 개',
-                  fontSize: FontSize.smallSize,
-                  color: CustomColors.blackColor,
-                ),
-              ],
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    title: '$bookmarkCnt 개',
+                    fontSize: FontSize.smallSize,
+                    color: CustomColors.blackColor,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomIconButton(
+                        icon: editIcon,
+                        color: CustomColors.mainColor,
+                        onPressed: () => showModal(
+                          context,
+                          page: InputModal(
+                            title: '즐겨 찾기 폴더명 수정',
+                            buttonText: '수정',
+                            isAlert: false,
+                            kindOf: 'folder',
+                            folderId: folderId,
+                          ),
+                        ),
+                        iconSize: 30,
+                      ),
+                      CustomIconButton(
+                        icon: deleteIcon,
+                        color: CustomColors.redColor,
+                        onPressed: () => showModal(
+                          context,
+                          page: DeleteModal(
+                            deleteMode: 1,
+                            id: folderId,
+                          ),
+                        ),
+                        iconSize: 30,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -216,13 +219,14 @@ class ListItem extends StatelessWidget {
       starIcon
     ];
 
-    void addReview() async {
+    void addOrEditReview() async {
       final token = getToken(context);
       if (token != null && token != '') {
         removedRouterPush(context,
             page: ReviewForm(
               toiletName: data.toiletName,
               toiletId: data.toiletId,
+              reviewId: data.reviewId,
             ));
       } else {
         await showModal(context, page: const LoginConfirmModal());
@@ -275,12 +279,16 @@ class ListItem extends StatelessWidget {
                       IconButton(
                         onPressed: () => showModal(
                           context,
-                          page: data.bookmark
-                              ? DeleteModal(deleteMode: 2, id: data.toiletId)
+                          page: data.folderId != 0
+                              ? DeleteModal(
+                                  deleteMode: 2,
+                                  id: data.toiletId,
+                                  folderId: data.folderId,
+                                )
                               : AddToBookMarkModal(toiletId: data.toiletId),
                         ),
                         icon: CustomIcon(
-                          icon: data.bookmark ? heartIcon : emptyHeartIcon,
+                          icon: data.folderId != 0 ? heartIcon : emptyHeartIcon,
                           color: redColor,
                         ),
                       ),
@@ -358,8 +366,8 @@ class ListItem extends StatelessWidget {
                       : const SizedBox(),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: addReview,
-                    buttonText: '리뷰 남기기',
+                    onPressed: addOrEditReview,
+                    buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
                   )
                 ],
               )

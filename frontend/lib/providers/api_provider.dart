@@ -19,7 +19,7 @@ class UrlClass extends UserInfoProvider {
   String addToiletUrl({required int folderId, required int toiletId}) =>
       '$_bookmarkUrl/add/folder/$folderId/$toiletId';
   String deleteToiletUrl({required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/delete/$folderId/$toiletId';
+      '$_bookmarkUrl/delete/toilet/$folderId/$toiletId';
 
   //* toilet
   static const _toiletUrl = '/toilet';
@@ -43,11 +43,13 @@ class UrlClass extends UserInfoProvider {
 
 class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
-  final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
+  final dio =
+      Dio(BaseOptions(baseUrl: _baseUrl!, receiveDataWhenStatusError: true));
   dioWithToken() => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
           headers: {'Authorization': token},
+          receiveDataWhenStatusError: true,
         ),
       );
   dioWithRefresh(String method) => Dio(
@@ -55,6 +57,7 @@ class ApiProvider extends UrlClass {
           baseUrl: _baseUrl!,
           method: method,
           headers: {'Authorization-refresh': refresh},
+          receiveDataWhenStatusError: true,
         ),
       );
   //*
@@ -157,6 +160,8 @@ class ApiProvider extends UrlClass {
   FutureBool _deleteApi(String url) async {
     try {
       final response = await dioWithToken().delete(url);
+      print(response.statusCode);
+      print(response.data);
       switch (response.statusCode) {
         case 200:
           return true;
@@ -175,7 +180,5 @@ class ApiProvider extends UrlClass {
     }
   }
 
-  FutureBool deleteApi(String url) async {
-    return _deleteApi(url);
-  }
+  FutureBool deleteApi(String url) async => _deleteApi(url);
 }

@@ -56,7 +56,7 @@ class _IntroState extends State<Intro> {
 
   @override
   Widget build(BuildContext context) {
-    initWidthHeight(context);
+    context.read<SizeProvider>().initWidthHeight(context);
     return Scaffold(
       backgroundColor: mainColor,
       body: Center(child: Image.asset(logo)),

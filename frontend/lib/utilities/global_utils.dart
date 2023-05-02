@@ -34,14 +34,6 @@ Future<bool?> showModal(BuildContext context, {required Widget page}) =>
       builder: (context) => page,
     );
 
-//* 화면 너비, 높이 (intro에서 실행)
-late var screenWidth, screenHeight;
-void initWidthHeight(BuildContext context) {
-  final size = MediaQuery.of(context).size;
-  screenWidth = size.width;
-  screenHeight = size.height;
-}
-
 //* 토큰 받아오기
 String? getToken(BuildContext context) =>
     context.read<UserInfoProvider>().token;
@@ -61,11 +53,15 @@ void applyFontSize(BuildContext context, bool newValue) {
   context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }
 
+//* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)
 FutureBool exitApp(BuildContext context) =>
     context.read<ApplyChangeProvider>().changePressed();
+
+//* 뒤로 가기 버튼 눌림 여부
 bool watchPressed(BuildContext context) =>
     context.watch<ApplyChangeProvider>().pressedOnce;
 
+//* 로그인
 FutureBool login(BuildContext context) async {
   final result = await UserProvider().login();
   if (!context.mounted) throw Error();
@@ -81,3 +77,18 @@ FutureBool login(BuildContext context) async {
   }
   return true;
 }
+
+//* 새로고침 확인
+String onRefresh(BuildContext context) =>
+    context.watch<ApplyChangeProvider>().refresh.trim();
+
+//* 새로고침
+void changeRefresh(BuildContext context) =>
+    context.read<ApplyChangeProvider>().refreshPage();
+
+//* 너비, 높이
+double screenWidth(BuildContext context) =>
+    context.read<SizeProvider>().screenWidth;
+
+double screenHeight(BuildContext context) =>
+    context.read<SizeProvider>().screenHeight;

@@ -19,8 +19,6 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    initWidthHeight(context);
-
     return WillPopScope(
       onWillPop: () => exitApp(context),
       child: GestureDetector(
@@ -34,8 +32,8 @@ class Main extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: screenWidth,
-                    height: screenHeight,
+                    width: screenWidth(context),
+                    height: screenHeight(context),
                     child: const MapScreen(),
                   ),
                 ],

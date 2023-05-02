@@ -55,20 +55,15 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                   color: CustomColors.whiteColor,
                   font: kimm,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ThemeBox(
-                      text: '큰 글씨',
-                      selected: isLargeSize,
-                      onTap: changeFontSize(true),
-                    ),
-                    ThemeBox(
-                      text: '기본',
-                      selected: !isLargeSize,
-                      onTap: changeFontSize(false),
-                    ),
-                  ],
+                ThemeBox(
+                  text: '큰 글씨',
+                  selected: isLargeSize,
+                  onTap: changeFontSize(true),
+                ),
+                ThemeBox(
+                  text: '기본',
+                  selected: !isLargeSize,
+                  onTap: changeFontSize(false),
                 ),
                 CustomButton(onPressed: applyTheme)
               ],

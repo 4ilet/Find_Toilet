@@ -44,7 +44,7 @@ class FolderProvider extends ApiProvider {
           {required StringMap folderData}) async =>
       updateApi(updateFolderUrl(folderId), data: folderData);
 
-  //* 리뷰 삭제
+  //* 폴더 삭제
   FutureBool deleteFolder(int folderId) async =>
       deleteApi(deleteFolderUrl(folderId));
 }
@@ -103,5 +103,8 @@ class BookMarkProvider extends ApiProvider {
     required int folderId,
     required int toiletId,
   }) async =>
-      deleteApi(deleteToiletUrl(folderId: folderId, toiletId: toiletId));
+      deleteApi(deleteToiletUrl(
+        folderId: folderId,
+        toiletId: toiletId,
+      ));
 }
