@@ -1,6 +1,7 @@
 package com.Fourilet.project.fourilet.dto;
 public enum StatusEnum {
     OK(200, "OK"),
+    NO_CONTENT(204, "NO_CONTENT"),
     BAD_REQUEST(400, "BAD_REQUEST"),
     UNAUTHORIZED(401, "UNAUTHORIZED"),
     FORBIDDEN(403, "FORBIDDEN"),
