@@ -80,10 +80,10 @@ public class ReviewController {
 
         } catch (NullPointerException e) {
 
-            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setStatus(StatusEnum.NO_CONTENT);
             message.setMessage(String.valueOf(e));
 
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(message, headers, HttpStatus.NO_CONTENT);
         }
 
     }
