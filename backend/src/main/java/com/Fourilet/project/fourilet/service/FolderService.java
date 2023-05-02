@@ -143,7 +143,6 @@ public class FolderService {
 
         List<ToiletDto2> toiletDtoList = new ArrayList<>();
         List<Toilet> toiletList = new ArrayList<>();
-        long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
 
         for (BookMark bookmark : bookMarkList){
             Toilet toilet = bookmark.getToilet();
@@ -151,6 +150,7 @@ public class FolderService {
         }
 
         for (Toilet toilet : toiletList){
+            long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
             ToiletDto2 toiletDto2 = new ToiletDto2();
             // 해당 화장실의 모든 리뷰 목록을 reviewList에 저장,
             List<Review> reviewList = reviewRepository.findAllByToilet(toilet);

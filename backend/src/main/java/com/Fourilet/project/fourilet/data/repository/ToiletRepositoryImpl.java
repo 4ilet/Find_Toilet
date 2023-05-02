@@ -54,6 +54,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.allDay,
                                 toilet.diaper,
                                 toilet.toiletId,
+                                toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
                 .leftJoin(toilet.reviewList, review)
@@ -114,6 +115,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.allDay,
                                 toilet.diaper,
                                 toilet.toiletId,
+                                toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
                 .leftJoin(toilet.reviewList, review)
@@ -168,6 +170,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.allDay,
                                 toilet.diaper,
                                 toilet.toiletId,
+                                toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
                 .leftJoin(toilet.reviewList, review)
@@ -213,6 +216,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.cMalePoo,
                                 toilet.allDay,
                                 toilet.diaper,
+                                toilet.toiletId,
                                 toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
