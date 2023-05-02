@@ -10,13 +10,8 @@ import com.Fourilet.project.fourilet.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 //import javax.xml.ws.Response;
 //import java.sql.Array;
@@ -121,5 +116,21 @@ public class ReviewService {
         review.setComment(updateReviewDto.getComment());
         review.setScore(updateReviewDto.getScore());
         reviewRepository.save(review);
+    }
+    public ReviewDto.GetReviewDto getReview(long reviewId){
+        LOGGER.info("CALL GET REVIEW");
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        ReviewDto.GetReviewDto getreviewDto = new ReviewDto.GetReviewDto();
+        if (review == null){
+            throw new NullPointerException("존재하지 않는 리뷰입니다.");
+        }
+
+        getreviewDto.setReviewId(review.getReviewId());
+        getreviewDto.setScore(review.getScore());
+        getreviewDto.setComment(review.getComment());
+        Member member = memberRepository.findById(review.getMember().getMemberId());
+        getreviewDto.setNickname(member.getNickname());
+
+        return getreviewDto;
     }
 }
