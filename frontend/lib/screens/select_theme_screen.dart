@@ -40,33 +40,41 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
         backgroundColor: mainColor,
         body: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(
-                    child: CustomText(
-                  title: '어서오세요',
-                  fontSize: FontSize.titleSize,
-                  color: CustomColors.whiteColor,
-                  font: kimm,
-                )),
-                const CustomText(
-                  title: '사용하실 테마를 선택해주세요.',
-                  color: CustomColors.whiteColor,
-                  font: kimm,
-                ),
-                ThemeBox(
-                  text: '큰 글씨',
-                  selected: isLargeSize,
-                  onTap: changeFontSize(true),
-                ),
-                ThemeBox(
-                  text: '기본',
-                  selected: !isLargeSize,
-                  onTap: changeFontSize(false),
-                ),
-                CustomButton(onPressed: applyTheme)
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: Column(
+                    children: const [
+                      CustomText(
+                        title: '어서오세요',
+                        fontSize: FontSize.titleSize,
+                        color: CustomColors.whiteColor,
+                        font: kimm,
+                      ),
+                      SizedBox(height: 10),
+                      CustomText(
+                        title: '사용하실 테마를 선택해주세요.',
+                        color: CustomColors.whiteColor,
+                        font: kimm,
+                      ),
+                    ],
+                  )),
+                  ThemeBox(
+                    text: '큰 글씨',
+                    selected: isLargeSize,
+                    onTap: changeFontSize(true),
+                  ),
+                  ThemeBox(
+                    text: '기본',
+                    selected: !isLargeSize,
+                    onTap: changeFontSize(false),
+                  ),
+                  CustomButton(onPressed: applyTheme)
+                ],
+              ),
             ),
             watchPressed(context)
                 ? const Center(

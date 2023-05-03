@@ -139,12 +139,19 @@ class BookMarkList extends StatelessWidget {
       backgroundColor: mainColor,
       body: ToiletScrollView(
         folderId: folderId,
-        toolbarHeight: 50,
-        expandedHeight: 80,
+        toolbarHeight: 10,
+        expandedHeight: 60,
         flexibleSpace: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(top: 30),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              CustomIconButton(
+                onPressed: routerPop(context),
+                icon: exitIcon,
+                color: CustomColors.whiteColor,
+                iconSize: 35,
+              ),
               CustomText(
                 title: '$folderName${onRefresh(context)}',
                 fontSize: FontSize.titleSize,
@@ -157,10 +164,6 @@ class BookMarkList extends StatelessWidget {
                 title: '$bookmarkCnt',
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: ExitPage(),
               ),
             ],
           ),

@@ -29,6 +29,7 @@ class UrlClass extends UserInfoProvider {
   //* review
   static const _reviewUrl = '/review';
   String reviewListUrl(int toiletId) => '$_reviewUrl/$toiletId';
+  String reviewUrl(int reviewId) => '$_reviewUrl/get/$reviewId';
   String postReviewUrl(int toiletId) => '$_reviewUrl/post/$toiletId';
   String updateReviewUrl(int reviewId) => '$_reviewUrl/update/$reviewId';
   String deleteReviewUrl(int reviewId) => '$_reviewUrl/delete/$reviewId';

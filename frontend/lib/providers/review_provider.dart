@@ -32,6 +32,25 @@ class ReviewProvider extends ApiProvider {
     }
   }
 
+  //* 리뷰 조회
+  Future<ReviewModel> getReview(int reviewId) async {
+    try {
+      final response = await dioWithToken().get(reviewUrl(reviewId));
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data['data'];
+          return ReviewModel.fromJson(data);
+        // case 401:
+        //   return review;
+        default:
+          throw Error();
+      }
+    } catch (error) {
+      print(error);
+      throw Error();
+    }
+  }
+
   //* 리뷰 생성
   FutureBool postNewReview({
     required int toiletId,
