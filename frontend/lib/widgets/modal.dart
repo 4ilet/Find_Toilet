@@ -590,16 +590,11 @@ class NavigationModal extends StatelessWidget {
           'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=$packageNmae'),
       Uri.parse(
           'kakaomap://route?sp=${startPoint[0]},${startPoint[1]}&ep=${endPoint[0]},${endPoint[1]}&by=CAR'),
-      Uri.parse('tmap://open')
+      Uri.parse(
+          'tmap://route?goalname=$destination&goalx=${endPoint[1]}&goaly=${endPoint[0]}')
     ];
     ReturnVoid toMapApp(int i) {
       return () async {
-        // final uri = uriList[i];
-        // await launchUrl(uri, mode: LaunchMode.externalApplication);
-        // final newUri = Uri.parse(
-        //     'https://map.naver.com/v5/directions/14134997.483033512,4519704.42999858,광화문,13161322,PLACE_POI/14130204.52216987,4512164.397202961,대교아파트,19000666,PLACE_POI/-/transit?c=12,0,0,0,dh'
-        //     // 'https://apis.openapi.sk.com/tmap/routes/prediction?version=1&callback={callback}'
-        //     );
         await launchUrl(uriList[i]);
       };
     }
