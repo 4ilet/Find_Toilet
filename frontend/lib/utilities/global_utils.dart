@@ -46,11 +46,20 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
 }
 
 //* 현재 글자 크기
-bool? getFontSize(BuildContext context) =>
-    context.read<SettingsProvider>().hasLargeFont;
+String? getFontSize(BuildContext context) =>
+    context.read<SettingsProvider>().fontState;
 
-void applyFontSize(BuildContext context, bool newValue) {
-  context.read<SettingsProvider>().applyHasLargeFont(newValue);
+//* 화면 확대/축소 버튼
+String getMagnify(BuildContext context) =>
+    context.read<SettingsProvider>().magnigyState;
+
+//* 지도 반경
+String getRadius(BuildContext context) =>
+    context.read<SettingsProvider>().radiusState;
+
+//* 메뉴 옵션 변경
+void changeOptions(BuildContext context, int menuIdx) {
+  context.read<SettingsProvider>().applyOption(menuIdx);
 }
 
 //* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)

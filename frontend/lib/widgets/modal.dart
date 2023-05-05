@@ -307,50 +307,53 @@ class CustomModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Flexible(
-          child: Center(
-            child: CustomText(
-              title: title,
-              fontSize: FontSize.largeSize,
-              color: titleColor,
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: SimpleDialog(
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Flexible(
+            child: Center(
+              child: CustomText(
+                title: title,
+                fontSize: FontSize.largeSize,
+                color: titleColor,
+              ),
             ),
           ),
         ),
-      ),
-      children: [
-        ...children,
-        isAlert
-            ? Flexible(
-                child: modalButton(
-                  context: context,
-                  onPressed: onPressed ?? routerPop(context),
-                  buttonText: buttonText,
-                ),
-              )
-            : Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      modalButton(
-                        context: context,
-                        onPressed: onPressed ?? routerPop(context),
-                        buttonText: buttonText,
-                      ),
-                      modalButton(
-                        context: context,
-                        onPressed: routerPop(context),
-                        buttonText: '취소',
-                      ),
-                    ],
+        children: [
+          ...children,
+          isAlert
+              ? Flexible(
+                  child: modalButton(
+                    context: context,
+                    onPressed: onPressed ?? routerPop(context),
+                    buttonText: buttonText,
+                  ),
+                )
+              : Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        modalButton(
+                          context: context,
+                          onPressed: onPressed ?? routerPop(context),
+                          buttonText: buttonText,
+                        ),
+                        modalButton(
+                          context: context,
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 

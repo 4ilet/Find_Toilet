@@ -1,5 +1,5 @@
 import 'package:find_toilet/providers/state_provider.dart';
-import 'package:find_toilet/screens/book_mark_screen.dart';
+import 'package:find_toilet/screens/book_mark_folder_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
