@@ -9,8 +9,10 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
+import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -162,12 +164,14 @@ class InputModal extends StatelessWidget {
   final String title, buttonText;
   final bool isAlert;
   final String kindOf;
+  final int? folderId;
   const InputModal({
     super.key,
     required this.title,
     required this.buttonText,
     required this.isAlert,
     required this.kindOf,
+    this.folderId,
   });
 
   @override
@@ -180,26 +184,38 @@ class InputModal extends StatelessWidget {
     void createFolder(BuildContext context) async {
       try {
         if (data != null && data != '') {
-          final result =
-              await FolderProvider().createNewFolder({'folderName': data!});
+          folderId == null
+              ? await FolderProvider().createNewFolder({'folderName': data!})
+              : await FolderProvider().updateFolderName(folderId!,
+                  folderData: {'folderName': data!});
           if (!context.mounted) return;
           routerPop(context)();
           showModal(
             context,
-            page: const AlertModal(
-              title: '폴더 생성 성공',
-              content: '성공적으로 폴더가 생성되었습니다.',
+            page: AlertModal(
+              title: folderId == null ? '폴더 생성 성공' : '폴더 수정 성공',
+              content: folderId == null
+                  ? '성공적으로 폴더가 생성되었습니다.'
+                  : '성공적으로 폴더가 수정되었습니다.',
             ),
           );
-        } else {}
-        // routerPop(context)();
-        // routerPush(context, page: const BookMarkFolderList())();
+        } else {
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '폴더명 확인',
+              content: '폴더명을 올바르게 입력해주세요.',
+            ),
+          );
+        }
       } catch (error) {
         showModal(
           context,
-          page: const AlertModal(
+          page: AlertModal(
             title: '오류 발생',
-            content: '오류가 발생해\n 폴더가 생성되지 않았습니다',
+            content: folderId == null
+                ? '오류가 발생해\n 폴더가 생성되지 않았습니다'
+                : '오류가 발생해\n 폴더 이름이 변경되지 않았습니다',
           ),
         );
       }
@@ -257,9 +273,9 @@ class InputModal extends StatelessWidget {
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: kindOf == 'folder'
-          ? () => createFolder(context)
-          : () => setNickname(data),
+      onPressed: kindOf == 'nickname'
+          ? () => setNickname(data)
+          : () => createFolder(context),
       isAlert: isAlert,
       children: [
         Expanded(
@@ -426,23 +442,28 @@ class DeleteModal extends StatelessWidget {
 
     void onPressed() async {
       try {
-        late bool response;
         switch (deleteMode) {
           case 0:
-            response = await ReviewProvider().deleteReview(id);
+            await ReviewProvider().deleteReview(id);
             break;
           case 1:
-            response = await FolderProvider().deleteFolder(id);
+            await FolderProvider().deleteFolder(id);
             break;
           default:
-            response = await BookMarkProvider()
-                .deleteBookMark(folderId: id, toiletId: id);
+            await BookMarkProvider()
+                .deleteBookMark(folderId: folderId!, toiletId: id);
             break;
         }
         if (!context.mounted) return;
         routerPop(context)();
-        showModal(context, page: const SuccessBox(feature: '삭제', page: '폴더'));
+        showModal(
+          context,
+          page: const AlertModal(
+              title: '삭제 확인', content: '성공적으로 삭제 작업이 완료되었습니다.'),
+        );
+        changeRefresh(context);
       } catch (error) {
+        routerPop(context)();
         showModal(
           context,
           page: AlertModal(
@@ -473,8 +494,8 @@ class DeleteModal extends StatelessWidget {
 
 //* 즐겨찾기 추가 모달
 class AddToBookMarkModal extends StatefulWidget {
-  final int folderCnt;
-  const AddToBookMarkModal({super.key, this.folderCnt = 10});
+  final int toiletId;
+  const AddToBookMarkModal({super.key, required this.toiletId});
 
   @override
   State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
@@ -482,10 +503,10 @@ class AddToBookMarkModal extends StatefulWidget {
 
 class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   int? selected;
-  ReturnVoid selectFolder(int idx) {
+  ReturnVoid selectFolder(int id) {
     return () {
       setState(() {
-        selected = idx;
+        selected = id;
       });
     };
   }
@@ -494,43 +515,49 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   Widget build(BuildContext context) {
     return CustomModal(
       title: '즐겨찾기 추가',
-      onPressed: () {},
+      onPressed: () {
+        if (selected != null) {
+          BookMarkProvider().addToilet(
+            folderId: selected!,
+            toiletId: widget.toiletId,
+          );
+        }
+      },
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              for (int i = 0; i < widget.folderCnt ~/ 2; i += 1)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int j = 0; j < 2; j += 1)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Column(
-                          children: [
-                            CustomBox(
-                              onTap: selectFolder(2 * i + j),
-                              color: whiteColor,
-                              border: Border.all(),
-                              boxShadow: selected == 2 * i + j
-                                  ? const [highlightShadow]
-                                  : null,
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                child: CustomText(
-                                    title: '폴더명',
-                                    fontSize: FontSize.defaultSize),
-                              ),
+          child: FutureBuilder(
+            future: FolderProvider().getFolderList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Flexible(
+                  child: CustomListView(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final folderInfo = snapshot.data![index];
+                        return CustomBox(
+                          onTap: selectFolder(folderInfo.folderId),
+                          color: whiteColor,
+                          border: Border.all(),
+                          boxShadow: selected == folderInfo.folderId
+                              ? const [highlightShadow]
+                              : null,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 10,
                             ),
-                          ],
-                        ),
-                      ),
-                  ],
-                )
-            ],
+                            child: CustomText(
+                              title: folderInfo.folderName,
+                              fontSize: FontSize.defaultSize,
+                            ),
+                          ),
+                        );
+                      }),
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
         ),
       ],
@@ -551,6 +578,7 @@ class NavigationModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final packageNmae = dotenv.env['packageName'];
     const StringList appList = ['네이버맵', '카카오맵', 'T맵'];
     List<Image> imgList = [
       Image.asset(naverMap),
@@ -559,20 +587,15 @@ class NavigationModal extends StatelessWidget {
     ];
     List<Uri> uriList = [
       Uri.parse(
-          'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=com.example.myapp'),
+          'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=$packageNmae'),
       Uri.parse(
           'kakaomap://route?sp=${startPoint[0]},${startPoint[1]}&ep=${endPoint[0]},${endPoint[1]}&by=CAR'),
-      Uri.parse('tmap://open')
+      Uri.parse(
+          'tmap://route?goalname=$destination&goalx=${endPoint[1]}&goaly=${endPoint[0]}')
     ];
     ReturnVoid toMapApp(int i) {
       return () async {
-        // final uri = uriList[i];
-        // await launchUrl(uri, mode: LaunchMode.externalApplication);
-        final newUri = Uri.parse(
-            'https://map.naver.com/v5/directions/14134997.483033512,4519704.42999858,광화문,13161322,PLACE_POI/14130204.52216987,4512164.397202961,대교아파트,19000666,PLACE_POI/-/transit?c=12,0,0,0,dh'
-            // 'https://apis.openapi.sk.com/tmap/routes/prediction?version=1&callback={callback}'
-            );
-        await launchUrl(newUri);
+        await launchUrl(uriList[i]);
       };
     }
 
@@ -622,7 +645,7 @@ class AlertModal extends StatelessWidget {
       title: title,
       isAlert: true,
       onPressed: () {
-        context.read<ApplyChangeProvider>().refreshPage();
+        changeRefresh(context);
         routerPop(context)();
       },
       children: [
@@ -648,7 +671,12 @@ class LoginConfirmModal extends StatelessWidget {
           title: '로그인하시겠습니까?',
         )
       ],
-      onPressed: () => UserProvider().login(),
+      onPressed: () async {
+        await login(context);
+        if (!context.mounted) return;
+        routerPop(context)();
+        changeRefresh(context);
+      },
     );
   }
 }

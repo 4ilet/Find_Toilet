@@ -30,15 +30,22 @@ class ReviewForm extends StatefulWidget {
 
 class _ReviewFormState extends State<ReviewForm> {
   DynamicMap reviewData = {'comment': '', 'score': 0.0};
+  void initData() async {
+    final data = await ReviewProvider().getReview(widget.reviewId!);
+    changeScore(data.score.toInt() - 1);
+    changeComment(data.comment);
+  }
 
   @override
   void initState() {
     super.initState();
-    if (widget.preComment != null) {
-      reviewData['comment'] = widget.preComment!;
-    }
-    if (widget.preScore != null) {
-      reviewData['score'] = widget.preScore!;
+    if (widget.reviewId != null) {
+      if (widget.preComment != null && widget.preScore != null) {
+        reviewData['comment'] = widget.preComment!;
+        reviewData['score'] = widget.preScore!;
+      } else {
+        initData();
+      }
     }
   }
 
@@ -66,6 +73,7 @@ class _ReviewFormState extends State<ReviewForm> {
         state = '수정';
       }
       if (!mounted) return;
+      routerPop(context)();
       showModal(
         context,
         page: AlertModal(
@@ -129,20 +137,22 @@ class _ReviewFormState extends State<ReviewForm> {
     );
   }
 
-  Padding reviewScore() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+  SizedBox reviewScore() {
+    return SizedBox(
+      width: screenWidth(context) * 0.7,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           for (int i = 0; i < 5; i += 1)
-            CustomIconButton(
-              onPressed: () => changeScore(i),
-              icon: starIcon,
-              iconSize: 50,
-              color: i < reviewData['score']
-                  ? CustomColors.yellowColor
-                  : CustomColors.whiteColor,
+            Flexible(
+              child: CustomIconButton(
+                onPressed: () => changeScore(i),
+                icon: starIcon,
+                iconSize: 50,
+                color: i < reviewData['score']
+                    ? CustomColors.yellowColor
+                    : CustomColors.whiteColor,
+              ),
             ),
         ],
       ),
@@ -156,7 +166,7 @@ class _ReviewFormState extends State<ReviewForm> {
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: TextField(
-          controller: TextEditingController(text: widget.preComment),
+          controller: TextEditingController(text: reviewData['comment']),
           onChanged: changeComment,
           decoration: const InputDecoration(
             border: InputBorder.none,

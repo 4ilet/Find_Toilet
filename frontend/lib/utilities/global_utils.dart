@@ -1,5 +1,7 @@
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,14 +34,6 @@ Future<bool?> showModal(BuildContext context, {required Widget page}) =>
       builder: (context) => page,
     );
 
-//* 화면 너비, 높이 (intro에서 실행)
-late var screenWidth, screenHeight;
-void initWidthHeight(BuildContext context) {
-  final size = MediaQuery.of(context).size;
-  screenWidth = size.width;
-  screenHeight = size.height;
-}
-
 //* 토큰 받아오기
 String? getToken(BuildContext context) =>
     context.read<UserInfoProvider>().token;
@@ -59,6 +53,42 @@ void applyFontSize(BuildContext context, bool newValue) {
   context.read<SettingsProvider>().applyHasLargeFont(newValue);
 }
 
-FutureBool exitApp(context) =>
+//* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)
+FutureBool exitApp(BuildContext context) =>
     context.read<ApplyChangeProvider>().changePressed();
-bool watchPressed(context) => context.watch<ApplyChangeProvider>().pressedOnce;
+
+//* 뒤로 가기 버튼 눌림 여부
+bool watchPressed(BuildContext context) =>
+    context.watch<ApplyChangeProvider>().pressedOnce;
+
+//* 로그인
+FutureBool login(BuildContext context) async {
+  final result = await UserProvider().login();
+  if (!context.mounted) throw Error();
+  changeToken(context, token: result['token'], refresh: result['refresh']);
+  if (result['state'] != 'login') {
+    showModal(context,
+        page: const InputModal(
+          title: '닉네임 설정',
+          buttonText: '확인',
+          isAlert: true,
+          kindOf: 'nickname',
+        ));
+  }
+  return true;
+}
+
+//* 새로고침 확인
+String onRefresh(BuildContext context) =>
+    context.watch<ApplyChangeProvider>().refresh.trim();
+
+//* 새로고침
+void changeRefresh(BuildContext context) =>
+    context.read<ApplyChangeProvider>().refreshPage();
+
+//* 너비, 높이
+double screenWidth(BuildContext context) =>
+    context.read<SizeProvider>().screenWidth;
+
+double screenHeight(BuildContext context) =>
+    context.read<SizeProvider>().screenHeight;

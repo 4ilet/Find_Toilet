@@ -1,21 +1,21 @@
 import 'package:find_toilet/utilities/type_enum.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //* user info
-class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class UserInfoProvider with ChangeNotifier {
   static String? _token, _refresh, _nickname;
   String? get token => _token;
   String? get refresh => _refresh;
   String? get nickname => _nickname;
 
-  void debugFillProperites(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(StringProperty('token', token));
-    properties.add(StringProperty('refresh', refresh));
-    properties.add(StringProperty('nickname', nickname));
-  }
+  // void debugFillProperites(DiagnosticPropertiesBuilder properties) {
+  //   super.debugFillProperties(properties);
+  //   properties.add(StringProperty('token', token));
+  //   properties.add(StringProperty('refresh', refresh));
+  //   properties.add(StringProperty('nickname', nickname));
+  // }
 
   //* public
 
@@ -64,12 +64,12 @@ class UserInfoProvider with ChangeNotifier, DiagnosticableTreeMixin {
 }
 
 //* refresh
-class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class ApplyChangeProvider with ChangeNotifier {
   static Space _refresh = Space.empty;
   static String _convertedVar = '';
   static bool _pressedOnce = false;
-  get refresh => _convertedVar;
-  get pressedOnce => _pressedOnce;
+  String get refresh => _convertedVar;
+  bool get pressedOnce => _pressedOnce;
 
   void refreshPage() {
     _changeRefresh();
@@ -84,6 +84,7 @@ class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
   FutureBool changePressed() => _changePressed();
 
   FutureBool _changePressed() {
+    print(_pressedOnce);
     if (!_pressedOnce) {
       _pressedOnce = true;
       notifyListeners();
@@ -98,7 +99,7 @@ class ApplyChangeProvider with ChangeNotifier, DiagnosticableTreeMixin {
 }
 
 //* setttings
-class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class SettingsProvider with ChangeNotifier {
   static bool? _hasLargeFont, _showMagnify;
   static MapRadius? _radius;
   get hasLargeFont => _hasLargeFont;
@@ -162,4 +163,19 @@ class SettingsProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _hasLargeFont = newValue;
     notifyListeners();
   }
+}
+
+//* width, height
+class SizeProvider with ChangeNotifier {
+  static double _screenWidth = 0.0;
+  static double _screenHeight = 0.0;
+  double get screenWidth => _screenWidth;
+  double get screenHeight => _screenHeight;
+  void _initWidthHeight(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    _screenWidth = size.width;
+    _screenHeight = size.height;
+  }
+
+  void initWidthHeight(BuildContext context) => _initWidthHeight(context);
 }

@@ -13,22 +13,22 @@ class FolderProvider extends ApiProvider {
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
+          print(data);
           FolderList folderList = data.map<FolderModel>((json) {
             return FolderModel.fromJson(json);
           }).toList();
           return folderList;
         case 401:
-          final success = await refreshToken(
+          await refreshToken(
             url: folderListUrl,
             method: 'GET',
           );
-          getFolderList();
-          break;
+          return getFolderList();
         default:
           throw Error();
       }
 
-      throw Error();
+      // throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -44,34 +44,40 @@ class FolderProvider extends ApiProvider {
           {required StringMap folderData}) async =>
       updateApi(updateFolderUrl(folderId), data: folderData);
 
-  //* 리뷰 삭제
+  //* 폴더 삭제
   FutureBool deleteFolder(int folderId) async =>
       deleteApi(deleteFolderUrl(folderId));
 }
 
 class BookMarkProvider extends ApiProvider {
-  //* url
-  static const _bookmarkUrl = '/like';
-  static String _bookmarkListUrl(int folderId) =>
-      '$_bookmarkUrl/folder/toiletlist/$folderId';
-  static String _addToiletUrl({required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/add/folder/$folderId/$toiletId';
-  static String _deleteToiletUrl(
-          {required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/delete/$folderId/$toiletId';
-
   //* 즐겨찾기 목록 조회
-  FutureList getToiletList(int folderId) async {
+  Future<ToiletList> getToiletList(int folderId) async {
     ToiletList toiletList = [];
     try {
-      final response = await dioWithToken().get(_bookmarkListUrl(folderId));
-      if (response.statusCode == 200) {
-        response.data.forEach((element) {
-          toiletList.add(ToiletModel.fromJson(element));
-        });
-        return toiletList;
+      final response = await dioWithToken().get(bookmarkListUrl(folderId));
+      switch (response.statusCode) {
+        case 200:
+          final data = response.data['data'];
+          if (data.isEmpty) {
+            print('empty');
+            return [];
+          }
+          print(data);
+          data.forEach((element) {
+            toiletList.add(ToiletModel.fromJson(element));
+          });
+          return toiletList;
+        case 401:
+          await refreshToken(
+            url: folderListUrl,
+            method: 'GET',
+          );
+          return getToiletList(folderId);
+        // break;
+        default:
+          throw Error();
       }
-      throw Error();
+      // throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -84,7 +90,7 @@ class BookMarkProvider extends ApiProvider {
     required int toiletId,
   }) async {
     createApi(
-      _addToiletUrl(
+      addToiletUrl(
         folderId: folderId,
         toiletId: toiletId,
       ),
@@ -97,5 +103,8 @@ class BookMarkProvider extends ApiProvider {
     required int folderId,
     required int toiletId,
   }) async =>
-      deleteApi(_deleteToiletUrl(folderId: folderId, toiletId: toiletId));
+      deleteApi(deleteToiletUrl(
+        folderId: folderId,
+        toiletId: toiletId,
+      ));
 }

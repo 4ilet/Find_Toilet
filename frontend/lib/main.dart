@@ -21,6 +21,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
         ChangeNotifierProvider(create: (context) => ApplyChangeProvider()),
         ChangeNotifierProvider(create: (context) => SettingsProvider()),
+        ChangeNotifierProvider(create: (context) => SizeProvider()),
       ],
       child: MaterialApp(
         title: 'Find Toilet',

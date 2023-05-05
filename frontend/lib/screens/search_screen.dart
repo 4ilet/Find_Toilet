@@ -1,3 +1,4 @@
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/screens/map_screen.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -7,10 +8,12 @@ import 'package:flutter/material.dart';
 class Search extends StatelessWidget {
   final String query;
   final bool showReview;
+  final ToiletModel? toiletModel;
   const Search({
     super.key,
     required this.query,
     this.showReview = false,
+    this.toiletModel,
   });
 
   @override
@@ -35,9 +38,12 @@ class Search extends StatelessWidget {
               const FilterBox()
             ],
           ),
-          ToiletBottomSheet(
-            isMain: false,
-            showReview: showReview,
+          Positioned.fill(
+            child: ToiletBottomSheet(
+              isMain: false,
+              showReview: showReview,
+              toiletModel: toiletModel,
+            ),
           ),
         ],
       ),

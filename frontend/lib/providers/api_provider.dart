@@ -4,7 +4,7 @@ import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UrlClass extends UserInfoProvider {
-  //* bookmark
+  //* bookmark folder
   static const _bookmarkUrl = '/like';
   final folderListUrl = '$_bookmarkUrl/folder';
   final createFolderUrl = '$_bookmarkUrl/create/folder';
@@ -13,16 +13,44 @@ class UrlClass extends UserInfoProvider {
   String deleteFolderUrl(int folderId) =>
       '$_bookmarkUrl/delete/folder/$folderId';
 
-  //*
+  //* bookmark
+  String bookmarkListUrl(int folderId) =>
+      '$_bookmarkUrl/folder/toiletlist/$folderId';
+  String addToiletUrl({required int folderId, required int toiletId}) =>
+      '$_bookmarkUrl/add/folder/$folderId/$toiletId';
+  String deleteToiletUrl({required int folderId, required int toiletId}) =>
+      '$_bookmarkUrl/delete/toilet/$folderId/$toiletId';
+
+  //* toilet
+  static const _toiletUrl = '/toilet';
+  final nearToiletUrl = '$_toiletUrl/near';
+  final searchToiletUrl = '$_toiletUrl/search';
+
+  //* review
+  static const _reviewUrl = '/review';
+  String reviewListUrl(int toiletId) => '$_reviewUrl/$toiletId';
+  String reviewUrl(int reviewId) => '$_reviewUrl/get/$reviewId';
+  String postReviewUrl(int toiletId) => '$_reviewUrl/post/$toiletId';
+  String updateReviewUrl(int reviewId) => '$_reviewUrl/update/$reviewId';
+  String deleteReviewUrl(int reviewId) => '$_reviewUrl/delete/$reviewId';
+
+  //* user
+  static const _userUrl = '/user';
+  final loginUrl = '$_userUrl/login';
+  final deleteUserUrl = '$_userUrl/delete';
+  final changeNameUrl = '$_userUrl/update/nickname/';
+  final userInfoUrl = '$_userUrl/userinfo';
 }
 
 class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
-  final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
+  final dio =
+      Dio(BaseOptions(baseUrl: _baseUrl!, receiveDataWhenStatusError: true));
   dioWithToken() => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
           headers: {'Authorization': token},
+          receiveDataWhenStatusError: true,
         ),
       );
   dioWithRefresh(String method) => Dio(
@@ -30,6 +58,7 @@ class ApiProvider extends UrlClass {
           baseUrl: _baseUrl!,
           method: method,
           headers: {'Authorization-refresh': refresh},
+          receiveDataWhenStatusError: true,
         ),
       );
   //*
@@ -61,35 +90,6 @@ class ApiProvider extends UrlClass {
     dynamic data,
   }) =>
       _refreshToken(url: url, method: method, data: data);
-
-  //* 조회 전반
-  FutureList _getAPi({
-    required List list,
-    required String url,
-    required dynamic model,
-  }) async {
-    try {
-      final response = await dioWithToken().get(url);
-      if (response.statusCode == 200) {
-        response.data.forEach((element) {
-          list.add(model.fromJson(element));
-        });
-        return list;
-      }
-      throw Error();
-    } catch (error) {
-      print(error);
-      throw Error();
-    }
-  }
-
-  FutureList getApi({
-    required List list,
-    required String url,
-    required dynamic model,
-  }) async {
-    return _getAPi(list: list, url: url, model: model);
-  }
 
   //* 생성 전반
   FutureBool _createApi(String url, {required DynamicMap data}) async {
@@ -161,6 +161,8 @@ class ApiProvider extends UrlClass {
   FutureBool _deleteApi(String url) async {
     try {
       final response = await dioWithToken().delete(url);
+      print(response.statusCode);
+      print(response.data);
       switch (response.statusCode) {
         case 200:
           return true;
@@ -179,7 +181,5 @@ class ApiProvider extends UrlClass {
     }
   }
 
-  FutureBool deleteApi(String url) async {
-    return _deleteApi(url);
-  }
+  FutureBool deleteApi(String url) async => _deleteApi(url);
 }

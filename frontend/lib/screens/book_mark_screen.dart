@@ -39,7 +39,7 @@ class BookMarkFolderList extends StatelessWidget {
                     ),
                     CustomText(
                       title:
-                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${context.watch<ApplyChangeProvider>().refresh.trim()}',
+                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
                       fontSize: FontSize.largeSize,
                       color: CustomColors.whiteColor,
                       font: kimm,
@@ -124,24 +124,36 @@ class BookMarkFolderList extends StatelessWidget {
 //* 폴더 내 즐겨찾기 목록
 class BookMarkList extends StatelessWidget {
   final String folderName;
-  final int bookmarkCnt;
+  final int bookmarkCnt, folderId;
 
-  const BookMarkList(
-      {super.key, required this.folderName, required this.bookmarkCnt});
+  const BookMarkList({
+    super.key,
+    required this.folderName,
+    required this.bookmarkCnt,
+    required this.folderId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
       body: ToiletScrollView(
-        toolbarHeight: 50,
-        expandedHeight: 80,
+        folderId: folderId,
+        toolbarHeight: 10,
+        expandedHeight: 60,
         flexibleSpace: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(top: 30),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              CustomIconButton(
+                onPressed: routerPop(context),
+                icon: exitIcon,
+                color: CustomColors.whiteColor,
+                iconSize: 35,
+              ),
               CustomText(
-                title: folderName,
+                title: '$folderName${onRefresh(context)}',
                 fontSize: FontSize.titleSize,
                 color: CustomColors.whiteColor,
               ),
@@ -152,10 +164,6 @@ class BookMarkList extends StatelessWidget {
                 title: '$bookmarkCnt',
                 fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: ExitPage(),
               ),
             ],
           ),

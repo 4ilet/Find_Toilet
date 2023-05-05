@@ -1,5 +1,4 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -86,7 +85,7 @@ class _SettingsState extends State<Settings> {
       String appVersion = packageInfo.version;
 
       final Email email = Email(
-        subject: '[화장실을 찾아서 문의]',
+        subject: '[화장실을 찾아서] 문의사항',
         recipients: ['team.4ilet@gmail.com'],
         body: body(
           release: version['release'],
@@ -110,19 +109,7 @@ class _SettingsState extends State<Settings> {
     try {
       final token = getToken(context);
       if (token == null || token == '') {
-        final result = await UserProvider().login();
-        if (!mounted) return false;
-        changeToken(context,
-            token: result['token'], refresh: result['refresh']);
-        if (result['state'] != 'login') {
-          showModal(context,
-              page: const InputModal(
-                title: '닉네임 설정',
-                buttonText: '확인',
-                isAlert: true,
-                kindOf: 'nickname',
-              ));
-        }
+        login(context);
       } else {
         if (!mounted) return false;
         changeToken(context, token: null, refresh: null);
@@ -130,6 +117,7 @@ class _SettingsState extends State<Settings> {
       return changeBtn();
     } catch (error) {
       showModal(context, page: errorModal('login'));
+      changeRefresh(context);
       return false;
     }
   }

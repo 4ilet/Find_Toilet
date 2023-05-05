@@ -1,5 +1,7 @@
 import 'package:find_toilet/models/bookmark_model.dart';
-import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/models/review_model.dart';
+import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -13,6 +15,7 @@ import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
@@ -32,26 +35,23 @@ class ThemeBox extends StatefulWidget {
 class _ThemeBoxState extends State<ThemeBox> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 12),
-      child: CustomBox(
-        onTap: widget.onTap,
-        height: 220,
-        width: 170,
-        color: whiteColor,
-        boxShadow: widget.selected ? [redShadow] : null,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const CustomBox(
-              color: greyColor,
-              height: 130,
-              width: 130,
-              child: SizedBox(),
-            ),
-            CustomText(title: widget.text)
-          ],
-        ),
+    return CustomBox(
+      onTap: widget.onTap,
+      height: screenHeight(context) * 0.3,
+      width: screenWidth(context) * 0.8,
+      color: whiteColor,
+      boxShadow: widget.selected ? [redShadow] : null,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CustomBox(
+            color: greyColor,
+            height: screenHeight(context) * 0.2,
+            width: screenWidth(context) * 0.6,
+            child: const SizedBox(),
+          ),
+          CustomText(title: widget.text)
+        ],
       ),
     );
   }
@@ -74,13 +74,17 @@ class FolderBox extends StatelessWidget {
     String folderName = folderInfo.folderName;
     int bookmarkCnt = folderInfo.bookmarkCnt;
     int folderId = folderInfo.folderId;
-    String printedName = folderName.length < 3
+    String printedName = folderName.length <= 5
         ? folderName
-        : '${folderName.substring(0, 4)}\n${folderName.substring(4)}';
+        : '${folderName.substring(0, 5)}\n${folderName.substring(5)}';
     return CustomBox(
       onTap: routerPush(
         context,
-        page: BookMarkList(folderName: folderName, bookmarkCnt: bookmarkCnt),
+        page: BookMarkList(
+          folderName: folderName,
+          bookmarkCnt: bookmarkCnt,
+          folderId: folderId,
+        ),
       ),
       height: 150,
       width: 150,
@@ -90,54 +94,60 @@ class FolderBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  title: printedName,
-                  fontSize: FontSize.defaultSize,
-                  color: CustomColors.mainColor,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomIconButton(
-                      icon: editIcon,
-                      color: CustomColors.mainColor,
-                      onPressed: () => showModal(
-                        context,
-                        page: const InputModal(
-                          title: '즐겨 찾기 폴더명 수정',
-                          buttonText: '수정',
-                          isAlert: false,
-                          kindOf: 'folder',
+            Flexible(
+              child: Row(
+                children: [
+                  CustomText(
+                    title: printedName,
+                    fontSize: FontSize.defaultSize,
+                    color: CustomColors.mainColor,
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    title: '$bookmarkCnt 개',
+                    fontSize: FontSize.smallSize,
+                    color: CustomColors.blackColor,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomIconButton(
+                        icon: editIcon,
+                        color: CustomColors.mainColor,
+                        onPressed: () => showModal(
+                          context,
+                          page: InputModal(
+                            title: '즐겨 찾기 폴더명 수정',
+                            buttonText: '수정',
+                            isAlert: false,
+                            kindOf: 'folder',
+                            folderId: folderId,
+                          ),
                         ),
+                        iconSize: 30,
                       ),
-                      iconSize: 25,
-                    ),
-                    CustomIconButton(
-                      icon: deleteIcon,
-                      color: CustomColors.redColor,
-                      onPressed: () => showModal(context,
+                      CustomIconButton(
+                        icon: deleteIcon,
+                        color: CustomColors.redColor,
+                        onPressed: () => showModal(
+                          context,
                           page: DeleteModal(
                             deleteMode: 1,
                             id: folderId,
-                          )),
-                      iconSize: 25,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CustomText(
-                  title: '$bookmarkCnt 개',
-                  fontSize: FontSize.smallSize,
-                  color: CustomColors.blackColor,
-                ),
-              ],
+                          ),
+                        ),
+                        iconSize: 30,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -186,84 +196,114 @@ class _AddBoxState extends State<AddBox> {
   }
 }
 
-//* 화장실 목록 아이템
-class ListItem extends StatefulWidget {
-  final String toiletName, address, phoneNo, duration;
-  final StringList available;
-  final double score;
-  final int reviewCnt, toiletId;
-  final bool isLiked, showReview, isMain;
+//* 화장실, 리뷰 목록 아이템
+class ListItem extends StatelessWidget {
+  final ToiletModel data;
+  final bool showReview, isMain;
   const ListItem({
     super.key,
-    this.toiletName = '광주시립도서관화장실',
-    this.address = '광주광역시 북구 어쩌고길',
-    this.phoneNo = '062-xxx-xxxx',
-    this.duration = '00:00 - 00:00',
-    this.score = 4.3,
-    this.reviewCnt = 30,
-    this.available = const ['장애인용', '유아용', '기저귀 교환대'],
-    this.isLiked = false,
+    required this.data,
     required this.showReview,
-    this.isMain = true,
-    this.toiletId = 13,
+    required this.isMain,
   });
 
   @override
-  State<ListItem> createState() => _ListItemState();
-}
-
-class _ListItemState extends State<ListItem> {
-  late bool liked;
-  final IconDataList iconList = [locationIcon, phoneIcon, clockIcon, starIcon];
-  late final StringList infoList;
-  void changeLiked() {
-    setState(() {
-      liked = !liked;
-    });
-  }
-
-  void addIntoBookmark() async {
-    final token = UserProvider().token;
-    if (token == null || token == '') {
-      routerPush(context,
-          page: ReviewForm(
-            toiletName: widget.toiletName,
-            toiletId: widget.toiletId,
-          ))();
-    } else {
-      showModal(context, page: const LoginConfirmModal());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    liked = widget.isLiked;
-    infoList = [
-      widget.address,
-      widget.phoneNo,
-      widget.duration,
-      '${widget.score} (${widget.reviewCnt}개)'
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
+    BoolList availableList = [
+      data.can24hour,
+      data.privateDiaper,
+      data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
+      data.privateChildF || data.privateChildM1 || data.privateChildM2
+    ];
+    // final IconDataList iconList = [
+    //   locationIcon,
+    //   phoneIcon,
+    //   clockIcon,
+    //   starIcon
+    // ];
+
+    void addOrEditReview() async {
+      final token = getToken(context);
+      if (token != null && token != '') {
+        routerPush(context,
+            page: ReviewForm(
+              toiletName: data.toiletName,
+              toiletId: data.toiletId,
+              reviewId: data.reviewId,
+            ))();
+      } else {
+        await showModal(context, page: const LoginConfirmModal());
+        routerPop(context)();
+      }
+    }
+
+    // final infoList = [
+    //   data.address,
+    //   data.phoneNo,
+    //   data.duration,
+    //   '${data.score} (${data.commentCnt}개)'
+    // ];
+    bool existState() {
+      for (int i = 0; i < 4; i += 1) {
+        if (availableList[i]) return true;
+      }
+      return false;
+    }
+
+    String available(int limit) {
+      StringList facilityList = [
+        '24시간 이용 가능',
+        '기저귀 교환대',
+        '장애인용',
+        '유아용',
+      ];
+      String result = '';
+      int length = 0;
+      for (int i = 0; i < 4; i += 1) {
+        if (availableList[i]) {
+          final newLength = facilityList[i].length;
+          if (length + newLength < limit) {
+            result += ' ${facilityList[i]}';
+            length += newLength;
+          } else {
+            result += '\n${facilityList[i]}';
+            length = newLength;
+          }
+        }
+      }
+      return result;
+    }
+
+    String showedValue(String value, int limit) {
+      String newValue = '';
+      int quot = value.length ~/ limit;
+      for (int i = 0; i < quot; i += 1) {
+        newValue += '${value.substring(i * limit, (i + 1) * limit)}\n';
+      }
+      newValue += value.substring(quot * limit);
+      return newValue;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
         onTap: routerPush(
           context,
-          page: widget.isMain
-              ? const Main(showReview: true)
-              : const Search(
+          page: isMain
+              ? Main(
+                  showReview: true,
+                  toiletModel: data,
+                )
+              : Search(
                   query: '',
                   showReview: true,
+                  toiletModel: data,
                 ),
         ),
         color: whiteColor,
-        height: 200,
-        width: 500,
+        // height: 200,
+        // width: screenWidth(context) * 0.8,
+        height: screenHeight(context) * 0.3,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
@@ -274,82 +314,117 @@ class _ListItemState extends State<ListItem> {
                 children: [
                   // toiletTopInfo(context),
                   // for (int i = 0; i < 2; i += 1) toiletInfo(i),
-                  CustomText(
+                  Flexible(
+                    flex: 2,
+                    child: CustomText(
                       color: CustomColors.mainColor,
-                      title: widget.toiletName,
-                      fontSize: FontSize.defaultSize),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () => showModal(context,
-                            page: const AddToBookMarkModal()),
-                        icon: CustomIcon(
-                          icon: liked ? heartIcon : emptyHeartIcon,
-                          color: redColor,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => showModal(context,
-                            page: NavigationModal(
-                              startPoint: const [37.537229, 127.005515],
-                              endPoint: const [37.4979502, 127.0276368],
-                              destination: widget.toiletName,
-                            )),
-                        icon: const CustomIcon(
-                          icon: planeIcon,
-                          color: Colors.lightBlue,
-                          size: 35,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWithIcon(
-                    icon: locationIcon,
-                    text: widget.address,
-                  ),
-                  TextWithIcon(
-                    icon: phoneIcon,
-                    text: widget.phoneNo,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWithIcon(
-                    icon: clockIcon,
-                    text: widget.duration,
-                  ),
-                  TextWithIcon(
-                    icon: starIcon,
-                    text: '${widget.score} (${widget.reviewCnt}개)',
-                    iconColor: CustomColors.yellowColor,
-                  ),
-                ],
-              ),
-              const CustomText(
-                title: '이용 가능 시설',
-                fontSize: FontSize.smallSize,
-                color: CustomColors.mainColor,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (String each in widget.available)
-                    CustomText(
-                      title: each,
-                      fontSize: FontSize.smallSize,
+                      title: data.toiletName,
+                      fontSize: FontSize.defaultSize,
                     ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () => showModal(
+                            context,
+                            page: data.folderId != 0
+                                ? DeleteModal(
+                                    deleteMode: 2,
+                                    id: data.toiletId,
+                                    folderId: data.folderId,
+                                  )
+                                : AddToBookMarkModal(toiletId: data.toiletId),
+                          ),
+                          icon: CustomIcon(
+                            icon:
+                                data.folderId != 0 ? heartIcon : emptyHeartIcon,
+                            color: redColor,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => showModal(context,
+                              page: NavigationModal(
+                                startPoint: const [37.537229, 127.005515],
+                                endPoint: [data.lat, data.lng],
+                                destination: data.toiletName,
+                              )),
+                          icon: const CustomIcon(
+                            icon: planeIcon,
+                            color: Colors.lightBlue,
+                            size: 35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 17,
+                    child: TextWithIcon(
+                      icon: locationIcon,
+                      text: showedValue(
+                          data.address, data.phoneNo != '' ? 11 : 27),
+                    ),
+                  ),
+                  data.phoneNo != ''
+                      ? Flexible(
+                          flex: 12,
+                          child: TextWithIcon(
+                            icon: phoneIcon,
+                            text: data.phoneNo,
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: TextWithIcon(
+                      icon: clockIcon,
+                      text: showedValue(data.duration, 13),
+                    ),
+                  ),
+                  Flexible(
+                    child: TextWithIcon(
+                      icon: starIcon,
+                      text: '${data.score} (${data.commentCnt}개)',
+                      iconColor: CustomColors.yellowColor,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  existState()
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CustomText(
+                              title: '이용 가능 시설',
+                              fontSize: FontSize.smallSize,
+                              color: CustomColors.mainColor,
+                            ),
+                            CustomText(
+                              title: available(13),
+                              fontSize: FontSize.smallSize,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   CustomButton(
                     fontSize: FontSize.smallSize,
-                    onPressed: addIntoBookmark,
-                    buttonText: '리뷰 남기기',
+                    onPressed: addOrEditReview,
+                    buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
                   )
                 ],
               )
@@ -552,17 +627,14 @@ class CustomBox extends StatelessWidget {
 
 //* review 상자
 class ReviewBox extends StatelessWidget {
-  final String nickname, content, toiletName;
-  final int toiletId, reviewId;
-  final double score;
+  final String toiletName;
+  final ReviewModel review;
+  final int toiletId;
   const ReviewBox({
     super.key,
-    required this.nickname,
-    required this.score,
-    required this.content,
-    required this.toiletName,
+    required this.review,
     required this.toiletId,
-    required this.reviewId,
+    required this.toiletName,
   });
 
   @override
@@ -580,45 +652,62 @@ class ReviewBox extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(
-                    color: CustomColors.mainColor,
-                    title: nickname,
-                  ),
-                  CustomIconButton(
-                    color: CustomColors.mainColor,
-                    icon: editIcon,
-                    iconSize: 20,
-                    onPressed: routerPush(
-                      context,
-                      page: ReviewForm(
-                        toiletName: toiletName,
-                        toiletId: toiletId,
-                        reviewId: reviewId,
-                        preComment: content,
-                        preScore: score,
-                      ),
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          color: CustomColors.mainColor,
+                          title: review.nickname,
+                          fontSize: FontSize.smallSize,
+                        ),
+                        review.nickname ==
+                                context.read<UserInfoProvider>().nickname
+                            ? Row(
+                                children: [
+                                  CustomIconButton(
+                                    color: CustomColors.mainColor,
+                                    icon: editIcon,
+                                    iconSize: 20,
+                                    onPressed: () => routerPush(
+                                      context,
+                                      page: ReviewForm(
+                                        toiletName: toiletName,
+                                        toiletId: toiletId,
+                                        reviewId: review.id,
+                                        preComment: review.comment,
+                                        preScore: review.score,
+                                      ),
+                                    ),
+                                  ),
+                                  CustomIconButton(
+                                    color: CustomColors.redColor,
+                                    icon: deleteIcon,
+                                    iconSize: 20,
+                                    onPressed: () => showModal(
+                                      context,
+                                      page: DeleteModal(
+                                        deleteMode: 0,
+                                        id: review.id,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                      ],
                     ),
                   ),
-                  CustomIconButton(
-                    color: CustomColors.redColor,
-                    icon: deleteIcon,
-                    iconSize: 20,
-                    onPressed: () => showModal(
-                      context,
-                      page: DeleteModal(
-                        deleteMode: 0,
-                        id: reviewId,
-                      ),
+                  Flexible(
+                    child: TextWithIcon(
+                      icon: starIcon,
+                      text: '${review.score}',
+                      iconColor: CustomColors.yellowColor,
                     ),
-                  ),
-                  TextWithIcon(
-                    icon: starIcon,
-                    text: '$score',
-                    iconColor: CustomColors.yellowColor,
                   ),
                 ],
               ),
-              CustomText(title: content)
+              CustomText(title: review.comment)
             ],
           ),
         ),
