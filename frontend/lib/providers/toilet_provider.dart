@@ -3,9 +3,13 @@ import 'package:find_toilet/providers/api_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletProvider extends ApiProvider {
-  Future<ToiletList> getNearToilet() async {
+  Future<ToiletList> getNearToilet(DynamicMap queryData) async {
     try {
-      final response = await dio.get(nearToiletUrl);
+      final response = await dio.get(
+        nearToiletUrl,
+        queryParameters: queryData,
+      );
+      print(response);
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -13,12 +17,12 @@ class ToiletProvider extends ApiProvider {
             return ToiletModel.fromJson(json);
           }).toList();
           return toiletList;
-        case 401:
-          await refreshToken(
-            url: nearToiletUrl,
-            method: 'GET',
-          );
-          return getNearToilet();
+        // case 401:
+        //   await refreshToken(
+        //     url: nearToiletUrl,
+        //     method: 'GET',
+        //   );
+        //   return getNearToilet();
         default:
           throw Error();
       }
@@ -30,9 +34,12 @@ class ToiletProvider extends ApiProvider {
     }
   }
 
-  Future<ToiletList> searchToilet() async {
+  Future<ToiletList> searchToilet(DynamicMap queryData) async {
     try {
-      final response = await dioWithToken().get(searchToiletUrl);
+      final response = await dio.get(
+        searchToiletUrl,
+        queryParameters: queryData,
+      );
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -40,12 +47,12 @@ class ToiletProvider extends ApiProvider {
             return ToiletModel.fromJson(json);
           }).toList();
           return toiletList;
-        case 401:
-          await refreshToken(
-            url: searchToiletUrl,
-            method: 'GET',
-          );
-          return searchToilet();
+        // case 401:
+        //   await refreshToken(
+        //     url: searchToiletUrl,
+        //     method: 'GET',
+        //   );
+        //   return searchToilet();
         default:
           throw Error();
       }

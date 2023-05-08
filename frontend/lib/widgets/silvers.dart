@@ -61,18 +61,26 @@ class CustomSilverFutureList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: snapshot.data!.isNotEmpty
-                        ? isReview
-                            ? reviewListView(snapshot.data! as ReviewList)
-                            : CustomListView(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  return ListItem(
-                                    isMain: false,
-                                    showReview: false,
-                                    data: snapshot.data![index],
-                                  );
-                                },
-                              )
+                        ?
+                        // isReview
+                        //     ? reviewListView(snapshot.data! as ReviewList)
+                        //     :
+                        CustomListView(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return isReview
+                                  ? ReviewBox(
+                                      review: snapshot.data![index],
+                                      toiletId: toiletId!,
+                                      toiletName: toiletName!,
+                                    )
+                                  : ListItem(
+                                      isMain: false,
+                                      showReview: false,
+                                      data: snapshot.data![index],
+                                    );
+                            },
+                          )
                         : Center(
                             child: CustomText(
                               title:
@@ -103,17 +111,17 @@ class CustomSilverFutureList extends StatelessWidget {
   //   );
   // }
 
-  ListView reviewListView(ReviewList data) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return ReviewBox(
-          review: data[index],
-          toiletId: toiletId!,
-          toiletName: toiletName!,
-        );
-      },
-    );
-  }
+  // ListView reviewListView(ReviewList data) {
+  //   return ListView.builder(
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     shrinkWrap: true,
+  //     itemBuilder: (context, index) {
+  //       return ReviewBox(
+  //         review: data[index],
+  //         toiletId: toiletId!,
+  //         toiletName: toiletName!,
+  //       );
+  //     },
+  //   );
+  // }
 }

@@ -1,6 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -14,11 +13,13 @@ class ToiletBottomSheet extends StatefulWidget {
   final bool isMain;
   final bool showReview;
   final ToiletModel? toiletModel;
+  final Future<ToiletList> future;
   const ToiletBottomSheet({
     super.key,
     required this.isMain,
     this.showReview = false,
     this.toiletModel,
+    required this.future,
   });
 
   @override
@@ -29,6 +30,9 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
   List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
   late String selectedValue;
   bool showList = false;
+  ToiletList toiletList = [];
+  int page = 0;
+  bool finished = false;
 
   void changeShowState() {
     setState(() {
@@ -45,6 +49,13 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
       selectedValue = value;
       changeShowState();
     });
+  }
+
+  void addToiletList() {
+    if (page != 0) {
+    } else {
+      // toiletList = await future;
+    }
   }
 
   @override
@@ -64,10 +75,16 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
+        scrollController.addListener(() {
+          print(scrollController.position.pixels);
+          print(scrollController.position.maxScrollExtent);
+          print(scrollController.position.userScrollDirection);
+        });
         return CustomBox(
           color: mainColor,
           child: CustomScrollView(
             controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               CustomSilverAppBar(
                 toolbarHeight: 80,
@@ -107,18 +124,11 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                   ),
                 ),
               ),
-              // CustomSilverFutureList(
-              //   future: ToiletProvider().getNearToilet(),
-              //   showReview: false,
-              // )
-              // reviewSilverList(),
               //*
               widget.showReview
                   ? reviewSilverList()
                   : CustomSilverFutureList(
-                      future: widget.isMain
-                          ? ToiletProvider().getNearToilet()
-                          : ToiletProvider().searchToilet(),
+                      future: widget.future,
                       showReview: false,
                     ),
             ],
@@ -177,30 +187,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                       return const Center(child: CircularProgressIndicator());
                     },
                   )
-
-                  // widget.showReview
-                  //     ? FutureBuilder(
-                  //         future: reviewList,
-                  //         builder: (context, snapshot) {
-                  //           if (snapshot.hasData) {
-                  //             return Column(
-                  //               children: const [
-                  //                 Expanded(
-                  //                   child: ReviewBox(
-                  //                     nickname: '아아',
-                  //                     score: 4.0,
-                  //                     content: '아주 좋아요',
-                  //                   ),
-                  //                 )
-                  //               ],
-                  //             );
-                  //           }
-                  //           return const Center(
-                  //             child: CircularProgressIndicator(),
-                  //           );
-                  //         },
-                  //       )
-                  //     : const SizedBox(),
                 ],
               ),
             ),
@@ -209,20 +195,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
       ),
     );
   }
-
-  // ListView reviewListView(ReviewList data, int toiletId) {
-  //   return ListView.builder(
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     shrinkWrap: true,
-  //     itemBuilder: (context, index) {
-  //       return ReviewBox(
-  //         review: data[index],
-  //         toiletId: toiletId,
-  //         toiletName: widget.toiletModel!.toiletName,
-  //       );
-  //     },
-  //   );
-  // }
 
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {
