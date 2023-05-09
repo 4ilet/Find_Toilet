@@ -75,7 +75,6 @@ class CustomSilverFutureList extends StatelessWidget {
                                       toiletName: toiletName!,
                                     )
                                   : ListItem(
-                                      isMain: false,
                                       showReview: false,
                                       data: snapshot.data![index],
                                     );

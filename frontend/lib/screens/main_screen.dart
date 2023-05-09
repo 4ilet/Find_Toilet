@@ -36,9 +36,9 @@ class _MainState extends State<Main> {
         'kids': 0,
         'lat': 37.537229,
         'lon': 127.005515,
-        'radus': 300,
+        'radius': 1000,
         'page': 0,
-        'size': 10,
+        'size': 30,
       });
     }
   }
@@ -78,7 +78,6 @@ class _MainState extends State<Main> {
                     )
                   : const SizedBox(),
               ToiletBottomSheet(
-                isMain: true,
                 future: toiletList,
                 showReview: widget.showReview,
                 toiletModel: widget.toiletModel,

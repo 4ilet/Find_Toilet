@@ -9,7 +9,6 @@ class ToiletProvider extends ApiProvider {
         nearToiletUrl,
         queryParameters: queryData,
       );
-      print(response);
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
@@ -40,22 +39,16 @@ class ToiletProvider extends ApiProvider {
         searchToiletUrl,
         queryParameters: queryData,
       );
-      switch (response.statusCode) {
-        case 200:
-          final data = response.data['data'];
-          ToiletList toiletList = data.map<ToiletModel>((json) {
-            return ToiletModel.fromJson(json);
-          }).toList();
-          return toiletList;
-        // case 401:
-        //   await refreshToken(
-        //     url: searchToiletUrl,
-        //     method: 'GET',
-        //   );
-        //   return searchToilet();
-        default:
-          throw Error();
+      print(response.data['totalPages']);
+      if (response.statusCode == 200) {
+        final data = response.data['content'];
+        print('data: $data');
+        ToiletList toiletList = data.map<ToiletModel>((json) {
+          return ToiletModel.fromJson(json);
+        }).toList();
+        return toiletList;
       }
+      throw Error();
 
       // throw Error();
     } catch (error) {

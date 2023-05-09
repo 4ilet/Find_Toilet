@@ -5,7 +5,6 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
-import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -199,12 +198,11 @@ class _AddBoxState extends State<AddBox> {
 //* 화장실, 리뷰 목록 아이템
 class ListItem extends StatelessWidget {
   final ToiletModel data;
-  final bool showReview, isMain;
+  final bool showReview;
   const ListItem({
     super.key,
     required this.data,
     required this.showReview,
-    required this.isMain,
   });
 
   @override
@@ -252,10 +250,10 @@ class ListItem extends StatelessWidget {
 
     String available(int limit) {
       StringList facilityList = [
-        '24시간 이용 가능',
+        '24시간 이용',
+        '장애인 전용',
+        '유아 전용',
         '기저귀 교환대',
-        '장애인용',
-        '유아용',
       ];
       String result = '';
       int length = 0;
@@ -287,19 +285,11 @@ class ListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: routerPush(
-          context,
-          page: isMain
-              ? Main(
-                  showReview: true,
-                  toiletModel: data,
-                )
-              : Search(
-                  query: '',
-                  showReview: true,
-                  toiletModel: data,
-                ),
-        ),
+        onTap: routerPush(context,
+            page: Main(
+              showReview: true,
+              toiletModel: data,
+            )),
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,

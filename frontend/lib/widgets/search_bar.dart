@@ -23,6 +23,13 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  final StringMap input = {};
+  @override
+  void initState() {
+    super.initState();
+    input['value'] = widget.query ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,9 +43,10 @@ class _SearchBarState extends State<SearchBar> {
           color: whiteColor,
           radius: 5,
           child: TextField(
+            onChanged: (value) => input['value'] = value,
             controller: widget.isMain
                 ? null
-                : TextEditingController(text: widget.query),
+                : TextEditingController(text: input['value']),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText:
