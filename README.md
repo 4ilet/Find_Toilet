@@ -3,7 +3,7 @@
 ![https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png](https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png)
 
 ## 목차
-[1. 소개](#1️⃣-소개)
+[1. 소개](#1️⃣-소개) 
 
 [2. 일정](#2️⃣-일정)
 
