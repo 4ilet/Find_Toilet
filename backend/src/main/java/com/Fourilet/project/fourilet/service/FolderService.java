@@ -133,10 +133,10 @@ public class FolderService {
     }
     public List<ToiletDto2> getToiletList(long folderId, Long memberId){
         LOGGER.info("CALL GET TOILET LIST");
+        System.out.println("memberId"+memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
-
         if (folder == null) {
             throw new NullPointerException("폴더가 존재하지 않습니다.");
         }

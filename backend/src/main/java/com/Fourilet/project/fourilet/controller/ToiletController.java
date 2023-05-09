@@ -1,6 +1,7 @@
 package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
+import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
@@ -42,7 +43,7 @@ public class ToiletController {
             @ApiParam(value = "검색 키워드") @RequestParam("keyword") String keyword, @ApiParam(value = "정렬 기준 (distance(가까운 순, 기본값) / score(평점 높은 순) / comment(리뷰 많은 순))") @RequestParam(value = "order", required = false, defaultValue = "distance") String order,
             @ApiParam(value = "24시간 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("allDay") Boolean allDay, @ApiParam(value = "장애인용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("disabled") Boolean disabled,
             @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
-            @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable){
+            @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
 
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -52,38 +53,40 @@ public class ToiletController {
 
         Long reqMemberId = null;
 
-        if(accessToken != null){
+        if (accessToken != null) {
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
 
-        try{
+        try {
             Page<ToiletDto> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
             return ResponseEntity.ok().body(page);
 
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage("정렬 기준이 올바르지 않습니다.");
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
     }
 
-   @GetMapping("/near")
-   @ApiOperation(value = "주변 화장실 API", notes = "유저 좌표 기준 지정한 반경 내 주변 화장실 목록을 반환합니다!")
+    @GetMapping("/near")
+    @ApiOperation(value = "주변 화장실 API", notes = "유저 좌표 기준 지정한 반경 내 주변 화장실 목록을 반환합니다!")
     public ResponseEntity<Page<ToiletDto>> getNearByToilet(HttpServletRequest request, @ApiParam(value = "유저의 경도(longitude)") @RequestParam("lon") BigDecimal lon, @ApiParam(value = "유저의 위도(latitude)") @RequestParam("lat") BigDecimal lat, @ApiParam(value = "반경") @RequestParam("radius") long radius,
                                                            @ApiParam(value = "24시간 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("allDay") Boolean allDay, @ApiParam(value = "장애인용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("disabled") Boolean disabled,
                                                            @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
-                                                           @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable){
+                                                           @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
 
-       String accessToken = request.getHeader("Authorization");
+        String accessToken = request.getHeader("Authorization");
 
-       Long reqMemberId = null;
+        Long reqMemberId = null;
 
-       if(accessToken != null){
-           reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
-       }
+        if (accessToken != null) {
+            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+        }
+
+        System.out.println("memberId"+reqMemberId);
 
         Page<ToiletDto> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
 
         return ResponseEntity.ok().body(page);
-   }
+    }
 }
