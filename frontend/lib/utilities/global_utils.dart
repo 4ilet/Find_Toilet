@@ -101,3 +101,9 @@ double screenWidth(BuildContext context) =>
 
 double screenHeight(BuildContext context) =>
     context.read<SizeProvider>().screenHeight;
+
+//* 총 페이지 수
+int? getTotal(BuildContext context) =>
+    context.read<GlobalProvider>().totalPages;
+void setTotal(BuildContext context, int? newTotal) =>
+    context.read<GlobalProvider>().setTotal(newTotal);

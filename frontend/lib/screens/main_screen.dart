@@ -24,11 +24,13 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  late final Future<ToiletList> toiletList;
+  late final Future<ToiletList>? toiletList;
   @override
   void initState() {
     super.initState();
-    if (!widget.showReview) {
+    if (widget.showReview) {
+      toiletList = null;
+    } else {
       toiletList = ToiletProvider().getNearToilet({
         'allDay': 0,
         'diaper': 0,
@@ -46,7 +48,12 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => exitApp(context),
+      onWillPop: widget.showReview
+          ? () {
+              routerPop(context)();
+              return Future.value(false);
+            }
+          : () => exitApp(context),
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
@@ -65,6 +72,11 @@ class _MainState extends State<Main> {
                 ],
               ),
               Column(children: const [SearchBar(isMain: true), FilterBox()]),
+              ToiletBottomSheet(
+                future: toiletList,
+                showReview: widget.showReview,
+                toiletModel: widget.toiletModel,
+              ),
               watchPressed(context)
                   ? const Center(
                       child: CustomBox(
@@ -77,11 +89,6 @@ class _MainState extends State<Main> {
                       ),
                     )
                   : const SizedBox(),
-              ToiletBottomSheet(
-                future: toiletList,
-                showReview: widget.showReview,
-                toiletModel: widget.toiletModel,
-              )
             ],
           ),
         ),

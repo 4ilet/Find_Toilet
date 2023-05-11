@@ -46,6 +46,7 @@ class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio =
       Dio(BaseOptions(baseUrl: _baseUrl!, receiveDataWhenStatusError: true));
+
   dioWithToken() {
     final tempDio = Dio(
       BaseOptions(
@@ -54,11 +55,12 @@ class ApiProvider extends UrlClass {
         receiveDataWhenStatusError: true,
       ),
     );
-    tempDio.interceptors.add(InterceptorsWrapper(
-      onError: (e, handler) {
-        if (e.response?.statusCode == 401) {}
-      },
-    ));
+    // tempDio.interceptors.add(InterceptorsWrapper(
+    //   onError: (e, handler) {
+    //     if (e.response?.statusCode == 401) {}
+    //   },
+    // ));
+    return tempDio;
   }
 
   dioWithRefresh(String method) => Dio(

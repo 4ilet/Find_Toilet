@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
   final ToiletModel? toiletModel;
-  final Future<ToiletList> future;
+  final Future<ToiletList>? future;
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
@@ -103,7 +103,7 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
               widget.showReview
                   ? reviewSilverList()
                   : CustomSilverFutureList(
-                      future: widget.future,
+                      future: widget.future!,
                       showReview: false,
                     ),
             ],

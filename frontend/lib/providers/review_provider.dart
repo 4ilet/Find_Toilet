@@ -8,26 +8,28 @@ class ReviewProvider extends ApiProvider {
   Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
-      final response = await dioWithToken().get(
+      final response = await dio.get(
         reviewListUrl(toiletId),
         queryParameters: {'page': page},
       );
+      print('res: $response');
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
+          print('data: $data');
           data.forEach((review) {
             reviewList.add(ReviewModel.fromJson(review));
           });
           return reviewList;
         case 204:
-          return reviewList;
+          return [];
         case 401:
           return reviewList;
         default:
           throw Error();
       }
     } catch (error) {
-      print(error);
+      print('error: $error');
       throw Error();
     }
   }

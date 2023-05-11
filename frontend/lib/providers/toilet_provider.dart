@@ -1,5 +1,6 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletProvider extends ApiProvider {
@@ -11,17 +12,16 @@ class ToiletProvider extends ApiProvider {
       );
       switch (response.statusCode) {
         case 200:
-          final data = response.data['data'];
-          ToiletList toiletList = data.map<ToiletModel>((json) {
-            return ToiletModel.fromJson(json);
-          }).toList();
-          return toiletList;
-        // case 401:
-        //   await refreshToken(
-        //     url: nearToiletUrl,
-        //     method: 'GET',
-        //   );
-        //   return getNearToilet();
+          // print(response);
+          final data = response.data['content'];
+          if (data.isNotEmpty) {
+            ToiletList toiletList = data.map<ToiletModel>((json) {
+              return ToiletModel.fromJson(json);
+            }).toList();
+            return toiletList;
+          } else {
+            return [];
+          }
         default:
           throw Error();
       }
@@ -33,16 +33,19 @@ class ToiletProvider extends ApiProvider {
     }
   }
 
-  Future<ToiletList> searchToilet(DynamicMap queryData) async {
+  Future<ToiletList> searchToilet(DynamicMap queryData) =>
+      _searchToilet(queryData);
+  Future<ToiletList> _searchToilet(DynamicMap queryData) async {
     try {
       final response = await dio.get(
         searchToiletUrl,
         queryParameters: queryData,
       );
-      print(response.data['totalPages']);
       if (response.statusCode == 200) {
+        if (GlobalProvider().totalPages == null) {
+          GlobalProvider().setTotal(response.data['totalPages']);
+        }
         final data = response.data['content'];
-        print('data: $data');
         ToiletList toiletList = data.map<ToiletModel>((json) {
           return ToiletModel.fromJson(json);
         }).toList();

@@ -210,3 +210,14 @@ class SizeProvider with ChangeNotifier {
 
   void initWidthHeight(BuildContext context) => _initWidthHeight(context);
 }
+
+//* main, search
+class GlobalProvider with ChangeNotifier {
+  static int? _totalPages;
+  int? get totalPages => _totalPages;
+  void _setTotal(int? newVal) => _totalPages = newVal;
+  void setTotal(int? newVal) {
+    _setTotal(newVal);
+    notifyListeners();
+  }
+}
