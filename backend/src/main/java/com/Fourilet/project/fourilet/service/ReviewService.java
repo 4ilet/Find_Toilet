@@ -11,10 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
 
 //import javax.xml.ws.Response;
 //import java.sql.Array;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -64,7 +67,7 @@ public class ReviewService {
         }
 
         PageRequest pageRequest = PageRequest.of(page, 10);
-        List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest);
+        List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest, Sort.by(Sort.Direction.DESC, "reviewId"));
 
 
         if (toilet == null) {

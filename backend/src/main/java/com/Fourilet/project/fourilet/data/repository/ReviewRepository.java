@@ -4,6 +4,7 @@ import com.Fourilet.project.fourilet.data.entity.Member;
 import com.Fourilet.project.fourilet.data.entity.Review;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +21,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
       List<Review> findAllByToilet(Toilet toilet, PageRequest pageRequest);
 
 
+      List<Review> findAllByToilet(Toilet toilet, PageRequest pageRequest, Sort reviewId);
 }
