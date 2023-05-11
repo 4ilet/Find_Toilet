@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class ReviewService {
         }
 
         PageRequest pageRequest = PageRequest.of(page, 10);
-        List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest);
+        List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest, Sort.by(Sort.Direction.DESC, "reviewId"));
 
 
         if (toilet == null) {
