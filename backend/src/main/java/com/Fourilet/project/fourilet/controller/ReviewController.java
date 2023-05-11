@@ -127,7 +127,6 @@ public class ReviewController {
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
-
     }
     @GetMapping("/get/{reviewId}")
     @ApiOperation(value = "개별 화장실 리뷰 가져오기", notes = "특정 리뷰를 가져온다")
@@ -148,6 +147,5 @@ public class ReviewController {
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

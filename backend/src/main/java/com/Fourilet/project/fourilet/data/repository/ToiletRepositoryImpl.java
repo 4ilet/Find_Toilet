@@ -34,6 +34,9 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
 
     @Override
     public Page<ToiletDto> nearByToilet(ToiletGetCondition condition, Pageable pageable){
+        int maxPageSize = 150;
+        int requestedPageSize = pageable.getPageSize();
+        int effectivePageSize = Math.min(maxPageSize, requestedPageSize);
         QueryResults<ToiletDto> result = queryFactory.select(
                         new QToiletDto(
                                 toilet.toiletId,
@@ -84,17 +87,20 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.lat
                         )).asc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(effectivePageSize)
                 .fetchResults();
 
         List<ToiletDto> content = result.getResults();
-        long total = result.getTotal();
+        long total = Math.min(result.getTotal(), maxPageSize);
 
         return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<ToiletDto> searchToiletDistance(ToiletSearchCondition condition, Pageable pageable){
+        int maxPageSize = 150;
+        int requestedPageSize = pageable.getPageSize();
+        int effectivePageSize = Math.min(maxPageSize, requestedPageSize);
         QueryResults<ToiletDto> result = queryFactory.select(
                         new QToiletDto(
                                 toilet.toiletId,
@@ -139,17 +145,20 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                         )).asc()
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(effectivePageSize)
                 .fetchResults();
 
         List<ToiletDto> content = result.getResults();
-        long total = result.getTotal();
+        long total = Math.min(result.getTotal(), maxPageSize);
 
         return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<ToiletDto> searchToiletScore(ToiletSearchCondition condition, Pageable pageable){
+        int maxPageSize = 150;
+        int requestedPageSize = pageable.getPageSize();
+        int effectivePageSize = Math.min(maxPageSize, requestedPageSize);
         QueryResults<ToiletDto> result = queryFactory.select(
                         new QToiletDto(
                                 toilet.toiletId,
@@ -186,17 +195,20 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                         review.score.coalesce((float)0).avg().desc(), review.count().desc()
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(effectivePageSize)
                 .fetchResults();
 
         List<ToiletDto> content = result.getResults();
-        long total = result.getTotal();
+        long total = Math.min(result.getTotal(), maxPageSize);
 
         return new PageImpl<>(content, pageable, total);
     }
 
     @Override
     public Page<ToiletDto> searchToiletComment(ToiletSearchCondition condition, Pageable pageable){
+        int maxPageSize = 150;
+        int requestedPageSize = pageable.getPageSize();
+        int effectivePageSize = Math.min(maxPageSize, requestedPageSize);
         QueryResults<ToiletDto> result = queryFactory.select(
                         new QToiletDto(
                                 toilet.toiletId,
@@ -233,11 +245,11 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                         review.count().desc(), review.score.coalesce((float)0).avg().desc()
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(effectivePageSize)
                 .fetchResults();
 
         List<ToiletDto> content = result.getResults();
-        long total = result.getTotal();
+        long total = Math.min(result.getTotal(), maxPageSize);
 
         return new PageImpl<>(content, pageable, total);
     }
