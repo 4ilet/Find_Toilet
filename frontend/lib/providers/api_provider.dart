@@ -17,7 +17,7 @@ class UrlClass extends UserInfoProvider {
   String bookmarkListUrl(int folderId) =>
       '$_bookmarkUrl/folder/toiletlist/$folderId';
   String addToiletUrl({required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/add/folder/$folderId/$toiletId';
+      '$_bookmarkUrl/add/$folderId/$toiletId';
   String deleteToiletUrl({required int folderId, required int toiletId}) =>
       '$_bookmarkUrl/delete/toilet/$folderId/$toiletId';
 

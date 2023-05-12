@@ -88,15 +88,14 @@ class BookMarkProvider extends ApiProvider {
   FutureVoid addToilet({
     required int folderId,
     required int toiletId,
-  }) async {
-    createApi(
-      addToiletUrl(
-        folderId: folderId,
-        toiletId: toiletId,
-      ),
-      data: {},
-    );
-  }
+  }) async =>
+      createApi(
+        addToiletUrl(
+          folderId: folderId,
+          toiletId: toiletId,
+        ),
+        data: {},
+      );
 
   //* 즐겨찾기 삭제
   FutureBool deleteBookMark({

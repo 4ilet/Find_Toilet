@@ -214,7 +214,9 @@ class SizeProvider with ChangeNotifier {
 //* main, search
 class GlobalProvider with ChangeNotifier {
   static int? _totalPages;
+  static final bool _loading = true;
   int? get totalPages => _totalPages;
+  bool get loading => _loading;
   void _setTotal(int? newVal) => _totalPages = newVal;
   void setTotal(int? newVal) {
     _setTotal(newVal);

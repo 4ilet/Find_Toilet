@@ -220,21 +220,6 @@ class ListItem extends StatelessWidget {
     //   starIcon
     // ];
 
-    void addOrEditReview() async {
-      final token = getToken(context);
-      if (token != null && token != '') {
-        routerPush(context,
-            page: ReviewForm(
-              toiletName: data.toiletName,
-              toiletId: data.toiletId,
-              reviewId: data.reviewId,
-            ))();
-      } else {
-        await showModal(context, page: const LoginConfirmModal());
-        routerPop(context)();
-      }
-    }
-
     // final infoList = [
     //   data.address,
     //   data.phoneNo,
@@ -282,6 +267,38 @@ class ListItem extends StatelessWidget {
       return newValue;
     }
 
+    void addOrEditReview() async {
+      final token = getToken(context);
+      if (token != null && token != '') {
+        routerPush(context,
+            page: ReviewForm(
+              toiletName: data.toiletName,
+              toiletId: data.toiletId,
+              reviewId: data.reviewId,
+            ))();
+      } else {
+        await showModal(context, page: const LoginConfirmModal());
+        routerPop(context)();
+      }
+    }
+
+    void pressedHeart() {
+      if (getToken(context) != null) {
+        showModal(
+          context,
+          page: data.folderId != 0
+              ? DeleteModal(
+                  deleteMode: 2,
+                  id: data.toiletId,
+                  folderId: data.folderId,
+                )
+              : AddToBookMarkModal(toiletId: data.toiletId),
+        );
+      } else {
+        showModal(context, page: const LoginConfirmModal());
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
@@ -293,7 +310,7 @@ class ListItem extends StatelessWidget {
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,
-        height: screenHeight(context) * 0.3,
+        height: screenHeight(context) * 0.33,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
@@ -317,16 +334,7 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () => showModal(
-                            context,
-                            page: data.folderId != 0
-                                ? DeleteModal(
-                                    deleteMode: 2,
-                                    id: data.toiletId,
-                                    folderId: data.folderId,
-                                  )
-                                : AddToBookMarkModal(toiletId: data.toiletId),
-                          ),
+                          onPressed: pressedHeart,
                           icon: CustomIcon(
                             icon:
                                 data.folderId != 0 ? heartIcon : emptyHeartIcon,
@@ -392,31 +400,34 @@ class ListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  existState()
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CustomText(
-                              title: '이용 가능 시설',
-                              fontSize: FontSize.smallSize,
-                              color: CustomColors.mainColor,
-                            ),
-                            CustomText(
-                              title: available(13),
-                              fontSize: FontSize.smallSize,
-                            ),
-                          ],
-                        )
-                      : const SizedBox(),
-                  CustomButton(
-                    fontSize: FontSize.smallSize,
-                    onPressed: addOrEditReview,
-                    buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    existState()
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CustomText(
+                                title: '이용 가능 시설',
+                                fontSize: FontSize.smallSize,
+                                color: CustomColors.mainColor,
+                              ),
+                              CustomText(
+                                title: available(13),
+                                fontSize: FontSize.smallSize,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    CustomButton(
+                      fontSize: FontSize.smallSize,
+                      onPressed: addOrEditReview,
+                      buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
+                    )
+                  ],
+                ),
               )
             ],
           ),

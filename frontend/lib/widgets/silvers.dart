@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 //* app bar
 class CustomSilverAppBar extends StatelessWidget {
   final double toolbarHeight, expandedHeight;
+  final double? elevation;
   final Widget flexibleSpace;
   final Color backgroundColor;
 
@@ -17,6 +18,7 @@ class CustomSilverAppBar extends StatelessWidget {
     required this.expandedHeight,
     required this.flexibleSpace,
     required this.backgroundColor,
+    this.elevation,
   });
 
   @override
@@ -28,6 +30,7 @@ class CustomSilverAppBar extends StatelessWidget {
       pinned: true,
       expandedHeight: expandedHeight,
       flexibleSpace: flexibleSpace,
+      elevation: elevation,
     );
   }
 }

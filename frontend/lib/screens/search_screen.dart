@@ -10,7 +10,6 @@ import 'package:find_toilet/widgets/select_box.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class Search extends StatefulWidget {
   final String query;
@@ -33,6 +32,8 @@ class _SearchState extends State<Search> {
   final scrollController = ScrollController();
   bool showList = false;
   bool loading = true;
+  bool additional = false;
+  bool working = false;
   final DynamicMap searchData = {
     'allDay': 0,
     'diaper': 0,
@@ -42,7 +43,7 @@ class _SearchState extends State<Search> {
     'lat': 37.537229,
     'lon': 127.005515,
     'page': -1,
-    'size': 5,
+    'size': 10,
     'order': 'distance',
   };
 
@@ -51,34 +52,53 @@ class _SearchState extends State<Search> {
     super.initState();
     selectedValue = sortOrder.first;
     searchData['keyword'] = widget.query;
-    search();
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-              ScrollDirection.reverse &&
-          scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent * 0.9) {
-        print(scrollController.position.userScrollDirection);
-        if (!loading) {
-          loading = true;
-          search();
+    firstSearch();
+    scrollController.addListener(() async {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent * 0.9) {
+        if (!working) {
+          setState(() {
+            working = true;
+          });
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            if (!additional) {
+              setState(() {
+                additional = true;
+              });
+              search();
+            }
+          });
         }
       }
     });
   }
 
-  void search() async {
-    if (loading && getTotal(context) == null ||
-        searchData['page'] < getTotal(context)) {
-      print(searchData);
+  void firstSearch() async {
+    if (loading) {
       searchData['page'] += 1;
       final data = await ToiletProvider().searchToilet(searchData);
+      toiletList.addAll(data);
       setState(() {
-        toiletList.addAll(data);
+        loading = false;
       });
-      print(searchData);
-      print('getTotal: ${getTotal(context)}');
     }
-    loading = false;
+  }
+
+  void search() async {
+    // print(additional);
+    if (additional && searchData['page'] < getTotal(context)) {
+      // print('search 함수 실행 => $searchData');
+      searchData['page'] += 1;
+      final data = await ToiletProvider().searchToilet(searchData);
+      toiletList.addAll(data);
+      // print(toiletList.length);
+      setState(() {
+        additional = false;
+        working = false;
+      });
+      // print(toiletList.length);
+      // print('getTotal: ${getTotal(context)}');
+    }
   }
 
   void changeShowState() {
@@ -93,10 +113,14 @@ class _SearchState extends State<Search> {
 
   void changeSelected(int i) {
     setState(() {
-      selectedValue = sortOrder[i];
-      searchData['order'] = sortValues[i];
-      searchData['page'] = 0;
-      changeShowState();
+      if (selectedValue != sortOrder[i]) {
+        selectedValue = sortOrder[i];
+        searchData['order'] = sortValues[i];
+        searchData['page'] = 0;
+        changeShowState();
+        loading = true;
+        firstSearch();
+      }
     });
   }
 
@@ -104,53 +128,85 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
-      body: CustomBox(
-        radius: 0,
-        color: mainColor,
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: scrollController,
-          slivers: [
-            CustomSilverAppBar(
-              toolbarHeight: 200,
-              expandedHeight: 100,
-              flexibleSpace: Stack(
-                children: [
-                  Column(
+      body: Stack(
+        children: [
+          CustomBox(
+            radius: 0,
+            color: mainColor,
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: scrollController,
+              slivers: [
+                CustomSilverAppBar(
+                  elevation: 0,
+                  toolbarHeight: 200,
+                  expandedHeight: 100,
+                  flexibleSpace: Stack(
                     children: [
-                      SearchBar(
-                        isMain: false,
-                        query: searchData['keyword'] as String,
+                      Column(
+                        children: [
+                          SearchBar(
+                            isMain: false,
+                            query: searchData['keyword'] as String,
+                          ),
+                          topOfAppBar(),
+                          const FilterBox()
+                        ],
                       ),
-                      topOfAppBar(),
-                      const FilterBox()
+                      showList ? sortList() : const SizedBox()
                     ],
                   ),
-                  showList ? sortList() : const SizedBox()
-                ],
-              ),
-              backgroundColor: mainColor,
+                  backgroundColor: mainColor,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: !loading
+                            ? CustomListView(
+                                itemCount: toiletList.length,
+                                itemBuilder: (context, i) {
+                                  return Column(
+                                    children: [
+                                      i < searchData['page'] * 10
+                                          ? ListItem(
+                                              data: toiletList[i],
+                                              showReview: false,
+                                            )
+                                          : !additional
+                                              ? ListItem(
+                                                  data: toiletList[i],
+                                                  showReview: false,
+                                                )
+                                              : const SizedBox(),
+                                      i == toiletList.length - 1 &&
+                                              getTotal(context) !=
+                                                  searchData['page']
+                                          ? const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 40,
+                                              ),
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            )
+                                          : const SizedBox()
+                                    ],
+                                  );
+                                },
+                              )
+                            : const Center(child: CircularProgressIndicator()),
+                      ),
+                      // : const Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              ],
             ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  !loading
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: CustomListView(
-                            itemCount: (searchData['page'] + 1) * 5,
-                            itemBuilder: (context, i) => ListItem(
-                              data: toiletList[i],
-                              showReview: false,
-                            ),
-                          ),
-                        )
-                      : const Center(child: CircularProgressIndicator()),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -183,7 +239,7 @@ class _SearchState extends State<Search> {
   //* 선택 상자 눌렀을 때 나오는 목록
   Padding sortList() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+      padding: const EdgeInsets.fromLTRB(0, 120, 20, 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
