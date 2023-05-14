@@ -5,6 +5,7 @@ import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/list_view.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/select_box.dart';
 import 'package:find_toilet/widgets/silvers.dart';
@@ -25,51 +26,61 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  StringList sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
-  StringList sortValues = ['distance', 'score', 'comment'];
-  ToiletList toiletList = [];
-  late String selectedValue;
+  final StringList sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
+  final StringList sortValues = ['distance', 'score', 'comment'];
+  final ToiletList toiletList = [];
   final scrollController = ScrollController();
+  final cnt = 10;
+  final selectedBoxKey = GlobalKey();
+  Offset? position;
+
   bool showList = false;
   bool loading = true;
   bool additional = false;
   bool working = false;
-  final DynamicMap searchData = {
-    'allDay': 0,
-    'diaper': 0,
-    'disabled': 0,
-    'kids': 0,
-    'keyword': null,
-    'lat': 37.537229,
-    'lon': 127.005515,
-    'page': -1,
-    'size': 10,
-    'order': 'distance',
-  };
+  late final DynamicMap searchData;
+  late String selectedValue;
 
   @override
   void initState() {
     super.initState();
-    selectedValue = sortOrder.first;
-    searchData['keyword'] = widget.query;
+    final sortIdx = getSortIdx(context);
+    searchData = {
+      'allDay': readFilter(context, 0),
+      'diaper': readFilter(context, 1),
+      'disabled': readFilter(context, 2),
+      'kids': readFilter(context, 3),
+      'keyword': widget.query,
+      'lat': 37.537229,
+      'lon': 127.005515,
+      'page': -1,
+      'size': cnt,
+      'order': sortValues[sortIdx],
+    };
+    selectedValue = sortOrder[sortIdx];
     firstSearch();
     scrollController.addListener(() async {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent * 0.9) {
-        if (!working) {
-          setState(() {
-            working = true;
-          });
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            if (!additional) {
-              setState(() {
-                additional = true;
-              });
-              search();
-            }
-          });
+        if (searchData['page'] < getTotal(context)) {
+          if (!working) {
+            setState(() {
+              working = true;
+            });
+            Future.delayed(const Duration(milliseconds: 2000), () {
+              if (!additional) {
+                setState(() {
+                  additional = true;
+                });
+                search();
+              }
+            });
+          }
         }
       }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getOffset();
     });
   }
 
@@ -85,19 +96,14 @@ class _SearchState extends State<Search> {
   }
 
   void search() async {
-    // print(additional);
-    if (additional && searchData['page'] < getTotal(context)) {
-      // print('search 함수 실행 => $searchData');
+    if (additional) {
       searchData['page'] += 1;
       final data = await ToiletProvider().searchToilet(searchData);
       toiletList.addAll(data);
-      // print(toiletList.length);
       setState(() {
         additional = false;
         working = false;
       });
-      // print(toiletList.length);
-      // print('getTotal: ${getTotal(context)}');
     }
   }
 
@@ -114,14 +120,47 @@ class _SearchState extends State<Search> {
   void changeSelected(int i) {
     setState(() {
       if (selectedValue != sortOrder[i]) {
-        selectedValue = sortOrder[i];
+        setSortIdx(context, i);
         searchData['order'] = sortValues[i];
-        searchData['page'] = 0;
+        selectedValue = sortOrder[i];
+        searchData['page'] = -1;
         changeShowState();
         loading = true;
         firstSearch();
+      } else {
+        changeShowState();
       }
     });
+  }
+
+  void onSearchAction() {
+    final keyword = searchData['keyword'];
+    if (keyword == null || keyword == '') {
+      showModal(
+        context,
+        page: const AlertModal(
+          title: '검색어 입력',
+          content: '검색어를 입력해주세요',
+        ),
+      );
+      return;
+    } else if (keyword != widget.query) {
+      return routerPush(
+        context,
+        page: Search(query: keyword!),
+      )();
+    }
+    return;
+  }
+
+  void getOffset() {
+    if (selectedBoxKey.currentContext != null) {
+      final renderBox =
+          selectedBoxKey.currentContext!.findRenderObject() as RenderBox;
+      setState(() {
+        position = renderBox.localToGlobal(Offset.zero);
+      });
+    }
   }
 
   @override
@@ -148,6 +187,11 @@ class _SearchState extends State<Search> {
                           SearchBar(
                             isMain: false,
                             query: searchData['keyword'] as String,
+                            onChange: (value) {
+                              searchData['keyword'] = value;
+                              print('data: ${searchData['keyword']}');
+                            },
+                            onSearchAction: onSearchAction,
                           ),
                           topOfAppBar(),
                           const FilterBox()
@@ -164,39 +208,46 @@ class _SearchState extends State<Search> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: !loading
-                            ? CustomListView(
-                                itemCount: toiletList.length,
-                                itemBuilder: (context, i) {
-                                  return Column(
-                                    children: [
-                                      i < searchData['page'] * 10
-                                          ? ListItem(
-                                              data: toiletList[i],
-                                              showReview: false,
-                                            )
-                                          : !additional
+                            ? toiletList.isNotEmpty
+                                ? CustomListView(
+                                    itemCount: toiletList.length,
+                                    itemBuilder: (context, i) {
+                                      return Column(
+                                        children: [
+                                          i < searchData['page'] * cnt
                                               ? ListItem(
                                                   data: toiletList[i],
                                                   showReview: false,
                                                 )
-                                              : const SizedBox(),
-                                      i == toiletList.length - 1 &&
-                                              getTotal(context) !=
-                                                  searchData['page']
-                                          ? const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 40,
-                                              ),
-                                              child: Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                            )
-                                          : const SizedBox()
-                                    ],
-                                  );
-                                },
-                              )
+                                              : !additional
+                                                  ? ListItem(
+                                                      data: toiletList[i],
+                                                      showReview: false,
+                                                    )
+                                                  : const SizedBox(),
+                                          i == toiletList.length - 1 &&
+                                                  getTotal(context) !=
+                                                      searchData['page']
+                                              ? const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 40,
+                                                  ),
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                )
+                                              : const SizedBox()
+                                        ],
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: CustomText(
+                                      title: '조건에 맞는 화장실이 없습니다.',
+                                      color: CustomColors.whiteColor,
+                                    ),
+                                  )
                             : const Center(child: CircularProgressIndicator()),
                       ),
                       // : const Center(child: CircularProgressIndicator())
@@ -225,6 +276,7 @@ class _SearchState extends State<Search> {
             font: kimm,
           ),
           SelectBox(
+            key: selectedBoxKey,
             showList: showList,
             onTap: changeShowState,
             width: 120,
@@ -237,9 +289,9 @@ class _SearchState extends State<Search> {
   }
 
   //* 선택 상자 눌렀을 때 나오는 목록
-  Padding sortList() {
+  Widget sortList() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 120, 20, 30),
+      padding: EdgeInsets.fromLTRB(0, position!.dy, 20, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -254,9 +306,12 @@ class _SearchState extends State<Search> {
                     onTap: () => changeSelected(i),
                     width: 120,
                     child: Center(
-                      child: CustomText(
-                        title: sortOrder[i],
-                        fontSize: FontSize.smallSize,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: CustomText(
+                          title: sortOrder[i],
+                          fontSize: FontSize.smallSize,
+                        ),
                       ),
                     ),
                   )

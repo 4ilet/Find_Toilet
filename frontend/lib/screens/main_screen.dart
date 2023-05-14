@@ -1,10 +1,12 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
 import 'package:find_toilet/widgets/box_container.dart';
+import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/map_widget.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
@@ -25,6 +27,7 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   late final Future<ToiletList>? toiletList;
+  DynamicMap query = {'value': null};
   @override
   void initState() {
     super.initState();
@@ -32,10 +35,10 @@ class _MainState extends State<Main> {
       toiletList = null;
     } else {
       toiletList = ToiletProvider().getNearToilet({
-        'allDay': 0,
-        'diaper': 0,
-        'disabled': 0,
-        'kids': 0,
+        'allDay': readFilter(context, 0),
+        'diaper': readFilter(context, 1),
+        'disabled': readFilter(context, 2),
+        'kids': readFilter(context, 3),
         'lat': 37.537229,
         'lon': 127.005515,
         'radius': 1000,
@@ -43,6 +46,22 @@ class _MainState extends State<Main> {
         'size': 30,
       });
     }
+  }
+
+  void onSearchAction() {
+    if (query['value'] != '') {
+      return routerPush(
+        context,
+        page: Search(query: query['value']!),
+      )();
+    }
+    showModal(
+      context,
+      page: const AlertModal(
+        title: '검색어 입력',
+        content: '검색어를 입력해주세요',
+      ),
+    );
   }
 
   @override
@@ -71,7 +90,17 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              Column(children: const [SearchBar(isMain: true), FilterBox()]),
+              Column(
+                children: [
+                  SearchBar(
+                    isMain: true,
+                    query: query['value'] ?? '',
+                    onChange: (value) => query['value'] = value,
+                    onSearchAction: onSearchAction,
+                  ),
+                  const FilterBox()
+                ],
+              ),
               ToiletBottomSheet(
                 future: toiletList,
                 showReview: widget.showReview,

@@ -246,7 +246,7 @@ class ListItem extends StatelessWidget {
         if (availableList[i]) {
           final newLength = facilityList[i].length;
           if (length + newLength < limit) {
-            result += ' ${facilityList[i]}';
+            result += '${facilityList[i]} ';
             length += newLength;
           } else {
             result += '\n${facilityList[i]}';
@@ -413,10 +413,13 @@ class ListItem extends StatelessWidget {
                                 title: '이용 가능 시설',
                                 fontSize: FontSize.smallSize,
                                 color: CustomColors.mainColor,
+                                isBoldText: true,
                               ),
+                              const SizedBox(height: 10),
                               CustomText(
-                                title: available(13),
+                                title: available(15),
                                 fontSize: FontSize.smallSize,
+                                isCentered: true,
                               ),
                             ],
                           )
@@ -435,82 +438,9 @@ class ListItem extends StatelessWidget {
       ),
     );
   }
-
-  // Row toiletTopInfo(BuildContext context) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Flexible(
-  //         flex: 7,
-  //         child: CustomText(
-  //           color: CustomColors.mainColor,
-  //           title: widget.toiletName,
-  //           fontSize: FontSize.defaultSize,
-  //         ),
-  //       ),
-  //       Flexible(
-  //         flex: 2,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             CustomIconButton(
-  //               onPressed: showModal(
-  //                 context,
-  //                 page: const AddToBookMarkModal(),
-  //               ),
-  //               icon: liked ? heartIcon : emptyHeartIcon,
-  //               color: CustomColors.redColor,
-  //             ),
-  //             CustomIconButton(
-  //               onPressed: showModal(
-  //                 context,
-  //                 page: NavigationModal(
-  //                   startPoint: const [37.537229, 127.005515],
-  //                   endPoint: const [37.4979502, 127.0276368],
-  //                   destination: widget.toiletName,
-  //                 ),
-  //               ),
-  //               icon: planeIcon,
-  //               color: CustomColors.lightBlueColor,
-  //               iconSize: 35,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Row toiletInfo(int i) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Flexible(
-  //         flex: 7,
-  //         child: TextWithIcon(
-  //           icon: iconList[2 * i],
-  //           text: infoList[2 * i],
-  //         ),
-  //       ),
-  //       Flexible(
-  //         flex: 4,
-  //         child: i == 0
-  //             ? TextWithIcon(
-  //                 icon: iconList[2 * i + 1],
-  //                 text: infoList[2 * i + 1],
-  //               )
-  //             : TextWithIcon(
-  //                 icon: iconList[2 * i + 1],
-  //                 text: infoList[2 * i + 1],
-  //                 iconColor: CustomColors.yellowColor,
-  //               ),
-  //       )
-  //     ],
-  //   );
-  // }
 }
 
-//* filter 상자, 화살표
+//* filter 상자
 class FilterBox extends StatefulWidget {
   const FilterBox({super.key});
 
@@ -519,23 +449,11 @@ class FilterBox extends StatefulWidget {
 }
 
 class _FilterBoxState extends State<FilterBox> {
-  int length = 4;
   StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
-  late StringList showedFilter;
-  late BoolList selectedList;
-  ReturnVoid changeSelected(int i) {
-    return () {
-      setState(() {
-        selectedList[i] = !selectedList[i];
-      });
-    };
-  }
 
   @override
   void initState() {
     super.initState();
-    showedFilter = [for (int i = 0; i < 3; i += 1) filterList[i]];
-    selectedList = [for (int i = 0; i < length; i += 1) false];
   }
 
   @override
@@ -544,18 +462,12 @@ class _FilterBoxState extends State<FilterBox> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CustomIconButton(
-          icon: toLeftIcon,
-          iconSize: 50,
-          onPressed: () {},
-          color: CustomColors.mainColor,
-        ),
-        for (int i = 0; i < 3; i += 1)
+        for (int i = 0; i < 4; i += 1)
           CustomBox(
-            onTap: changeSelected(i),
+            onTap: () => setFilter(context, i),
             // width: 100,
             // height: 30,
-            color: selectedList[i] ? mainColor : whiteColor,
+            color: getFilter(context, i) ? mainColor : whiteColor,
             radius: 5,
             boxShadow: const [defaultShadow],
             child: Center(
@@ -563,22 +475,16 @@ class _FilterBoxState extends State<FilterBox> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 child: CustomText(
-                  title: showedFilter[i],
+                  title: filterList[i],
                   font: kimm,
                   fontSize: FontSize.smallSize,
-                  color: selectedList[i]
+                  color: getFilter(context, i)
                       ? CustomColors.whiteColor
                       : CustomColors.blackColor,
                 ),
               ),
             ),
           ),
-        CustomIconButton(
-          icon: toRightIcon,
-          iconSize: 50,
-          onPressed: () {},
-          color: CustomColors.mainColor,
-        ),
       ],
     );
   }

@@ -107,3 +107,37 @@ int? getTotal(BuildContext context) =>
     context.read<GlobalProvider>().totalPages;
 void setTotal(BuildContext context, int? newTotal) =>
     context.read<GlobalProvider>().setTotal(newTotal);
+
+//* 필터
+void setFilter(BuildContext context, int index) =>
+    context.read<GlobalProvider>().setFilter(index);
+bool readFilter(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return context.read<GlobalProvider>().diaper;
+    case 1:
+      return context.read<GlobalProvider>().child;
+    case 2:
+      return context.read<GlobalProvider>().disabled;
+    default:
+      return context.read<GlobalProvider>().allDay;
+  }
+}
+
+bool getFilter(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return context.watch<GlobalProvider>().diaper;
+    case 1:
+      return context.watch<GlobalProvider>().child;
+    case 2:
+      return context.watch<GlobalProvider>().disabled;
+    default:
+      return context.watch<GlobalProvider>().allDay;
+  }
+}
+
+//* 정렬
+void setSortIdx(BuildContext context, int index) =>
+    context.read<GlobalProvider>().setSortIdx(index);
+int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;

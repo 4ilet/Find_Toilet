@@ -51,6 +51,8 @@ class TextWithIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon, color: convertedColor(iconColor)),
         const SizedBox(width: 10),

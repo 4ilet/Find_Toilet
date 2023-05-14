@@ -6,27 +6,27 @@ import 'package:find_toilet/utilities/type_enum.dart';
 class ToiletProvider extends ApiProvider {
   Future<ToiletList> getNearToilet(DynamicMap queryData) async {
     try {
-      final response = await dio.get(
-        nearToiletUrl,
-        queryParameters: queryData,
-      );
-      switch (response.statusCode) {
-        case 200:
-          // print(response);
-          final data = response.data['content'];
-          if (data.isNotEmpty) {
-            ToiletList toiletList = data.map<ToiletModel>((json) {
-              return ToiletModel.fromJson(json);
-            }).toList();
-            return toiletList;
-          } else {
-            return [];
-          }
-        default:
-          throw Error();
+      final response = token == null
+          ? await dio.get(
+              nearToiletUrl,
+              queryParameters: queryData,
+            )
+          : await dioWithToken().get(
+              nearToiletUrl,
+              queryParameters: queryData,
+            );
+      if (response.statusCode == 200) {
+        final data = response.data['content'];
+        if (data.isNotEmpty) {
+          ToiletList toiletList = data.map<ToiletModel>((json) {
+            return ToiletModel.fromJson(json);
+          }).toList();
+          return toiletList;
+        } else {
+          return [];
+        }
       }
-
-      // throw Error();
+      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -37,10 +37,15 @@ class ToiletProvider extends ApiProvider {
       _searchToilet(queryData);
   Future<ToiletList> _searchToilet(DynamicMap queryData) async {
     try {
-      final response = await dio.get(
-        searchToiletUrl,
-        queryParameters: queryData,
-      );
+      final response = token == null
+          ? await dio.get(
+              searchToiletUrl,
+              queryParameters: queryData,
+            )
+          : await dioWithToken().get(
+              searchToiletUrl,
+              queryParameters: queryData,
+            );
       if (response.statusCode == 200) {
         if (GlobalProvider().totalPages == null) {
           GlobalProvider().setTotal(response.data['totalPages']);

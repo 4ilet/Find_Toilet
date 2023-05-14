@@ -214,12 +214,55 @@ class SizeProvider with ChangeNotifier {
 //* main, search
 class GlobalProvider with ChangeNotifier {
   static int? _totalPages;
-  static final bool _loading = true;
+  // static final bool _loading = true;
+  static bool _diaper = false;
+  static bool _child = false;
+  static bool _disabled = false;
+  static bool _allDay = false;
+  static int _sortIdx = 0;
   int? get totalPages => _totalPages;
-  bool get loading => _loading;
-  void _setTotal(int? newVal) => _totalPages = newVal;
+  bool get diaper => _diaper;
+  bool get child => _child;
+  bool get disabled => _disabled;
+  bool get allDay => _allDay;
+  int get sortIdx => _sortIdx;
+  // bool get loading => _loading;
+
+  //* public
   void setTotal(int? newVal) {
     _setTotal(newVal);
     notifyListeners();
   }
+
+  void setFilter(int index) {
+    _setFilter(index);
+    notifyListeners();
+  }
+
+  void setSortIdx(int index) {
+    _setSortIdx(index);
+    notifyListeners();
+  }
+
+  //* private
+  void _setTotal(int? newVal) => _totalPages = newVal;
+
+  void _setFilter(int index) {
+    switch (index) {
+      case 0:
+        _diaper = !_diaper;
+        return;
+      case 1:
+        _child = !_child;
+        return;
+      case 2:
+        _disabled = !_disabled;
+        return;
+      default:
+        _allDay = !_allDay;
+        return;
+    }
+  }
+
+  void _setSortIdx(int index) => _sortIdx = index;
 }
