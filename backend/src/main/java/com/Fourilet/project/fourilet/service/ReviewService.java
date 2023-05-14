@@ -10,14 +10,9 @@ import com.Fourilet.project.fourilet.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 //import javax.xml.ws.Response;
 //import java.sql.Array;
@@ -62,7 +57,7 @@ public class ReviewService {
         newReview.setScore(postReviewDto.getScore());
         reviewRepository.save(newReview);
     }
-    public List<ReviewDto.GetReviewDto> getReview(long toiletId, int page){
+    public ReviewDto.GetReviewListDto getReview(long toiletId, int page){
         LOGGER.info("CALL GET REVIEW");
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
         if (toilet == null) {
@@ -71,7 +66,7 @@ public class ReviewService {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
         List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest, Sort.by(Sort.Direction.DESC, "reviewId"));
-
+        long size = reviewRepository.findAllByToilet(toilet).size();
 
         if (toilet == null) {
             throw new NullPointerException("존재하지 않는 화장실입니다.");
@@ -88,7 +83,10 @@ public class ReviewService {
                 reviewListDto.setNickname(member.getNickname());
                 result.add(reviewListDto);
             }
-            return result;
+            ReviewDto.GetReviewListDto result2 = new ReviewDto.GetReviewListDto();
+            result2.setReviewSize((int) size);
+            result2.setResponse(result);
+            return result2;
         }
         else {
             throw new NoSuchElementException("리뷰가 존재하지 않습니다");
@@ -123,7 +121,7 @@ public class ReviewService {
         review.setScore(updateReviewDto.getScore());
         reviewRepository.save(review);
     }
-    public ReviewDto.GetReviewDto getReview(long reviewId){
+    public ReviewDto.GetReviewDto getEachReview(long reviewId){
         LOGGER.info("CALL GET REVIEW");
         Review review = reviewRepository.findById(reviewId).orElse(null);
         ReviewDto.GetReviewDto getreviewDto = new ReviewDto.GetReviewDto();

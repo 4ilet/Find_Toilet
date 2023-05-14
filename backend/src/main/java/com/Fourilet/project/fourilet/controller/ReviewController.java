@@ -63,8 +63,7 @@ public class ReviewController {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         try {
-            List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId,  page);
-
+            ReviewDto.GetReviewListDto result = reviewService.getReview(toiletId,  page);
             message.setStatus(StatusEnum.OK);
             message.setData(result);
             message.setMessage("화장실 리뷰 가져오기 성공");
@@ -130,12 +129,12 @@ public class ReviewController {
     }
     @GetMapping("/get/{reviewId}")
     @ApiOperation(value = "개별 화장실 리뷰 가져오기", notes = "특정 리뷰를 가져온다")
-    public ResponseEntity<?> getReview(@PathVariable("reviewId") long reviewId) {
+    public ResponseEntity<?> getEachReview(@PathVariable("reviewId") long reviewId) {
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
-            ReviewDto.GetReviewDto result = reviewService.getReview(reviewId);
+            ReviewDto.GetReviewDto result = reviewService.getEachReview(reviewId);
             message.setStatus(StatusEnum.OK);
             message.setData(result);
             message.setMessage("리뷰 가져오기 성공");
