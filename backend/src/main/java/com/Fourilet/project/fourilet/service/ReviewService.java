@@ -66,7 +66,7 @@ public class ReviewService {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
         List<Review> reviewList = reviewRepository.findAllByToilet(toilet, pageRequest, Sort.by(Sort.Direction.DESC, "reviewId"));
-        long size = reviewRepository.findAllByToilet(toilet).size();
+        long size = ((reviewRepository.findAllByToilet(toilet).size() - 1) / 10) + 1 ;
 
         if (toilet == null) {
             throw new NullPointerException("존재하지 않는 화장실입니다.");
@@ -84,7 +84,7 @@ public class ReviewService {
                 result.add(reviewListDto);
             }
             ReviewDto.GetReviewListDto result2 = new ReviewDto.GetReviewListDto();
-            result2.setReviewSize((int) size);
+            result2.setTotalPage((int) size);
             result2.setResponse(result);
             return result2;
         }

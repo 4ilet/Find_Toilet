@@ -52,7 +52,7 @@ public class ReviewDto {
     @Getter
     @Setter
     public static class GetReviewListDto {
-        private int reviewSize;
+        private int totalPage;
         private List<GetReviewDto> response = new ArrayList<>();
     }
     @Getter
