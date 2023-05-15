@@ -64,11 +64,7 @@ class CustomSilverFutureList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: snapshot.data!.isNotEmpty
-                        ?
-                        // isReview
-                        //     ? reviewListView(snapshot.data! as ReviewList)
-                        //     :
-                        CustomListView(
+                        ? CustomListView(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               return isReview

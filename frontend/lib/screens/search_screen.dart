@@ -38,27 +38,12 @@ class _SearchState extends State<Search> {
   bool loading = true;
   bool additional = false;
   bool working = false;
-  late final DynamicMap searchData;
+  DynamicMap searchData = {};
   late String selectedValue;
 
   @override
   void initState() {
     super.initState();
-    final sortIdx = getSortIdx(context);
-    searchData = {
-      'allDay': readFilter(context, 0),
-      'diaper': readFilter(context, 1),
-      'disabled': readFilter(context, 2),
-      'kids': readFilter(context, 3),
-      'keyword': widget.query,
-      'lat': 37.537229,
-      'lon': 127.005515,
-      'page': -1,
-      'size': cnt,
-      'order': sortValues[sortIdx],
-    };
-    selectedValue = sortOrder[sortIdx];
-    firstSearch();
     scrollController.addListener(() async {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent * 0.9) {
@@ -82,6 +67,24 @@ class _SearchState extends State<Search> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getOffset();
     });
+  }
+
+  void initData() {
+    final sortIdx = getSortIdx(context);
+    searchData = {
+      'allDay': readFilter(context, 0),
+      'diaper': readFilter(context, 1),
+      'disabled': readFilter(context, 2),
+      'kids': readFilter(context, 3),
+      'keyword': widget.query,
+      'lat': 37.537229,
+      'lon': 127.005515,
+      'page': -1,
+      'size': cnt,
+      'order': sortValues[sortIdx],
+    };
+    selectedValue = sortOrder[sortIdx];
+    firstSearch();
   }
 
   void firstSearch() async {
@@ -165,6 +168,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    initData();
     return Scaffold(
       backgroundColor: mainColor,
       body: Stack(

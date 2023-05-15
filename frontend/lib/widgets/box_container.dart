@@ -21,11 +21,12 @@ class ThemeBox extends StatefulWidget {
   final String text;
   final bool selected;
   final ReturnVoid onTap;
-  const ThemeBox(
-      {super.key,
-      required this.text,
-      required this.selected,
-      required this.onTap});
+  const ThemeBox({
+    super.key,
+    required this.text,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   State<ThemeBox> createState() => _ThemeBoxState();
@@ -60,11 +61,9 @@ class _ThemeBoxState extends State<ThemeBox> {
 class FolderBox extends StatelessWidget {
   final FolderModel folderInfo;
   final bool add;
-  // final ReturnVoid editFolder;
   const FolderBox({
     super.key,
     required this.folderInfo,
-    // required this.editFolder,
     this.add = false,
   });
 
@@ -157,10 +156,8 @@ class FolderBox extends StatelessWidget {
 
 //* 즐겨찾기 폴더 생성
 class AddBox extends StatefulWidget {
-  // final ReturnVoid createFolder;
   const AddBox({
     super.key,
-    // required this.createFolder,
   });
 
   @override
@@ -178,7 +175,6 @@ class _AddBoxState extends State<AddBox> {
           buttonText: '만들기',
           isAlert: true,
           kindOf: 'folder',
-          // onPressed: widget.createFolder,
         ),
       ),
       height: 150,
@@ -257,16 +253,6 @@ class ListItem extends StatelessWidget {
       return result;
     }
 
-    String showedValue(String value, int limit) {
-      String newValue = '';
-      int quot = value.length ~/ limit;
-      for (int i = 0; i < quot; i += 1) {
-        newValue += '${value.substring(i * limit, (i + 1) * limit)}\n';
-      }
-      newValue += value.substring(quot * limit);
-      return newValue;
-    }
-
     void addOrEditReview() async {
       final token = getToken(context);
       if (token != null && token != '') {
@@ -321,7 +307,7 @@ class ListItem extends StatelessWidget {
                 children: [
                   // toiletTopInfo(context),
                   // for (int i = 0; i < 2; i += 1) toiletInfo(i),
-                  Flexible(
+                  Expanded(
                     flex: 2,
                     child: CustomText(
                       color: CustomColors.mainColor,
@@ -366,8 +352,8 @@ class ListItem extends StatelessWidget {
                     flex: 17,
                     child: TextWithIcon(
                       icon: locationIcon,
-                      text: showedValue(
-                          data.address, data.phoneNo != '' ? 11 : 27),
+                      text: data.address,
+                      flex: data.phoneNo != '' ? 10 : 18,
                     ),
                   ),
                   data.phoneNo != ''
@@ -376,6 +362,7 @@ class ListItem extends StatelessWidget {
                           child: TextWithIcon(
                             icon: phoneIcon,
                             text: data.phoneNo,
+                            flex: 6,
                           ),
                         )
                       : const SizedBox(),
@@ -388,7 +375,8 @@ class ListItem extends StatelessWidget {
                     flex: 2,
                     child: TextWithIcon(
                       icon: clockIcon,
-                      text: showedValue(data.duration, 13),
+                      text: data.duration,
+                      flex: 10,
                     ),
                   ),
                   Flexible(

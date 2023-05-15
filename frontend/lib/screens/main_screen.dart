@@ -118,6 +118,7 @@ class _MainState extends State<Main> {
                       ),
                     )
                   : const SizedBox(),
+              CustomText(title: onRefresh(context).trim())
             ],
           ),
         ),

@@ -141,3 +141,6 @@ bool getFilter(BuildContext context, int index) {
 void setSortIdx(BuildContext context, int index) =>
     context.read<GlobalProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
+
+
+//* 반경

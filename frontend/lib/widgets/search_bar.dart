@@ -48,12 +48,14 @@ class SearchBar extends StatelessWidget {
                 onPressed: routerPush(context, page: const Settings()),
                 color: CustomColors.blackColor,
               ),
-              suffixIcon: CustomIconButton(
-                icon: closeIcon,
-                onPressed: () => onChange(''),
-                // onPressed: routerPush(context, page: const Main()),
-                color: CustomColors.blackColor,
-              ),
+              suffixIcon: query != ''
+                  ? CustomIconButton(
+                      icon: closeIcon,
+                      onPressed: () => onChange(''),
+                      // onPressed: routerPush(context, page: const Main()),
+                      color: CustomColors.blackColor,
+                    )
+                  : null,
             ),
           ),
         ),

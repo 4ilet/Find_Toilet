@@ -38,6 +38,7 @@ class TextWithIcon extends StatelessWidget {
   final String? font;
   final FontSize fontSize;
   final CustomColors textColor, iconColor;
+  final int flex;
   const TextWithIcon({
     super.key,
     required this.icon,
@@ -46,6 +47,7 @@ class TextWithIcon extends StatelessWidget {
     this.iconColor = CustomColors.mainColor,
     this.textColor = CustomColors.blackColor,
     this.font,
+    this.flex = 4,
   });
 
   @override
@@ -54,13 +56,21 @@ class TextWithIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color: convertedColor(iconColor)),
-        const SizedBox(width: 10),
-        CustomText(
-          title: text,
-          fontSize: fontSize,
-          color: textColor,
-          font: font,
+        Expanded(
+          flex: 2,
+          child: Icon(
+            icon,
+            color: convertedColor(iconColor),
+          ),
+        ),
+        Expanded(
+          flex: flex,
+          child: CustomText(
+            title: text,
+            fontSize: fontSize,
+            color: textColor,
+            font: font,
+          ),
         )
       ],
     );
