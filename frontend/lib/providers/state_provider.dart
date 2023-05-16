@@ -79,12 +79,12 @@ class ApplyChangeProvider with ChangeNotifier {
 
   void _changeRefresh() =>
       _refresh = _refresh == Space.empty ? Space.one : Space.empty;
+
   void _spaceToString() => _convertedVar = convertedSpace(_refresh);
 
   FutureBool changePressed() => _changePressed();
 
   FutureBool _changePressed() {
-    print(_pressedOnce);
     if (!_pressedOnce) {
       _pressedOnce = true;
       notifyListeners();
@@ -100,67 +100,98 @@ class ApplyChangeProvider with ChangeNotifier {
 
 //* setttings
 class SettingsProvider with ChangeNotifier {
-  static bool? _hasLargeFont, _showMagnify;
-  static MapRadius? _radius;
-  get hasLargeFont => _hasLargeFont;
-  get radius => _radius;
-  get showMagnify => _showMagnify;
+  static late bool _alreadySetSize;
+  static late int _fontIdx, _magnigyIdx, _radiusIdx;
+  static String? _fontState;
+  static late String _magnigyState, _radiusState;
+  final List<StringList> _optionList = [
+    ['표시 안 함', '표시함'],
+    ['큰 글씨', '기본'],
+    ['300m', '500m', '700m'],
+  ];
+  get fontState => _fontState;
+  get magnigyState => _magnigyState;
+  get radiusState => _radiusState;
+  get alreadySetSize => _alreadySetSize;
 
   Future<bool> initSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    _hasLargeFont = prefs.getBool('hasLargeFont');
-    final radiusIdx = prefs.getInt('radiusIdx');
-    _radius = radiusIdx != null ? toMapRadius(radiusIdx) : null;
-    _showMagnify = prefs.getBool('showMagnify');
+    _magnigyIdx = prefs.getInt('magnigyIdx') ?? 0;
+    _magnigyState = _optionList[0][_magnigyIdx];
+
+    final font = prefs.getInt('fontIdx');
+    if (font != null) {
+      _fontIdx = font;
+      _alreadySetSize = true;
+    } else {
+      _fontIdx = 0;
+      _alreadySetSize = false;
+    }
+    _fontState = _optionList[1][_magnigyIdx];
+
+    _radiusIdx = prefs.getInt('radiusIdx') ?? 0;
+    _radiusState = _optionList[2][_radiusIdx];
+
     return true;
   }
 
 //* public
-  void applyHasLargeFont(bool newValue) {
-    _setHasLargeFont(newValue);
-    _applyHasLargeFont(newValue);
-    print('result: $_hasLargeFont');
+  void applyOption(int menuIdx) {
+    switch (menuIdx) {
+      case 0:
+        _applyShowMagnify();
+        _setShowMagnify();
+        break;
+      case 1:
+        _applyFont();
+        _setFont();
+        break;
+      default:
+        _applyRadius();
+        _setRadius();
+    }
   }
 
-  void applyRadius(MapRadius radius) {
-    _setRadius(radius);
-    _applyRadius(radius);
-  }
-
-  void applyShowMagnify(bool newValue) {
-    _setShowMagnify(newValue);
-    _applyShowMagnify(newValue);
-  }
+  void completeSetSize() => _completeSetSize();
 
 //* private
 
-  void _setHasLargeFont(bool newValue) async {
+  void _setFont() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasLargeFont', newValue);
+    await prefs.setInt('fontIdx', _fontIdx);
   }
 
-  void _applyHasLargeFont(bool newValue) {
-    _hasLargeFont = newValue;
+  void _applyFont() {
+    _fontIdx = 1 - _fontIdx;
+    _fontState = _optionList[1][_fontIdx];
     notifyListeners();
   }
 
-  void _setRadius(MapRadius radius) async {
+  void _setRadius() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('radiusIdx', convertedRadius(radius));
+    await prefs.setInt('radiusIdx', _radiusIdx);
   }
 
-  void _applyRadius(MapRadius newValue) {
-    _radius = newValue;
+  void _applyRadius() {
+    _radiusIdx += 1;
+    if (_radiusIdx >= 3) _radiusIdx = 0;
+    _radiusState = _optionList[2][_fontIdx];
     notifyListeners();
   }
 
-  void _setShowMagnify(bool newValue) async {
+  void _setShowMagnify() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('applyShowMagnify', newValue);
+    await prefs.setInt('magnigyIdx', _magnigyIdx);
   }
 
-  void _applyShowMagnify(bool newValue) {
-    _hasLargeFont = newValue;
+  void _applyShowMagnify() {
+    _magnigyIdx = 1 - _magnigyIdx;
+    _magnigyState = _optionList[0][_magnigyIdx];
+    notifyListeners();
+  }
+
+  void _completeSetSize() {
+    _alreadySetSize = true;
     notifyListeners();
   }
 }
@@ -178,4 +209,60 @@ class SizeProvider with ChangeNotifier {
   }
 
   void initWidthHeight(BuildContext context) => _initWidthHeight(context);
+}
+
+//* main, search
+class GlobalProvider with ChangeNotifier {
+  static int? _totalPages;
+  // static final bool _loading = true;
+  static bool _diaper = false;
+  static bool _child = false;
+  static bool _disabled = false;
+  static bool _allDay = false;
+  static int _sortIdx = 0;
+  int? get totalPages => _totalPages;
+  bool get diaper => _diaper;
+  bool get child => _child;
+  bool get disabled => _disabled;
+  bool get allDay => _allDay;
+  int get sortIdx => _sortIdx;
+  // bool get loading => _loading;
+
+  //* public
+  void setTotal(int? newVal) {
+    _setTotal(newVal);
+    notifyListeners();
+  }
+
+  void setFilter(int index) {
+    _setFilter(index);
+    notifyListeners();
+  }
+
+  void setSortIdx(int index) {
+    _setSortIdx(index);
+    notifyListeners();
+  }
+
+  //* private
+  void _setTotal(int? newVal) => _totalPages = newVal;
+
+  void _setFilter(int index) {
+    switch (index) {
+      case 0:
+        _diaper = !_diaper;
+        return;
+      case 1:
+        _child = !_child;
+        return;
+      case 2:
+        _disabled = !_disabled;
+        return;
+      default:
+        _allDay = !_allDay;
+        return;
+    }
+  }
+
+  void _setSortIdx(int index) => _sortIdx = index;
 }

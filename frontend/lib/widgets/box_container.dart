@@ -5,7 +5,6 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
-import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -22,11 +21,12 @@ class ThemeBox extends StatefulWidget {
   final String text;
   final bool selected;
   final ReturnVoid onTap;
-  const ThemeBox(
-      {super.key,
-      required this.text,
-      required this.selected,
-      required this.onTap});
+  const ThemeBox({
+    super.key,
+    required this.text,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   State<ThemeBox> createState() => _ThemeBoxState();
@@ -61,11 +61,9 @@ class _ThemeBoxState extends State<ThemeBox> {
 class FolderBox extends StatelessWidget {
   final FolderModel folderInfo;
   final bool add;
-  // final ReturnVoid editFolder;
   const FolderBox({
     super.key,
     required this.folderInfo,
-    // required this.editFolder,
     this.add = false,
   });
 
@@ -158,10 +156,8 @@ class FolderBox extends StatelessWidget {
 
 //* 즐겨찾기 폴더 생성
 class AddBox extends StatefulWidget {
-  // final ReturnVoid createFolder;
   const AddBox({
     super.key,
-    // required this.createFolder,
   });
 
   @override
@@ -179,7 +175,6 @@ class _AddBoxState extends State<AddBox> {
           buttonText: '만들기',
           isAlert: true,
           kindOf: 'folder',
-          // onPressed: widget.createFolder,
         ),
       ),
       height: 150,
@@ -199,12 +194,11 @@ class _AddBoxState extends State<AddBox> {
 //* 화장실, 리뷰 목록 아이템
 class ListItem extends StatelessWidget {
   final ToiletModel data;
-  final bool showReview, isMain;
+  final bool showReview;
   const ListItem({
     super.key,
     required this.data,
     required this.showReview,
-    required this.isMain,
   });
 
   @override
@@ -222,21 +216,6 @@ class ListItem extends StatelessWidget {
     //   starIcon
     // ];
 
-    void addOrEditReview() async {
-      final token = getToken(context);
-      if (token != null && token != '') {
-        routerPush(context,
-            page: ReviewForm(
-              toiletName: data.toiletName,
-              toiletId: data.toiletId,
-              reviewId: data.reviewId,
-            ))();
-      } else {
-        await showModal(context, page: const LoginConfirmModal());
-        routerPop(context)();
-      }
-    }
-
     // final infoList = [
     //   data.address,
     //   data.phoneNo,
@@ -252,10 +231,10 @@ class ListItem extends StatelessWidget {
 
     String available(int limit) {
       StringList facilityList = [
-        '24시간 이용 가능',
+        '24시간 이용',
+        '장애인 전용',
+        '유아 전용',
         '기저귀 교환대',
-        '장애인용',
-        '유아용',
       ];
       String result = '';
       int length = 0;
@@ -263,7 +242,7 @@ class ListItem extends StatelessWidget {
         if (availableList[i]) {
           final newLength = facilityList[i].length;
           if (length + newLength < limit) {
-            result += ' ${facilityList[i]}';
+            result += '${facilityList[i]} ';
             length += newLength;
           } else {
             result += '\n${facilityList[i]}';
@@ -274,36 +253,50 @@ class ListItem extends StatelessWidget {
       return result;
     }
 
-    String showedValue(String value, int limit) {
-      String newValue = '';
-      int quot = value.length ~/ limit;
-      for (int i = 0; i < quot; i += 1) {
-        newValue += '${value.substring(i * limit, (i + 1) * limit)}\n';
+    void addOrEditReview() async {
+      final token = getToken(context);
+      if (token != null && token != '') {
+        routerPush(context,
+            page: ReviewForm(
+              toiletName: data.toiletName,
+              toiletId: data.toiletId,
+              reviewId: data.reviewId,
+            ))();
+      } else {
+        await showModal(context, page: const LoginConfirmModal());
+        routerPop(context)();
       }
-      newValue += value.substring(quot * limit);
-      return newValue;
+    }
+
+    void pressedHeart() {
+      if (getToken(context) != null) {
+        showModal(
+          context,
+          page: data.folderId != 0
+              ? DeleteModal(
+                  deleteMode: 2,
+                  id: data.toiletId,
+                  folderId: data.folderId,
+                )
+              : AddToBookMarkModal(toiletId: data.toiletId),
+        );
+      } else {
+        showModal(context, page: const LoginConfirmModal());
+      }
     }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: routerPush(
-          context,
-          page: isMain
-              ? Main(
-                  showReview: true,
-                  toiletModel: data,
-                )
-              : Search(
-                  query: '',
-                  showReview: true,
-                  toiletModel: data,
-                ),
-        ),
+        onTap: routerPush(context,
+            page: Main(
+              showReview: true,
+              toiletModel: data,
+            )),
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,
-        height: screenHeight(context) * 0.3,
+        height: screenHeight(context) * 0.33,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
@@ -314,7 +307,7 @@ class ListItem extends StatelessWidget {
                 children: [
                   // toiletTopInfo(context),
                   // for (int i = 0; i < 2; i += 1) toiletInfo(i),
-                  Flexible(
+                  Expanded(
                     flex: 2,
                     child: CustomText(
                       color: CustomColors.mainColor,
@@ -327,16 +320,7 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () => showModal(
-                            context,
-                            page: data.folderId != 0
-                                ? DeleteModal(
-                                    deleteMode: 2,
-                                    id: data.toiletId,
-                                    folderId: data.folderId,
-                                  )
-                                : AddToBookMarkModal(toiletId: data.toiletId),
-                          ),
+                          onPressed: pressedHeart,
                           icon: CustomIcon(
                             icon:
                                 data.folderId != 0 ? heartIcon : emptyHeartIcon,
@@ -368,8 +352,8 @@ class ListItem extends StatelessWidget {
                     flex: 17,
                     child: TextWithIcon(
                       icon: locationIcon,
-                      text: showedValue(
-                          data.address, data.phoneNo != '' ? 11 : 27),
+                      text: data.address,
+                      flex: data.phoneNo != '' ? 10 : 18,
                     ),
                   ),
                   data.phoneNo != ''
@@ -378,6 +362,7 @@ class ListItem extends StatelessWidget {
                           child: TextWithIcon(
                             icon: phoneIcon,
                             text: data.phoneNo,
+                            flex: 6,
                           ),
                         )
                       : const SizedBox(),
@@ -390,7 +375,8 @@ class ListItem extends StatelessWidget {
                     flex: 2,
                     child: TextWithIcon(
                       icon: clockIcon,
-                      text: showedValue(data.duration, 13),
+                      text: data.duration,
+                      flex: 10,
                     ),
                   ),
                   Flexible(
@@ -402,31 +388,37 @@ class ListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  existState()
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CustomText(
-                              title: '이용 가능 시설',
-                              fontSize: FontSize.smallSize,
-                              color: CustomColors.mainColor,
-                            ),
-                            CustomText(
-                              title: available(13),
-                              fontSize: FontSize.smallSize,
-                            ),
-                          ],
-                        )
-                      : const SizedBox(),
-                  CustomButton(
-                    fontSize: FontSize.smallSize,
-                    onPressed: addOrEditReview,
-                    buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    existState()
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CustomText(
+                                title: '이용 가능 시설',
+                                fontSize: FontSize.smallSize,
+                                color: CustomColors.mainColor,
+                                isBoldText: true,
+                              ),
+                              const SizedBox(height: 10),
+                              CustomText(
+                                title: available(15),
+                                fontSize: FontSize.smallSize,
+                                isCentered: true,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    CustomButton(
+                      fontSize: FontSize.smallSize,
+                      onPressed: addOrEditReview,
+                      buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -434,82 +426,9 @@ class ListItem extends StatelessWidget {
       ),
     );
   }
-
-  // Row toiletTopInfo(BuildContext context) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Flexible(
-  //         flex: 7,
-  //         child: CustomText(
-  //           color: CustomColors.mainColor,
-  //           title: widget.toiletName,
-  //           fontSize: FontSize.defaultSize,
-  //         ),
-  //       ),
-  //       Flexible(
-  //         flex: 2,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             CustomIconButton(
-  //               onPressed: showModal(
-  //                 context,
-  //                 page: const AddToBookMarkModal(),
-  //               ),
-  //               icon: liked ? heartIcon : emptyHeartIcon,
-  //               color: CustomColors.redColor,
-  //             ),
-  //             CustomIconButton(
-  //               onPressed: showModal(
-  //                 context,
-  //                 page: NavigationModal(
-  //                   startPoint: const [37.537229, 127.005515],
-  //                   endPoint: const [37.4979502, 127.0276368],
-  //                   destination: widget.toiletName,
-  //                 ),
-  //               ),
-  //               icon: planeIcon,
-  //               color: CustomColors.lightBlueColor,
-  //               iconSize: 35,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Row toiletInfo(int i) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Flexible(
-  //         flex: 7,
-  //         child: TextWithIcon(
-  //           icon: iconList[2 * i],
-  //           text: infoList[2 * i],
-  //         ),
-  //       ),
-  //       Flexible(
-  //         flex: 4,
-  //         child: i == 0
-  //             ? TextWithIcon(
-  //                 icon: iconList[2 * i + 1],
-  //                 text: infoList[2 * i + 1],
-  //               )
-  //             : TextWithIcon(
-  //                 icon: iconList[2 * i + 1],
-  //                 text: infoList[2 * i + 1],
-  //                 iconColor: CustomColors.yellowColor,
-  //               ),
-  //       )
-  //     ],
-  //   );
-  // }
 }
 
-//* filter 상자, 화살표
+//* filter 상자
 class FilterBox extends StatefulWidget {
   const FilterBox({super.key});
 
@@ -518,23 +437,11 @@ class FilterBox extends StatefulWidget {
 }
 
 class _FilterBoxState extends State<FilterBox> {
-  int length = 4;
   StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
-  late StringList showedFilter;
-  late BoolList selectedList;
-  ReturnVoid changeSelected(int i) {
-    return () {
-      setState(() {
-        selectedList[i] = !selectedList[i];
-      });
-    };
-  }
 
   @override
   void initState() {
     super.initState();
-    showedFilter = [for (int i = 0; i < 3; i += 1) filterList[i]];
-    selectedList = [for (int i = 0; i < length; i += 1) false];
   }
 
   @override
@@ -543,18 +450,12 @@ class _FilterBoxState extends State<FilterBox> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CustomIconButton(
-          icon: toLeftIcon,
-          iconSize: 50,
-          onPressed: () {},
-          color: CustomColors.mainColor,
-        ),
-        for (int i = 0; i < 3; i += 1)
+        for (int i = 0; i < 4; i += 1)
           CustomBox(
-            onTap: changeSelected(i),
+            onTap: () => setFilter(context, i),
             // width: 100,
             // height: 30,
-            color: selectedList[i] ? mainColor : whiteColor,
+            color: getFilter(context, i) ? mainColor : whiteColor,
             radius: 5,
             boxShadow: const [defaultShadow],
             child: Center(
@@ -562,22 +463,16 @@ class _FilterBoxState extends State<FilterBox> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 child: CustomText(
-                  title: showedFilter[i],
+                  title: filterList[i],
                   font: kimm,
                   fontSize: FontSize.smallSize,
-                  color: selectedList[i]
+                  color: getFilter(context, i)
                       ? CustomColors.whiteColor
                       : CustomColors.blackColor,
                 ),
               ),
             ),
           ),
-        CustomIconButton(
-          icon: toRightIcon,
-          iconSize: 50,
-          onPressed: () {},
-          color: CustomColors.mainColor,
-        ),
       ],
     );
   }

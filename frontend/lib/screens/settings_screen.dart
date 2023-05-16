@@ -1,16 +1,15 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/button.dart';
-import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -25,33 +24,15 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    initIndexList();
     changeBtn();
   }
 
-  void initIndexList() {
-    if (getFontSize(context) != true) {
-      changeIndex(1, false)();
-    }
-  }
-
-  //* 옵션 변경
-  ReturnVoid changeIndex(int i, bool apply) {
-    return () {
-      setState(() {
-        if (indexList[i] < optionList[i].length - 1) {
-          indexList[i] += 1;
-        } else {
-          indexList[i] = 0;
-        }
-        if (apply) {
-          if (i == 1) {
-            applyFontSize(context, indexList[i] == 0);
-          }
-        }
-      });
-    };
-  }
+  //* 모달 목록
+  WidgetList pages = [
+    const PolicyModal(),
+    const HelpModal(isHelpModal: false),
+    const HelpModal()
+  ];
 
   //* 버튼 변경
   bool changeBtn() {
@@ -72,29 +53,10 @@ class _SettingsState extends State<Settings> {
   //* 문의하기
   void sendEmail() async {
     try {
-      WidgetsFlutterBinding.ensureInitialized();
-      DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      final deviceInfo = await deviceInfoPlugin.deviceInfo;
-      final info = deviceInfo.data;
-      final version = info['version'];
-      final manufacturer = info['manufacturer'];
-      final model = info['model'];
-      final device = info['device'];
-
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String appVersion = packageInfo.version;
-
       final Email email = Email(
         subject: '[화장실을 찾아서] 문의사항',
         recipients: ['team.4ilet@gmail.com'],
-        body: body(
-          release: version['release'],
-          sdkInt: version['sdkInt'],
-          manufacturer: manufacturer,
-          model: model,
-          device: device,
-          appVersion: appVersion,
-        ),
+        body: await body(),
         isHTML: false,
       );
 
@@ -109,7 +71,8 @@ class _SettingsState extends State<Settings> {
     try {
       final token = getToken(context);
       if (token == null || token == '') {
-        login(context);
+        await login(context);
+        changeBtn();
       } else {
         if (!mounted) return false;
         changeToken(context, token: null, refresh: null);
@@ -128,103 +91,155 @@ class _SettingsState extends State<Settings> {
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () => loginOrLogout(),
-                    child: loginOrLogoutBtn,
-                  ),
-                ],
-              ),
-            ),
-            const Flexible(
+        child: GestureDetector(
+          onHorizontalDragEnd: (_) {
+            routerPop(context)();
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Flexible(
                 flex: 1,
-                child: CustomText(
-                  title: '어떤 것을 원하시나요?',
-                  fontSize: FontSize.largeSize,
-                  color: CustomColors.mainColor,
-                  font: kimm,
-                )),
-            Flexible(
-              flex: 6,
-              child: Column(
-                children: [
-                  for (int i = 0; i < 3; i += 1)
-                    eachMenu(
-                      index: i,
-                      onTap: changeIndex(i, true),
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      child: option(i),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      textColor: CustomColors.blackColor,
+                      fontSize: FontSize.smallSize,
+                      onPressed: () {
+                        showModal(
+                          context,
+                          page: const InputModal(
+                            title: '닉네임 설정',
+                            buttonText: '확인',
+                            isAlert: false,
+                            kindOf: 'nickname',
+                          ),
+                        );
+                      },
+                      buttonText: '닉네임 변경',
                     ),
-                  eachMenu(
-                    index: 3,
-                    onTap: sendEmail,
-                  ),
-                  for (int i = 4; i < 7; i += 1)
-                    eachMenu(
-                      index: i,
-                      onTap: () => showModal(
-                        context,
-                        page: pages[i - 4],
+                    GestureDetector(
+                      onTap: () => loginOrLogout(),
+                      child: loginOrLogoutBtn,
+                    ),
+                  ],
+                ),
+              ),
+              const Flexible(
+                  flex: 1,
+                  child: CustomText(
+                    title: '어떤 것을 원하시나요?',
+                    fontSize: FontSize.largeSize,
+                    color: CustomColors.mainColor,
+                    font: kimm,
+                  )),
+              Flexible(
+                flex: 6,
+                child: Column(
+                  children: [
+                    for (int i = 0; i < 3; i += 1)
+                      eachMenu(
+                        index: i,
+                        onTap: () => changeOptions(context, i),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: option(i),
                       ),
+                    eachMenu(
+                      index: 3,
+                      onTap: sendEmail,
                     ),
-                ],
+                    for (int i = 4; i < 7; i += 1)
+                      eachMenu(
+                        index: i,
+                        onTap: () => showModal(
+                          context,
+                          page: pages[i - 4],
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  ExitPage(color: CustomColors.blackColor),
-                ],
-              ),
-            )
-          ],
+              Flexible(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    ExitPage(color: CustomColors.blackColor),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget option(int i) {
-    return i < 2
-        ? CustomText(
-            title: optionList[i][indexList[i]],
-            fontSize: FontSize.defaultSize,
-            color: CustomColors.mainColor,
-            font: kimm,
-          )
-        : Row(
-            children: [
-              const CustomIcon(
-                icon: toLeftIcon,
-                color: mainColor,
-              ),
-              CustomText(
-                title: optionList[i][indexList[i]],
-                font: kimm,
-                fontSize: FontSize.defaultSize,
-                color: CustomColors.mainColor,
-              ),
-              const CustomIcon(
-                icon: toRightIcon,
-                color: mainColor,
-              ),
-            ],
-          );
+    String optionTitle() {
+      switch (i) {
+        case 0:
+          return context.watch<SettingsProvider>().magnigyState;
+        case 1:
+          return context.watch<SettingsProvider>().fontState;
+        default:
+          return context.watch<SettingsProvider>().radiusState;
+      }
+    }
+
+    return
+        // i < 2 ?
+        CustomText(
+      title: optionTitle(),
+      fontSize: FontSize.defaultSize,
+      color: CustomColors.mainColor,
+      font: kimm,
+    );
+    // : Row(
+    //     children: [
+    //       const CustomIcon(
+    //         icon: toLeftIcon,
+    //         color: mainColor,
+    //       ),
+    //       CustomText(
+    //         title: optionList[i][indexList[i]],
+    //         font: kimm,
+    //         fontSize: FontSize.defaultSize,
+    //         color: CustomColors.mainColor,
+    //       ),
+    //       const CustomIcon(
+    //         icon: toRightIcon,
+    //         color: mainColor,
+    //       ),
+    //     ],
+    //   );
   }
 
-  GestureDetector eachMenu(
-      {required int index,
-      Widget? child,
-      required ReturnVoid onTap,
-      MainAxisAlignment? mainAxisAlignment}) {
+  GestureDetector eachMenu({
+    required int index,
+    Widget? child,
+    required ReturnVoid onTap,
+    MainAxisAlignment? mainAxisAlignment,
+  }) {
+    const StringList menuList = [
+      '확대/축소 버튼',
+      '글자 크기',
+      '지도 반경',
+      '문의하기',
+      '개인 정보 및 위치 처리 방침',
+      '라이선스',
+      '도움말'
+    ];
+    const IconDataList iconList = [
+      scaleIcon,
+      fontIcon,
+      gpsIcon,
+      inquiryIcon,
+      policyIcon,
+      licenseIcon,
+      helpIcon,
+    ];
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -247,15 +262,13 @@ class _SettingsState extends State<Settings> {
   }
 
   CustomModal errorModal(String feature) {
-    const emailError =
-        '문의 메일 전송 오류가 발생했습니다.\n gmail앱이 존재하지 않거나, \n기타 오류 때문일 수 있습니다. \n 문의사항은 아래 이메일로 연락주세요 \n team.4ilet@gmail.com';
     const loginError = '카카오톡 로그인 오류가 발생했습니다.';
     return CustomModal(
       title: '오류 발생',
       isAlert: true,
       children: [
         CustomText(
-          title: feature == 'email' ? emailError : loginError,
+          title: feature == 'email' ? errorBody() : loginError,
           fontSize: FontSize.defaultSize,
         ),
       ],

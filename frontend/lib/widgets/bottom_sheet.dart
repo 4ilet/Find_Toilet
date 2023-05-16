@@ -1,24 +1,23 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/list_view.dart';
-import 'package:find_toilet/widgets/select_box.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
-  final bool isMain;
   final bool showReview;
   final ToiletModel? toiletModel;
+  final Future<ToiletList>? future;
   const ToiletBottomSheet({
     super.key,
-    required this.isMain,
     this.showReview = false,
     this.toiletModel,
+    required this.future,
   });
 
   @override
@@ -26,48 +25,43 @@ class ToiletBottomSheet extends StatefulWidget {
 }
 
 class _ToiletBottomSheet extends State<ToiletBottomSheet> {
-  List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
-  late String selectedValue;
-  bool showList = false;
+  // List<String> sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
+  // late String selectedValue;
+  // bool showList = false;
+  ToiletList toiletList = [];
+  int page = 0;
+  bool finished = false;
 
-  void changeShowState() {
-    setState(() {
-      if (!showList) {
-        showList = true;
-      } else {
-        showList = false;
-      }
-    });
-  }
-
-  void changeSelected(String value) {
-    setState(() {
-      selectedValue = value;
-      changeShowState();
-    });
+  void addToiletList() {
+    if (page != 0) {
+    } else {
+      // toiletList = await future;
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    selectedValue = sortOrder.first;
   }
 
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: widget.showReview
-          ? 0.6
-          : widget.isMain
-              ? 0.4
-              : 0.08,
+      initialChildSize: widget.showReview ? 0.6 : 0.4,
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
+        scrollController.addListener(() {
+          if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent * 0.9) {
+            print(scrollController.position.userScrollDirection);
+          }
+        });
         return CustomBox(
           color: mainColor,
           child: CustomScrollView(
             controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               CustomSilverAppBar(
                 toolbarHeight: 80,
@@ -101,24 +95,16 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                                   ),
                           ],
                         ),
-                        showList ? sortList() : const SizedBox()
                       ],
                     ),
                   ),
                 ),
               ),
-              // CustomSilverFutureList(
-              //   future: ToiletProvider().getNearToilet(),
-              //   showReview: false,
-              // )
-              // reviewSilverList(),
               //*
               widget.showReview
                   ? reviewSilverList()
                   : CustomSilverFutureList(
-                      future: widget.isMain
-                          ? ToiletProvider().getNearToilet()
-                          : ToiletProvider().searchToilet(),
+                      future: widget.future!,
                       showReview: false,
                     ),
             ],
@@ -144,7 +130,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                   ListItem(
                     data: widget.toiletModel!,
                     showReview: true,
-                    isMain: widget.isMain,
                   ),
                   FutureBuilder(
                     future: ReviewProvider()
@@ -177,30 +162,6 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
                       return const Center(child: CircularProgressIndicator());
                     },
                   )
-
-                  // widget.showReview
-                  //     ? FutureBuilder(
-                  //         future: reviewList,
-                  //         builder: (context, snapshot) {
-                  //           if (snapshot.hasData) {
-                  //             return Column(
-                  //               children: const [
-                  //                 Expanded(
-                  //                   child: ReviewBox(
-                  //                     nickname: '아아',
-                  //                     score: 4.0,
-                  //                     content: '아주 좋아요',
-                  //                   ),
-                  //                 )
-                  //               ],
-                  //             );
-                  //           }
-                  //           return const Center(
-                  //             child: CircularProgressIndicator(),
-                  //           );
-                  //         },
-                  //       )
-                  //     : const SizedBox(),
                 ],
               ),
             ),
@@ -210,73 +171,17 @@ class _ToiletBottomSheet extends State<ToiletBottomSheet> {
     );
   }
 
-  // ListView reviewListView(ReviewList data, int toiletId) {
-  //   return ListView.builder(
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     shrinkWrap: true,
-  //     itemBuilder: (context, index) {
-  //       return ReviewBox(
-  //         review: data[index],
-  //         toiletId: toiletId,
-  //         toiletName: widget.toiletModel!.toiletName,
-  //       );
-  //     },
-  //   );
-  // }
-
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: const [
           CustomText(
-            title: widget.isMain ? '주변 화장실' : '검색 결과',
+            title: '주변 화장실',
             fontSize: FontSize.largeSize,
             color: CustomColors.whiteColor,
             font: kimm,
-          ),
-          widget.isMain
-              ? const SizedBox()
-              : SelectBox(
-                  showList: showList,
-                  onTap: changeShowState,
-                  width: 120,
-                  height: 25,
-                  value: selectedValue,
-                ),
-        ],
-      ),
-    );
-  }
-
-  //* 선택 상자 눌렀을 때 나오는 목록
-  Padding sortList() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          CustomBox(
-            width: 120,
-            color: whiteColor,
-            boxShadow: const [defaultShadow],
-            child: Column(
-              children: [
-                for (String select in sortOrder)
-                  CustomBox(
-                    onTap: () => changeSelected(select),
-                    width: 120,
-                    child: Center(
-                      child: CustomText(
-                        title: select,
-                        fontSize: FontSize.smallSize,
-                      ),
-                    ),
-                  )
-              ],
-            ),
           ),
         ],
       ),

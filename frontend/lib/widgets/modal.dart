@@ -307,50 +307,53 @@ class CustomModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Flexible(
-          child: Center(
-            child: CustomText(
-              title: title,
-              fontSize: FontSize.largeSize,
-              color: titleColor,
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: SimpleDialog(
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Flexible(
+            child: Center(
+              child: CustomText(
+                title: title,
+                fontSize: FontSize.largeSize,
+                color: titleColor,
+              ),
             ),
           ),
         ),
-      ),
-      children: [
-        ...children,
-        isAlert
-            ? Flexible(
-                child: modalButton(
-                  context: context,
-                  onPressed: onPressed ?? routerPop(context),
-                  buttonText: buttonText,
-                ),
-              )
-            : Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      modalButton(
-                        context: context,
-                        onPressed: onPressed ?? routerPop(context),
-                        buttonText: buttonText,
-                      ),
-                      modalButton(
-                        context: context,
-                        onPressed: routerPop(context),
-                        buttonText: '취소',
-                      ),
-                    ],
+        children: [
+          ...children,
+          isAlert
+              ? Flexible(
+                  child: modalButton(
+                    context: context,
+                    onPressed: onPressed ?? routerPop(context),
+                    buttonText: buttonText,
+                  ),
+                )
+              : Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        modalButton(
+                          context: context,
+                          onPressed: onPressed ?? routerPop(context),
+                          buttonText: buttonText,
+                        ),
+                        modalButton(
+                          context: context,
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -514,13 +517,16 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   @override
   Widget build(BuildContext context) {
     return CustomModal(
-      title: '즐겨찾기 추가',
-      onPressed: () {
+      title: '즐겨찾기 폴더 선택',
+      buttonText: '추가',
+      onPressed: () async {
         if (selected != null) {
-          BookMarkProvider().addToilet(
+          await BookMarkProvider().addToilet(
             folderId: selected!,
             toiletId: widget.toiletId,
           );
+          changeRefresh(context);
+          routerPop(context)();
         }
       },
       children: [
@@ -535,21 +541,24 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         final folderInfo = snapshot.data![index];
-                        return CustomBox(
-                          onTap: selectFolder(folderInfo.folderId),
-                          color: whiteColor,
-                          border: Border.all(),
-                          boxShadow: selected == folderInfo.folderId
-                              ? const [highlightShadow]
-                              : null,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 10,
-                            ),
-                            child: CustomText(
-                              title: folderInfo.folderName,
-                              fontSize: FontSize.defaultSize,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: CustomBox(
+                            onTap: selectFolder(folderInfo.folderId),
+                            color: whiteColor,
+                            border: Border.all(),
+                            boxShadow: selected == folderInfo.folderId
+                                ? const [highlightShadow]
+                                : null,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: CustomText(
+                                title: folderInfo.folderName,
+                                fontSize: FontSize.defaultSize,
+                              ),
                             ),
                           ),
                         );
@@ -669,6 +678,7 @@ class LoginConfirmModal extends StatelessWidget {
       children: const [
         CustomText(
           title: '로그인하시겠습니까?',
+          isCentered: true,
         )
       ],
       onPressed: () async {

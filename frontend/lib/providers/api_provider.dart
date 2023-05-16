@@ -17,7 +17,7 @@ class UrlClass extends UserInfoProvider {
   String bookmarkListUrl(int folderId) =>
       '$_bookmarkUrl/folder/toiletlist/$folderId';
   String addToiletUrl({required int folderId, required int toiletId}) =>
-      '$_bookmarkUrl/add/folder/$folderId/$toiletId';
+      '$_bookmarkUrl/add/$folderId/$toiletId';
   String deleteToiletUrl({required int folderId, required int toiletId}) =>
       '$_bookmarkUrl/delete/toilet/$folderId/$toiletId';
 
@@ -46,13 +46,23 @@ class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio =
       Dio(BaseOptions(baseUrl: _baseUrl!, receiveDataWhenStatusError: true));
-  dioWithToken() => Dio(
-        BaseOptions(
-          baseUrl: _baseUrl!,
-          headers: {'Authorization': token},
-          receiveDataWhenStatusError: true,
-        ),
-      );
+
+  dioWithToken() {
+    final tempDio = Dio(
+      BaseOptions(
+        baseUrl: _baseUrl!,
+        headers: {'Authorization': token},
+        receiveDataWhenStatusError: true,
+      ),
+    );
+    // tempDio.interceptors.add(InterceptorsWrapper(
+    //   onError: (e, handler) {
+    //     if (e.response?.statusCode == 401) {}
+    //   },
+    // ));
+    return tempDio;
+  }
+
   dioWithRefresh(String method) => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
@@ -167,7 +177,7 @@ class ApiProvider extends UrlClass {
         case 200:
           return true;
         case 401:
-          final success = await refreshToken(
+          await refreshToken(
             url: url,
             method: 'DELETE',
           );

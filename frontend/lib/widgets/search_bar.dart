@@ -1,7 +1,5 @@
 import 'package:find_toilet/providers/state_provider.dart';
-import 'package:find_toilet/screens/book_mark_screen.dart';
-import 'package:find_toilet/screens/main_screen.dart';
-import 'package:find_toilet/screens/search_screen.dart';
+import 'package:find_toilet/screens/book_mark_folder_screen.dart';
 import 'package:find_toilet/screens/settings_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -13,16 +11,19 @@ import 'package:find_toilet/widgets/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SearchBar extends StatefulWidget {
+class SearchBar extends StatelessWidget {
   final bool isMain;
-  final String? query;
-  const SearchBar({super.key, required this.isMain, this.query});
+  final String query;
+  final Function(String value) onChange;
+  final ReturnVoid onSearchAction;
+  const SearchBar({
+    super.key,
+    required this.isMain,
+    this.query = '',
+    required this.onChange,
+    required this.onSearchAction,
+  });
 
-  @override
-  State<SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,9 +37,8 @@ class _SearchBarState extends State<SearchBar> {
           color: whiteColor,
           radius: 5,
           child: TextField(
-            controller: widget.isMain
-                ? null
-                : TextEditingController(text: widget.query),
+            onChanged: onChange,
+            controller: TextEditingController(text: query),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText:
@@ -48,25 +48,26 @@ class _SearchBarState extends State<SearchBar> {
                 onPressed: routerPush(context, page: const Settings()),
                 color: CustomColors.blackColor,
               ),
-              suffixIcon: CustomIconButton(
-                icon: closeIcon,
-                onPressed: routerPush(context, page: const Main()),
-                color: CustomColors.blackColor,
-              ),
+              suffixIcon: query != ''
+                  ? CustomIconButton(
+                      icon: closeIcon,
+                      onPressed: () => onChange(''),
+                      // onPressed: routerPush(context, page: const Main()),
+                      color: CustomColors.blackColor,
+                    )
+                  : null,
             ),
           ),
         ),
         CustomCircleButton(
-            width: 40,
-            height: 40,
-            child: CustomIconButton(
-              onPressed: routerPush(
-                context,
-                page: const Search(query: '광주'),
-              ),
-              icon: searchIcon,
-              color: CustomColors.blackColor,
-            )),
+          width: 40,
+          height: 40,
+          child: CustomIconButton(
+            onPressed: onSearchAction,
+            icon: searchIcon,
+            color: CustomColors.blackColor,
+          ),
+        ),
         CustomCircleButton(
           width: 40,
           height: 40,
