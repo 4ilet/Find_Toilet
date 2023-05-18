@@ -133,7 +133,6 @@ public class FolderService {
     }
     public List<ToiletDto2> getToiletList(long folderId, Long memberId){
         LOGGER.info("CALL GET TOILET LIST");
-        System.out.println("memberId"+memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
         Folder folder = folderRepository.findById(folderId).orElse(null);
         List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
@@ -192,16 +191,13 @@ public class FolderService {
             toiletDto2.setDiaper(toilet.isDiaper());
 
             if(memberId == null){
-                toiletDto2.setFolderId(0L); // 0L : 롱타입 0으로~
+                toiletDto2.setFolderId(new ArrayList<>()); // 0L : 롱타입 0으로~
                 toiletDto2.setReviewId(0L); // 0 인거죠 ~ 리뷰 작성하기 버튼이 보일꺼고,
             }else{
                 toiletDto2.setReviewId(alreadyReviewed); // 0인 경우 리뷰 쓴 적 없음, 0이 아니면 해당 리뷰 쓴거임~!
-                Long isBookmark = toiletRepository.isBookmark(memberId, toilet.getToiletId());
-                if(isBookmark != 0){
-                    toiletDto2.setFolderId(isBookmark);
-                }else{
-                    toiletDto2.setFolderId(0L);
-                }
+                List<Folder> folderList = folderRepository.findAllByMember(member);
+                List<Long> isBookmark = bookMarkRepository.isBookmark(folderList, toilet.getToiletId()).orElseGet(() -> new ArrayList<>());
+                toiletDto2.setFolderId(isBookmark);
             }
 
             toiletDtoList.add(toiletDto2);

@@ -214,7 +214,7 @@ public class FolderController {
         if(accessToken != null){
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
-
+        System.out.println("reqmemberid" + reqMemberId);
         try {
             List<ToiletDto2> toiletDtoList = folderService.getToiletList(folderId, reqMemberId);
             message.setStatus(StatusEnum.OK);
