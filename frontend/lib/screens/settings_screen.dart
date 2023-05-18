@@ -188,32 +188,12 @@ class _SettingsState extends State<Settings> {
       }
     }
 
-    return
-        // i < 2 ?
-        CustomText(
+    return CustomText(
       title: optionTitle(),
       fontSize: FontSize.defaultSize,
       color: CustomColors.mainColor,
       font: kimm,
     );
-    // : Row(
-    //     children: [
-    //       const CustomIcon(
-    //         icon: toLeftIcon,
-    //         color: mainColor,
-    //       ),
-    //       CustomText(
-    //         title: optionList[i][indexList[i]],
-    //         font: kimm,
-    //         fontSize: FontSize.defaultSize,
-    //         color: CustomColors.mainColor,
-    //       ),
-    //       const CustomIcon(
-    //         icon: toRightIcon,
-    //         color: mainColor,
-    //       ),
-    //     ],
-    //   );
   }
 
   GestureDetector eachMenu({
@@ -245,14 +225,18 @@ class _SettingsState extends State<Settings> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
-          mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+          mainAxisAlignment:
+              mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
           children: [
-            TextWithIcon(
-              icon: iconList[index],
-              text: menuList[index],
-              iconColor: CustomColors.blackColor,
-              fontSize: FontSize.defaultSize,
-              font: kimm,
+            Flexible(
+              child: TextWithIcon(
+                icon: iconList[index],
+                text: menuList[index],
+                iconColor: CustomColors.blackColor,
+                fontSize: FontSize.defaultSize,
+                font: kimm,
+                flex: 20,
+              ),
             ),
             child ?? const SizedBox()
           ],

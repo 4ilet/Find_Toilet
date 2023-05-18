@@ -44,51 +44,58 @@ class UrlClass extends UserInfoProvider {
 
 class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
-  final dio =
-      Dio(BaseOptions(baseUrl: _baseUrl!, receiveDataWhenStatusError: true));
+  final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
 
-  dioWithToken() {
+  Dio dioWithToken({
+    required String url,
+    // required String method,
+  }) {
     final tempDio = Dio(
       BaseOptions(
         baseUrl: _baseUrl!,
         headers: {'Authorization': token},
-        receiveDataWhenStatusError: true,
       ),
     );
-    // tempDio.interceptors.add(InterceptorsWrapper(
-    //   onError: (e, handler) {
-    //     if (e.response?.statusCode == 401) {}
-    //   },
-    // ));
+    tempDio.interceptors.add(InterceptorsWrapper(
+      onError: (e, handler) {
+        if (e.response?.statusCode == 401) {
+          _refreshToken(url: url).then((response) {
+            final newToken = response['token'];
+            final newRefresh = response['refresh'];
+            UserInfoProvider().setStoreToken(newToken);
+            UserInfoProvider().setStoreRefresh(newRefresh);
+            print(e.requestOptions);
+          });
+        }
+      },
+    ));
     return tempDio;
   }
 
-  dioWithRefresh(String method) => Dio(
+  Dio _dioWithRefresh() => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
-          method: method,
+          // method: method,
           headers: {'Authorization-refresh': refresh},
-          receiveDataWhenStatusError: true,
         ),
       );
+
   //*
   FutureDynamicMap _refreshToken({
     required String url,
-    required String method,
-    dynamic data,
+    // required String method,
+    // dynamic data,
   }) async {
     try {
-      final response = await dioWithRefresh(method).request(url, data: data);
-      switch (response.statusCode) {
-        case 200:
-          final headers = response.headers;
-          return {
-            'token': headers['Authorization']!.first,
-            'refresh': headers['Authorization-refresh']!.first,
-          };
-        default:
-          throw Error();
+      final response = await _dioWithRefresh().request(url);
+      if (response.statusCode == 200) {
+        final headers = response.headers;
+        return {
+          'token': headers['Authorization']!.first,
+          'refresh': headers['Authorization-refresh']!.first,
+        };
       }
+      throw Error();
     } catch (error) {
       throw Error();
     }
@@ -99,28 +106,23 @@ class ApiProvider extends UrlClass {
     required String method,
     dynamic data,
   }) =>
-      _refreshToken(url: url, method: method, data: data);
+      _refreshToken(url: url);
+  // _refreshToken(url: url, method: method, data: data);
 
   //* 생성 전반
   FutureBool _createApi(String url, {required DynamicMap data}) async {
     try {
       //* token
       if (token != '') {
-        final response = await dioWithToken().post(url, data: data);
-        switch (response.statusCode) {
-          case 200:
-            return true;
-          case 401:
-            final success = await refreshToken(
-              url: url,
-              method: 'POST',
-              data: data,
-            );
-            _createApi(url, data: data);
-            return false;
-          default:
-            throw Error();
+        final response = await dioWithToken(
+          url: url,
+          // data: data,
+          // method: 'POST',
+        ).post(url, data: data);
+        if (response.statusCode == 200) {
+          return true;
         }
+        throw Error();
       } else {
         //* 로그인 할 것인지 묻는 팝업
         return false;
@@ -144,7 +146,7 @@ class ApiProvider extends UrlClass {
   //* 수정 전반
   FutureDynamicMap _updateApi(String url, {required DynamicMap data}) async {
     try {
-      final response = await dioWithToken().put(url, data: data);
+      final response = await dioWithToken(url: url).put(url, data: data);
       switch (response.statusCode) {
         case 200:
           return response.data;
@@ -170,7 +172,7 @@ class ApiProvider extends UrlClass {
   //* 삭제 전반
   FutureBool _deleteApi(String url) async {
     try {
-      final response = await dioWithToken().delete(url);
+      final response = await dioWithToken(url: url).delete(url);
       print(response.statusCode);
       print(response.data);
       switch (response.statusCode) {

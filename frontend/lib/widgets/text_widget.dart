@@ -56,15 +56,21 @@ class TextWithIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
+        Flexible(
           flex: 2,
+          fit: FlexFit.loose,
           child: Icon(
             icon,
             color: convertedColor(iconColor),
           ),
         ),
-        Expanded(
+        const Flexible(
+            child: SizedBox(
+          width: 10,
+        )),
+        Flexible(
           flex: flex,
+          fit: FlexFit.loose,
           child: CustomText(
             title: text,
             fontSize: fontSize,

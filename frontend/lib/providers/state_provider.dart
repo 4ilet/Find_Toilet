@@ -100,19 +100,20 @@ class ApplyChangeProvider with ChangeNotifier {
 
 //* setttings
 class SettingsProvider with ChangeNotifier {
-  static late bool _alreadySetSize;
   static late int _fontIdx, _magnigyIdx, _radiusIdx;
   static String? _fontState;
   static late String _magnigyState, _radiusState;
   final List<StringList> _optionList = [
     ['표시 안 함', '표시함'],
     ['큰 글씨', '기본'],
-    ['300m', '500m', '700m'],
+    ['좁게', '보통', '넓게'],
   ];
+  final _valueList = [700, 1000, 2000];
+
   get fontState => _fontState;
   get magnigyState => _magnigyState;
   get radiusState => _radiusState;
-  get alreadySetSize => _alreadySetSize;
+  get radius => _valueList[_radiusIdx];
 
   Future<bool> initSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -122,14 +123,12 @@ class SettingsProvider with ChangeNotifier {
     final font = prefs.getInt('fontIdx');
     if (font != null) {
       _fontIdx = font;
-      _alreadySetSize = true;
     } else {
       _fontIdx = 0;
-      _alreadySetSize = false;
     }
     _fontState = _optionList[1][_magnigyIdx];
 
-    _radiusIdx = prefs.getInt('radiusIdx') ?? 0;
+    _radiusIdx = prefs.getInt('radiusIdx') ?? 1;
     _radiusState = _optionList[2][_radiusIdx];
 
     return true;
@@ -151,8 +150,6 @@ class SettingsProvider with ChangeNotifier {
         _setRadius();
     }
   }
-
-  void completeSetSize() => _completeSetSize();
 
 //* private
 
@@ -189,11 +186,6 @@ class SettingsProvider with ChangeNotifier {
     _magnigyState = _optionList[0][_magnigyIdx];
     notifyListeners();
   }
-
-  void _completeSetSize() {
-    _alreadySetSize = true;
-    notifyListeners();
-  }
 }
 
 //* width, height
@@ -214,19 +206,36 @@ class SizeProvider with ChangeNotifier {
 //* main, search
 class GlobalProvider with ChangeNotifier {
   static int? _totalPages;
-  // static final bool _loading = true;
+  static bool _loading = true;
   static bool _diaper = false;
   static bool _child = false;
   static bool _disabled = false;
   static bool _allDay = false;
   static int _sortIdx = 0;
-  int? get totalPages => _totalPages;
+  static double _lat = 37.537229;
+  static double _lng = 127.005515;
+  static final ToiletList _mainToiletList = [];
+  static final DynamicMap _mainToiletData = {
+    'allDay': _allDay,
+    'diaper': _diaper,
+    'disabled': _disabled,
+    'kids': _child,
+    'lat': _lat,
+    'lon': _lng,
+    'radius': 1000,
+    'page': -1,
+    'size': 30,
+  };
+
+  bool get loading => _loading;
   bool get diaper => _diaper;
   bool get child => _child;
   bool get disabled => _disabled;
   bool get allDay => _allDay;
   int get sortIdx => _sortIdx;
-  // bool get loading => _loading;
+  int? get totalPages => _totalPages;
+  ToiletList get mainToiletList => _mainToiletList;
+  DynamicMap get mainToiletData => _mainToiletData;
 
   //* public
   void setTotal(int? newVal) {
@@ -241,6 +250,21 @@ class GlobalProvider with ChangeNotifier {
 
   void setSortIdx(int index) {
     _setSortIdx(index);
+    notifyListeners();
+  }
+
+  void addToiletList(ToiletList toiletList) {
+    _addToiletList(toiletList);
+    notifyListeners();
+  }
+
+  void setLoading() {
+    _setLoading();
+    notifyListeners();
+  }
+
+  void setLatLng(double newLat, double newLng) {
+    _setLatLng(newLat, newLng);
     notifyListeners();
   }
 
@@ -265,4 +289,14 @@ class GlobalProvider with ChangeNotifier {
   }
 
   void _setSortIdx(int index) => _sortIdx = index;
+
+  void _addToiletList(ToiletList toiletList) =>
+      _mainToiletList.addAll(toiletList);
+
+  void _setLoading() => _loading = !_loading;
+
+  void _setLatLng(double newLat, double newLng) {
+    _lat = newLat;
+    _lng = newLng;
+  }
 }

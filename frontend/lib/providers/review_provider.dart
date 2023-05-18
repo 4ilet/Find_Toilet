@@ -8,10 +8,15 @@ class ReviewProvider extends ApiProvider {
   Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
-      final response = await dio.get(
-        reviewListUrl(toiletId),
-        queryParameters: {'page': page},
-      );
+      final response = token != null
+          ? await dio.get(
+              reviewListUrl(toiletId),
+              queryParameters: {'page': page},
+            )
+          : await dioWithToken(url: reviewListUrl(toiletId)).get(
+              reviewListUrl(toiletId),
+              queryParameters: {'page': page},
+            );
       print('res: $response');
       switch (response.statusCode) {
         case 200:
@@ -23,8 +28,6 @@ class ReviewProvider extends ApiProvider {
           return reviewList;
         case 204:
           return [];
-        case 401:
-          return reviewList;
         default:
           throw Error();
       }
@@ -37,16 +40,14 @@ class ReviewProvider extends ApiProvider {
   //* 리뷰 조회
   Future<ReviewModel> getReview(int reviewId) async {
     try {
-      final response = await dioWithToken().get(reviewUrl(reviewId));
-      switch (response.statusCode) {
-        case 200:
-          final data = response.data['data'];
-          return ReviewModel.fromJson(data);
-        // case 401:
-        //   return review;
-        default:
-          throw Error();
+      final response =
+          await dioWithToken(url: reviewUrl(reviewId)).get(reviewUrl(reviewId));
+      if (response.statusCode == 200) {
+        final data = response.data['data'];
+        return ReviewModel.fromJson(data);
       }
+
+      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -57,20 +58,18 @@ class ReviewProvider extends ApiProvider {
   FutureBool postNewReview({
     required int toiletId,
     required DynamicMap reviewData,
-  }) async {
-    return createApi(
-      postReviewUrl(toiletId),
-      data: reviewData,
-    );
-  }
+  }) async =>
+      createApi(
+        postReviewUrl(toiletId),
+        data: reviewData,
+      );
 
   //* 리뷰 수정
   FutureVoid updateReview(
     int reviewId, {
     required DynamicMap reviewData,
-  }) async {
-    updateApi(updateReviewUrl(reviewId), data: reviewData);
-  }
+  }) async =>
+      updateApi(updateReviewUrl(reviewId), data: reviewData);
 
   //* 리뷰 삭제
   FutureBool deleteReview(int reviewId) async =>

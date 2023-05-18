@@ -57,6 +57,9 @@ String getMagnify(BuildContext context) =>
 String getRadius(BuildContext context) =>
     context.read<SettingsProvider>().radiusState;
 
+int getIntRadius(BuildContext context) =>
+    context.read<SettingsProvider>().radius;
+
 //* 메뉴 옵션 변경
 void changeOptions(BuildContext context, int menuIdx) {
   context.read<SettingsProvider>().applyOption(menuIdx);
@@ -142,5 +145,12 @@ void setSortIdx(BuildContext context, int index) =>
     context.read<GlobalProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
 
+//* main toilet list
+void addToiletList(BuildContext context, ToiletList toiletList) =>
+    context.read<GlobalProvider>().addToiletList(toiletList);
 
-//* 반경
+DynamicMap mainToiletData(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletData;
+
+ToiletList mainToiletList(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletList;

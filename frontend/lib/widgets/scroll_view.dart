@@ -1,4 +1,3 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:flutter/material.dart';
 
@@ -25,9 +24,10 @@ class ToiletScrollView extends StatelessWidget {
           flexibleSpace: flexibleSpace,
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         ),
-        CustomSilverFutureList(
-          future: BookMarkProvider().getToiletList(folderId),
+        CustomSilverList(
+          folderId: folderId,
           showReview: false,
+          isMain: false,
         )
       ],
     );

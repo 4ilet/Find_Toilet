@@ -35,7 +35,7 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _sendOldToken(String token) async {
     try {
-      final response = await dioWithToken().get(userInfoUrl);
+      final response = await dioWithToken(url: userInfoUrl).get(userInfoUrl);
       switch (response.statusCode) {
         case 200:
           return {};
@@ -52,8 +52,8 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _sendToken(String token) async {
     try {
-      final response =
-          await dioWithToken().post(loginUrl, data: {'token': token});
+      final response = await dioWithToken(url: loginUrl)
+          .post(loginUrl, data: {'token': token});
       print(response);
       switch (response.statusCode) {
         case 200:
@@ -109,7 +109,7 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _changeName(String newName) async {
     try {
-      final response = await dioWithToken().put(
+      final response = await dioWithToken(url: changeNameUrl).put(
         changeNameUrl,
         data: {'nickname': newName},
       );

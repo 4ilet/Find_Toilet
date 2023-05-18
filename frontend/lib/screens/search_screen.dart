@@ -171,98 +171,77 @@ class _SearchState extends State<Search> {
     initData();
     return Scaffold(
       backgroundColor: mainColor,
-      body: Stack(
-        children: [
-          CustomBox(
-            radius: 0,
-            color: mainColor,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: scrollController,
-              slivers: [
-                CustomSilverAppBar(
-                  elevation: 0,
-                  toolbarHeight: 200,
-                  expandedHeight: 100,
-                  flexibleSpace: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          SearchBar(
-                            isMain: false,
-                            query: searchData['keyword'] as String,
-                            onChange: (value) {
-                              searchData['keyword'] = value;
-                              print('data: ${searchData['keyword']}');
-                            },
-                            onSearchAction: onSearchAction,
-                          ),
-                          topOfAppBar(),
-                          const FilterBox()
-                        ],
-                      ),
-                      showList ? sortList() : const SizedBox()
-                    ],
-                  ),
-                  backgroundColor: mainColor,
+      body: CustomBoxWithScrollView(
+        flexibleSpace: Stack(
+          children: [
+            Column(
+              children: [
+                SearchBar(
+                  isMain: false,
+                  query: searchData['keyword'] as String,
+                  onChange: (value) {
+                    searchData['keyword'] = value;
+                    // print('data: ${searchData['keyword']}');
+                  },
+                  onSearchAction: onSearchAction,
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: !loading
-                            ? toiletList.isNotEmpty
-                                ? CustomListView(
-                                    itemCount: toiletList.length,
-                                    itemBuilder: (context, i) {
-                                      return Column(
-                                        children: [
-                                          i < searchData['page'] * cnt
-                                              ? ListItem(
-                                                  data: toiletList[i],
-                                                  showReview: false,
-                                                )
-                                              : !additional
-                                                  ? ListItem(
-                                                      data: toiletList[i],
-                                                      showReview: false,
-                                                    )
-                                                  : const SizedBox(),
-                                          i == toiletList.length - 1 &&
-                                                  getTotal(context) !=
-                                                      searchData['page']
-                                              ? const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    vertical: 40,
-                                                  ),
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                )
-                                              : const SizedBox()
-                                        ],
-                                      );
-                                    },
-                                  )
-                                : const Center(
-                                    child: CustomText(
-                                      title: '조건에 맞는 화장실이 없습니다.',
-                                      color: CustomColors.whiteColor,
-                                    ),
-                                  )
-                            : const Center(child: CircularProgressIndicator()),
-                      ),
-                      // : const Center(child: CircularProgressIndicator())
-                    ],
-                  ),
-                ),
+                topOfAppBar(),
+                const FilterBox()
               ],
             ),
-          ),
+            showList ? sortList() : const SizedBox()
+          ],
+        ),
+        silverChild: [
+          searchToiletList(),
         ],
       ),
+    );
+  }
+
+  Padding searchToiletList() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: !loading
+          ? toiletList.isNotEmpty
+              ? CustomListView(
+                  itemCount: toiletList.length,
+                  itemBuilder: (context, i) {
+                    return Column(
+                      children: [
+                        i < searchData['page'] * cnt
+                            ? ListItem(
+                                data: toiletList[i],
+                                showReview: false,
+                              )
+                            : !additional
+                                ? ListItem(
+                                    data: toiletList[i],
+                                    showReview: false,
+                                  )
+                                : const SizedBox(),
+                        i == toiletList.length - 1 &&
+                                getTotal(context) != searchData['page']
+                            ? const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 40,
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    );
+                  },
+                )
+              : const Center(
+                  child: CustomText(
+                    title: '조건에 맞는 화장실이 없습니다.',
+                    color: CustomColors.whiteColor,
+                  ),
+                )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
