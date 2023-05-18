@@ -117,7 +117,6 @@ public class ReviewController {
             message.setStatus(StatusEnum.OK);
             message.setMessage("리뷰 수정 완료");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
-
         } catch (NullPointerException e){
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
