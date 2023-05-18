@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class ToiletDto2 {
     private boolean cMalePoo;
     private boolean allDay;
     private boolean diaper;
-    private Long folderId;
+    private List<Long> folderId;
     private Long reviewId;
 
 }
