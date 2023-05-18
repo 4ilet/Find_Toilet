@@ -4,11 +4,13 @@ import com.Fourilet.project.fourilet.data.entity.*;
 import com.Fourilet.project.fourilet.data.repository.*;
 import com.Fourilet.project.fourilet.dto.FolderDto;
 import com.Fourilet.project.fourilet.dto.ToiletDto2;
+import com.Fourilet.project.fourilet.exception.AtLeastException;
 import com.Fourilet.project.fourilet.exception.DuplicationNameException;
 import com.Fourilet.project.fourilet.exception.LimitException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,18 +44,35 @@ public class FolderService {
         return folderListDto;
     }
 
-    public void deleteFolder(long folderId) {
+    public void deleteFolder(long folderId, long memberId) throws Exception {
+        Member member = memberRepository.findById(memberId);
         Folder folder = folderRepository.findById(folderId).orElse(null);
+        List<Folder> folderList = folderRepository.findAllByMember(member);
+
+
         if (folder == null) {
             throw new NullPointerException("해당 폴더가 존재하지 않습니다.");
         }
-        List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
-        if (bookmarkList.size() > 0) {
-            for (BookMark bookmark : bookmarkList) {
-                bookMarkRepository.delete(bookmark);
+
+        if (folderList.size() > 1){
+            List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
+            if (bookmarkList.size() > 0) {
+                for (BookMark bookmark : bookmarkList) {
+                    bookMarkRepository.delete(bookmark);
+                }
             }
+            folderRepository.delete(folder);
+        } else {
+            throw new AtLeastException();
         }
-        folderRepository.delete(folder);
+
+//        List<BookMark> bookmarkList = bookMarkRepository.findAllByFolder(folder);
+//        if (bookmarkList.size() > 0) {
+//            for (BookMark bookmark : bookmarkList) {
+//                bookMarkRepository.delete(bookmark);
+//            }
+//        }
+//        folderRepository.delete(folder);
     }
 
     public void updateFolderName(long folderId, FolderDto.UpdateFolderDto update){
@@ -131,11 +150,13 @@ public class FolderService {
             throw new NullPointerException("존재하지 않는 화장실입니다");
         }
     }
-    public List<ToiletDto2> getToiletList(long folderId, Long memberId){
+    public ToiletDto2.ToiletDto2WithSize getToiletList(long folderId, Long memberId, int page){
         LOGGER.info("CALL GET TOILET LIST");
         Member member = memberRepository.findById(memberId).orElse(null);
         Folder folder = folderRepository.findById(folderId).orElse(null);
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder, pageRequest); // 폴더아이디와 일치하는 모든 북마크를 가져온다.
+        int size = ((bookMarkRepository.findAllByFolder(folder).size() - 1) / 10) + 1 ;
         if (folder == null) {
             throw new NullPointerException("폴더가 존재하지 않습니다.");
         }
@@ -203,6 +224,9 @@ public class FolderService {
             toiletDtoList.add(toiletDto2);
 
         }
-        return toiletDtoList;
+        ToiletDto2.ToiletDto2WithSize result = new ToiletDto2.ToiletDto2WithSize();
+        result.setTotalPage(size);
+        result.setResponse(toiletDtoList);
+        return result;
     }
 }

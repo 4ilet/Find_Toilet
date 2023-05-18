@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,5 +33,13 @@ public class ToiletDto2 {
     private boolean diaper;
     private List<Long> folderId;
     private Long reviewId;
+
+    @Getter
+    @Setter
+    public static class ToiletDto2WithSize {
+        private int totalPage;
+        private List<ToiletDto2> response = new ArrayList<>();
+
+    }
 
 }

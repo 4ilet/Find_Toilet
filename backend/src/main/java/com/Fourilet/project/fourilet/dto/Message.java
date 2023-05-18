@@ -9,7 +9,6 @@ public class Message {
     private StatusEnum status;
     private String message;
     private Object data;
-    private int size;
 
     public Message() {
         this.status = StatusEnum.BAD_REQUEST;
