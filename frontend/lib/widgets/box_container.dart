@@ -272,13 +272,10 @@ class ListItem extends StatelessWidget {
       if (getToken(context) != null) {
         showModal(
           context,
-          page: data.folderId != 0
-              ? DeleteModal(
-                  deleteMode: 2,
-                  id: data.toiletId,
-                  folderId: data.folderId,
-                )
-              : AddToBookMarkModal(toiletId: data.toiletId),
+          page: AddOrDeleteBookMarkModal(
+            toiletId: data.toiletId,
+            folderId: data.folderId,
+          ),
         );
       } else {
         showModal(context, page: const LoginConfirmModal());
@@ -322,8 +319,9 @@ class ListItem extends StatelessWidget {
                         IconButton(
                           onPressed: pressedHeart,
                           icon: CustomIcon(
-                            icon:
-                                data.folderId != 0 ? heartIcon : emptyHeartIcon,
+                            icon: data.folderId.isNotEmpty
+                                ? heartIcon
+                                : emptyHeartIcon,
                             color: redColor,
                           ),
                         ),

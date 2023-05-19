@@ -21,6 +21,7 @@ class ToiletProvider extends ApiProvider {
           ToiletList toiletList = data.map<ToiletModel>((json) {
             return ToiletModel.fromJson(json);
           }).toList();
+          GlobalProvider().setTotal(response.data['totalPages']);
           return toiletList;
         } else {
           return [];

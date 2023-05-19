@@ -154,3 +154,12 @@ DynamicMap mainToiletData(BuildContext context) =>
 
 ToiletList mainToiletList(BuildContext context) =>
     context.read<GlobalProvider>().mainToiletList;
+
+bool readLoading(BuildContext context) =>
+    context.read<GlobalProvider>().loading;
+
+bool getLoading(BuildContext context) =>
+    context.watch<GlobalProvider>().loading;
+
+void setLoading(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setLoading(value);

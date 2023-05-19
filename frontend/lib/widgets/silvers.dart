@@ -59,12 +59,10 @@ class CustomSilverList extends StatefulWidget {
 }
 
 class _CustomSilverListState extends State<CustomSilverList> {
-  bool loading = true;
   bool additional = false;
   bool working = false;
   List data = [];
   int page = 0;
-  int totalPages = 0;
   int cnt = 20;
   final scrollController = ScrollController();
 
@@ -76,26 +74,31 @@ class _CustomSilverListState extends State<CustomSilverList> {
   }
 
   void initData() async {
-    if (loading) {
+    if (readLoading(context)) {
       if (widget.showReview == true) {
         data = await ReviewProvider().getReviewList(widget.toiletId!, page);
-        page += 1;
       } else if (widget.isMain == true) {
         ToiletProvider()
             .getNearToilet(mainToiletData(context))
             .then((toiletData) {
-          data = toiletData;
+          setState(() {
+            data = toiletData;
+          });
+          setLoading(context, false);
           addToiletList(
             context,
             toiletData,
           );
         });
       } else {
-        data = await BookMarkProvider().getToiletList(widget.folderId!);
+        BookMarkProvider().getToiletList(widget.folderId!).then((toiletData) {
+          setState(() {
+            data = toiletData;
+            setLoading(context, false);
+          });
+        });
       }
-      setState(() {
-        loading = false;
-      });
+      page += 1;
     }
   }
 
@@ -124,7 +127,6 @@ class _CustomSilverListState extends State<CustomSilverList> {
 
   void moreData() {
     if (additional) {
-      page += 1;
       if (widget.showReview) {
         ReviewProvider()
             .getReviewList(widget.toiletId!, page)
@@ -146,6 +148,7 @@ class _CustomSilverListState extends State<CustomSilverList> {
         additional = false;
         working = false;
       });
+      page += 1;
     }
   }
 
@@ -155,7 +158,7 @@ class _CustomSilverListState extends State<CustomSilverList> {
       color: mainColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: !loading
+        child: !getLoading(context)
             ? data.isNotEmpty
                 ? CustomListView(
                     itemCount: data.length,
@@ -176,7 +179,7 @@ class _CustomSilverListState extends State<CustomSilverList> {
                           i < page * cnt || !additional
                               ? returnedWidget
                               : const SizedBox(),
-                          i == data.length - 1 && getTotal(context) != page
+                          i == data.length - 1 && getTotal(context)! > page
                               ? const Padding(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 40,
@@ -209,8 +212,8 @@ class CustomBoxWithScrollView extends StatelessWidget {
   final double toolbarHeight, expandedHeight;
   final Color backgroundColor;
   final WidgetList? silverChild;
-  final SliverChildDelegate? sliverChildDelegate;
-  final ScrollPhysics physics;
+  // final SliverChildDelegate? sliverChildDelegate;
+  // final ScrollPhysics physics;
 
   const CustomBoxWithScrollView({
     super.key,
@@ -220,8 +223,8 @@ class CustomBoxWithScrollView extends StatelessWidget {
     this.expandedHeight = 100,
     this.backgroundColor = mainColor,
     this.silverChild,
-    this.sliverChildDelegate,
-    this.physics = const AlwaysScrollableScrollPhysics(),
+    // this.sliverChildDelegate,
+    // this.physics = const AlwaysScrollableScrollPhysics(),
   });
 
   @override
@@ -229,21 +232,35 @@ class CustomBoxWithScrollView extends StatelessWidget {
     return CustomBox(
       radius: 0,
       color: mainColor,
-      child: CustomScrollView(
-        physics: physics,
-        controller: scrollController,
-        slivers: [
-          CustomSilverAppBar(
-            elevation: 0,
-            toolbarHeight: toolbarHeight,
-            expandedHeight: expandedHeight,
-            flexibleSpace: flexibleSpace,
-            backgroundColor: backgroundColor,
+      child: Column(
+        children: [
+          SizedBox(
+            height: expandedHeight,
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                CustomSilverAppBar(
+                  elevation: 0,
+                  toolbarHeight: toolbarHeight,
+                  expandedHeight: expandedHeight,
+                  flexibleSpace: flexibleSpace,
+                  backgroundColor: backgroundColor,
+                ),
+              ],
+            ),
           ),
-          SliverList(
-            delegate: sliverChildDelegate != null
-                ? sliverChildDelegate!
-                : SliverChildListDelegate(silverChild!),
+          Expanded(
+            child: CustomScrollView(
+              // physics: physics,
+              slivers: [
+                SliverList(
+                  delegate:
+                      // sliverChildDelegate != null
+                      //     ? sliverChildDelegate! :
+                      SliverChildListDelegate(silverChild!),
+                ),
+              ],
+            ),
           ),
         ],
       ),

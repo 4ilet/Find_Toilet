@@ -258,8 +258,8 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setLoading() {
-    _setLoading();
+  void setLoading(bool value) {
+    _setLoading(value);
     notifyListeners();
   }
 
@@ -293,7 +293,7 @@ class GlobalProvider with ChangeNotifier {
   void _addToiletList(ToiletList toiletList) =>
       _mainToiletList.addAll(toiletList);
 
-  void _setLoading() => _loading = !_loading;
+  void _setLoading(bool value) => _loading = value;
 
   void _setLatLng(double newLat, double newLng) {
     _lat = newLat;

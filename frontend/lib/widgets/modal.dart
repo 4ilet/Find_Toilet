@@ -419,9 +419,7 @@ class CustomModalWithClose extends StatelessWidget {
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
-  final int? folderId;
-  const DeleteModal(
-      {super.key, required this.deleteMode, required this.id, this.folderId});
+  const DeleteModal({super.key, required this.deleteMode, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -432,13 +430,9 @@ class DeleteModal extends StatelessWidget {
           target = '리뷰';
           message = '이 리뷰를\n삭제하시겠습니까?';
           break;
-        case 1:
+        default:
           target = '폴더';
           message = '폴더 삭제 시\n내부의 즐겨찾기도\n모두 삭제됩니다.\n그래도 삭제하시겠습니까?';
-          break;
-        default:
-          target = '즐겨찾기';
-          message = '즐겨 찾기 목록에서\n이 화장실을 삭제하시겠습니까?';
           break;
       }
     }
@@ -449,12 +443,8 @@ class DeleteModal extends StatelessWidget {
           case 0:
             await ReviewProvider().deleteReview(id);
             break;
-          case 1:
-            await FolderProvider().deleteFolder(id);
-            break;
           default:
-            await BookMarkProvider()
-                .deleteBookMark(folderId: folderId!, toiletId: id);
+            await FolderProvider().deleteFolder(id);
             break;
         }
         if (!context.mounted) return;
@@ -496,20 +486,36 @@ class DeleteModal extends StatelessWidget {
 }
 
 //* 즐겨찾기 추가 모달
-class AddToBookMarkModal extends StatefulWidget {
+class AddOrDeleteBookMarkModal extends StatefulWidget {
   final int toiletId;
-  const AddToBookMarkModal({super.key, required this.toiletId});
+  final List folderId;
+  const AddOrDeleteBookMarkModal({
+    super.key,
+    required this.toiletId,
+    required this.folderId,
+  });
 
   @override
-  State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
+  State<AddOrDeleteBookMarkModal> createState() =>
+      _AddOrDeleteBookMarkModalState();
 }
 
-class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
-  int? selected;
+class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
+  Set selectedFolder = {};
+  @override
+  void initState() {
+    super.initState();
+    selectedFolder.addAll(widget.folderId);
+  }
+
   ReturnVoid selectFolder(int id) {
     return () {
       setState(() {
-        selected = id;
+        if (selectedFolder.contains(id)) {
+          selectedFolder.remove(id);
+        } else {
+          selectedFolder.add(id);
+        }
       });
     };
   }
@@ -518,11 +524,12 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   Widget build(BuildContext context) {
     return CustomModal(
       title: '즐겨찾기 폴더 선택',
-      buttonText: '추가',
+      buttonText: '적용',
       onPressed: () async {
-        if (selected != null) {
+        if (widget.folderId.toSet() != selectedFolder) {
           await BookMarkProvider().addToilet(
-            folderId: selected!,
+            folderId: 1,
+            // selectedFolder.toList(),
             toiletId: widget.toiletId,
           );
           changeRefresh(context);
@@ -547,9 +554,10 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
                             onTap: selectFolder(folderInfo.folderId),
                             color: whiteColor,
                             border: Border.all(),
-                            boxShadow: selected == folderInfo.folderId
-                                ? const [highlightShadow]
-                                : null,
+                            boxShadow:
+                                selectedFolder.contains(folderInfo.folderId)
+                                    ? const [highlightShadow]
+                                    : null,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 5,

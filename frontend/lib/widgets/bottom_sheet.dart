@@ -23,10 +23,9 @@ class ToiletBottomSheet extends StatelessWidget {
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
-          physics: const NeverScrollableScrollPhysics(),
           scrollController: scrollController,
-          toolbarHeight: 80,
-          expandedHeight: showReview ? 40 : 80,
+          toolbarHeight: 100,
+          expandedHeight: showReview ? 40 : 100,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
@@ -38,7 +37,9 @@ class ToiletBottomSheet extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
+                      horizontal: 10,
+                      vertical: 15,
+                    ),
                     child: Row(
                       children: const [
                         CustomText(

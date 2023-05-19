@@ -45,6 +45,7 @@ class _SettingsState extends State<Settings> {
               text: '로그아웃',
               iconColor: CustomColors.blackColor,
               fontSize: FontSize.defaultSize,
+              mainAxisAlignment: MainAxisAlignment.end,
             );
     });
     return true;
@@ -102,26 +103,32 @@ class _SettingsState extends State<Settings> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisSize: MainAxisSize.max,
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomButton(
-                      textColor: CustomColors.blackColor,
-                      fontSize: FontSize.smallSize,
-                      onPressed: () {
-                        showModal(
-                          context,
-                          page: const InputModal(
-                            title: '닉네임 설정',
-                            buttonText: '확인',
-                            isAlert: false,
-                            kindOf: 'nickname',
-                          ),
-                        );
-                      },
-                      buttonText: '닉네임 변경',
+                    Flexible(
+                      child: CustomButton(
+                        textColor: CustomColors.blackColor,
+                        fontSize: FontSize.smallSize,
+                        onPressed: () {
+                          showModal(
+                            context,
+                            page: const InputModal(
+                              title: '닉네임 설정',
+                              buttonText: '확인',
+                              isAlert: false,
+                              kindOf: 'nickname',
+                            ),
+                          );
+                        },
+                        buttonText: '닉네임 변경',
+                      ),
                     ),
-                    GestureDetector(
-                      onTap: () => loginOrLogout(),
-                      child: loginOrLogoutBtn,
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () => loginOrLogout(),
+                        child: loginOrLogoutBtn,
+                      ),
                     ),
                   ],
                 ),
