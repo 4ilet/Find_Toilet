@@ -11,7 +11,7 @@ class ToiletProvider extends ApiProvider {
               nearToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken().get(
+          : await dioWithToken(url: nearToiletUrl).get(
               nearToiletUrl,
               queryParameters: queryData,
             );
@@ -21,6 +21,7 @@ class ToiletProvider extends ApiProvider {
           ToiletList toiletList = data.map<ToiletModel>((json) {
             return ToiletModel.fromJson(json);
           }).toList();
+          GlobalProvider().setTotal(response.data['totalPages']);
           return toiletList;
         } else {
           return [];
@@ -42,7 +43,7 @@ class ToiletProvider extends ApiProvider {
               searchToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken().get(
+          : await dioWithToken(url: searchToiletUrl).get(
               searchToiletUrl,
               queryParameters: queryData,
             );

@@ -26,25 +26,14 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  late final Future<ToiletList>? toiletList;
   DynamicMap query = {'value': null};
   @override
   void initState() {
     super.initState();
-    if (widget.showReview) {
-      toiletList = null;
-    } else {
-      toiletList = ToiletProvider().getNearToilet({
-        'allDay': readFilter(context, 0),
-        'diaper': readFilter(context, 1),
-        'disabled': readFilter(context, 2),
-        'kids': readFilter(context, 3),
-        'lat': 37.537229,
-        'lon': 127.005515,
-        'radius': 1000,
-        'page': 0,
-        'size': 30,
-      });
+    if (!widget.showReview) {
+      ToiletProvider()
+          .getNearToilet(mainToiletData(context))
+          .then((data) => addToiletList(context, data));
     }
   }
 
@@ -102,7 +91,6 @@ class _MainState extends State<Main> {
                 ],
               ),
               ToiletBottomSheet(
-                future: toiletList,
                 showReview: widget.showReview,
                 toiletModel: widget.toiletModel,
               ),

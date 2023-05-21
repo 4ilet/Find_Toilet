@@ -57,6 +57,9 @@ String getMagnify(BuildContext context) =>
 String getRadius(BuildContext context) =>
     context.read<SettingsProvider>().radiusState;
 
+int getIntRadius(BuildContext context) =>
+    context.read<SettingsProvider>().radius;
+
 //* 메뉴 옵션 변경
 void changeOptions(BuildContext context, int menuIdx) {
   context.read<SettingsProvider>().applyOption(menuIdx);
@@ -72,18 +75,18 @@ bool watchPressed(BuildContext context) =>
 
 //* 로그인
 FutureBool login(BuildContext context) async {
-  final result = await UserProvider().login();
-  if (!context.mounted) throw Error();
-  changeToken(context, token: result['token'], refresh: result['refresh']);
-  if (result['state'] != 'login') {
-    showModal(context,
-        page: const InputModal(
-          title: '닉네임 설정',
-          buttonText: '확인',
-          isAlert: true,
-          kindOf: 'nickname',
-        ));
-  }
+  UserProvider().login().then((result) {
+    changeToken(context, token: result['token'], refresh: result['refresh']);
+    if (result['state'] != 'login') {
+      showModal(context,
+          page: const InputModal(
+            title: '닉네임 설정',
+            buttonText: '확인',
+            isAlert: true,
+            kindOf: 'nickname',
+          ));
+    }
+  });
   return true;
 }
 
@@ -142,5 +145,21 @@ void setSortIdx(BuildContext context, int index) =>
     context.read<GlobalProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
 
+//* main toilet list
+void addToiletList(BuildContext context, ToiletList toiletList) =>
+    context.read<GlobalProvider>().addToiletList(toiletList);
 
-//* 반경
+DynamicMap mainToiletData(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletData;
+
+ToiletList mainToiletList(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletList;
+
+bool readLoading(BuildContext context) =>
+    context.read<GlobalProvider>().loading;
+
+bool getLoading(BuildContext context) =>
+    context.watch<GlobalProvider>().loading;
+
+void setLoading(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setLoading(value);

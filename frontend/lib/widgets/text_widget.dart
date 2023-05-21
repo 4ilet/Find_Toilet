@@ -39,32 +39,39 @@ class TextWithIcon extends StatelessWidget {
   final FontSize fontSize;
   final CustomColors textColor, iconColor;
   final int flex;
-  const TextWithIcon({
-    super.key,
-    required this.icon,
-    required this.text,
-    this.fontSize = FontSize.smallSize,
-    this.iconColor = CustomColors.mainColor,
-    this.textColor = CustomColors.blackColor,
-    this.font,
-    this.flex = 4,
-  });
+  final MainAxisAlignment mainAxisAlignment;
+  const TextWithIcon(
+      {super.key,
+      required this.icon,
+      required this.text,
+      this.fontSize = FontSize.smallSize,
+      this.iconColor = CustomColors.mainColor,
+      this.textColor = CustomColors.blackColor,
+      this.font,
+      this.flex = 4,
+      this.mainAxisAlignment = MainAxisAlignment.start});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
+        Flexible(
           flex: 2,
+          fit: FlexFit.loose,
           child: Icon(
             icon,
             color: convertedColor(iconColor),
           ),
         ),
-        Expanded(
+        const Flexible(
+            child: SizedBox(
+          width: 10,
+        )),
+        Flexible(
           flex: flex,
+          fit: FlexFit.loose,
           child: CustomText(
             title: text,
             fontSize: fontSize,

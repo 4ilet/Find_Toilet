@@ -1,4 +1,3 @@
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -7,7 +6,6 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SelectFontTheme extends StatefulWidget {
   const SelectFontTheme({super.key});
@@ -31,7 +29,6 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
 
   void applyTheme() {
     changeOptions(context, 1);
-    context.read<SettingsProvider>().completeSetSize();
     removedRouterPush(context, page: const Main());
   }
 

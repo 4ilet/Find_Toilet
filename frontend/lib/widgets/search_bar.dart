@@ -19,9 +19,9 @@ class SearchBar extends StatelessWidget {
   const SearchBar({
     super.key,
     required this.isMain,
-    this.query = '',
     required this.onChange,
     required this.onSearchAction,
+    this.query = '',
   });
 
   @override

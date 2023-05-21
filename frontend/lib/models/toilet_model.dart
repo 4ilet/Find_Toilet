@@ -1,9 +1,10 @@
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletModel {
-  final int toiletId, commentCnt, folderId, reviewId;
+  final int toiletId, commentCnt, reviewId;
   final double score, lat, lng;
   final String toiletName, address, duration, phoneNo;
+  final List folderId;
   final bool privateDisabledM1,
       privateDisabledM2,
       privateDisabledF,

@@ -45,6 +45,7 @@ class _SettingsState extends State<Settings> {
               text: '로그아웃',
               iconColor: CustomColors.blackColor,
               fontSize: FontSize.defaultSize,
+              mainAxisAlignment: MainAxisAlignment.end,
             );
     });
     return true;
@@ -102,26 +103,32 @@ class _SettingsState extends State<Settings> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisSize: MainAxisSize.max,
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomButton(
-                      textColor: CustomColors.blackColor,
-                      fontSize: FontSize.smallSize,
-                      onPressed: () {
-                        showModal(
-                          context,
-                          page: const InputModal(
-                            title: '닉네임 설정',
-                            buttonText: '확인',
-                            isAlert: false,
-                            kindOf: 'nickname',
-                          ),
-                        );
-                      },
-                      buttonText: '닉네임 변경',
+                    Flexible(
+                      child: CustomButton(
+                        textColor: CustomColors.blackColor,
+                        fontSize: FontSize.smallSize,
+                        onPressed: () {
+                          showModal(
+                            context,
+                            page: const InputModal(
+                              title: '닉네임 설정',
+                              buttonText: '확인',
+                              isAlert: false,
+                              kindOf: 'nickname',
+                            ),
+                          );
+                        },
+                        buttonText: '닉네임 변경',
+                      ),
                     ),
-                    GestureDetector(
-                      onTap: () => loginOrLogout(),
-                      child: loginOrLogoutBtn,
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () => loginOrLogout(),
+                        child: loginOrLogoutBtn,
+                      ),
                     ),
                   ],
                 ),
@@ -188,32 +195,12 @@ class _SettingsState extends State<Settings> {
       }
     }
 
-    return
-        // i < 2 ?
-        CustomText(
+    return CustomText(
       title: optionTitle(),
       fontSize: FontSize.defaultSize,
       color: CustomColors.mainColor,
       font: kimm,
     );
-    // : Row(
-    //     children: [
-    //       const CustomIcon(
-    //         icon: toLeftIcon,
-    //         color: mainColor,
-    //       ),
-    //       CustomText(
-    //         title: optionList[i][indexList[i]],
-    //         font: kimm,
-    //         fontSize: FontSize.defaultSize,
-    //         color: CustomColors.mainColor,
-    //       ),
-    //       const CustomIcon(
-    //         icon: toRightIcon,
-    //         color: mainColor,
-    //       ),
-    //     ],
-    //   );
   }
 
   GestureDetector eachMenu({
@@ -245,14 +232,18 @@ class _SettingsState extends State<Settings> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
-          mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+          mainAxisAlignment:
+              mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
           children: [
-            TextWithIcon(
-              icon: iconList[index],
-              text: menuList[index],
-              iconColor: CustomColors.blackColor,
-              fontSize: FontSize.defaultSize,
-              font: kimm,
+            Flexible(
+              child: TextWithIcon(
+                icon: iconList[index],
+                text: menuList[index],
+                iconColor: CustomColors.blackColor,
+                fontSize: FontSize.defaultSize,
+                font: kimm,
+                flex: 20,
+              ),
             ),
             child ?? const SizedBox()
           ],
