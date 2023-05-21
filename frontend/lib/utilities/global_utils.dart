@@ -75,18 +75,18 @@ bool watchPressed(BuildContext context) =>
 
 //* 로그인
 FutureBool login(BuildContext context) async {
-  final result = await UserProvider().login();
-  if (!context.mounted) throw Error();
-  changeToken(context, token: result['token'], refresh: result['refresh']);
-  if (result['state'] != 'login') {
-    showModal(context,
-        page: const InputModal(
-          title: '닉네임 설정',
-          buttonText: '확인',
-          isAlert: true,
-          kindOf: 'nickname',
-        ));
-  }
+  UserProvider().login().then((result) {
+    changeToken(context, token: result['token'], refresh: result['refresh']);
+    if (result['state'] != 'login') {
+      showModal(context,
+          page: const InputModal(
+            title: '닉네임 설정',
+            buttonText: '확인',
+            isAlert: true,
+            kindOf: 'nickname',
+          ));
+    }
+  });
   return true;
 }
 

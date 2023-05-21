@@ -72,9 +72,9 @@ class FolderBox extends StatelessWidget {
     String folderName = folderInfo.folderName;
     int bookmarkCnt = folderInfo.bookmarkCnt;
     int folderId = folderInfo.folderId;
-    String printedName = folderName.length <= 5
-        ? folderName
-        : '${folderName.substring(0, 5)}\n${folderName.substring(5)}';
+    // String printedName = folderName.length <= 5
+    //     ? folderName
+    //     : '${folderName.substring(0, 5)}\n${folderName.substring(5)}';
     return CustomBox(
       onTap: routerPush(
         context,
@@ -94,11 +94,14 @@ class FolderBox extends StatelessWidget {
           children: [
             Flexible(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CustomText(
-                    title: printedName,
-                    fontSize: FontSize.defaultSize,
-                    color: CustomColors.mainColor,
+                  Flexible(
+                    child: CustomText(
+                      title: folderName,
+                      fontSize: FontSize.defaultSize,
+                      color: CustomColors.mainColor,
+                    ),
                   ),
                 ],
               ),
@@ -173,7 +176,7 @@ class _AddBoxState extends State<AddBox> {
         builder: (context) => const InputModal(
           title: '즐겨 찾기 폴더 생성',
           buttonText: '만들기',
-          isAlert: true,
+          isAlert: false,
           kindOf: 'folder',
         ),
       ),
@@ -253,7 +256,7 @@ class ListItem extends StatelessWidget {
       return result;
     }
 
-    void addOrEditReview() async {
+    void addOrEditReview() {
       final token = getToken(context);
       if (token != null && token != '') {
         routerPush(context,
@@ -263,8 +266,9 @@ class ListItem extends StatelessWidget {
               reviewId: data.reviewId,
             ))();
       } else {
-        await showModal(context, page: const LoginConfirmModal());
-        routerPop(context)();
+        showModal(context, page: const LoginConfirmModal()).then((_) {
+          routerPop(context)();
+        });
       }
     }
 

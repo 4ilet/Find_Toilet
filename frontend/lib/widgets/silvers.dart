@@ -232,6 +232,7 @@ class CustomBoxWithScrollView extends StatelessWidget {
     return CustomBox(
       radius: 0,
       color: mainColor,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
       child: Column(
         children: [
           SizedBox(

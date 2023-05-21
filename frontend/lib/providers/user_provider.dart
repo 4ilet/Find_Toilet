@@ -36,15 +36,10 @@ class UserProvider extends ApiProvider {
   FutureDynamicMap _sendOldToken(String token) async {
     try {
       final response = await dioWithToken(url: userInfoUrl).get(userInfoUrl);
-      switch (response.statusCode) {
-        case 200:
-          return {};
-        case 401:
-          final result = await refreshToken(url: userInfoUrl, method: 'GET');
-          return result;
-        default:
-          throw Error();
+      if (response.statusCode == 200) {
+        return {};
       }
+      throw Error();
     } catch (error) {
       throw Error();
     }
@@ -55,15 +50,10 @@ class UserProvider extends ApiProvider {
       final response = await dioWithToken(url: loginUrl)
           .post(loginUrl, data: {'token': token});
       print(response);
-      switch (response.statusCode) {
-        case 200:
-          return _returnTokens(response);
-        case 401:
-          final result = await refreshToken(url: loginUrl, method: 'POST');
-          return {'result': result};
-        default:
-          throw Error();
+      if (response.statusCode == 200) {
+        return _returnTokens(response);
       }
+      throw Error();
     } catch (error) {
       throw Error();
     }
@@ -99,9 +89,9 @@ class UserProvider extends ApiProvider {
     return _kakaoLogin(false);
   }
 
-  void _deleteUser() {
+  void _deleteUser() async {
     try {
-      deleteApi(deleteUserUrl);
+      await deleteApi(deleteUserUrl);
     } catch (error) {
       throw Error();
     }
@@ -113,21 +103,10 @@ class UserProvider extends ApiProvider {
         changeNameUrl,
         data: {'nickname': newName},
       );
-      switch (response.statusCode) {
-        case 200:
-          return response.data;
-        case 400:
-          return {'message': '이미 존재하는 닉네임입니다.'};
-        case 401:
-          final success = await refreshToken(
-            url: changeNameUrl,
-            method: 'POST',
-            data: {'nickname': newName},
-          );
-          return _changeName(newName);
-        default:
-          throw Error();
+      if (response.statusCode == 200) {
+        return response.data;
       }
+      throw Error();
     } catch (error) {
       print(error);
       throw Error();

@@ -30,18 +30,23 @@ class BookMarkFolderList extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomIconButton(
-                      icon: exitIcon,
-                      color: CustomColors.whiteColor,
-                      onPressed: routerPop(context),
-                      iconSize: 50,
+                    Flexible(
+                      child: CustomIconButton(
+                        icon: exitIcon,
+                        color: CustomColors.whiteColor,
+                        onPressed: routerPop(context),
+                        iconSize: 50,
+                      ),
                     ),
-                    CustomText(
-                      title:
-                          '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
-                      fontSize: FontSize.largeSize,
-                      color: CustomColors.whiteColor,
-                      font: kimm,
+                    Flexible(
+                      flex: 20,
+                      child: CustomText(
+                        title:
+                            '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                        fontSize: FontSize.largeSize,
+                        color: CustomColors.whiteColor,
+                        font: kimm,
+                      ),
                     ),
                   ],
                 ),

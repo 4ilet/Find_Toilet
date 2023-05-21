@@ -29,6 +29,7 @@ class ToiletBottomSheet extends StatelessWidget {
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
+            radius: 30,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),

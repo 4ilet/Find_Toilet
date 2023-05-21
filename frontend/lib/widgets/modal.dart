@@ -190,13 +190,12 @@ class InputModal extends StatelessWidget {
                   folderData: {'folderName': data!});
           if (!context.mounted) return;
           routerPop(context)();
+          final work = folderId == null ? '생성' : '수정';
           showModal(
             context,
             page: AlertModal(
-              title: folderId == null ? '폴더 생성 성공' : '폴더 수정 성공',
-              content: folderId == null
-                  ? '성공적으로 폴더가 생성되었습니다.'
-                  : '성공적으로 폴더가 수정되었습니다.',
+              title: '폴더 $work 성공',
+              content: '성공적으로 폴더가 $work되었습니다.',
             ),
           );
         } else {
@@ -224,33 +223,31 @@ class InputModal extends StatelessWidget {
     void setNickname(String? data) async {
       try {
         if (data != null && data != '') {
-          final result = await UserProvider().changeName(data);
-          print('result: $result');
-          if (result['success'] != null) {
-            context.read<UserInfoProvider>().setStoreName(result['success']);
-            if (!context.mounted) return;
-            routerPop(context)();
-            showModal(
-              context,
-              page: const AlertModal(
-                title: '닉네임 적용 성공',
-                content: '닉네임이 적용되었습니다.',
-              ),
-            );
-            return;
-          } else {
-            if (!context.mounted) return;
-            showModal(
-              context,
-              page: const AlertModal(
-                title: '닉네임 중복',
-                content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
-              ),
-            );
-            return;
-          }
+          UserProvider().changeName(data).then((result) {
+            print('result: $result');
+            if (result['success'] != null) {
+              context.read<UserInfoProvider>().setStoreName(result['success']);
+              routerPop(context)();
+              showModal(
+                context,
+                page: const AlertModal(
+                  title: '닉네임 적용 성공',
+                  content: '닉네임이 적용되었습니다.',
+                ),
+              );
+              return;
+            } else {
+              showModal(
+                context,
+                page: const AlertModal(
+                  title: '닉네임 중복',
+                  content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
+                ),
+              );
+              return;
+            }
+          });
         }
-        if (!context.mounted) return;
         showModal(
           context,
           page: const AlertModal(
@@ -525,15 +522,18 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
     return CustomModal(
       title: '즐겨찾기 폴더 선택',
       buttonText: '적용',
-      onPressed: () async {
+      onPressed: () {
         if (widget.folderId.toSet() != selectedFolder) {
-          await BookMarkProvider().addToilet(
+          BookMarkProvider()
+              .addToilet(
             folderId: 1,
             // selectedFolder.toList(),
             toiletId: widget.toiletId,
-          );
-          changeRefresh(context);
-          routerPop(context)();
+          )
+              .then((_) {
+            changeRefresh(context);
+            routerPop(context)();
+          });
         }
       },
       children: [
@@ -689,11 +689,11 @@ class LoginConfirmModal extends StatelessWidget {
           isCentered: true,
         )
       ],
-      onPressed: () async {
-        await login(context);
-        if (!context.mounted) return;
-        routerPop(context)();
-        changeRefresh(context);
+      onPressed: () {
+        login(context).then((_) {
+          routerPop(context)();
+          changeRefresh(context);
+        });
       },
     );
   }
