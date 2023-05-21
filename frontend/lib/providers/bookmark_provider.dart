@@ -1,6 +1,7 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 //* folder CRUD
@@ -9,26 +10,17 @@ class FolderProvider extends ApiProvider {
   Future<FolderList> getFolderList() async {
     try {
       //*
-      final response = await dioWithToken().get(folderListUrl);
-      switch (response.statusCode) {
-        case 200:
-          final data = response.data['data'];
-          print(data);
-          FolderList folderList = data.map<FolderModel>((json) {
-            return FolderModel.fromJson(json);
-          }).toList();
-          return folderList;
-        case 401:
-          await refreshToken(
-            url: folderListUrl,
-            method: 'GET',
-          );
-          return getFolderList();
-        default:
-          throw Error();
+      final response =
+          await dioWithToken(url: folderListUrl).get(folderListUrl);
+      if (response.statusCode == 200) {
+        final data = response.data['data'];
+        print(data);
+        FolderList folderList = data.map<FolderModel>((json) {
+          return FolderModel.fromJson(json);
+        }).toList();
+        return folderList;
       }
-
-      // throw Error();
+      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -54,29 +46,22 @@ class BookMarkProvider extends ApiProvider {
   Future<ToiletList> getToiletList(int folderId) async {
     ToiletList toiletList = [];
     try {
-      final response = await dioWithToken().get(bookmarkListUrl(folderId));
-      switch (response.statusCode) {
-        case 200:
-          final data = response.data['data'];
-          if (data.isEmpty) {
-            print('empty');
-            return [];
-          }
-          print(data);
-          data.forEach((element) {
-            toiletList.add(ToiletModel.fromJson(element));
-          });
-          return toiletList;
-        case 401:
-          await refreshToken(
-            url: folderListUrl,
-            method: 'GET',
-          );
-          return getToiletList(folderId);
-        // break;
-        default:
-          throw Error();
+      final response = await dioWithToken(url: bookmarkListUrl(folderId))
+          .get(bookmarkListUrl(folderId));
+      if (response.statusCode == 200) {
+        final data = response.data['data'];
+        if (data.isEmpty) {
+          return [];
+        }
+        data.forEach((element) {
+          toiletList.add(ToiletModel.fromJson(element));
+        });
+        GlobalProvider().setTotal(response.data['cnt']);
+        return toiletList;
       }
+
+      throw Error();
+
       // throw Error();
     } catch (error) {
       print(error);
@@ -88,15 +73,14 @@ class BookMarkProvider extends ApiProvider {
   FutureVoid addToilet({
     required int folderId,
     required int toiletId,
-  }) async {
-    createApi(
-      addToiletUrl(
-        folderId: folderId,
-        toiletId: toiletId,
-      ),
-      data: {},
-    );
-  }
+  }) async =>
+      createApi(
+        addToiletUrl(
+          folderId: folderId,
+          toiletId: toiletId,
+        ),
+        data: {},
+      );
 
   //* 즐겨찾기 삭제
   FutureBool deleteBookMark({

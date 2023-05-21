@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 //* icon
 const locationIcon = Icons.location_on;
-const phoneIcon = Icons.phone_rounded;
+const phoneIcon = Icons.phone_android_rounded;
 const clockIcon = Icons.access_time_filled_rounded;
 const starIcon = Icons.star_rounded;
 const hamburgerIcon = Icons.menu;

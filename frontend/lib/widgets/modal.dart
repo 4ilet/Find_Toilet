@@ -190,13 +190,12 @@ class InputModal extends StatelessWidget {
                   folderData: {'folderName': data!});
           if (!context.mounted) return;
           routerPop(context)();
+          final work = folderId == null ? '생성' : '수정';
           showModal(
             context,
             page: AlertModal(
-              title: folderId == null ? '폴더 생성 성공' : '폴더 수정 성공',
-              content: folderId == null
-                  ? '성공적으로 폴더가 생성되었습니다.'
-                  : '성공적으로 폴더가 수정되었습니다.',
+              title: '폴더 $work 성공',
+              content: '성공적으로 폴더가 $work되었습니다.',
             ),
           );
         } else {
@@ -224,33 +223,31 @@ class InputModal extends StatelessWidget {
     void setNickname(String? data) async {
       try {
         if (data != null && data != '') {
-          final result = await UserProvider().changeName(data);
-          print('result: $result');
-          if (result['success'] != null) {
-            context.read<UserInfoProvider>().setStoreName(result['success']);
-            if (!context.mounted) return;
-            routerPop(context)();
-            showModal(
-              context,
-              page: const AlertModal(
-                title: '닉네임 적용 성공',
-                content: '닉네임이 적용되었습니다.',
-              ),
-            );
-            return;
-          } else {
-            if (!context.mounted) return;
-            showModal(
-              context,
-              page: const AlertModal(
-                title: '닉네임 중복',
-                content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
-              ),
-            );
-            return;
-          }
+          UserProvider().changeName(data).then((result) {
+            print('result: $result');
+            if (result['success'] != null) {
+              context.read<UserInfoProvider>().setStoreName(result['success']);
+              routerPop(context)();
+              showModal(
+                context,
+                page: const AlertModal(
+                  title: '닉네임 적용 성공',
+                  content: '닉네임이 적용되었습니다.',
+                ),
+              );
+              return;
+            } else {
+              showModal(
+                context,
+                page: const AlertModal(
+                  title: '닉네임 중복',
+                  content: '중복된 닉네임입니다.\n다른 닉네임을 입력해주세요.',
+                ),
+              );
+              return;
+            }
+          });
         }
-        if (!context.mounted) return;
         showModal(
           context,
           page: const AlertModal(
@@ -307,50 +304,53 @@ class CustomModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Flexible(
-          child: Center(
-            child: CustomText(
-              title: title,
-              fontSize: FontSize.largeSize,
-              color: titleColor,
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: SimpleDialog(
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Flexible(
+            child: Center(
+              child: CustomText(
+                title: title,
+                fontSize: FontSize.largeSize,
+                color: titleColor,
+              ),
             ),
           ),
         ),
-      ),
-      children: [
-        ...children,
-        isAlert
-            ? Flexible(
-                child: modalButton(
-                  context: context,
-                  onPressed: onPressed ?? routerPop(context),
-                  buttonText: buttonText,
-                ),
-              )
-            : Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      modalButton(
-                        context: context,
-                        onPressed: onPressed ?? routerPop(context),
-                        buttonText: buttonText,
-                      ),
-                      modalButton(
-                        context: context,
-                        onPressed: routerPop(context),
-                        buttonText: '취소',
-                      ),
-                    ],
+        children: [
+          ...children,
+          isAlert
+              ? Flexible(
+                  child: modalButton(
+                    context: context,
+                    onPressed: onPressed ?? routerPop(context),
+                    buttonText: buttonText,
+                  ),
+                )
+              : Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        modalButton(
+                          context: context,
+                          onPressed: onPressed ?? routerPop(context),
+                          buttonText: buttonText,
+                        ),
+                        modalButton(
+                          context: context,
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -416,9 +416,7 @@ class CustomModalWithClose extends StatelessWidget {
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
-  final int? folderId;
-  const DeleteModal(
-      {super.key, required this.deleteMode, required this.id, this.folderId});
+  const DeleteModal({super.key, required this.deleteMode, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -429,13 +427,9 @@ class DeleteModal extends StatelessWidget {
           target = '리뷰';
           message = '이 리뷰를\n삭제하시겠습니까?';
           break;
-        case 1:
+        default:
           target = '폴더';
           message = '폴더 삭제 시\n내부의 즐겨찾기도\n모두 삭제됩니다.\n그래도 삭제하시겠습니까?';
-          break;
-        default:
-          target = '즐겨찾기';
-          message = '즐겨 찾기 목록에서\n이 화장실을 삭제하시겠습니까?';
           break;
       }
     }
@@ -446,12 +440,8 @@ class DeleteModal extends StatelessWidget {
           case 0:
             await ReviewProvider().deleteReview(id);
             break;
-          case 1:
-            await FolderProvider().deleteFolder(id);
-            break;
           default:
-            await BookMarkProvider()
-                .deleteBookMark(folderId: folderId!, toiletId: id);
+            await FolderProvider().deleteFolder(id);
             break;
         }
         if (!context.mounted) return;
@@ -493,20 +483,36 @@ class DeleteModal extends StatelessWidget {
 }
 
 //* 즐겨찾기 추가 모달
-class AddToBookMarkModal extends StatefulWidget {
+class AddOrDeleteBookMarkModal extends StatefulWidget {
   final int toiletId;
-  const AddToBookMarkModal({super.key, required this.toiletId});
+  final List folderId;
+  const AddOrDeleteBookMarkModal({
+    super.key,
+    required this.toiletId,
+    required this.folderId,
+  });
 
   @override
-  State<AddToBookMarkModal> createState() => _AddToBookMarkModalState();
+  State<AddOrDeleteBookMarkModal> createState() =>
+      _AddOrDeleteBookMarkModalState();
 }
 
-class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
-  int? selected;
+class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
+  Set selectedFolder = {};
+  @override
+  void initState() {
+    super.initState();
+    selectedFolder.addAll(widget.folderId);
+  }
+
   ReturnVoid selectFolder(int id) {
     return () {
       setState(() {
-        selected = id;
+        if (selectedFolder.contains(id)) {
+          selectedFolder.remove(id);
+        } else {
+          selectedFolder.add(id);
+        }
       });
     };
   }
@@ -514,13 +520,20 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
   @override
   Widget build(BuildContext context) {
     return CustomModal(
-      title: '즐겨찾기 추가',
+      title: '즐겨찾기 폴더 선택',
+      buttonText: '적용',
       onPressed: () {
-        if (selected != null) {
-          BookMarkProvider().addToilet(
-            folderId: selected!,
+        if (widget.folderId.toSet() != selectedFolder) {
+          BookMarkProvider()
+              .addToilet(
+            folderId: 1,
+            // selectedFolder.toList(),
             toiletId: widget.toiletId,
-          );
+          )
+              .then((_) {
+            changeRefresh(context);
+            routerPop(context)();
+          });
         }
       },
       children: [
@@ -535,21 +548,25 @@ class _AddToBookMarkModalState extends State<AddToBookMarkModal> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         final folderInfo = snapshot.data![index];
-                        return CustomBox(
-                          onTap: selectFolder(folderInfo.folderId),
-                          color: whiteColor,
-                          border: Border.all(),
-                          boxShadow: selected == folderInfo.folderId
-                              ? const [highlightShadow]
-                              : null,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 10,
-                            ),
-                            child: CustomText(
-                              title: folderInfo.folderName,
-                              fontSize: FontSize.defaultSize,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: CustomBox(
+                            onTap: selectFolder(folderInfo.folderId),
+                            color: whiteColor,
+                            border: Border.all(),
+                            boxShadow:
+                                selectedFolder.contains(folderInfo.folderId)
+                                    ? const [highlightShadow]
+                                    : null,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: CustomText(
+                                title: folderInfo.folderName,
+                                fontSize: FontSize.defaultSize,
+                              ),
                             ),
                           ),
                         );
@@ -669,13 +686,14 @@ class LoginConfirmModal extends StatelessWidget {
       children: const [
         CustomText(
           title: '로그인하시겠습니까?',
+          isCentered: true,
         )
       ],
-      onPressed: () async {
-        await login(context);
-        if (!context.mounted) return;
-        routerPop(context)();
-        changeRefresh(context);
+      onPressed: () {
+        login(context).then((_) {
+          routerPop(context)();
+          changeRefresh(context);
+        });
       },
     );
   }

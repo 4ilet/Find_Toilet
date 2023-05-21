@@ -28,7 +28,7 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
   }
 
   void applyTheme() {
-    applyFontSize(context, isLargeSize);
+    changeOptions(context, 1);
     removedRouterPush(context, page: const Main());
   }
 

@@ -46,11 +46,23 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
 }
 
 //* 현재 글자 크기
-bool? getFontSize(BuildContext context) =>
-    context.read<SettingsProvider>().hasLargeFont;
+String? getFontSize(BuildContext context) =>
+    context.read<SettingsProvider>().fontState;
 
-void applyFontSize(BuildContext context, bool newValue) {
-  context.read<SettingsProvider>().applyHasLargeFont(newValue);
+//* 화면 확대/축소 버튼
+String getMagnify(BuildContext context) =>
+    context.read<SettingsProvider>().magnigyState;
+
+//* 지도 반경
+String getRadius(BuildContext context) =>
+    context.read<SettingsProvider>().radiusState;
+
+int getIntRadius(BuildContext context) =>
+    context.read<SettingsProvider>().radius;
+
+//* 메뉴 옵션 변경
+void changeOptions(BuildContext context, int menuIdx) {
+  context.read<SettingsProvider>().applyOption(menuIdx);
 }
 
 //* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)
@@ -63,18 +75,18 @@ bool watchPressed(BuildContext context) =>
 
 //* 로그인
 FutureBool login(BuildContext context) async {
-  final result = await UserProvider().login();
-  if (!context.mounted) throw Error();
-  changeToken(context, token: result['token'], refresh: result['refresh']);
-  if (result['state'] != 'login') {
-    showModal(context,
-        page: const InputModal(
-          title: '닉네임 설정',
-          buttonText: '확인',
-          isAlert: true,
-          kindOf: 'nickname',
-        ));
-  }
+  UserProvider().login().then((result) {
+    changeToken(context, token: result['token'], refresh: result['refresh']);
+    if (result['state'] != 'login') {
+      showModal(context,
+          page: const InputModal(
+            title: '닉네임 설정',
+            buttonText: '확인',
+            isAlert: true,
+            kindOf: 'nickname',
+          ));
+    }
+  });
   return true;
 }
 
@@ -92,3 +104,62 @@ double screenWidth(BuildContext context) =>
 
 double screenHeight(BuildContext context) =>
     context.read<SizeProvider>().screenHeight;
+
+//* 총 페이지 수
+int? getTotal(BuildContext context) =>
+    context.read<GlobalProvider>().totalPages;
+void setTotal(BuildContext context, int? newTotal) =>
+    context.read<GlobalProvider>().setTotal(newTotal);
+
+//* 필터
+void setFilter(BuildContext context, int index) =>
+    context.read<GlobalProvider>().setFilter(index);
+bool readFilter(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return context.read<GlobalProvider>().diaper;
+    case 1:
+      return context.read<GlobalProvider>().child;
+    case 2:
+      return context.read<GlobalProvider>().disabled;
+    default:
+      return context.read<GlobalProvider>().allDay;
+  }
+}
+
+bool getFilter(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      return context.watch<GlobalProvider>().diaper;
+    case 1:
+      return context.watch<GlobalProvider>().child;
+    case 2:
+      return context.watch<GlobalProvider>().disabled;
+    default:
+      return context.watch<GlobalProvider>().allDay;
+  }
+}
+
+//* 정렬
+void setSortIdx(BuildContext context, int index) =>
+    context.read<GlobalProvider>().setSortIdx(index);
+int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
+
+//* main toilet list
+void addToiletList(BuildContext context, ToiletList toiletList) =>
+    context.read<GlobalProvider>().addToiletList(toiletList);
+
+DynamicMap mainToiletData(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletData;
+
+ToiletList mainToiletList(BuildContext context) =>
+    context.read<GlobalProvider>().mainToiletList;
+
+bool readLoading(BuildContext context) =>
+    context.read<GlobalProvider>().loading;
+
+bool getLoading(BuildContext context) =>
+    context.watch<GlobalProvider>().loading;
+
+void setLoading(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setLoading(value);
