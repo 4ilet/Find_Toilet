@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -24,8 +25,10 @@ class ToiletBottomSheet extends StatelessWidget {
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
           scrollController: scrollController,
-          toolbarHeight: 100,
-          expandedHeight: showReview ? 40 : 100,
+          toolbarHeight: showReview ? 40 : 80,
+          expandedHeight: showReview
+              ? screenHeight(context) * 0.44
+              : screenHeight(context) * 0.15,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
@@ -42,9 +45,9 @@ class ToiletBottomSheet extends StatelessWidget {
                       vertical: 15,
                     ),
                     child: Row(
-                      children: const [
+                      children: [
                         CustomText(
-                          title: '주변 화장실',
+                          title: showReview ? '화장실 조회' : '주변 화장실',
                           fontSize: FontSize.largeSize,
                           color: CustomColors.whiteColor,
                           font: kimm,
@@ -76,6 +79,10 @@ class ToiletBottomSheet extends StatelessWidget {
             CustomSilverList(
               showReview: showReview,
               isMain: true,
+              toiletId: toiletModel?.toiletId,
+              toiletName: toiletModel?.toiletName,
+              addScrollListener: addScrollListener,
+              controller: scrollController,
             ),
           ],
         );

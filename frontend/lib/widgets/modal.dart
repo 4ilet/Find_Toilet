@@ -324,7 +324,6 @@ class CustomModal extends StatelessWidget {
           isAlert
               ? Flexible(
                   child: modalButton(
-                    context: context,
                     onPressed: onPressed ?? routerPop(context),
                     buttonText: buttonText,
                   ),
@@ -336,12 +335,10 @@ class CustomModal extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         modalButton(
-                          context: context,
                           onPressed: onPressed ?? routerPop(context),
                           buttonText: buttonText,
                         ),
                         modalButton(
-                          context: context,
                           onPressed: routerPop(context),
                           buttonText: '취소',
                         ),
@@ -355,7 +352,6 @@ class CustomModal extends StatelessWidget {
   }
 
   CustomButton modalButton({
-    required BuildContext context,
     required ReturnVoid onPressed,
     required String buttonText,
   }) {
@@ -677,7 +673,15 @@ class AlertModal extends StatelessWidget {
 
 //* 로그인 확인 모달
 class LoginConfirmModal extends StatelessWidget {
-  const LoginConfirmModal({super.key});
+  final GlobalKey? globalKey;
+  // final ReturnVoid nextAction;
+  final Widget? page;
+  const LoginConfirmModal({
+    super.key,
+    this.globalKey,
+    // required this.nextAction,
+    this.page,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -689,11 +693,21 @@ class LoginConfirmModal extends StatelessWidget {
           isCentered: true,
         )
       ],
-      onPressed: () {
-        login(context).then((_) {
-          routerPop(context)();
-          changeRefresh(context);
+      onPressed: () async {
+        // SchedulerBinding.instance.addPostFrameCallback(
+        //   (_) {
+        final newContext = globalKey!.currentContext!;
+        login(newContext).then((_) {
+          routerPop(newContext)();
+          if (page != null) {
+            routerPush(newContext, page: page!);
+          } else {
+            changeRefresh(globalKey!.currentContext!);
+          }
+          // nextAction();
         });
+        //   },
+        // );
       },
     );
   }

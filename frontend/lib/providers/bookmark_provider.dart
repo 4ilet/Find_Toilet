@@ -22,7 +22,7 @@ class FolderProvider extends ApiProvider {
       }
       throw Error();
     } catch (error) {
-      print(error);
+      print('folderError: $error');
       throw Error();
     }
   }
@@ -43,11 +43,11 @@ class FolderProvider extends ApiProvider {
 
 class BookMarkProvider extends ApiProvider {
   //* 즐겨찾기 목록 조회
-  Future<ToiletList> getToiletList(int folderId) async {
+  Future<ToiletList> getToiletList(int folderId, int page) async {
     ToiletList toiletList = [];
     try {
       final response = await dioWithToken(url: bookmarkListUrl(folderId))
-          .get(bookmarkListUrl(folderId));
+          .get(bookmarkListUrl(folderId), queryParameters: {'page': page});
       if (response.statusCode == 200) {
         final data = response.data['data'];
         if (data.isEmpty) {
@@ -56,7 +56,7 @@ class BookMarkProvider extends ApiProvider {
         data.forEach((element) {
           toiletList.add(ToiletModel.fromJson(element));
         });
-        GlobalProvider().setTotal(response.data['cnt']);
+        GlobalProvider().setTotal(response.data['size']);
         return toiletList;
       }
 

@@ -49,33 +49,53 @@ class ApiProvider extends UrlClass {
   Dio dioWithToken({
     required String url,
     // required String method,
-  }) {
-    final tempDio = Dio(
-      BaseOptions(
-        baseUrl: _baseUrl!,
-        headers: {'Authorization': token},
-      ),
-    );
-    tempDio.interceptors.add(InterceptorsWrapper(
-      onError: (e, handler) {
-        if (e.response?.statusCode == 401) {
-          _refreshToken(url: url).then((response) {
-            final newToken = response['token'];
-            final newRefresh = response['refresh'];
-            UserInfoProvider().setStoreToken(newToken);
-            UserInfoProvider().setStoreRefresh(newRefresh);
-            print(e.requestOptions);
-          });
-        }
-      },
-    ));
-    return tempDio;
-  }
+  }) =>
+      Dio(
+        BaseOptions(
+          baseUrl: _baseUrl!,
+          headers: {'Authorization': token},
+        ),
+      );
+
+  // Dio dioWithToken({
+  //   required String url,
+  //   // required String method,
+  // }) {
+  //   final tempDio = Dio(
+  //     BaseOptions(
+  //       baseUrl: _baseUrl!,
+  //       headers: {'Authorization': token},
+  //     ),
+  //   );
+  //   // tempDio.interceptors.add(InterceptorsWrapper(
+  //   //   onError: (e, handler) {
+  //   //     print('token error => $e');
+  //   //     print('token error code : ${e.error}');
+  //   //     print('token error message : ${e.message}');
+  //   //     // print('token error options : ${e.requestOptions}');
+  //   //     if (e.response?.statusCode == 401) {
+  //   //       //* token refresh
+  //   //       print('token 401 : ${e.response}');
+  //   //       _refreshToken(url: url).then((response) async {
+  //   //         // final newToken = response['token'];
+  //   //         // final newRefresh = response['refresh'];
+  //   //         UserInfoProvider().setStoreToken(response['token']);
+  //   //         UserInfoProvider().setStoreRefresh(response['refresh']);
+  //   //         //* 재요청
+  //   //         e.requestOptions.headers['Authorization'] = response['token'];
+  //   //         print(e.requestOptions);
+  //   //         return handler.resolve(await dio.fetch(e.requestOptions));
+  //   //       });
+  //   //     }
+  //   //     return handler.next(e);
+  //   //   },
+  //   // ));
+  //   return tempDio;
+  // }
 
   Dio _dioWithRefresh() => Dio(
         BaseOptions(
           baseUrl: _baseUrl!,
-          // method: method,
           headers: {'Authorization-refresh': refresh},
         ),
       );

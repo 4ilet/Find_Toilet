@@ -248,7 +248,7 @@ class ListItem extends StatelessWidget {
             result += '${facilityList[i]} ';
             length += newLength;
           } else {
-            result += '\n${facilityList[i]}';
+            result += '\n${facilityList[i]} ';
             length = newLength;
           }
         }
@@ -330,12 +330,14 @@ class ListItem extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () => showModal(context,
-                              page: NavigationModal(
-                                startPoint: const [37.537229, 127.005515],
-                                endPoint: [data.lat, data.lng],
-                                destination: data.toiletName,
-                              )),
+                          onPressed: () => showModal(
+                            context,
+                            page: NavigationModal(
+                              startPoint: const [37.537229, 127.005515],
+                              endPoint: [data.lat, data.lng],
+                              destination: data.toiletName,
+                            ),
+                          ),
                           icon: const CustomIcon(
                             icon: planeIcon,
                             color: Colors.lightBlue,

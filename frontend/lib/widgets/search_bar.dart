@@ -16,16 +16,28 @@ class SearchBar extends StatelessWidget {
   final String query;
   final Function(String value) onChange;
   final ReturnVoid onSearchAction;
+  final GlobalKey? globalKey;
   const SearchBar({
     super.key,
     required this.isMain,
     required this.onChange,
     required this.onSearchAction,
+    this.globalKey,
     this.query = '',
   });
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      getToken(context) != null
+          ? routerPush(context, page: const BookMarkFolderList())()
+          : showModal(context,
+              page: LoginConfirmModal(
+                globalKey: globalKey,
+                page: const BookMarkFolderList(),
+              ));
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -72,9 +84,7 @@ class SearchBar extends StatelessWidget {
           width: 40,
           height: 40,
           child: CustomIconButton(
-            onPressed: getToken(context) != null
-                ? routerPush(context, page: const BookMarkFolderList())
-                : () => showModal(context, page: const LoginConfirmModal()),
+            onPressed: onPressed,
             icon: bookMarkIcon,
             color: CustomColors.blackColor,
           ),

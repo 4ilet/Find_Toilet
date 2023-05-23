@@ -45,6 +45,8 @@ class CustomSilverList extends StatefulWidget {
   final bool isMain;
   final int? toiletId, folderId;
   final String? toiletName;
+  final void Function(ReturnVoid) addScrollListener;
+  final ScrollController controller;
   const CustomSilverList({
     super.key,
     required this.showReview,
@@ -52,6 +54,8 @@ class CustomSilverList extends StatefulWidget {
     this.toiletId,
     this.folderId,
     this.toiletName,
+    required this.addScrollListener,
+    required this.controller,
   });
 
   @override
@@ -64,19 +68,51 @@ class _CustomSilverListState extends State<CustomSilverList> {
   List data = [];
   int page = 0;
   int cnt = 20;
-  final scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    initData();
-    addScrollListener();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        setLoading(context, true);
+        initData();
+        widget.addScrollListener(() {
+          print(widget.controller.position.pixels);
+          if (widget.controller.position.pixels >=
+              widget.controller.position.maxScrollExtent * 0.9) {
+            print('$page, ${getTotal(context)}');
+            if (page < getTotal(context)!) {
+              if (!working) {
+                setState(() {
+                  working = true;
+                });
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  if (!additional) {
+                    setState(() {
+                      additional = true;
+                    });
+                    moreData();
+                  }
+                });
+              }
+            }
+          }
+        });
+      },
+    );
   }
 
   void initData() async {
     if (readLoading(context)) {
       if (widget.showReview == true) {
-        data = await ReviewProvider().getReviewList(widget.toiletId!, page);
+        ReviewProvider()
+            .getReviewList(widget.toiletId!, page)
+            .then((toiletData) {
+          setState(() {
+            data = toiletData;
+          });
+          setLoading(context, false);
+        });
       } else if (widget.isMain == true) {
         ToiletProvider()
             .getNearToilet(mainToiletData(context))
@@ -91,38 +127,18 @@ class _CustomSilverListState extends State<CustomSilverList> {
           );
         });
       } else {
-        BookMarkProvider().getToiletList(widget.folderId!).then((toiletData) {
+        BookMarkProvider()
+            .getToiletList(widget.folderId!, page)
+            .then((toiletData) {
           setState(() {
             data = toiletData;
             setLoading(context, false);
+            print('data : $data toiletData : $toiletData');
           });
         });
       }
       page += 1;
     }
-  }
-
-  void addScrollListener() {
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent * 0.9) {
-        if (page < getTotal(context)!) {
-          if (!working) {
-            setState(() {
-              working = true;
-            });
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              if (!additional) {
-                setState(() {
-                  additional = true;
-                });
-                moreData();
-              }
-            });
-          }
-        }
-      }
-    });
   }
 
   void moreData() {
@@ -229,6 +245,9 @@ class CustomBoxWithScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+    void addScrollListener(ReturnVoid voidFunc) =>
+        scrollController.addListener(voidFunc);
     return CustomBox(
       radius: 0,
       color: mainColor,
@@ -252,13 +271,10 @@ class CustomBoxWithScrollView extends StatelessWidget {
           ),
           Expanded(
             child: CustomScrollView(
-              // physics: physics,
+              controller: scrollController,
               slivers: [
                 SliverList(
-                  delegate:
-                      // sliverChildDelegate != null
-                      //     ? sliverChildDelegate! :
-                      SliverChildListDelegate(silverChild!),
+                  delegate: SliverChildListDelegate(silverChild!),
                 ),
               ],
             ),
