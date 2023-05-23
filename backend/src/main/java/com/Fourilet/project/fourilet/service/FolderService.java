@@ -8,6 +8,7 @@ import com.Fourilet.project.fourilet.exception.AtLeastException;
 import com.Fourilet.project.fourilet.exception.DuplicationNameException;
 import com.Fourilet.project.fourilet.exception.LimitException;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -113,43 +114,69 @@ public class FolderService {
         folder.setMember(member);
         folderRepository.save(folder);
         }
-    public void addToilet(long folderId, long toiletId){
+    public void AddDeleteToilet(long folderId, FolderDto.AddOrDelToiletDto addOrDelToiletDto){
         LOGGER.info("CALL ADD TOILET");
         Folder folder = folderRepository.findById(folderId).orElse(null);
-        Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-        if (folder == null | toilet == null){
-            throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
-        }
-        List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
-        for (BookMark bookmark : bookMarkList){
-            if(bookmark.getToilet() == toilet) {
-                throw new IllegalStateException("이미 즐겨찾기에 추가되어 있습니다.");
+        System.out.println("여기야여기"+addOrDelToiletDto.getAddToiletList().size());
+        if (!addOrDelToiletDto.getAddToiletList().isEmpty()){
+            for (long toiletId : addOrDelToiletDto.getAddToiletList()){
+                Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+                if (toilet == null | folder == null){
+                    throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
+                }
+                List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
+                for (BookMark bookmark : bookMarkList){
+                    if(bookmark.getToilet() == toilet) {
+                        throw new IllegalStateException("이미 즐겨찾기에 추가되어 있습니다.");
+                    }
+                }
+                BookMark bookMark = new BookMark();
+                bookMark.setFolder(folder);
+                bookMark.setToilet(toilet);
+                bookMarkRepository.save(bookMark);
             }
         }
-        BookMark bookMark = new BookMark();
-        bookMark.setFolder(folder);
-        bookMark.setToilet(toilet);
-        bookMarkRepository.save(bookMark);
-    }
-    public void deleteToilet(long folderId, long toiletId){
-        LOGGER.info("CALL DELETE TOILET");
-        Folder folder = folderRepository.findById(folderId).orElse(null);
-        Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
-        if (folder == null){
-            throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
-        }
-        boolean flag = false;
-        for (BookMark bookmark : bookMarkList) {
-            if (bookmark.getToilet() == toilet) {
-                bookMarkRepository.delete(bookmark);
-                flag = true;
+        if (!addOrDelToiletDto.getDelToiletList().isEmpty()) {
+            for (long toiletId : addOrDelToiletDto.getDelToiletList()) {
+                Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+
+                if (toilet == null | folder == null) {
+                    throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
+
+                }
+                List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
+                boolean flag = false;
+                for (BookMark bookmark : bookMarkList) {
+                    if (bookmark.getToilet() == toilet) {
+                        bookMarkRepository.delete(bookmark);
+                        flag = true;
+                    }
+                }
+                if (!flag) {
+                    throw new NullPointerException("존재하지 않는 화장실입니다");
+                }
             }
         }
-        if (!flag){
-            throw new NullPointerException("존재하지 않는 화장실입니다");
-        }
     }
+//    public void deleteToilet(long folderId, long toiletId){
+//        LOGGER.info("CALL DELETE TOILET");
+//        Folder folder = folderRepository.findById(folderId).orElse(null);
+//        Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+//        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
+//        if (folder == null){
+//            throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
+//        }
+//        boolean flag = false;
+//        for (BookMark bookmark : bookMarkList) {
+//            if (bookmark.getToilet() == toilet) {
+//                bookMarkRepository.delete(bookmark);
+//                flag = true;
+//            }
+//        }
+//        if (!flag){
+//            throw new NullPointerException("존재하지 않는 화장실입니다");
+//        }
+//    }
     public ToiletDto2.ToiletDto2WithSize getToiletList(long folderId, Long memberId, int page){
         LOGGER.info("CALL GET TOILET LIST");
         Member member = memberRepository.findById(memberId).orElse(null);
@@ -229,4 +256,6 @@ public class FolderService {
         result.setResponse(toiletDtoList);
         return result;
     }
+
+
 }
