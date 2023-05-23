@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ToiletService {
@@ -29,18 +31,18 @@ public class ToiletService {
     @Autowired
     FolderRepository folderRepository;
 
-    public Page<ToiletDto> getNearToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Long radius, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, Pageable pageable) {
+    public Map<String, Object> getNearToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Long radius, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, Pageable pageable) {
 
         ToiletGetCondition condition = new ToiletGetCondition(memberId, nowLat, nowLon, radius, allDay, disabled, kids, diaper);
-        Page<ToiletDto> result = toiletRepository.nearByToilet(condition, pageable);
-
+        Page<ToiletDto> item = toiletRepository.nearByToilet(condition, pageable);
+        Map<String, Object> result = new HashMap<>();
         Member member = null;
 
         if(memberId != null){
             member = memberRepository.findById(memberId).orElse(null);
         }
 
-        for(ToiletDto toiletDto : result) {
+        for(ToiletDto toiletDto : item) {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
             long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
@@ -63,30 +65,32 @@ public class ToiletService {
             }
             toiletDto.setReviewId(alreadyReviewed);
         }
+        result.put("content", item.getContent());
+        result.put("totalPages", item.getTotalPages());
+
         return result;
     }
 
-    public Page<ToiletDto> getSearchToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, String keyword, String order, Pageable pageable) {
+    public Map<String, Object> getSearchToilet(Long memberId, BigDecimal nowLon, BigDecimal nowLat, Boolean allDay, Boolean disabled, Boolean kids, Boolean diaper, String keyword, String order, Pageable pageable) {
         ToiletSearchCondition condition = new ToiletSearchCondition(memberId, nowLat, nowLon, allDay, disabled, kids, diaper, keyword, order);
         Member member = null;
-
+        Map<String, Object> result = new HashMap<>();
         if(memberId != null){
             member = memberRepository.findById(memberId).orElse(null);
         }
-
-        Page<ToiletDto> result = null;
+        Page<ToiletDto> item = null;
 
         if(order.equals("distance") || order == null){
-            result = toiletRepository.searchToiletDistance(condition, pageable);
+            item = toiletRepository.searchToiletDistance(condition, pageable);
         }else if(order.equals("score")){
-            result = toiletRepository.searchToiletScore(condition, pageable);
+            item = toiletRepository.searchToiletScore(condition, pageable);
         }else if(order.equals("comment")){
-            result = toiletRepository.searchToiletComment(condition, pageable);
+            item = toiletRepository.searchToiletComment(condition, pageable);
         }else{
             throw new IllegalArgumentException();
         }
 
-        for(ToiletDto toiletDto : result) {
+        for(ToiletDto toiletDto : item) {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
             long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
@@ -112,6 +116,8 @@ public class ToiletService {
             }
             toiletDto.setReviewId(alreadyReviewed);
         }
+        result.put("content", item.getContent());
+        result.put("totalPages", item.getTotalPages());
         return result;
     }
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 @Api(tags = "Toilet API")
 @RestController
@@ -58,7 +59,7 @@ public class ToiletController {
         }
 
         try {
-            Page<ToiletDto> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
+            Map<String, Object> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
             return ResponseEntity.ok().body(page);
 
         } catch (IllegalArgumentException e) {
@@ -70,7 +71,7 @@ public class ToiletController {
 
     @GetMapping("/near")
     @ApiOperation(value = "주변 화장실 API", notes = "유저 좌표 기준 지정한 반경 내 주변 화장실 목록을 반환합니다!")
-    public ResponseEntity<Page<ToiletDto>> getNearByToilet(HttpServletRequest request, @ApiParam(value = "유저의 경도(longitude)") @RequestParam("lon") BigDecimal lon, @ApiParam(value = "유저의 위도(latitude)") @RequestParam("lat") BigDecimal lat, @ApiParam(value = "반경") @RequestParam("radius") long radius,
+    public ResponseEntity<?> getNearByToilet(HttpServletRequest request, @ApiParam(value = "유저의 경도(longitude)") @RequestParam("lon") BigDecimal lon, @ApiParam(value = "유저의 위도(latitude)") @RequestParam("lat") BigDecimal lat, @ApiParam(value = "반경") @RequestParam("radius") long radius,
                                                            @ApiParam(value = "24시간 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("allDay") Boolean allDay, @ApiParam(value = "장애인용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("disabled") Boolean disabled,
                                                            @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
                                                            @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
@@ -85,7 +86,7 @@ public class ToiletController {
 
         System.out.println("memberId"+reqMemberId);
 
-        Page<ToiletDto> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
+        Map<String, Object> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
 
         return ResponseEntity.ok().body(page);
     }
