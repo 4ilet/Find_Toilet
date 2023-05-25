@@ -23,7 +23,7 @@ import java.util.List;
 
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
-//@EnableSwagger2
+@EnableSwagger2
 @Configuration
 //@RequiredArgsConstructor
 public class SwaggerConfig {

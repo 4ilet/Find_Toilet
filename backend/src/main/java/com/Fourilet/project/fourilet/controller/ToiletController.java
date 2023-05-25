@@ -6,6 +6,7 @@ import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.ToiletService;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,27 +47,26 @@ public class ToiletController {
             @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
             @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
 
-        Message message = new Message();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            Message message = new Message();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            String accessToken = request.getHeader("Authorization");
 
-        String accessToken = request.getHeader("Authorization");
+            Long reqMemberId = null;
 
-        Long reqMemberId = null;
+            if (accessToken != null) {
+                reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+            }
 
-        if (accessToken != null) {
-            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
-        }
+            try {
+                Map<String, Object> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
+                return ResponseEntity.ok().body(page);
 
-        try {
-            Map<String, Object> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
-            return ResponseEntity.ok().body(page);
-
-        } catch (IllegalArgumentException e) {
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("정렬 기준이 올바르지 않습니다.");
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        }
+            } catch (IllegalArgumentException e) {
+                message.setStatus(StatusEnum.BAD_REQUEST);
+                message.setMessage("정렬 기준이 올바르지 않습니다.");
+                return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            }
     }
 
     @GetMapping("/near")
