@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -8,7 +9,7 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 //* 폴더 내 즐겨찾기 목록
-class BookMarkList extends StatelessWidget {
+class BookMarkList extends StatefulWidget {
   final String folderName;
   final int bookmarkCnt, folderId;
 
@@ -20,15 +21,83 @@ class BookMarkList extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final controller = ScrollController();
-    void addScrollListener(ReturnVoid voidFunc) =>
-        controller.addListener(voidFunc);
+  State<BookMarkList> createState() => _BookMarkListState();
+}
 
+class _BookMarkListState extends State<BookMarkList> {
+  final controller = ScrollController();
+  List data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        initLoadingData(context);
+        initData();
+        controller.addListener(
+          () {
+            if (controller.position.pixels >=
+                controller.position.maxScrollExtent * 0.9) {
+              print('${getPage(context)}, ${getTotal(context)}');
+              if (getPage(context) < getTotal(context)!) {
+                if (!getWorking(context)) {
+                  setState(() {
+                    setWorking(context, true);
+                  });
+                  Future.delayed(const Duration(milliseconds: 2000), () {
+                    if (!getAdditional(context)) {
+                      setAdditional(context, true);
+                      moreData();
+                    }
+                  });
+                }
+              }
+            }
+          },
+        );
+      },
+    );
+  }
+
+  void initData() async {
+    if (readLoading(context)) {
+      BookMarkProvider()
+          .getToiletList(widget.folderId, getPage(context))
+          .then((toiletData) {
+        setState(() {
+          data.addAll(toiletData);
+        });
+        setLoading(context, false);
+        print('data : $data toiletData : $toiletData');
+      });
+      increasePage(context);
+    }
+  }
+
+  void moreData() {
+    if (getAdditional(context)) {
+      BookMarkProvider()
+          .getToiletList(widget.folderId, getPage(context))
+          .then((toiletData) {
+        setState(() {
+          data.addAll(toiletData);
+        });
+        setLoading(context, false);
+        print('data : $data toiletData : $toiletData');
+      });
+      setAdditional(context, false);
+      setWorking(context, false);
+      increasePage(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
-        scrollController: controller,
+        listScroll: controller,
         toolbarHeight: 130,
         expandedHeight: 130,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
@@ -49,14 +118,14 @@ class BookMarkList extends StatelessWidget {
                 flex: 5,
                 fit: FlexFit.loose,
                 child: CustomText(
-                  title: '$folderName${onRefresh(context)}',
+                  title: '${widget.folderName}${onRefresh(context)}',
                   fontSize: FontSize.titleSize,
                   color: CustomColors.whiteColor,
                 ),
               ),
               Flexible(
                 child: CustomText(
-                  title: '$bookmarkCnt',
+                  title: '${widget.bookmarkCnt}',
                   fontSize: FontSize.defaultSize,
                   color: CustomColors.whiteColor,
                 ),
@@ -66,11 +135,12 @@ class BookMarkList extends StatelessWidget {
         ),
         silverChild: [
           CustomSilverList(
-            folderId: folderId,
+            folderId: widget.folderId,
             showReview: false,
             isMain: false,
-            controller: controller,
-            addScrollListener: addScrollListener,
+            isSearch: false,
+            data: data,
+            // addScrollListener: addScrollListener,
           )
         ],
       ),

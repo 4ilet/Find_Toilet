@@ -257,7 +257,7 @@ class ListItem extends StatelessWidget {
     }
 
     void addOrEditReview() {
-      final token = getToken(context);
+      final token = readToken(context);
       if (token != null && token != '') {
         routerPush(context,
             page: ReviewForm(
@@ -273,7 +273,7 @@ class ListItem extends StatelessWidget {
     }
 
     void pressedHeart() {
-      if (getToken(context) != null) {
+      if (readToken(context) != null) {
         showModal(
           context,
           page: AddOrDeleteBookMarkModal(

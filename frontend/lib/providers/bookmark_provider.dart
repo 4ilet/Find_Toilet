@@ -10,8 +10,8 @@ class FolderProvider extends ApiProvider {
   Future<FolderList> getFolderList() async {
     try {
       //*
-      final response =
-          await dioWithToken(url: folderListUrl).get(folderListUrl);
+      final response = await dioWithToken(url: folderListUrl, method: 'GET')
+          .get(folderListUrl);
       if (response.statusCode == 200) {
         final data = response.data['data'];
         print(data);
@@ -46,8 +46,9 @@ class BookMarkProvider extends ApiProvider {
   Future<ToiletList> getToiletList(int folderId, int page) async {
     ToiletList toiletList = [];
     try {
-      final response = await dioWithToken(url: bookmarkListUrl(folderId))
-          .get(bookmarkListUrl(folderId), queryParameters: {'page': page});
+      final response =
+          await dioWithToken(url: bookmarkListUrl(folderId), method: 'GET')
+              .get(bookmarkListUrl(folderId), queryParameters: {'page': page});
       if (response.statusCode == 200) {
         final data = response.data['data'];
         if (data.isEmpty) {

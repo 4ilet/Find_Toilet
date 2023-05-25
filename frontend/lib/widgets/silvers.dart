@@ -1,6 +1,3 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
-import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -40,136 +37,45 @@ class CustomSilverAppBar extends StatelessWidget {
 }
 
 //* silver list (화장실 목록 출력)
-class CustomSilverList extends StatefulWidget {
-  final bool showReview;
-  final bool isMain;
+class CustomSilverList extends StatelessWidget {
+  final bool showReview, isMain, isSearch;
   final int? toiletId, folderId;
   final String? toiletName;
-  final void Function(ReturnVoid) addScrollListener;
-  final ScrollController controller;
+  final List data;
+  // final void Function(ReturnVoid) addScrollListener;
+  // final ScrollController controller;
   const CustomSilverList({
     super.key,
     required this.showReview,
     required this.isMain,
+    required this.isSearch,
     this.toiletId,
     this.folderId,
     this.toiletName,
-    required this.addScrollListener,
-    required this.controller,
+    required this.data,
+    // required this.addScrollListener,
+    // required this.controller,
   });
 
-  @override
-  State<CustomSilverList> createState() => _CustomSilverListState();
-}
-
-class _CustomSilverListState extends State<CustomSilverList> {
-  bool additional = false;
-  bool working = false;
-  List data = [];
-  int page = 0;
-  int cnt = 20;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        setLoading(context, true);
-        initData();
-        widget.addScrollListener(() {
-          print(widget.controller.position.pixels);
-          if (widget.controller.position.pixels >=
-              widget.controller.position.maxScrollExtent * 0.9) {
-            print('$page, ${getTotal(context)}');
-            if (page < getTotal(context)!) {
-              if (!working) {
-                setState(() {
-                  working = true;
-                });
-                Future.delayed(const Duration(milliseconds: 2000), () {
-                  if (!additional) {
-                    setState(() {
-                      additional = true;
-                    });
-                    moreData();
-                  }
-                });
-              }
-            }
-          }
-        });
-      },
-    );
-  }
-
-  void initData() async {
-    if (readLoading(context)) {
-      if (widget.showReview == true) {
-        ReviewProvider()
-            .getReviewList(widget.toiletId!, page)
-            .then((toiletData) {
-          setState(() {
-            data = toiletData;
-          });
-          setLoading(context, false);
-        });
-      } else if (widget.isMain == true) {
-        ToiletProvider()
-            .getNearToilet(mainToiletData(context))
-            .then((toiletData) {
-          setState(() {
-            data = toiletData;
-          });
-          setLoading(context, false);
-          addToiletList(
-            context,
-            toiletData,
-          );
-        });
-      } else {
-        BookMarkProvider()
-            .getToiletList(widget.folderId!, page)
-            .then((toiletData) {
-          setState(() {
-            data = toiletData;
-            setLoading(context, false);
-            print('data : $data toiletData : $toiletData');
-          });
-        });
-      }
-      page += 1;
-    }
-  }
-
-  void moreData() {
-    if (additional) {
-      if (widget.showReview) {
-        ReviewProvider()
-            .getReviewList(widget.toiletId!, page)
-            .then((reviewData) {
-          data.addAll(reviewData);
-        });
-      } else if (widget.isMain) {
-        ToiletProvider()
-            .getNearToilet(mainToiletData(context))
-            .then((toiletData) {
-          data.addAll(toiletData);
-          addToiletList(
-            context,
-            toiletData,
-          );
-        });
-      }
-      setState(() {
-        additional = false;
-        working = false;
-      });
-      page += 1;
-    }
-  }
+  // bool additional = false;
 
   @override
   Widget build(BuildContext context) {
+    int cnt = 5;
+    String ifEmpty() {
+      String showedContent = '';
+      if (isSearch) {
+        showedContent = '조건에 맞는 화장실이';
+      } else if (showReview) {
+        showedContent = '이 화장실에 대한 리뷰가';
+      } else if (isMain) {
+        showedContent = '주변에 화장실이';
+      } else {
+        showedContent = '즐겨찾기한 화장실이';
+      }
+      return '$showedContent 없습니다.';
+    }
+
     return CustomBox(
       color: mainColor,
       child: Padding(
@@ -179,11 +85,11 @@ class _CustomSilverListState extends State<CustomSilverList> {
                 ? CustomListView(
                     itemCount: data.length,
                     itemBuilder: (context, i) {
-                      final returnedWidget = widget.showReview
+                      final returnedWidget = showReview
                           ? ReviewBox(
                               review: data[i],
-                              toiletId: widget.toiletId!,
-                              toiletName: widget.toiletName!,
+                              toiletId: toiletId!,
+                              toiletName: toiletName!,
                             )
                           : ListItem(
                               showReview: false,
@@ -192,10 +98,11 @@ class _CustomSilverListState extends State<CustomSilverList> {
 
                       return Column(
                         children: [
-                          i < page * cnt || !additional
+                          i < getPage(context) * cnt || !getAdditional(context)
                               ? returnedWidget
                               : const SizedBox(),
-                          i == data.length - 1 && getTotal(context)! > page
+                          i == data.length - 1 &&
+                                  getTotal(context)! > getPage(context)
                               ? const Padding(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 40,
@@ -211,8 +118,7 @@ class _CustomSilverListState extends State<CustomSilverList> {
                   )
                 : Center(
                     child: CustomText(
-                      title:
-                          '${widget.showReview ? '이 화장실에 대한 리뷰가' : widget.isMain ? '주변에 화장실이' : '즐겨찾기한 화장실이'} 없습니다',
+                      title: ifEmpty(),
                       color: CustomColors.whiteColor,
                     ),
                   )
@@ -222,32 +128,43 @@ class _CustomSilverListState extends State<CustomSilverList> {
   }
 }
 
-class CustomBoxWithScrollView extends StatelessWidget {
-  final ScrollController? scrollController;
+class CustomBoxWithScrollView extends StatefulWidget {
+  final ScrollController? appBarScroll, listScroll;
   final Widget flexibleSpace;
   final double toolbarHeight, expandedHeight;
   final Color backgroundColor;
   final WidgetList? silverChild;
+  // final ReturnVoid addScrollListner;
   // final SliverChildDelegate? sliverChildDelegate;
   // final ScrollPhysics physics;
 
   const CustomBoxWithScrollView({
     super.key,
-    this.scrollController,
+    this.appBarScroll,
+    this.listScroll,
     required this.flexibleSpace,
     this.toolbarHeight = 200,
     this.expandedHeight = 100,
     this.backgroundColor = mainColor,
     this.silverChild,
+    // required this.addScrollListner,
     // this.sliverChildDelegate,
     // this.physics = const AlwaysScrollableScrollPhysics(),
   });
 
   @override
+  State<CustomBoxWithScrollView> createState() =>
+      _CustomBoxWithScrollViewState();
+}
+
+class _CustomBoxWithScrollViewState extends State<CustomBoxWithScrollView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-    void addScrollListener(ReturnVoid voidFunc) =>
-        scrollController.addListener(voidFunc);
     return CustomBox(
       radius: 0,
       color: mainColor,
@@ -255,26 +172,26 @@ class CustomBoxWithScrollView extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: expandedHeight,
+            height: widget.expandedHeight,
             child: CustomScrollView(
-              controller: scrollController,
+              controller: widget.appBarScroll,
               slivers: [
                 CustomSilverAppBar(
                   elevation: 0,
-                  toolbarHeight: toolbarHeight,
-                  expandedHeight: expandedHeight,
-                  flexibleSpace: flexibleSpace,
-                  backgroundColor: backgroundColor,
+                  toolbarHeight: widget.toolbarHeight,
+                  expandedHeight: widget.expandedHeight,
+                  flexibleSpace: widget.flexibleSpace,
+                  backgroundColor: widget.backgroundColor,
                 ),
               ],
             ),
           ),
           Expanded(
             child: CustomScrollView(
-              controller: scrollController,
+              controller: widget.listScroll,
               slivers: [
                 SliverList(
-                  delegate: SliverChildListDelegate(silverChild!),
+                  delegate: SliverChildListDelegate(widget.silverChild!),
                 ),
               ],
             ),

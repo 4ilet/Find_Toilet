@@ -11,7 +11,7 @@ class ToiletProvider extends ApiProvider {
               nearToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken(url: nearToiletUrl).get(
+          : await dioWithToken(url: nearToiletUrl, method: 'GET').get(
               nearToiletUrl,
               queryParameters: queryData,
             );
@@ -43,7 +43,7 @@ class ToiletProvider extends ApiProvider {
               searchToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken(url: searchToiletUrl).get(
+          : await dioWithToken(url: searchToiletUrl, method: 'GET').get(
               searchToiletUrl,
               queryParameters: queryData,
             );

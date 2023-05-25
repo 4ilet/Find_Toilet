@@ -35,8 +35,11 @@ Future<bool?> showModal(BuildContext context, {required Widget page}) =>
     );
 
 //* 토큰 받아오기
-String? getToken(BuildContext context) =>
+String? readToken(BuildContext context) =>
     context.read<UserInfoProvider>().token;
+
+String? getToken(BuildContext context) =>
+    context.watch<UserInfoProvider>().token;
 
 //* 토큰 변경
 void changeToken(BuildContext context, {String? token, String? refresh}) {
@@ -155,6 +158,8 @@ DynamicMap mainToiletData(BuildContext context) =>
 ToiletList mainToiletList(BuildContext context) =>
     context.read<GlobalProvider>().mainToiletList;
 
+//* scroll
+
 bool readLoading(BuildContext context) =>
     context.read<GlobalProvider>().loading;
 
@@ -163,3 +168,37 @@ bool getLoading(BuildContext context) =>
 
 void setLoading(BuildContext context, bool value) =>
     context.read<GlobalProvider>().setLoading(value);
+
+int getPage(BuildContext context) => context.read<GlobalProvider>().page;
+
+void increasePage(BuildContext context) =>
+    context.read<GlobalProvider>().increasePage();
+
+void initPage(BuildContext context) =>
+    context.read<GlobalProvider>().initPage();
+
+bool getWorking(BuildContext context) => context.read<GlobalProvider>().working;
+
+void setWorking(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setWorking(value);
+
+bool getAdditional(BuildContext context) =>
+    context.read<GlobalProvider>().additional;
+
+void setAdditional(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setAdditional(value);
+
+void initLoadingData(BuildContext context) {
+  setLoading(context, true);
+  initPage(context);
+  setAdditional(context, false);
+  setWorking(context, false);
+}
+
+// bool getAdditional(BuildContext context) => context.read<GlobalProvider>().additional;
+
+// void setAdditional(BuildContext context, bool value) => context.read<GlobalProvider>().setAdditional(value);
+
+
+
+

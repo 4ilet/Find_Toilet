@@ -13,7 +13,7 @@ class ReviewProvider extends ApiProvider {
               reviewListUrl(toiletId),
               queryParameters: {'page': page},
             )
-          : await dioWithToken(url: reviewListUrl(toiletId)).get(
+          : await dioWithToken(url: reviewListUrl(toiletId), method: 'GET').get(
               reviewListUrl(toiletId),
               queryParameters: {'page': page},
             );
@@ -41,7 +41,8 @@ class ReviewProvider extends ApiProvider {
   Future<ReviewModel> getReview(int reviewId) async {
     try {
       final response =
-          await dioWithToken(url: reviewUrl(reviewId)).get(reviewUrl(reviewId));
+          await dioWithToken(url: reviewUrl(reviewId), method: 'GET')
+              .get(reviewUrl(reviewId));
       if (response.statusCode == 200) {
         final data = response.data['data'];
         return ReviewModel.fromJson(data);

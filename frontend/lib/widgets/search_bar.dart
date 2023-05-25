@@ -29,7 +29,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressed() {
-      getToken(context) != null
+      readToken(context) != null
           ? routerPush(context, page: const BookMarkFolderList())()
           : showModal(context,
               page: LoginConfirmModal(
