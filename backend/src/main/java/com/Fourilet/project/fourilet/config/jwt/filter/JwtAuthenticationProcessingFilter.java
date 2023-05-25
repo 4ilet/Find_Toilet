@@ -10,6 +10,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,8 +44,6 @@ import java.io.IOException;
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private static final String NO_CHECK_URL = "/user/login"; // "/login"으로 들어오는 요청은 Filter 작동 X
-    private static final String NO_CHECK_TOILET = "/toilet/**";
-
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
 
@@ -55,7 +54,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().equals(NO_CHECK_TOILET)) {
+        if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().matches("/v3/api-docs/*.*") ||
+                request.getRequestURI().matches("/swagger-ui/*.*") || request.getRequestURI().matches("/swagger-resources/*.*")) {
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
             return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
         }
@@ -122,25 +122,30 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      */
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        String token = jwtService.extractAccessToken(request).orElse(null);
 
-        try{
-            String token = jwtService.extractAccessToken(request).orElse(null);
-            String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
-            Member member = memberRepository.findByEmail(email).orElse(null);
-            saveAuthentication(member);
-
-        }catch (TokenExpiredException e){
-            e.printStackTrace();
-            request.setAttribute("Authorization", "토큰 만료");
-        }catch (JWTVerificationException e){
-            e.printStackTrace();
-            request.setAttribute("Authorization", "유효하지 않은 토큰");
+        if((requestURI.matches(".*/toilet/.*") && token != null) || !requestURI.matches(".*/toilet/.*")){
+            try {
+                String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
+                Member member = memberRepository.findByEmail(email).orElse(null);
+                saveAuthentication(member);
+            } catch (TokenExpiredException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                String message = "{\"message\": \"토큰 만료\"}";
+                response.getWriter().write(message);
+                return;
+            } catch (JWTVerificationException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                String message = "{\"message\": \"유효하지 않은 토큰\"}";
+                response.getWriter().write(message);
+                return;
+            }
         }
-//        jwtService.extractAccessToken(request)
-//                .filter(jwtService::isTokenValid)
-//                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-//                        .ifPresent(email -> memberRepository.findByEmail(email)
-//                                .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
     }
