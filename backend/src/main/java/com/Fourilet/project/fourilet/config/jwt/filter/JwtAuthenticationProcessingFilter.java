@@ -146,8 +146,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         String token = jwtService.extractAccessToken(request).orElse(null);
 
-        System.out.println("flag "+flag);
-
         if((requestURI.matches(".*/toilet/.*") && token != null) || !requestURI.matches(".*/toilet/.*")){
             try {
                 String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
@@ -172,7 +170,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 return;
             } catch (JWTVerificationException e) {
                 // 액세스 토큰이 유효하지 않은 경우
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 String message = "{\"message\": \"유효하지 않은 액세스 토큰\"}";
