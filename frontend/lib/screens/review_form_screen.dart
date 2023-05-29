@@ -14,14 +14,14 @@ class ReviewForm extends StatefulWidget {
   final String toiletName;
   final double? preScore;
   final String? preComment;
-  final int? reviewId;
+  final int reviewId;
   const ReviewForm({
     super.key,
     required this.toiletName,
     required this.toiletId,
     this.preComment,
     this.preScore,
-    this.reviewId,
+    required this.reviewId,
   });
 
   @override
@@ -31,7 +31,7 @@ class ReviewForm extends StatefulWidget {
 class _ReviewFormState extends State<ReviewForm> {
   DynamicMap reviewData = {'comment': '', 'score': 0.0};
   void initData() async {
-    final data = await ReviewProvider().getReview(widget.reviewId!);
+    final data = await ReviewProvider().getReview(widget.reviewId);
     changeScore(data.score.toInt() - 1);
     changeComment(data.comment);
   }
@@ -39,7 +39,7 @@ class _ReviewFormState extends State<ReviewForm> {
   @override
   void initState() {
     super.initState();
-    if (widget.reviewId != null) {
+    if (widget.reviewId != 0) {
       if (widget.preComment != null && widget.preScore != null) {
         reviewData['comment'] = widget.preComment!;
         reviewData['score'] = widget.preScore!;
@@ -59,7 +59,7 @@ class _ReviewFormState extends State<ReviewForm> {
   void addOrEditReview() async {
     try {
       late final String state;
-      if (widget.reviewId == null) {
+      if (widget.reviewId == 0) {
         await ReviewProvider().postNewReview(
           toiletId: widget.toiletId,
           reviewData: reviewData,
@@ -67,7 +67,7 @@ class _ReviewFormState extends State<ReviewForm> {
         state = '등록';
       } else {
         await ReviewProvider().updateReview(
-          widget.reviewId!,
+          widget.reviewId,
           reviewData: reviewData,
         );
         state = '수정';
@@ -82,7 +82,8 @@ class _ReviewFormState extends State<ReviewForm> {
         ),
       );
     } catch (error) {
-      final state = widget.reviewId != null ? '수정' : '등록';
+      print(error);
+      final state = widget.reviewId != 0 ? '수정' : '등록';
       showModal(
         context,
         page: AlertModal(
@@ -191,7 +192,7 @@ class _ReviewFormState extends State<ReviewForm> {
         ),
         CustomButton(
           onPressed: addOrEditReview,
-          buttonText: widget.reviewId != null ? '수정' : '등록',
+          buttonText: widget.reviewId != 0 ? '수정' : '등록',
           buttonColor: whiteColor,
         ),
       ],

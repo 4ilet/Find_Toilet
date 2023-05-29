@@ -20,17 +20,8 @@ class _IntroState extends State<Intro> {
   void preparation() async {
     try {
       await context.read<UserInfoProvider>().initVar();
-      final result = await UserProvider().autoLogin();
-      if (!mounted) return;
-      if (result.isNotEmpty) {
-        changeToken(
-          context,
-          token: result['token'],
-          refresh: result['refresh'],
-        );
-      }
+      await UserProvider().autoLogin();
     } catch (error) {
-      if (!mounted) return;
       changeToken(
         context,
         token: null,

@@ -199,6 +199,8 @@ void initLoadingData(BuildContext context) {
 
 // void setAdditional(BuildContext context, bool value) => context.read<GlobalProvider>().setAdditional(value);
 
-
-
-
+//* key
+void setKey(BuildContext context, GlobalKey key) =>
+    context.read<GlobalProvider>().setKey(key);
+GlobalKey? getKey(BuildContext context) =>
+    context.read<GlobalProvider>().globalKey;

@@ -37,10 +37,7 @@ class UserProvider extends ApiProvider {
     try {
       final response =
           await dioWithToken(url: userInfoUrl, method: 'GET').get(userInfoUrl);
-      if (response.statusCode == 200) {
-        return {};
-      }
-      throw Error();
+      return {};
     } catch (error) {
       throw Error();
     }
@@ -51,10 +48,7 @@ class UserProvider extends ApiProvider {
       final response = await dioWithToken(url: loginUrl, method: 'POST')
           .post(loginUrl, data: {'token': token});
       print(response);
-      if (response.statusCode == 200) {
-        return _returnTokens(response);
-      }
-      throw Error();
+      return _returnTokens(response);
     } catch (error) {
       throw Error();
     }
@@ -105,10 +99,7 @@ class UserProvider extends ApiProvider {
         changeNameUrl,
         data: {'nickname': newName},
       );
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-      throw Error();
+      return response.data;
     } catch (error) {
       print(error);
       throw Error();

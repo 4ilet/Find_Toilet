@@ -286,14 +286,31 @@ class ListItem extends StatelessWidget {
       }
     }
 
+    // ReturnVoid pressedBox() {
+    //   if (readToken(context) != null) {
+    //     return routerPush(
+    //       context,
+    //       page: Main(
+    //         showReview: true,
+    //         toiletModel: data,
+    //       ),
+    //     );
+    //   }
+    //   return () {
+    //     showModal(context, page: const LoginConfirmModal());
+    //   };
+    // }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: routerPush(context,
-            page: Main(
-              showReview: true,
-              toiletModel: data,
-            )),
+        onTap: () => routerPush(
+          context,
+          page: Main(
+            showReview: true,
+            toiletModel: data,
+          ),
+        )(),
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,

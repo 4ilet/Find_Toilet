@@ -16,13 +16,11 @@ class SearchBar extends StatelessWidget {
   final String query;
   final Function(String value) onChange;
   final ReturnVoid onSearchAction;
-  final GlobalKey? globalKey;
   const SearchBar({
     super.key,
     required this.isMain,
     required this.onChange,
     required this.onSearchAction,
-    this.globalKey,
     this.query = '',
   });
 
@@ -31,11 +29,12 @@ class SearchBar extends StatelessWidget {
     void onPressed() {
       readToken(context) != null
           ? routerPush(context, page: const BookMarkFolderList())()
-          : showModal(context,
-              page: LoginConfirmModal(
-                globalKey: globalKey,
-                page: const BookMarkFolderList(),
-              ));
+          : showModal(
+              context,
+              page: const LoginConfirmModal(
+                page: BookMarkFolderList(),
+              ),
+            );
     }
 
     return Row(

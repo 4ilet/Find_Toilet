@@ -335,7 +335,10 @@ class CustomModal extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         modalButton(
-                          onPressed: onPressed ?? routerPop(context),
+                          onPressed: onPressed ??
+                              routerPop(
+                                getKey(context)?.currentContext ?? context,
+                              ),
                           buttonText: buttonText,
                         ),
                         modalButton(
@@ -673,12 +676,12 @@ class AlertModal extends StatelessWidget {
 
 //* 로그인 확인 모달
 class LoginConfirmModal extends StatelessWidget {
-  final GlobalKey? globalKey;
+  // final GlobalKey? globalKey;
   // final ReturnVoid nextAction;
   final Widget? page;
   const LoginConfirmModal({
     super.key,
-    this.globalKey,
+    // this.globalKey,
     // required this.nextAction,
     this.page,
   });
@@ -696,14 +699,15 @@ class LoginConfirmModal extends StatelessWidget {
       onPressed: () async {
         // SchedulerBinding.instance.addPostFrameCallback(
         //   (_) {
-        final newContext = globalKey!.currentContext!;
-        login(newContext).then((_) {
+        final newContext = getKey(context)?.currentContext;
+        login(newContext!).then((_) {
           routerPop(newContext)();
           if (page != null) {
-            routerPush(newContext, page: page!);
+            routerPush(context, page: page!);
           } else {
-            changeRefresh(globalKey!.currentContext!);
+            changeRefresh(context);
           }
+          // routerPop(context);
           // nextAction();
         });
         //   },

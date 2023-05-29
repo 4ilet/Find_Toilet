@@ -205,6 +205,7 @@ class SizeProvider with ChangeNotifier {
 
 //* main, search
 class GlobalProvider with ChangeNotifier {
+  static GlobalKey? _globalKey;
   static int? _totalPages;
   static bool _loading = true;
   static int _page = 0;
@@ -232,6 +233,7 @@ class GlobalProvider with ChangeNotifier {
   };
 
   //* getter
+  GlobalKey? get globalKey => _globalKey;
   bool get loading => _loading;
   bool get working => _working;
   bool get additional => _additional;
@@ -247,6 +249,11 @@ class GlobalProvider with ChangeNotifier {
   DynamicMap get mainToiletData => _mainToiletData;
 
   //* public
+  void setKey(GlobalKey key) {
+    _setKey(key);
+    notifyListeners();
+  }
+
   void increasePage() {
     _setPage(_page + 1);
     notifyListeners();
@@ -304,6 +311,7 @@ class GlobalProvider with ChangeNotifier {
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;
+  void _setKey(GlobalKey key) => _globalKey = key;
   void _setWorking(bool newVal) => _working = newVal;
   void _setAdditional(bool newVal) => _additional = newVal;
   void _setPage(int newVal) => _page = newVal;

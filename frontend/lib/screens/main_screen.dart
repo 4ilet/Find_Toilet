@@ -37,6 +37,11 @@ class _MainState extends State<Main> {
           .getNearToilet(mainToiletData(context))
           .then((data) => addToiletList(context, data));
     }
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        setKey(context, globalKey);
+      },
+    );
   }
 
   void onSearchAction() {
@@ -89,7 +94,6 @@ class _MainState extends State<Main> {
                     query: query['value'] ?? '',
                     onChange: (value) => query['value'] = value,
                     onSearchAction: onSearchAction,
-                    globalKey: globalKey,
                   ),
                   const FilterBox()
                 ],

@@ -9,18 +9,14 @@ class FolderProvider extends ApiProvider {
   //* 폴더 목록
   Future<FolderList> getFolderList() async {
     try {
-      //*
       final response = await dioWithToken(url: folderListUrl, method: 'GET')
           .get(folderListUrl);
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        print(data);
-        FolderList folderList = data.map<FolderModel>((json) {
-          return FolderModel.fromJson(json);
-        }).toList();
-        return folderList;
-      }
-      throw Error();
+      final data = response.data['data'];
+      print(data);
+      FolderList folderList = data.map<FolderModel>((json) {
+        return FolderModel.fromJson(json);
+      }).toList();
+      return folderList;
     } catch (error) {
       print('folderError: $error');
       throw Error();
@@ -49,21 +45,15 @@ class BookMarkProvider extends ApiProvider {
       final response =
           await dioWithToken(url: bookmarkListUrl(folderId), method: 'GET')
               .get(bookmarkListUrl(folderId), queryParameters: {'page': page});
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        if (data.isEmpty) {
-          return [];
-        }
-        data.forEach((element) {
-          toiletList.add(ToiletModel.fromJson(element));
-        });
-        GlobalProvider().setTotal(response.data['size']);
-        return toiletList;
+      final data = response.data['data'];
+      if (data.isEmpty) {
+        return [];
       }
-
-      throw Error();
-
-      // throw Error();
+      data.forEach((element) {
+        toiletList.add(ToiletModel.fromJson(element));
+      });
+      GlobalProvider().setTotal(response.data['size']);
+      return toiletList;
     } catch (error) {
       print(error);
       throw Error();

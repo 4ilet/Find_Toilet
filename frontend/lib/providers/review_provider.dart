@@ -8,7 +8,8 @@ class ReviewProvider extends ApiProvider {
   Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
-      final response = token != null
+      print(token);
+      final response = token == null
           ? await dio.get(
               reviewListUrl(toiletId),
               queryParameters: {'page': page},
@@ -43,12 +44,8 @@ class ReviewProvider extends ApiProvider {
       final response =
           await dioWithToken(url: reviewUrl(reviewId), method: 'GET')
               .get(reviewUrl(reviewId));
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        return ReviewModel.fromJson(data);
-      }
-
-      throw Error();
+      final data = response.data['data'];
+      return ReviewModel.fromJson(data);
     } catch (error) {
       print(error);
       throw Error();

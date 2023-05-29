@@ -60,6 +60,7 @@ class ApiProvider extends UrlClass {
   Dio dioWithToken({
     required String url,
     required String method,
+    dynamic data,
   }) {
     final tempDio = Dio(
       BaseOptions(
@@ -72,53 +73,67 @@ class ApiProvider extends UrlClass {
         print('token error => $e');
         // print('token error code : ${e.error}');
         // print('token error message : ${e.message}');
-        // print('token error options : ${e.requestOptions}');
         if (e.response?.statusCode == 401) {
           //* token refresh
           print('token 401 : ${e.response}');
-          _refreshToken(url: url, method: method).then((response) async {
+          _refreshToken(
+            url: url,
+            method: method,
+            data: data,
+          ).then((response) async {
             print('refresh => $response');
             UserInfoProvider().setStoreToken(response['token']);
             UserInfoProvider().setStoreRefresh(response['refresh']);
             //* 재요청
-            if (token != null) {
-              print('재요청 : token => $token');
-              print(e.requestOptions);
-              e.requestOptions.headers['Authorization'] = response['token'];
-              print(e.requestOptions);
-              return handler.resolve(await dio.fetch(e.requestOptions));
-            }
+            print('재요청 : token => $token');
+            print('method : ${e.requestOptions.method}');
+            print('data : ${e.requestOptions.data}');
+            print('headers : ${e.requestOptions.headers}');
+            e.requestOptions.headers['Authorization'] = response['token'];
+            final secondRes = await dio.fetch(e.requestOptions);
+            return handler.resolve(secondRes);
           }).catchError((error) {
+            print('catch error : $error');
             UserInfoProvider().setStoreToken(null);
             UserInfoProvider().setStoreRefresh(null);
           });
+        } else {
+          if (e.response?.statusCode == 403) {
+            UserInfoProvider().setStoreToken(null);
+            UserInfoProvider().setStoreRefresh(null);
+          }
+          return handler.next(e);
         }
-        return handler.next(e);
       },
     ));
     return tempDio;
   }
 
-  Dio _dioWithRefresh(String method) => Dio(
-        BaseOptions(
-          baseUrl: _baseUrl!,
-          headers: {
-            'Authorization-refresh': refresh,
-            'Authorization': token,
-          },
-          method: method,
-        ),
-      );
+  Dio _dioWithRefresh(String method) {
+    final tempDio = Dio(
+      BaseOptions(
+        baseUrl: _baseUrl!,
+        headers: {
+          'Authorization-refresh': refresh,
+          'Authorization': token,
+          'method': method,
+        },
+        // method: method,
+      ),
+    );
+    return tempDio;
+  }
 
   //*
   FutureDynamicMap _refreshToken({
     required String url,
     required String method,
-    // dynamic data,
+    dynamic data,
   }) async {
     try {
       print('url : $url');
-      final response = await _dioWithRefresh(method).request(url);
+
+      final response = await _dioWithRefresh(method).request(url, data: data);
       print('refesth response : $response');
       if (response.statusCode == 200) {
         final headers = response.headers;
@@ -126,8 +141,9 @@ class ApiProvider extends UrlClass {
           'token': headers['Authorization']!.first,
           'refresh': headers['Authorization-refresh']!.first,
         };
+      } else {
+        throw Error();
       }
-      throw Error();
     } catch (error) {
       print('refresh error : $error');
       throw Error();
@@ -139,8 +155,8 @@ class ApiProvider extends UrlClass {
     required String method,
     dynamic data,
   }) =>
-      _refreshToken(url: url, method: method);
-  // _refreshToken(url: url, method: method, data: data);
+      // _refreshToken(url: url, method: method);
+      _refreshToken(url: url, method: method, data: data);
 
   //* 생성 전반
   FutureBool _createApi(String url, {required DynamicMap data}) async {
