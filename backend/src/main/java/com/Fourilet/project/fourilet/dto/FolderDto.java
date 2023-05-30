@@ -45,11 +45,13 @@ public class FolderDto {
     @Getter
     @Setter
     public static class AddOrDelToiletDto {
-        @ApiParam(value = "추가할 화장실 아이디 목록", type = "ArrayList")
-        private ArrayList<Long> addToiletList;
-
-        @ApiParam(value="삭제할 화장실 아이디 목록", type = "ArrayList")
-        private ArrayList<Long> delToiletList;
+        @ApiParam(value = "즐겨찾기 폴더 목록", type = "List")
+        private List<Long> folderIdList;
+        @ApiParam(value = "추가할 화장실 아이디", type = "long")
+        private long AddtoiletId;
+        @ApiParam(value="삭제할 화장실 아이디", type = "long")
+        private long DelToiletId;
     }
 
 }
+
