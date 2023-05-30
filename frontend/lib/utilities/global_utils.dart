@@ -35,8 +35,11 @@ Future<bool?> showModal(BuildContext context, {required Widget page}) =>
     );
 
 //* 토큰 받아오기
-String? getToken(BuildContext context) =>
+String? readToken(BuildContext context) =>
     context.read<UserInfoProvider>().token;
+
+String? getToken(BuildContext context) =>
+    context.watch<UserInfoProvider>().token;
 
 //* 토큰 변경
 void changeToken(BuildContext context, {String? token, String? refresh}) {
@@ -77,14 +80,9 @@ bool watchPressed(BuildContext context) =>
 FutureBool login(BuildContext context) async {
   UserProvider().login().then((result) {
     changeToken(context, token: result['token'], refresh: result['refresh']);
-    if (result['state'] != 'login') {
-      showModal(context,
-          page: const InputModal(
-            title: '닉네임 설정',
-            buttonText: '확인',
-            isAlert: true,
-            kindOf: 'nickname',
-          ));
+    context.read<UserInfoProvider>().setStoreName(result['nickname']);
+    if (result['state'] != 'login' || result['nickname'] == null) {
+      showModal(context, page: const NicknameInputModal(isAlert: true));
     }
   });
   return true;
@@ -155,6 +153,8 @@ DynamicMap mainToiletData(BuildContext context) =>
 ToiletList mainToiletList(BuildContext context) =>
     context.read<GlobalProvider>().mainToiletList;
 
+//* scroll
+
 bool readLoading(BuildContext context) =>
     context.read<GlobalProvider>().loading;
 
@@ -163,3 +163,39 @@ bool getLoading(BuildContext context) =>
 
 void setLoading(BuildContext context, bool value) =>
     context.read<GlobalProvider>().setLoading(value);
+
+int getPage(BuildContext context) => context.read<GlobalProvider>().page;
+
+void increasePage(BuildContext context) =>
+    context.read<GlobalProvider>().increasePage();
+
+void initPage(BuildContext context) =>
+    context.read<GlobalProvider>().initPage();
+
+bool getWorking(BuildContext context) => context.read<GlobalProvider>().working;
+
+void setWorking(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setWorking(value);
+
+bool getAdditional(BuildContext context) =>
+    context.read<GlobalProvider>().additional;
+
+void setAdditional(BuildContext context, bool value) =>
+    context.read<GlobalProvider>().setAdditional(value);
+
+void initLoadingData(BuildContext context) {
+  setLoading(context, true);
+  initPage(context);
+  setAdditional(context, false);
+  setWorking(context, false);
+}
+
+// bool getAdditional(BuildContext context) => context.read<GlobalProvider>().additional;
+
+// void setAdditional(BuildContext context, bool value) => context.read<GlobalProvider>().setAdditional(value);
+
+//* key
+void setKey(BuildContext context, GlobalKey key) =>
+    context.read<GlobalProvider>().setKey(key);
+GlobalKey? getKey(BuildContext context) =>
+    context.read<GlobalProvider>().globalKey;

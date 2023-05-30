@@ -9,20 +9,16 @@ class FolderProvider extends ApiProvider {
   //* 폴더 목록
   Future<FolderList> getFolderList() async {
     try {
-      //*
-      final response =
-          await dioWithToken(url: folderListUrl).get(folderListUrl);
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        print(data);
-        FolderList folderList = data.map<FolderModel>((json) {
-          return FolderModel.fromJson(json);
-        }).toList();
-        return folderList;
-      }
-      throw Error();
+      final response = await dioWithToken(url: folderListUrl, method: 'GET')
+          .get(folderListUrl);
+      final data = response.data['data'];
+      print(data);
+      FolderList folderList = data.map<FolderModel>((json) {
+        return FolderModel.fromJson(json);
+      }).toList();
+      return folderList;
     } catch (error) {
-      print(error);
+      print('folderError: $error');
       throw Error();
     }
   }
@@ -43,34 +39,29 @@ class FolderProvider extends ApiProvider {
 
 class BookMarkProvider extends ApiProvider {
   //* 즐겨찾기 목록 조회
-  Future<ToiletList> getToiletList(int folderId) async {
+  Future<ToiletList> getToiletList(int folderId, int page) async {
     ToiletList toiletList = [];
     try {
-      final response = await dioWithToken(url: bookmarkListUrl(folderId))
-          .get(bookmarkListUrl(folderId));
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        if (data.isEmpty) {
-          return [];
-        }
-        data.forEach((element) {
-          toiletList.add(ToiletModel.fromJson(element));
-        });
-        GlobalProvider().setTotal(response.data['cnt']);
-        return toiletList;
+      final response =
+          await dioWithToken(url: bookmarkListUrl(folderId), method: 'GET')
+              .get(bookmarkListUrl(folderId), queryParameters: {'page': page});
+      final data = response.data['data'];
+      if (data.isEmpty) {
+        return [];
       }
-
-      throw Error();
-
-      // throw Error();
+      data.forEach((element) {
+        toiletList.add(ToiletModel.fromJson(element));
+      });
+      GlobalProvider().setTotal(response.data['size']);
+      return toiletList;
     } catch (error) {
       print(error);
       throw Error();
     }
   }
 
-  //* 즐겨찾기에 추가
-  FutureVoid addToilet({
+  //* 즐겨찾기에 추가/삭제
+  FutureVoid addOrDeleteToilet({
     required int folderId,
     required int toiletId,
   }) async =>
@@ -81,14 +72,4 @@ class BookMarkProvider extends ApiProvider {
         ),
         data: {},
       );
-
-  //* 즐겨찾기 삭제
-  FutureBool deleteBookMark({
-    required int folderId,
-    required int toiletId,
-  }) async =>
-      deleteApi(deleteToiletUrl(
-        folderId: folderId,
-        toiletId: toiletId,
-      ));
 }

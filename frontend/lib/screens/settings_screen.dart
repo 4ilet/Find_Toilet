@@ -19,12 +19,9 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  late Widget loginOrLogoutBtn;
-
   @override
   void initState() {
     super.initState();
-    changeBtn();
   }
 
   //* 모달 목록
@@ -33,23 +30,6 @@ class _SettingsState extends State<Settings> {
     const HelpModal(isHelpModal: false),
     const HelpModal()
   ];
-
-  //* 버튼 변경
-  bool changeBtn() {
-    final token = getToken(context);
-    setState(() {
-      loginOrLogoutBtn = token == null || token == ''
-          ? Image.asset(kakaoLogin)
-          : const TextWithIcon(
-              icon: logoutIcon,
-              text: '로그아웃',
-              iconColor: CustomColors.blackColor,
-              fontSize: FontSize.defaultSize,
-              mainAxisAlignment: MainAxisAlignment.end,
-            );
-    });
-    return true;
-  }
 
   //* 문의하기
   void sendEmail() async {
@@ -68,21 +48,17 @@ class _SettingsState extends State<Settings> {
   }
 
   //* 로그인/로그아웃
-  FutureBool loginOrLogout() async {
+  void loginOrLogout() async {
     try {
-      final token = getToken(context);
+      final token = readToken(context);
       if (token == null || token == '') {
         await login(context);
-        changeBtn();
       } else {
-        if (!mounted) return false;
+        if (!mounted) return;
         changeToken(context, token: null, refresh: null);
       }
-      return changeBtn();
     } catch (error) {
       showModal(context, page: errorModal('login'));
-      changeRefresh(context);
-      return false;
     }
   }
 
@@ -103,31 +79,36 @@ class _SettingsState extends State<Settings> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // mainAxisSize: MainAxisSize.max,
-                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      child: CustomButton(
-                        textColor: CustomColors.blackColor,
-                        fontSize: FontSize.smallSize,
-                        onPressed: () {
-                          showModal(
-                            context,
-                            page: const InputModal(
-                              title: '닉네임 설정',
-                              buttonText: '확인',
-                              isAlert: false,
-                              kindOf: 'nickname',
-                            ),
-                          );
-                        },
-                        buttonText: '닉네임 변경',
-                      ),
+                      child: getToken(context) != null
+                          ? CustomButton(
+                              textColor: CustomColors.blackColor,
+                              fontSize: FontSize.smallSize,
+                              onPressed: () {
+                                showModal(
+                                  context,
+                                  page: const NicknameInputModal(
+                                    isAlert: false,
+                                  ),
+                                );
+                              },
+                              buttonText: '닉네임 변경',
+                            )
+                          : const SizedBox(),
                     ),
                     Flexible(
                       child: GestureDetector(
-                        onTap: () => loginOrLogout(),
-                        child: loginOrLogoutBtn,
+                        onTap: loginOrLogout,
+                        child: getToken(context) != null
+                            ? const TextWithIcon(
+                                icon: logoutIcon,
+                                text: '로그아웃',
+                                iconColor: CustomColors.blackColor,
+                                fontSize: FontSize.defaultSize,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                              )
+                            : Image.asset(kakaoLogin),
                       ),
                     ),
                   ],

@@ -35,17 +35,23 @@ class BookMarkFolderList extends StatelessWidget {
                         icon: exitIcon,
                         color: CustomColors.whiteColor,
                         onPressed: routerPop(context),
-                        iconSize: 50,
+                        iconSize: 80,
                       ),
                     ),
                     Flexible(
-                      flex: 20,
-                      child: CustomText(
-                        title:
-                            '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
-                        fontSize: FontSize.largeSize,
-                        color: CustomColors.whiteColor,
-                        font: kimm,
+                      flex: 4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            title:
+                                '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                            isCentered: true,
+                            fontSize: FontSize.largeSize,
+                            color: CustomColors.whiteColor,
+                            font: kimm,
+                          ),
+                        ],
                       ),
                     ),
                   ],

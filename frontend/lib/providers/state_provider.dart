@@ -205,8 +205,13 @@ class SizeProvider with ChangeNotifier {
 
 //* main, search
 class GlobalProvider with ChangeNotifier {
+  static GlobalKey? _globalKey;
   static int? _totalPages;
   static bool _loading = true;
+  static int _page = 0;
+  // static int _cnt = 20;
+  static bool _working = false;
+  static bool _additional = false;
   static bool _diaper = false;
   static bool _child = false;
   static bool _disabled = false;
@@ -223,21 +228,57 @@ class GlobalProvider with ChangeNotifier {
     'lat': _lat,
     'lon': _lng,
     'radius': 1000,
-    'page': -1,
-    'size': 30,
+    'page': _page,
+    'size': 20,
   };
 
+  //* getter
+  GlobalKey? get globalKey => _globalKey;
   bool get loading => _loading;
+  bool get working => _working;
+  bool get additional => _additional;
   bool get diaper => _diaper;
   bool get child => _child;
   bool get disabled => _disabled;
   bool get allDay => _allDay;
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
+  int get page => _page;
+  // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
 
   //* public
+  void setKey(GlobalKey key) {
+    _setKey(key);
+    notifyListeners();
+  }
+
+  void increasePage() {
+    _setPage(_page + 1);
+    notifyListeners();
+  }
+
+  void initPage() {
+    _setPage(0);
+    notifyListeners();
+  }
+
+  // void setCnt(int newVal) {
+  //   _setCnt(newVal);
+  //   notifyListeners();
+  // }
+
+  void setWorking(bool newVal) {
+    _setWorking(newVal);
+    notifyListeners();
+  }
+
+  void setAdditional(bool newVal) {
+    _setAdditional(newVal);
+    notifyListeners();
+  }
+
   void setTotal(int? newVal) {
     _setTotal(newVal);
     notifyListeners();
@@ -269,6 +310,11 @@ class GlobalProvider with ChangeNotifier {
   }
 
   //* private
+  // void _setCnt(int newVal) => _cnt = newVal;
+  void _setKey(GlobalKey key) => _globalKey = key;
+  void _setWorking(bool newVal) => _working = newVal;
+  void _setAdditional(bool newVal) => _additional = newVal;
+  void _setPage(int newVal) => _page = newVal;
   void _setTotal(int? newVal) => _totalPages = newVal;
 
   void _setFilter(int index) {
