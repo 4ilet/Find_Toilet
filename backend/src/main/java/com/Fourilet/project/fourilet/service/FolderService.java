@@ -113,41 +113,48 @@ public class FolderService {
         folder.setFolderName(newFolderDto.getFolderName());
         folder.setMember(member);
         folderRepository.save(folder);
-        }
-    public void AddDeleteToilet(long folderId, FolderDto.AddOrDelToiletDto addOrDelToiletDto){
+    }
+    public void AddDeleteToilet(FolderDto.AddOrDelToiletDto addOrDelToiletDto){
         LOGGER.info("CALL ADD TOILET");
-        Folder folder = folderRepository.findById(folderId).orElse(null);
-        System.out.println("여기야여기"+addOrDelToiletDto.getAddToiletList().size());
-        if (!addOrDelToiletDto.getAddToiletList().isEmpty()){
-            for (long toiletId : addOrDelToiletDto.getAddToiletList()){
-                Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-                if (toilet == null | folder == null){
+        List<Long> folderIdList = addOrDelToiletDto.getFolderIdList();
+
+        // 폴더리스트를 순회하면서 해당 화장실을 폴더리스트에 저장로직
+        if (addOrDelToiletDto.getAddtoiletId() != 0) { // 추가할 화장실이 있을 경우에만 작동
+
+            for (long folderId : folderIdList){
+                Folder folder = folderRepository.findById(folderId).orElse(null);
+                Toilet Addtoilet = toiletRepository.findById(addOrDelToiletDto.getAddtoiletId()).orElse(null);
+                List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
+
+                if (Addtoilet == null | folder == null){
                     throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
                 }
-                List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
                 for (BookMark bookmark : bookMarkList){
-                    if(bookmark.getToilet() == toilet) {
+                    if(bookmark.getToilet() == Addtoilet) {
                         throw new IllegalStateException("이미 즐겨찾기에 추가되어 있습니다.");
                     }
                 }
                 BookMark bookMark = new BookMark();
                 bookMark.setFolder(folder);
-                bookMark.setToilet(toilet);
+                bookMark.setToilet(Addtoilet);
                 bookMarkRepository.save(bookMark);
             }
         }
-        if (!addOrDelToiletDto.getDelToiletList().isEmpty()) {
-            for (long toiletId : addOrDelToiletDto.getDelToiletList()) {
-                Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
+        // 폴더리스트를 순회하면서 해당 화장실을 폴더에서 삭제하는 로직
+        if (addOrDelToiletDto.getDelToiletId() != 0) { // 삭제할 화장실이 있을 경우에만 작동
+            for (long folderId : folderIdList){
+                Folder folder = folderRepository.findById(folderId).orElse(null);
+                Toilet DelToilet = toiletRepository.findById(addOrDelToiletDto.getDelToiletId()).orElse(null);
 
-                if (toilet == null | folder == null) {
+                List<BookMark> bookMarkList= bookMarkRepository.findAllByFolder(folder);
+
+                if (DelToilet == null | folder == null){
                     throw new NullPointerException("폴더 혹은 화장실이 존재하지 않습니다.");
-
                 }
-                List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
+
                 boolean flag = false;
                 for (BookMark bookmark : bookMarkList) {
-                    if (bookmark.getToilet() == toilet) {
+                    if (bookmark.getToilet() == DelToilet) {
                         bookMarkRepository.delete(bookmark);
                         flag = true;
                     }
@@ -158,25 +165,7 @@ public class FolderService {
             }
         }
     }
-//    public void deleteToilet(long folderId, long toiletId){
-//        LOGGER.info("CALL DELETE TOILET");
-//        Folder folder = folderRepository.findById(folderId).orElse(null);
-//        Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
-//        List<BookMark> bookMarkList = bookMarkRepository.findAllByFolder(folder);
-//        if (folder == null){
-//            throw new NullPointerException("즐겨찾기가 존재하지 않습니다");
-//        }
-//        boolean flag = false;
-//        for (BookMark bookmark : bookMarkList) {
-//            if (bookmark.getToilet() == toilet) {
-//                bookMarkRepository.delete(bookmark);
-//                flag = true;
-//            }
-//        }
-//        if (!flag){
-//            throw new NullPointerException("존재하지 않는 화장실입니다");
-//        }
-//    }
+
     public ToiletDto2.ToiletDto2WithSize getToiletList(long folderId, Long memberId, int page){
         LOGGER.info("CALL GET TOILET LIST");
         Member member = memberRepository.findById(memberId).orElse(null);
@@ -259,3 +248,4 @@ public class FolderService {
 
 
 }
+

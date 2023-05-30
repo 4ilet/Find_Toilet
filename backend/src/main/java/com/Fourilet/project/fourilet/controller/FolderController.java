@@ -167,12 +167,12 @@ public class FolderController {
 
     @PostMapping("/add/{folderId}/{toiletId}")
     @ApiOperation(value = "즐겨찾기에 화장실을 추가, 삭제하는 Api", notes = "즐겨찾기에 화장실을 추가 또는 삭제한다.")
-    public ResponseEntity<?> AddDeleteToilet(@PathVariable("folderId") long folderId, @RequestBody FolderDto.AddOrDelToiletDto addOrDelToiletDto){
+    public ResponseEntity<?> AddDeleteToilet(@RequestBody FolderDto.AddOrDelToiletDto addOrDelToiletDto){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try{
-            folderService.AddDeleteToilet(folderId, addOrDelToiletDto);
+            folderService.AddDeleteToilet(addOrDelToiletDto);
             message.setStatus(StatusEnum.OK);
             message.setMessage("추가 혹은 삭제 성공");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
@@ -256,3 +256,4 @@ public class FolderController {
         }
     }
 }
+
