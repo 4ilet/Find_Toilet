@@ -159,67 +159,16 @@ class PolicyContent extends StatelessWidget {
   }
 }
 
-//* 입력창 존재 모달
-class InputModal extends StatelessWidget {
-  final String title, buttonText;
+//* 닉네임 변경 모달
+class NicknameInputModal extends StatelessWidget {
   final bool isAlert;
-  final String kindOf;
-  final int? folderId;
-  const InputModal({
+  const NicknameInputModal({
     super.key,
-    required this.title,
-    required this.buttonText,
     required this.isAlert,
-    required this.kindOf,
-    this.folderId,
   });
 
   @override
   Widget build(BuildContext context) {
-    String? data;
-    void fillData(String value) {
-      data = value.trim();
-    }
-
-    void createFolder(BuildContext context) async {
-      try {
-        if (data != null && data != '') {
-          folderId == null
-              ? await FolderProvider().createNewFolder({'folderName': data!})
-              : await FolderProvider().updateFolderName(folderId!,
-                  folderData: {'folderName': data!});
-          if (!context.mounted) return;
-          routerPop(context)();
-          final work = folderId == null ? '생성' : '수정';
-          showModal(
-            context,
-            page: AlertModal(
-              title: '폴더 $work 성공',
-              content: '성공적으로 폴더가 $work되었습니다.',
-            ),
-          );
-        } else {
-          showModal(
-            context,
-            page: const AlertModal(
-              title: '폴더명 확인',
-              content: '폴더명을 올바르게 입력해주세요.',
-            ),
-          );
-        }
-      } catch (error) {
-        showModal(
-          context,
-          page: AlertModal(
-            title: '오류 발생',
-            content: folderId == null
-                ? '오류가 발생해\n 폴더가 생성되지 않았습니다'
-                : '오류가 발생해\n 폴더 이름이 변경되지 않았습니다',
-          ),
-        );
-      }
-    }
-
     void setNickname(String? data) async {
       try {
         if (data != null && data != '') {
@@ -227,14 +176,15 @@ class InputModal extends StatelessWidget {
             print('result: $result');
             if (result['success'] != null) {
               context.read<UserInfoProvider>().setStoreName(result['success']);
-              routerPop(context)();
               showModal(
                 context,
                 page: const AlertModal(
                   title: '닉네임 적용 성공',
                   content: '닉네임이 적용되었습니다.',
                 ),
-              );
+              ).then((_) {
+                routerPop(context)();
+              });
               return;
             } else {
               showModal(
@@ -247,14 +197,15 @@ class InputModal extends StatelessWidget {
               return;
             }
           });
+        } else {
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '올바르지 않은 닉네임',
+              content: '닉네임을 바르게 입력해주세요.',
+            ),
+          );
         }
-        showModal(
-          context,
-          page: const AlertModal(
-            title: '올바르지 않은 닉네임',
-            content: '닉네임을 바르게 입력해주세요.',
-          ),
-        );
       } catch (error) {
         print(error);
         showModal(
@@ -267,19 +218,136 @@ class InputModal extends StatelessWidget {
       }
     }
 
+    return InputModal(
+      title: '닉네임 설정',
+      buttonText: '확인',
+      isAlert: isAlert,
+      onPressed: setNickname,
+      initialValue: context.read<UserInfoProvider>().nickname,
+    );
+  }
+}
+
+//* 폴더 생성 / 폴더명 변경 모달
+class CreateOrEditFolderModal extends StatelessWidget {
+  final int? folderId;
+  final String? folderName;
+  const CreateOrEditFolderModal({
+    super.key,
+    this.folderId,
+    this.folderName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final work = folderId == null ? '생성' : '수정';
+    void Function(String) createFolder(BuildContext context) {
+      return (String? data) async {
+        try {
+          if (data != null && data != '') {
+            folderId == null
+                ? await FolderProvider().createNewFolder({'folderName': data})
+                : await FolderProvider().updateFolderName(
+                    folderId!,
+                    folderData: {'folderName': data},
+                  );
+            if (!context.mounted) return;
+            routerPop(context)();
+            showModal(
+              context,
+              page: AlertModal(
+                title: '폴더 $work 성공',
+                content: '성공적으로 폴더가 $work되었습니다.',
+              ),
+            );
+          } else {
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '폴더명 확인',
+                content: '폴더명을 올바르게 입력해주세요.',
+              ),
+            );
+          }
+        } catch (error) {
+          showModal(
+            context,
+            page: AlertModal(
+              title: '오류 발생',
+              content: folderId == null
+                  ? '오류가 발생해\n 폴더가 생성되지 않았습니다'
+                  : '오류가 발생해\n 폴더 이름이 변경되지 않았습니다',
+            ),
+          );
+        }
+      };
+    }
+
+    return InputModal(
+      title: folderId == null ? '즐겨찾기 폴더 $work' : '즐겨찾기 폴더명 $work',
+      buttonText: work,
+      isAlert: false,
+      onPressed: createFolder(context),
+      initialValue: folderName,
+    );
+  }
+}
+
+//* 입력창 존재 모달
+class InputModal extends StatelessWidget {
+  final String title, buttonText;
+  final bool isAlert;
+  final int? folderId;
+  final void Function(String) onPressed;
+  final String? initialValue;
+  const InputModal({
+    super.key,
+    required this.title,
+    required this.buttonText,
+    required this.isAlert,
+    required this.onPressed,
+    this.folderId,
+    this.initialValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String? data = initialValue;
+    void fillData(String value) {
+      data = value.trim();
+    }
+
+    void changeValue() {
+      if (initialValue != data) {
+        onPressed(data!);
+      } else {
+        showModal(
+          context,
+          page: AlertModal(
+            title: title,
+            content: '값이 변경되지 않았습니다.',
+          ),
+        );
+      }
+    }
+
     return CustomModal(
       title: title,
       buttonText: buttonText,
-      onPressed: kindOf == 'nickname'
-          ? () => setNickname(data)
-          : () => createFolder(context),
+      onPressed: changeValue,
       isAlert: isAlert,
       children: [
         Expanded(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: TextField(onChanged: fillData),
-        )),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: TextField(
+              onChanged: fillData,
+              controller: TextEditingController(
+                text: data,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -524,7 +592,7 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
       onPressed: () {
         if (widget.folderId.toSet() != selectedFolder) {
           BookMarkProvider()
-              .addToilet(
+              .addOrDeleteToilet(
             folderId: 1,
             // selectedFolder.toList(),
             toiletId: widget.toiletId,
@@ -609,9 +677,20 @@ class NavigationModal extends StatelessWidget {
       Uri.parse(
           'tmap://route?goalname=$destination&goalx=${endPoint[1]}&goaly=${endPoint[0]}')
     ];
+
+    StringList packageNameList = [
+      'com.nhn.android.nmap',
+      'net.daum.android.map',
+      'com.skt.tmap.ku'
+    ];
     ReturnVoid toMapApp(int i) {
       return () async {
-        await launchUrl(uriList[i]);
+        try {
+          await launchUrl(uriList[i]);
+        } catch (error) {
+          await launchUrl(
+              Uri.parse('market://details?id=${packageNameList[i]}'));
+        }
       };
     }
 

@@ -161,21 +161,15 @@ class ApiProvider extends UrlClass {
   //* 생성 전반
   FutureBool _createApi(String url, {required DynamicMap data}) async {
     try {
-      //* token
-      if (token != '') {
-        final response = await dioWithToken(
-          url: url,
-          // data: data,
-          method: 'POST',
-        ).post(url, data: data);
-        if (response.statusCode == 200) {
-          return true;
-        }
-        throw Error();
-      } else {
-        //* 로그인 할 것인지 묻는 팝업
-        return false;
+      final response = await dioWithToken(
+        url: url,
+        method: 'POST',
+        data: data,
+      ).post(url, data: data);
+      if (response.statusCode == 200) {
+        return true;
       }
+      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -195,8 +189,11 @@ class ApiProvider extends UrlClass {
   //* 수정 전반
   FutureDynamicMap _updateApi(String url, {required DynamicMap data}) async {
     try {
-      final response =
-          await dioWithToken(url: url, method: 'PUT').put(url, data: data);
+      final response = await dioWithToken(
+        url: url,
+        method: 'PUT',
+        data: data,
+      ).put(url, data: data);
       if (response.statusCode == 200) {
         return response.data;
       }

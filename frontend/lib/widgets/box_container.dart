@@ -123,12 +123,9 @@ class FolderBox extends StatelessWidget {
                         color: CustomColors.mainColor,
                         onPressed: () => showModal(
                           context,
-                          page: InputModal(
-                            title: '즐겨 찾기 폴더명 수정',
-                            buttonText: '수정',
-                            isAlert: false,
-                            kindOf: 'folder',
+                          page: CreateOrEditFolderModal(
                             folderId: folderId,
+                            folderName: folderName,
                           ),
                         ),
                         iconSize: 30,
@@ -173,12 +170,7 @@ class _AddBoxState extends State<AddBox> {
     return CustomBox(
       onTap: () => showDialog(
         context: context,
-        builder: (context) => const InputModal(
-          title: '즐겨 찾기 폴더 생성',
-          buttonText: '만들기',
-          isAlert: false,
-          kindOf: 'folder',
-        ),
+        builder: (context) => const CreateOrEditFolderModal(),
       ),
       height: 150,
       width: 150,

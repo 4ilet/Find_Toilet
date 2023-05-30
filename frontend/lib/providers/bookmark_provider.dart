@@ -60,8 +60,8 @@ class BookMarkProvider extends ApiProvider {
     }
   }
 
-  //* 즐겨찾기에 추가
-  FutureVoid addToilet({
+  //* 즐겨찾기에 추가/삭제
+  FutureVoid addOrDeleteToilet({
     required int folderId,
     required int toiletId,
   }) async =>
@@ -72,14 +72,4 @@ class BookMarkProvider extends ApiProvider {
         ),
         data: {},
       );
-
-  //* 즐겨찾기 삭제
-  FutureBool deleteBookMark({
-    required int folderId,
-    required int toiletId,
-  }) async =>
-      deleteApi(deleteToiletUrl(
-        folderId: folderId,
-        toiletId: toiletId,
-      ));
 }

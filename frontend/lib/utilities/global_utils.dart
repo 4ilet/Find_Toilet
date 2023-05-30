@@ -80,14 +80,9 @@ bool watchPressed(BuildContext context) =>
 FutureBool login(BuildContext context) async {
   UserProvider().login().then((result) {
     changeToken(context, token: result['token'], refresh: result['refresh']);
-    if (result['state'] != 'login') {
-      showModal(context,
-          page: const InputModal(
-            title: '닉네임 설정',
-            buttonText: '확인',
-            isAlert: true,
-            kindOf: 'nickname',
-          ));
+    context.read<UserInfoProvider>().setStoreName(result['nickname']);
+    if (result['state'] != 'login' || result['nickname'] == null) {
+      showModal(context, page: const NicknameInputModal(isAlert: true));
     }
   });
   return true;

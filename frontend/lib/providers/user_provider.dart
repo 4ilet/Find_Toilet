@@ -26,10 +26,12 @@ class UserProvider extends ApiProvider {
   //* private function
   StringMap _returnTokens(dynamic response) {
     final headers = response.headers;
+    final data = response.data;
     return {
       'token': headers['Authorization']!.first,
       'refresh': headers['Authorization-refresh']!.first,
-      'state': response.data['state']
+      'state': data['state'],
+      'nickname': data['data']['nickname']
     };
   }
 
@@ -47,9 +49,10 @@ class UserProvider extends ApiProvider {
     try {
       final response = await dioWithToken(url: loginUrl, method: 'POST')
           .post(loginUrl, data: {'token': token});
-      print(response);
+      print('login response : $response');
       return _returnTokens(response);
     } catch (error) {
+      print(error);
       throw Error();
     }
   }
@@ -94,12 +97,9 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _changeName(String newName) async {
     try {
-      final response =
-          await dioWithToken(url: changeNameUrl, method: 'PUT').put(
-        changeNameUrl,
-        data: {'nickname': newName},
-      );
-      return response.data;
+      final data = {'nickname': newName};
+      final response = await updateApi(changeNameUrl, data: data);
+      return response;
     } catch (error) {
       print(error);
       throw Error();

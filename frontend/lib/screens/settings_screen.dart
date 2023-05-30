@@ -79,8 +79,6 @@ class _SettingsState extends State<Settings> {
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // mainAxisSize: MainAxisSize.max,
-                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
                       child: getToken(context) != null
@@ -90,11 +88,8 @@ class _SettingsState extends State<Settings> {
                               onPressed: () {
                                 showModal(
                                   context,
-                                  page: const InputModal(
-                                    title: '닉네임 설정',
-                                    buttonText: '확인',
+                                  page: const NicknameInputModal(
                                     isAlert: false,
-                                    kindOf: 'nickname',
                                   ),
                                 );
                               },
