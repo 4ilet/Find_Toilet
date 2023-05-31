@@ -27,6 +27,8 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   DynamicMap query = {'value': null};
+  final globalKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -35,13 +37,18 @@ class _MainState extends State<Main> {
           .getNearToilet(mainToiletData(context))
           .then((data) => addToiletList(context, data));
     }
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        setKey(context, globalKey);
+      },
+    );
   }
 
   void onSearchAction() {
     if (query['value'] != '') {
       return routerPush(
         context,
-        page: Search(query: query['value']!),
+        page: Search(query: query['value'] ?? ''),
       )();
     }
     showModal(
@@ -65,6 +72,7 @@ class _MainState extends State<Main> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          key: globalKey,
           resizeToAvoidBottomInset: false,
           body: Stack(
             children: [

@@ -26,20 +26,20 @@ class UserProvider extends ApiProvider {
   //* private function
   StringMap _returnTokens(dynamic response) {
     final headers = response.headers;
+    final data = response.data;
     return {
       'token': headers['Authorization']!.first,
       'refresh': headers['Authorization-refresh']!.first,
-      'state': response.data['state']
+      'state': data['state'],
+      'nickname': data['data']['nickname']
     };
   }
 
   FutureDynamicMap _sendOldToken(String token) async {
     try {
-      final response = await dioWithToken(url: userInfoUrl).get(userInfoUrl);
-      if (response.statusCode == 200) {
-        return {};
-      }
-      throw Error();
+      final response =
+          await dioWithToken(url: userInfoUrl, method: 'GET').get(userInfoUrl);
+      return {};
     } catch (error) {
       throw Error();
     }
@@ -47,14 +47,12 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _sendToken(String token) async {
     try {
-      final response = await dioWithToken(url: loginUrl)
+      final response = await dioWithToken(url: loginUrl, method: 'POST')
           .post(loginUrl, data: {'token': token});
-      print(response);
-      if (response.statusCode == 200) {
-        return _returnTokens(response);
-      }
-      throw Error();
+      print('login response : $response');
+      return _returnTokens(response);
     } catch (error) {
+      print(error);
       throw Error();
     }
   }
@@ -99,14 +97,9 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _changeName(String newName) async {
     try {
-      final response = await dioWithToken(url: changeNameUrl).put(
-        changeNameUrl,
-        data: {'nickname': newName},
-      );
-      if (response.statusCode == 200) {
-        return response.data;
-      }
-      throw Error();
+      final data = {'nickname': newName};
+      final response = await updateApi(changeNameUrl, data: data);
+      return response;
     } catch (error) {
       print(error);
       throw Error();

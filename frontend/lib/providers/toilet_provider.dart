@@ -11,23 +11,20 @@ class ToiletProvider extends ApiProvider {
               nearToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken(url: nearToiletUrl).get(
+          : await dioWithToken(url: nearToiletUrl, method: 'GET').get(
               nearToiletUrl,
               queryParameters: queryData,
             );
-      if (response.statusCode == 200) {
-        final data = response.data['content'];
-        if (data.isNotEmpty) {
-          ToiletList toiletList = data.map<ToiletModel>((json) {
-            return ToiletModel.fromJson(json);
-          }).toList();
-          GlobalProvider().setTotal(response.data['totalPages']);
-          return toiletList;
-        } else {
-          return [];
-        }
+      final data = response.data['content'];
+      if (data.isNotEmpty) {
+        ToiletList toiletList = data.map<ToiletModel>((json) {
+          return ToiletModel.fromJson(json);
+        }).toList();
+        GlobalProvider().setTotal(response.data['totalPages']);
+        return toiletList;
+      } else {
+        return [];
       }
-      throw Error();
     } catch (error) {
       print(error);
       throw Error();
@@ -43,23 +40,18 @@ class ToiletProvider extends ApiProvider {
               searchToiletUrl,
               queryParameters: queryData,
             )
-          : await dioWithToken(url: searchToiletUrl).get(
+          : await dioWithToken(url: searchToiletUrl, method: 'GET').get(
               searchToiletUrl,
               queryParameters: queryData,
             );
-      if (response.statusCode == 200) {
-        if (GlobalProvider().totalPages == null) {
-          GlobalProvider().setTotal(response.data['totalPages']);
-        }
-        final data = response.data['content'];
-        ToiletList toiletList = data.map<ToiletModel>((json) {
-          return ToiletModel.fromJson(json);
-        }).toList();
-        return toiletList;
+      if (GlobalProvider().totalPages == null) {
+        GlobalProvider().setTotal(response.data['totalPages']);
       }
-      throw Error();
-
-      // throw Error();
+      final data = response.data['content'];
+      ToiletList toiletList = data.map<ToiletModel>((json) {
+        return ToiletModel.fromJson(json);
+      }).toList();
+      return toiletList;
     } catch (error) {
       print(error);
       throw Error();

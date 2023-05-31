@@ -123,12 +123,9 @@ class FolderBox extends StatelessWidget {
                         color: CustomColors.mainColor,
                         onPressed: () => showModal(
                           context,
-                          page: InputModal(
-                            title: '즐겨 찾기 폴더명 수정',
-                            buttonText: '수정',
-                            isAlert: false,
-                            kindOf: 'folder',
+                          page: CreateOrEditFolderModal(
                             folderId: folderId,
+                            folderName: folderName,
                           ),
                         ),
                         iconSize: 30,
@@ -173,12 +170,7 @@ class _AddBoxState extends State<AddBox> {
     return CustomBox(
       onTap: () => showDialog(
         context: context,
-        builder: (context) => const InputModal(
-          title: '즐겨 찾기 폴더 생성',
-          buttonText: '만들기',
-          isAlert: false,
-          kindOf: 'folder',
-        ),
+        builder: (context) => const CreateOrEditFolderModal(),
       ),
       height: 150,
       width: 150,
@@ -248,7 +240,7 @@ class ListItem extends StatelessWidget {
             result += '${facilityList[i]} ';
             length += newLength;
           } else {
-            result += '\n${facilityList[i]}';
+            result += '\n${facilityList[i]} ';
             length = newLength;
           }
         }
@@ -257,7 +249,7 @@ class ListItem extends StatelessWidget {
     }
 
     void addOrEditReview() {
-      final token = getToken(context);
+      final token = readToken(context);
       if (token != null && token != '') {
         routerPush(context,
             page: ReviewForm(
@@ -273,7 +265,7 @@ class ListItem extends StatelessWidget {
     }
 
     void pressedHeart() {
-      if (getToken(context) != null) {
+      if (readToken(context) != null) {
         showModal(
           context,
           page: AddOrDeleteBookMarkModal(
@@ -286,14 +278,31 @@ class ListItem extends StatelessWidget {
       }
     }
 
+    // ReturnVoid pressedBox() {
+    //   if (readToken(context) != null) {
+    //     return routerPush(
+    //       context,
+    //       page: Main(
+    //         showReview: true,
+    //         toiletModel: data,
+    //       ),
+    //     );
+    //   }
+    //   return () {
+    //     showModal(context, page: const LoginConfirmModal());
+    //   };
+    // }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
-        onTap: routerPush(context,
-            page: Main(
-              showReview: true,
-              toiletModel: data,
-            )),
+        onTap: () => routerPush(
+          context,
+          page: Main(
+            showReview: true,
+            toiletModel: data,
+          ),
+        )(),
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,
@@ -330,12 +339,14 @@ class ListItem extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () => showModal(context,
-                              page: NavigationModal(
-                                startPoint: const [37.537229, 127.005515],
-                                endPoint: [data.lat, data.lng],
-                                destination: data.toiletName,
-                              )),
+                          onPressed: () => showModal(
+                            context,
+                            page: NavigationModal(
+                              startPoint: const [37.537229, 127.005515],
+                              endPoint: [data.lat, data.lng],
+                              destination: data.toiletName,
+                            ),
+                          ),
                           icon: const CustomIcon(
                             icon: planeIcon,
                             color: Colors.lightBlue,
