@@ -44,13 +44,11 @@ class ToiletProvider extends ApiProvider {
               searchToiletUrl,
               queryParameters: queryData,
             );
-      if (GlobalProvider().totalPages == null) {
-        GlobalProvider().setTotal(response.data['totalPages']);
-      }
       final data = response.data['content'];
       ToiletList toiletList = data.map<ToiletModel>((json) {
         return ToiletModel.fromJson(json);
       }).toList();
+      GlobalProvider().setTotal(response.data['totalPages']);
       return toiletList;
     } catch (error) {
       print(error);

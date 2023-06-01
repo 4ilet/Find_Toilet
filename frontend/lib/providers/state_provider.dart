@@ -100,7 +100,8 @@ class ApplyChangeProvider with ChangeNotifier {
 
 //* setttings
 class SettingsProvider with ChangeNotifier {
-  static late int _fontIdx, _magnigyIdx, _radiusIdx;
+  static late int _magnigyIdx, _radiusIdx;
+  static int? _fontIdx;
   static String? _fontState;
   static late String _magnigyState, _radiusState;
   final List<StringList> _optionList = [
@@ -115,7 +116,7 @@ class SettingsProvider with ChangeNotifier {
   get radiusState => _radiusState;
   get radius => _valueList[_radiusIdx];
 
-  Future<bool> initSettings() async {
+  FutureBool initSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _magnigyIdx = prefs.getInt('magnigyIdx') ?? 0;
     _magnigyState = _optionList[0][_magnigyIdx];
@@ -123,10 +124,8 @@ class SettingsProvider with ChangeNotifier {
     final font = prefs.getInt('fontIdx');
     if (font != null) {
       _fontIdx = font;
-    } else {
-      _fontIdx = 0;
+      _fontState = _optionList[1][_fontIdx!];
     }
-    _fontState = _optionList[1][_magnigyIdx];
 
     _radiusIdx = prefs.getInt('radiusIdx') ?? 1;
     _radiusState = _optionList[2][_radiusIdx];
@@ -135,6 +134,15 @@ class SettingsProvider with ChangeNotifier {
   }
 
 //* public
+  void initOption(bool option) {
+    if (option) {
+      _applyShowMagnify();
+      _setShowMagnify();
+    }
+    _initFont(option);
+    _setFont();
+  }
+
   void applyOption(int menuIdx) {
     switch (menuIdx) {
       case 0:
@@ -152,15 +160,19 @@ class SettingsProvider with ChangeNotifier {
   }
 
 //* private
+  void _initFont(bool option) {
+    _fontIdx = option ? 0 : 1;
+    _fontState = _optionList[1][_fontIdx!];
+  }
 
   void _setFont() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('fontIdx', _fontIdx);
+    await prefs.setInt('fontIdx', _fontIdx!);
   }
 
   void _applyFont() {
-    _fontIdx = 1 - _fontIdx;
-    _fontState = _optionList[1][_fontIdx];
+    _fontIdx = 1 - _fontIdx!;
+    _fontState = _optionList[1][_fontIdx!];
     notifyListeners();
   }
 
@@ -172,7 +184,7 @@ class SettingsProvider with ChangeNotifier {
   void _applyRadius() {
     _radiusIdx += 1;
     if (_radiusIdx >= 3) _radiusIdx = 0;
-    _radiusState = _optionList[2][_fontIdx];
+    _radiusState = _optionList[2][_radiusIdx];
     notifyListeners();
   }
 

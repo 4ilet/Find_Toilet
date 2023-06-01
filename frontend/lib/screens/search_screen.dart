@@ -4,7 +4,6 @@ import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
-import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/select_box.dart';
@@ -35,47 +34,51 @@ class _SearchState extends State<Search> {
   Offset? position;
 
   bool showList = false;
-  bool loading = true;
-  bool additional = false;
-  bool working = false;
   DynamicMap searchData = {};
   late String selectedValue;
+  late bool allDay, diaper, disabled, kids;
 
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent * 0.9) {
-        if (searchData['page'] < getTotal(context)) {
-          if (!working) {
-            setState(() {
-              working = true;
-            });
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              if (!additional) {
-                setState(() {
-                  additional = true;
-                });
-                search();
-              }
-            });
+
+    initData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initLoadingData(context);
+      firstSearch();
+      getOffset();
+      scrollController.addListener(() async {
+        if (scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent * 0.9) {
+          if (getPage(context) < getTotal(context)!) {
+            if (!getWorking(context)) {
+              setState(() {
+                setWorking(context, true);
+              });
+              Future.delayed(const Duration(milliseconds: 2000), () {
+                if (!getAdditional(context)) {
+                  setAdditional(context, true);
+                  search();
+                }
+              });
+            }
           }
         }
-      }
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getOffset();
+      });
     });
   }
 
   void initData() {
     final sortIdx = getSortIdx(context);
+    allDay = readFilter(context, 0);
+    diaper = readFilter(context, 1);
+    disabled = readFilter(context, 2);
+    kids = readFilter(context, 3);
     searchData = {
-      'allDay': readFilter(context, 0),
-      'diaper': readFilter(context, 1),
-      'disabled': readFilter(context, 2),
-      'kids': readFilter(context, 3),
+      'allDay': allDay,
+      'diaper': diaper,
+      'disabled': disabled,
+      'kids': kids,
       'keyword': widget.query,
       'lat': 37.537229,
       'lon': 127.005515,
@@ -84,28 +87,30 @@ class _SearchState extends State<Search> {
       'order': sortValues[sortIdx],
     };
     selectedValue = sortOrder[sortIdx];
-    firstSearch();
   }
 
   void firstSearch() async {
-    if (loading) {
+    if (readLoading(context)) {
       searchData['page'] += 1;
-      final data = await ToiletProvider().searchToilet(searchData);
-      toiletList.addAll(data);
-      setState(() {
-        loading = false;
+      ToiletProvider().searchToilet(searchData).then((data) {
+        setState(() {
+          toiletList.addAll(data);
+        });
+        setLoading(context, false);
       });
+      increasePage(context);
     }
   }
 
   void search() async {
-    if (additional) {
+    if (getAdditional(context)) {
       searchData['page'] += 1;
-      final data = await ToiletProvider().searchToilet(searchData);
-      toiletList.addAll(data);
-      setState(() {
-        additional = false;
-        working = false;
+      ToiletProvider().searchToilet(searchData).then((data) {
+        toiletList.addAll(data);
+        setLoading(context, false);
+        setAdditional(context, false);
+        setWorking(context, false);
+        increasePage(context);
       });
     }
   }
@@ -127,13 +132,29 @@ class _SearchState extends State<Search> {
         searchData['order'] = sortValues[i];
         selectedValue = sortOrder[i];
         searchData['page'] = -1;
+        initLoadingData(context);
         changeShowState();
-        loading = true;
+        setLoading(context, true);
         firstSearch();
       } else {
         changeShowState();
       }
     });
+  }
+
+  bool isChanged() {
+    if (searchData['keyword'] != widget.query) {
+      return true;
+    } else if (searchData['allDay'] != allDay) {
+      return true;
+    } else if (searchData['diaper'] != diaper) {
+      return true;
+    } else if (searchData['disabled'] != diaper) {
+      return true;
+    } else if (searchData['kids'] != diaper) {
+      return true;
+    }
+    return false;
   }
 
   void onSearchAction() {
@@ -147,11 +168,11 @@ class _SearchState extends State<Search> {
         ),
       );
       return;
-    } else if (keyword != widget.query) {
-      return routerPush(
+    } else if (isChanged()) {
+      routerPush(
         context,
         page: Search(query: keyword!),
-      )();
+      );
     }
     return;
   }
@@ -166,12 +187,29 @@ class _SearchState extends State<Search> {
     }
   }
 
+  void changeFilterState(int index) {
+    switch (index) {
+      case 0:
+        searchData['diaper'] = !searchData['diaper'];
+        return;
+      case 1:
+        searchData['kids'] = !searchData['kids'];
+        return;
+      case 2:
+        searchData['disabled'] = !searchData['disabled'];
+        return;
+      default:
+        searchData['allDay'] = !searchData['allDay'];
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    initData();
     return Scaffold(
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
+        expandedHeight: 210,
         listScroll: scrollController,
         flexibleSpace: Stack(
           children: [
@@ -187,7 +225,9 @@ class _SearchState extends State<Search> {
                   onSearchAction: onSearchAction,
                 ),
                 topOfAppBar(),
-                const FilterBox()
+                FilterBox(
+                  onPressed: changeFilterState,
+                ),
               ],
             ),
             showList ? sortList() : const SizedBox()
@@ -205,41 +245,41 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Padding searchToiletList() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: CustomListView(
-          itemCount: toiletList.length,
-          itemBuilder: (context, i) {
-            return Column(
-              children: [
-                i < searchData['page'] * cnt
-                    ? ListItem(
-                        data: toiletList[i],
-                        showReview: false,
-                      )
-                    : !additional
-                        ? ListItem(
-                            data: toiletList[i],
-                            showReview: false,
-                          )
-                        : const SizedBox(),
-                i == toiletList.length - 1 &&
-                        getTotal(context) != searchData['page']
-                    ? const Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 40,
-                        ),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : const SizedBox()
-              ],
-            );
-          },
-        ));
-  }
+  // Padding searchToiletList() {
+  //   return Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 10),
+  //       child: CustomListView(
+  //         itemCount: toiletList.length,
+  //         itemBuilder: (context, i) {
+  //           return Column(
+  //             children: [
+  //               i < searchData['page'] * cnt
+  //                   ? ListItem(
+  //                       data: toiletList[i],
+  //                       showReview: false,
+  //                     )
+  //                   : !additional
+  //                       ? ListItem(
+  //                           data: toiletList[i],
+  //                           showReview: false,
+  //                         )
+  //                       : const SizedBox(),
+  //               i == toiletList.length - 1 &&
+  //                       getTotal(context) != searchData['page']
+  //                   ? const Padding(
+  //                       padding: EdgeInsets.symmetric(
+  //                         vertical: 40,
+  //                       ),
+  //                       child: Center(
+  //                         child: CircularProgressIndicator(),
+  //                       ),
+  //                     )
+  //                   : const SizedBox()
+  //             ],
+  //           );
+  //         },
+  //       ));
+  // }
 
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {

@@ -28,8 +28,8 @@ class CustomText extends StatelessWidget {
         fontFamily: font,
         fontWeight: isBoldText ? FontWeight.bold : null,
       ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
+      // overflow: TextOverflow.ellipsis,
+      // maxLines: 3,
     );
   }
 }
@@ -42,6 +42,7 @@ class TextWithIcon extends StatelessWidget {
   final CustomColors textColor, iconColor;
   final int flex;
   final MainAxisAlignment mainAxisAlignment;
+  final double gap;
   const TextWithIcon({
     super.key,
     required this.icon,
@@ -52,6 +53,7 @@ class TextWithIcon extends StatelessWidget {
     this.font,
     this.flex = 4,
     this.mainAxisAlignment = MainAxisAlignment.start,
+    this.gap = 10,
   });
 
   @override
@@ -68,10 +70,7 @@ class TextWithIcon extends StatelessWidget {
             color: convertedColor(iconColor),
           ),
         ),
-        const Flexible(
-            child: SizedBox(
-          width: 10,
-        )),
+        Flexible(child: SizedBox(width: gap)),
         Flexible(
           flex: flex,
           fit: FlexFit.loose,

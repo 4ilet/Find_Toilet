@@ -204,19 +204,7 @@ class ListItem extends StatelessWidget {
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
       data.privateChildF || data.privateChildM1 || data.privateChildM2
     ];
-    // final IconDataList iconList = [
-    //   locationIcon,
-    //   phoneIcon,
-    //   clockIcon,
-    //   starIcon
-    // ];
 
-    // final infoList = [
-    //   data.address,
-    //   data.phoneNo,
-    //   data.duration,
-    //   '${data.score} (${data.commentCnt}개)'
-    // ];
     bool existState() {
       for (int i = 0; i < 4; i += 1) {
         if (availableList[i]) return true;
@@ -371,11 +359,12 @@ class ListItem extends StatelessWidget {
                   ),
                   data.phoneNo != ''
                       ? Flexible(
-                          flex: 12,
+                          flex: 13,
                           child: TextWithIcon(
                             icon: phoneIcon,
                             text: data.phoneNo,
                             flex: 6,
+                            gap: 7,
                           ),
                         )
                       : const SizedBox(),
@@ -443,7 +432,11 @@ class ListItem extends StatelessWidget {
 
 //* filter 상자
 class FilterBox extends StatefulWidget {
-  const FilterBox({super.key});
+  final void Function(int)? onPressed;
+  const FilterBox({
+    super.key,
+    this.onPressed,
+  });
 
   @override
   State<FilterBox> createState() => _FilterBoxState();
@@ -465,7 +458,12 @@ class _FilterBoxState extends State<FilterBox> {
       children: [
         for (int i = 0; i < 4; i += 1)
           CustomBox(
-            onTap: () => setFilter(context, i),
+            onTap: () {
+              setFilter(context, i);
+              if (widget.onPressed != null) {
+                widget.onPressed!(i);
+              }
+            },
             // width: 100,
             // height: 30,
             color: getFilter(context, i) ? mainColor : whiteColor,

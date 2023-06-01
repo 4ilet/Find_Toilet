@@ -8,6 +8,7 @@ import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 
@@ -33,17 +34,26 @@ class _SettingsState extends State<Settings> {
 
   //* 문의하기
   void sendEmail() async {
+    String? emailBody;
     try {
+      emailBody = await body();
       final Email email = Email(
         subject: '[화장실을 찾아서] 문의사항',
         recipients: ['team.4ilet@gmail.com'],
-        body: await body(),
+        body: emailBody,
         isHTML: false,
       );
-
       await FlutterEmailSender.send(email);
     } catch (error) {
-      showModal(context, page: errorModal('email'));
+      showModal(
+        context,
+        page: AlertModal(
+          title: '문의하기',
+          content: emailBody ?? inquiryBody(),
+          onPressed: () => Clipboard.setData(
+              ClipboardData(text: emailBody ?? inquiryBody())),
+        ),
+      );
     }
   }
 
@@ -58,7 +68,13 @@ class _SettingsState extends State<Settings> {
         changeToken(context, token: null, refresh: null);
       }
     } catch (error) {
-      showModal(context, page: errorModal('login'));
+      showModal(
+        context,
+        page: const AlertModal(
+          title: '오류 발생',
+          content: '카카오톡 로그인 오류가 발생했습니다.',
+        ),
+      );
     }
   }
 
@@ -230,20 +246,6 @@ class _SettingsState extends State<Settings> {
           ],
         ),
       ),
-    );
-  }
-
-  CustomModal errorModal(String feature) {
-    const loginError = '카카오톡 로그인 오류가 발생했습니다.';
-    return CustomModal(
-      title: '오류 발생',
-      isAlert: true,
-      children: [
-        CustomText(
-          title: feature == 'email' ? errorBody() : loginError,
-          fontSize: FontSize.defaultSize,
-        ),
-      ],
     );
   }
 }

@@ -516,7 +516,9 @@ class DeleteModal extends StatelessWidget {
         showModal(
           context,
           page: const AlertModal(
-              title: '삭제 확인', content: '성공적으로 삭제 작업이 완료되었습니다.'),
+            title: '삭제 확인',
+            content: '성공적으로 삭제 작업이 완료되었습니다.',
+          ),
         );
         changeRefresh(context);
       } catch (error) {
@@ -689,7 +691,8 @@ class NavigationModal extends StatelessWidget {
           await launchUrl(uriList[i]);
         } catch (error) {
           await launchUrl(
-              Uri.parse('market://details?id=${packageNameList[i]}'));
+            Uri.parse('market://details?id=${packageNameList[i]}'),
+          );
         }
       };
     }

@@ -80,15 +80,14 @@ class _BookMarkListState extends State<BookMarkList> {
       BookMarkProvider()
           .getToiletList(widget.folderId, getPage(context))
           .then((toiletData) {
-        setState(() {
-          data.addAll(toiletData);
-        });
+        // setState(() {
+        // });
+        data.addAll(toiletData);
         setLoading(context, false);
-        print('data : $data toiletData : $toiletData');
+        setAdditional(context, false);
+        setWorking(context, false);
+        increasePage(context);
       });
-      setAdditional(context, false);
-      setWorking(context, false);
-      increasePage(context);
     }
   }
 

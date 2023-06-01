@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.find_toilet">
+    package="com.find_toilet.map.android">
     <queries>
     <!-- If your app checks for SMS support -->
     <intent>
