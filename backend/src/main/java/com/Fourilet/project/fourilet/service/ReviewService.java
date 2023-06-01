@@ -7,6 +7,7 @@ import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.data.repository.ReviewRepository;
 import com.Fourilet.project.fourilet.data.repository.ToiletRepository;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
+import com.Fourilet.project.fourilet.exception.DuplicatedReviewerException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,17 +47,29 @@ public class ReviewService {
         if (postReviewDto.getComment().isEmpty()){
             throw new IllegalArgumentException("리뷰를 작성하지 않았습니다");
         }
+
         float score = (float)postReviewDto.getScore();
         if ( score < 0  || score > 5){
             throw new IllegalArgumentException("점수는 0 ~ 5 사이의 점수를 입력해주세요");
         }
+        Review alreadyPostedMember = reviewRepository.findByMember(member).orElse(null);
 
-        Review newReview = new Review();
-        newReview.setToilet(toilet);
-        newReview.setMember(member);
-        newReview.setComment(postReviewDto.getComment());
-        newReview.setScore(postReviewDto.getScore());
-        reviewRepository.save(newReview);
+        if (alreadyPostedMember == null){
+            Review newReview = new Review();
+            newReview.setToilet(toilet);
+            newReview.setMember(member);
+            newReview.setComment(postReviewDto.getComment());
+            newReview.setScore(postReviewDto.getScore());
+            reviewRepository.save(newReview);
+        } else {
+            throw new DuplicatedReviewerException();
+        }
+//        Review newReview = new Review();
+//        newReview.setToilet(toilet);
+//        newReview.setMember(member);
+//        newReview.setComment(postReviewDto.getComment());
+//        newReview.setScore(postReviewDto.getScore());
+//        reviewRepository.save(newReview);
     }
     public ReviewDto.GetReviewListDto getReview(long toiletId, int page){
         LOGGER.info("CALL GET REVIEW");
