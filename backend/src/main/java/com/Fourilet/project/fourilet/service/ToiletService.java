@@ -64,6 +64,7 @@ public class ToiletService {
                 toiletDto.setFolderId(new ArrayList<>());
             }
             toiletDto.setReviewId(alreadyReviewed);
+            toiletDto.setScore(Double.valueOf(String.format("%.2f", toiletDto.getScore())));
         }
         result.put("content", item.getContent());
         result.put("totalPages", item.getTotalPages());
@@ -115,6 +116,7 @@ public class ToiletService {
                 toiletDto.setFolderId(new ArrayList<>());
             }
             toiletDto.setReviewId(alreadyReviewed);
+            toiletDto.setScore(Double.valueOf(String.format("%.2f", toiletDto.getScore())));
         }
         result.put("content", item.getContent());
         result.put("totalPages", item.getTotalPages());
