@@ -5,6 +5,7 @@ import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.Message2;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
+import com.Fourilet.project.fourilet.exception.DuplicatedReviewerException;
 import com.Fourilet.project.fourilet.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -54,6 +55,11 @@ public class ReviewController {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        } catch (DuplicatedReviewerException e) {
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         }
     }
     @GetMapping("/{toiletId}")

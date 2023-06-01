@@ -1,5 +1,6 @@
 package com.Fourilet.project.fourilet.data.repository;
 
+import com.Fourilet.project.fourilet.data.entity.Member;
 import com.Fourilet.project.fourilet.data.entity.Review;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
@@ -21,7 +22,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
       Optional<Review> findById(long reviewId);
 
+      Optional<Review> findByMember(Member member);
+
       List<Review> findAllByToilet(Toilet toilet, PageRequest pageRequest);
 
       List<Review> findAllByToilet(Toilet toilet, PageRequest pageRequest, Sort reviewId);
+
+
 }
