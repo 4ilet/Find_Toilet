@@ -206,7 +206,7 @@ public class FolderService {
                 toiletDto2.setComment(reviewList.size());
 
             } else {
-                average = total / reviewList.size();
+                average = Float.parseFloat(String.format("%2f", total / reviewList.size()));
                 toiletDto2.setScore(average);
                 toiletDto2.setComment(reviewList.size());
             }
