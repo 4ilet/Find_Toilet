@@ -21,11 +21,15 @@ class ThemeBox extends StatefulWidget {
   final String text;
   final bool selected;
   final ReturnVoid onTap;
+  final FontSize fontSize;
+  final String path;
   const ThemeBox({
     super.key,
     required this.text,
     required this.selected,
     required this.onTap,
+    required this.path,
+    this.fontSize = FontSize.defaultSize,
   });
 
   @override
@@ -45,12 +49,14 @@ class _ThemeBoxState extends State<ThemeBox> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomBox(
-            color: greyColor,
             height: screenHeight(context) * 0.2,
             width: screenWidth(context) * 0.6,
-            child: const SizedBox(),
+            child: Image.asset(widget.path),
           ),
-          CustomText(title: widget.text)
+          CustomText(
+            title: widget.text,
+            fontSize: widget.fontSize,
+          )
         ],
       ),
     );
@@ -432,7 +438,7 @@ class ListItem extends StatelessWidget {
 
 //* filter 상자
 class FilterBox extends StatefulWidget {
-  final void Function(int)? onPressed;
+  final ReturnVoid? onPressed;
   const FilterBox({
     super.key,
     this.onPressed,
@@ -461,7 +467,7 @@ class _FilterBoxState extends State<FilterBox> {
             onTap: () {
               setFilter(context, i);
               if (widget.onPressed != null) {
-                widget.onPressed!(i);
+                widget.onPressed!();
               }
             },
             // width: 100,

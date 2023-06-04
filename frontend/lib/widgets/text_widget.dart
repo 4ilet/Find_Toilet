@@ -1,5 +1,51 @@
+import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/widgets/box_container.dart';
 import 'package:flutter/material.dart';
+
+class CustomTextField extends StatelessWidget {
+  final String? initValue, hintText;
+  final void Function(String)? onChanged;
+  final int maxLines;
+  final double width;
+  final Widget? prefixIcon, suffixIcon;
+  const CustomTextField({
+    super.key,
+    this.initValue,
+    required this.onChanged,
+    this.maxLines = 1,
+    this.width = 350,
+    this.hintText,
+    this.prefixIcon,
+    this.suffixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomBox(
+      width: 350,
+      color: whiteColor,
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: TextField(
+          controller: TextEditingController(text: initValue),
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: hintText,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+          ),
+          maxLines: 5,
+          style: TextStyle(
+            fontSize: getFontSize(context) == '기본' ? defaultSize : largeSize,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class CustomText extends StatelessWidget {
   final String title;
@@ -24,7 +70,7 @@ class CustomText extends StatelessWidget {
       textAlign: isCentered ? TextAlign.center : null,
       style: TextStyle(
         color: convertedColor(color),
-        fontSize: convertedSize(fontSize),
+        fontSize: convertedSize(applyDefaultTheme(context, fontSize)),
         fontFamily: font,
         fontWeight: isBoldText ? FontWeight.bold : null,
       ),

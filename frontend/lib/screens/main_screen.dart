@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
@@ -11,6 +12,7 @@ import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/map_widget.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
   final bool showReview;
@@ -32,11 +34,7 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
-    if (!widget.showReview) {
-      ToiletProvider()
-          .getNearToilet(mainToiletData(context))
-          .then((data) => addToiletList(context, data));
-    }
+    refreshMain();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         setKey(context, globalKey);
@@ -48,6 +46,7 @@ class _MainState extends State<Main> {
     if (query['value'] != '') {
       return routerPush(
         context,
+        // page: const Search(),
         page: Search(query: query['value'] ?? ''),
       )();
     }
@@ -58,6 +57,16 @@ class _MainState extends State<Main> {
         content: '검색어를 입력해주세요',
       ),
     );
+  }
+
+  void refreshMain() {
+    setQuery(context, null);
+    if (!widget.showReview) {
+      context.read<GlobalProvider>().initToiletList();
+      ToiletProvider()
+          .getNearToilet(mainToiletData(context))
+          .then((data) => addToiletList(context, data));
+    }
   }
 
   @override
@@ -87,16 +96,11 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  SearchBar(
-                    isMain: true,
-                    query: query['value'] ?? '',
-                    onChange: (value) => query['value'] = value,
-                    onSearchAction: onSearchAction,
-                  ),
-                  const FilterBox()
-                ],
+              SearchBar(
+                isMain: true,
+                onChange: (value) => setQuery(context, value),
+                onSearchAction: onSearchAction,
+                pressedFilter: refreshMain,
               ),
               ToiletBottomSheet(
                 showReview: widget.showReview,

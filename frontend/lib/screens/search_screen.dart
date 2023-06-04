@@ -1,5 +1,6 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -80,6 +81,7 @@ class _SearchState extends State<Search> {
       'disabled': disabled,
       'kids': kids,
       'keyword': widget.query,
+      // 'keyword': readQuery(context),
       'lat': 37.537229,
       'lon': 127.005515,
       'page': -1,
@@ -206,41 +208,45 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: mainColor,
-      body: CustomBoxWithScrollView(
-        expandedHeight: 210,
-        listScroll: scrollController,
-        flexibleSpace: Stack(
-          children: [
-            Column(
-              children: [
-                SearchBar(
-                  isMain: false,
-                  query: searchData['keyword'] as String,
-                  onChange: (value) {
-                    searchData['keyword'] = value;
-                    // print('data: ${searchData['keyword']}');
-                  },
-                  onSearchAction: onSearchAction,
-                ),
-                topOfAppBar(),
-                FilterBox(
-                  onPressed: changeFilterState,
-                ),
-              ],
-            ),
-            showList ? sortList() : const SizedBox()
+    return WillPopScope(
+      onWillPop: () {
+        routerPush(context, page: const Main());
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: mainColor,
+        body: CustomBoxWithScrollView(
+          expandedHeight: 210,
+          listScroll: scrollController,
+          flexibleSpace: Stack(
+            children: [
+              Column(
+                children: [
+                  SearchBar(
+                    isMain: false,
+                    onChange: (value) {
+                      setQuery(context, value);
+                      searchData['keyword'] = value;
+                      print('data: ${searchData['keyword']}');
+                      print('value : $value');
+                    },
+                    onSearchAction: onSearchAction,
+                  ),
+                  topOfAppBar(),
+                ],
+              ),
+              showList ? sortList() : const SizedBox()
+            ],
+          ),
+          silverChild: [
+            CustomSilverList(
+              showReview: false,
+              isMain: false,
+              isSearch: true,
+              data: toiletList,
+            )
           ],
         ),
-        silverChild: [
-          CustomSilverList(
-            showReview: false,
-            isMain: false,
-            isSearch: true,
-            data: toiletList,
-          )
-        ],
       ),
     );
   }

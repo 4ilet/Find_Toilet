@@ -11,6 +11,7 @@ const lightGreyColor = Color(0xFFE5E5E5);
 const lightBlueColor = Colors.lightBlue;
 
 //* 글씨 관련
+const double largeTitleSize = 36;
 const double titleSize = 30;
 const double largeSize = 24;
 const double defaultSize = 19;

@@ -129,6 +129,7 @@ class SettingsProvider with ChangeNotifier {
 
     _radiusIdx = prefs.getInt('radiusIdx') ?? 1;
     _radiusState = _optionList[2][_radiusIdx];
+    notifyListeners();
 
     return true;
   }
@@ -141,6 +142,7 @@ class SettingsProvider with ChangeNotifier {
     }
     _initFont(option);
     _setFont();
+    notifyListeners();
   }
 
   void applyOption(int menuIdx) {
@@ -157,6 +159,7 @@ class SettingsProvider with ChangeNotifier {
         _applyRadius();
         _setRadius();
     }
+    notifyListeners();
   }
 
 //* private
@@ -173,7 +176,6 @@ class SettingsProvider with ChangeNotifier {
   void _applyFont() {
     _fontIdx = 1 - _fontIdx!;
     _fontState = _optionList[1][_fontIdx!];
-    notifyListeners();
   }
 
   void _setRadius() async {
@@ -185,7 +187,6 @@ class SettingsProvider with ChangeNotifier {
     _radiusIdx += 1;
     if (_radiusIdx >= 3) _radiusIdx = 0;
     _radiusState = _optionList[2][_radiusIdx];
-    notifyListeners();
   }
 
   void _setShowMagnify() async {
@@ -196,7 +197,6 @@ class SettingsProvider with ChangeNotifier {
   void _applyShowMagnify() {
     _magnigyIdx = 1 - _magnigyIdx;
     _magnigyState = _optionList[0][_magnigyIdx];
-    notifyListeners();
   }
 }
 
@@ -231,6 +231,7 @@ class GlobalProvider with ChangeNotifier {
   static int _sortIdx = 0;
   static double _lat = 37.537229;
   static double _lng = 127.005515;
+  static final Map<String, String?> _query = {'value': null};
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
     'allDay': _allDay,
@@ -256,6 +257,7 @@ class GlobalProvider with ChangeNotifier {
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
+  String? get query => _query['value'];
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
@@ -274,6 +276,10 @@ class GlobalProvider with ChangeNotifier {
   void initPage() {
     _setPage(0);
     notifyListeners();
+  }
+
+  void setQuery(String? value) {
+    _setQuery(value);
   }
 
   // void setCnt(int newVal) {
@@ -311,6 +317,11 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void initToiletList() {
+    _initToiletList();
+    // notifyListeners();
+  }
+
   void setLoading(bool value) {
     _setLoading(value);
     notifyListeners();
@@ -323,6 +334,7 @@ class GlobalProvider with ChangeNotifier {
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;
+  void _setQuery(String? value) => _query['value'] = value;
   void _setKey(GlobalKey key) => _globalKey = key;
   void _setWorking(bool newVal) => _working = newVal;
   void _setAdditional(bool newVal) => _additional = newVal;
@@ -350,6 +362,8 @@ class GlobalProvider with ChangeNotifier {
 
   void _addToiletList(ToiletList toiletList) =>
       _mainToiletList.addAll(toiletList);
+
+  void _initToiletList() => _mainToiletList.clear();
 
   void _setLoading(bool value) => _loading = value;
 

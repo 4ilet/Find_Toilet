@@ -338,14 +338,9 @@ class InputModal extends StatelessWidget {
       isAlert: isAlert,
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: TextField(
-              onChanged: fillData,
-              controller: TextEditingController(
-                text: data,
-              ),
-            ),
+          child: CustomTextField(
+            onChanged: fillData,
+            initValue: data,
           ),
         ),
       ],

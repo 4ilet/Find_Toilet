@@ -52,6 +52,23 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
 String? getFontSize(BuildContext context) =>
     context.read<SettingsProvider>().fontState;
 
+FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
+  if (context.read<SettingsProvider>().fontState == '기본') {
+    return defaultFont;
+  } else {
+    switch (defaultFont) {
+      case FontSize.titleSize:
+        return FontSize.largeTitleSize;
+      case FontSize.largeSize:
+        return FontSize.titleSize;
+      case FontSize.defaultSize:
+        return FontSize.largeSize;
+      default:
+        return FontSize.defaultSize;
+    }
+  }
+}
+
 //* 화면 확대/축소 버튼
 String getMagnify(BuildContext context) =>
     context.read<SettingsProvider>().magnigyState;
@@ -108,6 +125,12 @@ int? getTotal(BuildContext context) =>
     context.read<GlobalProvider>().totalPages;
 void setTotal(BuildContext context, int? newTotal) =>
     context.read<GlobalProvider>().setTotal(newTotal);
+
+//* 검색어
+String? getQuery(BuildContext context) => context.watch<GlobalProvider>().query;
+String? readQuery(BuildContext context) => context.read<GlobalProvider>().query;
+void setQuery(BuildContext context, String? value) =>
+    context.read<GlobalProvider>().setQuery(value);
 
 //* 필터
 void setFilter(BuildContext context, int index) =>

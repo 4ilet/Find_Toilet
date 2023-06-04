@@ -1,6 +1,7 @@
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -67,12 +68,15 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                   ThemeBox(
                     text: '큰 글씨',
                     selected: isLargeSize,
+                    fontSize: FontSize.largeSize,
                     onTap: changeFontSize(true),
+                    path: largeTheme,
                   ),
                   ThemeBox(
                     text: '기본',
                     selected: !isLargeSize,
                     onTap: changeFontSize(false),
+                    path: defaultTheme,
                   ),
                   CustomButton(onPressed: applyTheme)
                 ],
