@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
-import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/select_theme_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -40,7 +39,7 @@ class _IntroState extends State<Intro> {
         context,
         page: getFontSize(context) == null
             ? const SelectFontTheme()
-            : const Main(),
+            : const SelectFontTheme(),
       );
     });
   }

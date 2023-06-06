@@ -34,11 +34,6 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void initState() {
     super.initState();
-    // focus.addListener(() {
-    //   setState(() {
-    //     showDetail = true;
-    //   });
-    // });
   }
 
   void changeShowVar(bool value) {
@@ -69,38 +64,37 @@ class _SearchBarState extends State<SearchBar> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               const SizedBox(height: 100),
-              CustomBox(
-                width: screenWidth(context) * 0.8,
-                height: 40,
-                boxShadow: const [defaultShadow],
-                color: whiteColor,
-                radius: 5,
-                child: Focus(
-                    onFocusChange: changeShowVar,
-                    child: CustomTextField(
-                      onChanged: widget.onChange,
-                      initValue: getQuery(context),
-                      hintText: '검색어를 입력하세요',
-                      prefixIcon: CustomIconButton(
-                        icon: widget.isMain ? hamburgerIcon : exitIcon,
-                        onPressed: routerPush(
-                          context,
-                          page: widget.isMain ? const Settings() : const Main(),
-                        ),
-                        color: CustomColors.blackColor,
-                      ),
-                      suffixIcon:
-                          getQuery(context) != null && getQuery(context) != ''
-                              ? CustomIconButton(
-                                  icon: closeIcon,
-                                  onPressed: () {
-                                    widget.onChange('');
-                                    print(readQuery(context));
-                                  },
-                                  color: CustomColors.blackColor,
-                                )
-                              : null,
-                    )),
+              Focus(
+                onFocusChange: changeShowVar,
+                child: CustomTextField(
+                  width: screenWidth(context) * 0.8,
+                  padding: const EdgeInsetsDirectional.all(0),
+                  boxShadow: const [defaultShadow],
+                  onChanged: widget.onChange,
+                  searchMode: true,
+                  onSubmitted: (_) => widget.onSearchAction(),
+                  initValue: getQuery(context),
+                  hintText: '검색어를 입력하세요',
+                  prefixIcon: CustomIconButton(
+                    icon: widget.isMain ? hamburgerIcon : exitIcon,
+                    onPressed: routerPush(
+                      context,
+                      page: widget.isMain ? const Settings() : const Main(),
+                    ),
+                    color: CustomColors.blackColor,
+                  ),
+                  suffixIcon:
+                      getQuery(context) != null && getQuery(context) != ''
+                          ? CustomIconButton(
+                              icon: closeIcon,
+                              onPressed: () {
+                                widget.onChange('');
+                                print(readQuery(context));
+                              },
+                              color: CustomColors.blackColor,
+                            )
+                          : null,
+                ),
               ),
               //   width: 40,
               //   height: 40,

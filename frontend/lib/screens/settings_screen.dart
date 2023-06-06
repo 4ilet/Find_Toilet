@@ -92,11 +92,12 @@ class _SettingsState extends State<Settings> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Flexible(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
+                      flex: 1,
                       child: getToken(context) != null
                           ? CustomButton(
                               textColor: CustomColors.blackColor,
@@ -114,6 +115,7 @@ class _SettingsState extends State<Settings> {
                           : const SizedBox(),
                     ),
                     Flexible(
+                      flex: 1,
                       child: GestureDetector(
                         onTap: loginOrLogout,
                         child: getToken(context) != null
@@ -131,15 +133,16 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               const Flexible(
-                  flex: 1,
-                  child: CustomText(
-                    title: '어떤 것을 원하시나요?',
-                    fontSize: FontSize.largeSize,
-                    color: CustomColors.mainColor,
-                    font: kimm,
-                  )),
+                flex: 2,
+                child: CustomText(
+                  title: '어떤 것을 원하시나요?',
+                  fontSize: FontSize.largeSize,
+                  color: CustomColors.mainColor,
+                  font: kimm,
+                ),
+              ),
               Flexible(
-                flex: 6,
+                flex: 14,
                 child: Column(
                   children: [
                     for (int i = 0; i < 3; i += 1)
@@ -165,7 +168,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               Flexible(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const [

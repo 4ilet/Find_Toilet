@@ -51,7 +51,10 @@ class _ThemeBoxState extends State<ThemeBox> {
           CustomBox(
             height: screenHeight(context) * 0.2,
             width: screenWidth(context) * 0.6,
-            child: Image.asset(widget.path),
+            child: Image.asset(
+              widget.path,
+              fit: BoxFit.fitWidth,
+            ),
           ),
           CustomText(
             title: widget.text,
@@ -286,7 +289,7 @@ class ListItem extends StatelessWidget {
     //     showModal(context, page: const LoginConfirmModal());
     //   };
     // }
-
+    // print('height : ${screenHeight(context) * 0.33}');
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
@@ -300,7 +303,7 @@ class ListItem extends StatelessWidget {
         color: whiteColor,
         // height: 200,
         // width: screenWidth(context) * 0.8,
-        height: screenHeight(context) * 0.33,
+        height: getFontSize(context) == '기본' ? 250 : 300,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(

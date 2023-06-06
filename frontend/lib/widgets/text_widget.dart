@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? initValue, hintText;
-  final void Function(String)? onChanged;
+  final void Function(String)? onChanged, onSubmitted;
   final int maxLines;
-  final double width;
+  final double width, height, radius;
   final Widget? prefixIcon, suffixIcon;
+  final List<BoxShadow>? boxShadow;
+  final EdgeInsetsGeometry padding;
+  final bool searchMode;
   const CustomTextField({
     super.key,
     this.initValue,
@@ -19,15 +22,24 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.prefixIcon,
     this.suffixIcon,
+    this.height = 40,
+    this.boxShadow,
+    this.radius = 5,
+    this.padding = const EdgeInsetsDirectional.all(30),
+    this.onSubmitted,
+    this.searchMode = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomBox(
-      width: 350,
+      width: width,
+      height: getFontSize(context) == '기본' ? height : height * 1.2,
+      radius: radius,
       color: whiteColor,
+      boxShadow: boxShadow,
       child: Padding(
-        padding: const EdgeInsets.all(30),
+        padding: padding,
         child: TextField(
           controller: TextEditingController(text: initValue),
           onChanged: onChanged,
@@ -40,7 +52,10 @@ class CustomTextField extends StatelessWidget {
           maxLines: 5,
           style: TextStyle(
             fontSize: getFontSize(context) == '기본' ? defaultSize : largeSize,
+            height: 1,
           ),
+          textInputAction: searchMode ? TextInputAction.search : null,
+          onSubmitted: onSubmitted,
         ),
       ),
     );
@@ -52,16 +67,16 @@ class CustomText extends StatelessWidget {
   final String? font;
   final FontSize fontSize;
   final CustomColors color;
-  final bool isBoldText, isCentered;
-  const CustomText({
-    super.key,
-    required this.title,
-    this.fontSize = FontSize.defaultSize,
-    this.color = CustomColors.blackColor,
-    this.font,
-    this.isBoldText = false,
-    this.isCentered = false,
-  });
+  final bool isBoldText, isCentered, applyTheme;
+  const CustomText(
+      {super.key,
+      required this.title,
+      this.fontSize = FontSize.defaultSize,
+      this.color = CustomColors.blackColor,
+      this.font,
+      this.isBoldText = false,
+      this.isCentered = false,
+      this.applyTheme = true});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +85,8 @@ class CustomText extends StatelessWidget {
       textAlign: isCentered ? TextAlign.center : null,
       style: TextStyle(
         color: convertedColor(color),
-        fontSize: convertedSize(applyDefaultTheme(context, fontSize)),
+        fontSize: convertedSize(
+            applyTheme ? applyDefaultTheme(context, fontSize) : fontSize),
         fontFamily: font,
         fontWeight: isBoldText ? FontWeight.bold : null,
       ),

@@ -38,8 +38,8 @@ const plusIcon = Icons.add;
 
 //* image
 const logo = 'assets/logos/logo_2.png';
-const largeTheme = 'assets/logos/logo_2.png';
-const defaultTheme = 'assets/logos/logo_2.png';
+const largeTheme = 'assets/images/large_font.jpeg';
+const defaultTheme = 'assets/images/default_font.jpeg';
 const naverMap = 'assets/images/naver_map.png';
 const kakaoMap = 'assets/images/kakao_map.png';
 const tMap = 'assets/images/t_map.png';

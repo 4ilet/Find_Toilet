@@ -128,6 +128,7 @@ class _ReviewFormState extends State<ReviewForm> {
                 initValue: reviewData['comment'],
                 onChanged: changeComment,
                 maxLines: 5,
+                height: 200,
               ),
             ),
             Flexible(
