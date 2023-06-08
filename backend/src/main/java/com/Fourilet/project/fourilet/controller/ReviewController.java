@@ -51,10 +51,12 @@ public class ReviewController {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         } catch (IllegalArgumentException e){
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         } catch (DuplicatedReviewerException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
