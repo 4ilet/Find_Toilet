@@ -52,17 +52,20 @@ public class ReviewService {
         if ( score < 0  || score > 5){
             throw new IllegalArgumentException("점수는 0 ~ 5 사이의 점수를 입력해주세요");
         }
-        Review alreadyPostedMember = reviewRepository.findByMember(member).orElse(null);
+        List<Review> alreadyPostedReviewByMember = reviewRepository.findAllByMember(member);
 
-        if (alreadyPostedMember == null){
-            Review newReview = new Review();
-            newReview.setToilet(toilet);
-            newReview.setMember(member);
-            newReview.setComment(postReviewDto.getComment());
-            newReview.setScore(postReviewDto.getScore());
-            reviewRepository.save(newReview);
-        } else {
-            throw new DuplicatedReviewerException();
+        for (Review review : alreadyPostedReviewByMember ){ // 해당 멤버가 등록한 리뷰의 리스트들
+            if (review.getToilet() == toilet){ // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
+                throw new DuplicatedReviewerException(); // 존재하면 throw
+
+            } else { // 없으면 리뷰를 등록하기
+                Review newReview = new Review();
+                newReview.setToilet(toilet);
+                newReview.setMember(member);
+                newReview.setComment(postReviewDto.getComment());
+                newReview.setScore(postReviewDto.getScore());
+                reviewRepository.save(newReview);
+            }
         }
 //        Review newReview = new Review();
 //        newReview.setToilet(toilet);
