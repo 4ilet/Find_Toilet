@@ -165,7 +165,7 @@ public class FolderController {
         }
     }
 
-    @PostMapping("/add/{folderId}/{toiletId}")
+    @PostMapping("/add/")
     @ApiOperation(value = "즐겨찾기에 화장실을 추가, 삭제하는 Api", notes = "즐겨찾기에 화장실을 추가 또는 삭제한다.")
     public ResponseEntity<?> AddDeleteToilet(@RequestBody FolderDto.AddOrDelToiletDto addOrDelToiletDto){
         Message message = new Message();
