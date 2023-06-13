@@ -102,6 +102,7 @@ class FolderBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
+              flex: 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -223,10 +224,10 @@ class ListItem extends StatelessWidget {
 
     String available(int limit) {
       StringList facilityList = [
-        '24시간 이용',
-        '장애인 전용',
-        '유아 전용',
-        '기저귀 교환대',
+        '• 24시간 이용',
+        '• 장애인 전용',
+        '• 유아 전용',
+        '• 기저귀 교환대',
       ];
       String result = '';
       int length = 0;
@@ -275,21 +276,6 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    // ReturnVoid pressedBox() {
-    //   if (readToken(context) != null) {
-    //     return routerPush(
-    //       context,
-    //       page: Main(
-    //         showReview: true,
-    //         toiletModel: data,
-    //       ),
-    //     );
-    //   }
-    //   return () {
-    //     showModal(context, page: const LoginConfirmModal());
-    //   };
-    // }
-    // print('height : ${screenHeight(context) * 0.33}');
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
@@ -301,8 +287,6 @@ class ListItem extends StatelessWidget {
           ),
         )(),
         color: whiteColor,
-        // height: 200,
-        // width: screenWidth(context) * 0.8,
         height: getFontSize(context) == '기본' ? 250 : 300,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -312,8 +296,6 @@ class ListItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // toiletTopInfo(context),
-                  // for (int i = 0; i < 2; i += 1) toiletInfo(i),
                   Expanded(
                     flex: 2,
                     child: CustomText(
@@ -326,14 +308,33 @@ class ListItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
-                          onPressed: pressedHeart,
-                          icon: CustomIcon(
-                            icon: data.folderId.isNotEmpty
-                                ? heartIcon
-                                : emptyHeartIcon,
-                            color: redColor,
-                          ),
+                        Stack(
+                          children: [
+                            IconButton(
+                              onPressed: pressedHeart,
+                              icon: CustomIcon(
+                                icon: data.folderId.isNotEmpty
+                                    ? heartIcon
+                                    : emptyHeartIcon,
+                                color: redColor,
+                              ),
+                            ),
+                            data.folderId.isNotEmpty
+                                ? CustomCircleButton(
+                                    width: 20,
+                                    height: 20,
+                                    shadow: false,
+                                    hasBorder: true,
+                                    child: Center(
+                                      child: CustomText(
+                                        title: '${data.folderId.length}',
+                                        fontSize: FontSize.smallSize,
+                                        color: CustomColors.mainColor,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
                         ),
                         IconButton(
                           onPressed: () => showModal(
@@ -393,7 +394,8 @@ class ListItem extends StatelessWidget {
                   Flexible(
                     child: TextWithIcon(
                       icon: starIcon,
-                      text: '${data.score} (${data.commentCnt}개)',
+                      text:
+                          '${data.score}${isDefaultTheme(context) && data.commentCnt < 10 ? ' ' : '\n'}(${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
                       iconColor: CustomColors.yellowColor,
                     ),
                   ),

@@ -398,15 +398,15 @@ class CustomModal extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         modalButton(
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                        ),
+                        modalButton(
                           onPressed: onPressed ??
                               routerPop(
                                 getKey(context)?.currentContext ?? context,
                               ),
                           buttonText: buttonText,
-                        ),
-                        modalButton(
-                          onPressed: routerPop(context),
-                          buttonText: '취소',
                         ),
                       ],
                     ),

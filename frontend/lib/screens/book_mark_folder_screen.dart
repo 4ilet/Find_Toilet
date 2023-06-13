@@ -83,9 +83,7 @@ class BookMarkFolderList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (int di = 0; di < 2; di += 1)
-            FolderBox(
-              folderInfo: snapshot.data![2 * index + di],
-            ),
+            FolderBox(folderInfo: snapshot.data![2 * index + di]),
         ],
       );
     }

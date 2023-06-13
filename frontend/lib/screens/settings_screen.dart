@@ -97,7 +97,7 @@ class _SettingsState extends State<Settings> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
-                      flex: 1,
+                      flex: 4,
                       child: getToken(context) != null
                           ? CustomButton(
                               textColor: CustomColors.blackColor,
@@ -105,9 +105,8 @@ class _SettingsState extends State<Settings> {
                               onPressed: () {
                                 showModal(
                                   context,
-                                  page: const NicknameInputModal(
-                                    isAlert: false,
-                                  ),
+                                  page:
+                                      const NicknameInputModal(isAlert: false),
                                 );
                               },
                               buttonText: '닉네임 변경',
@@ -115,7 +114,7 @@ class _SettingsState extends State<Settings> {
                           : const SizedBox(),
                     ),
                     Flexible(
-                      flex: 1,
+                      flex: 5,
                       child: GestureDetector(
                         onTap: loginOrLogout,
                         child: getToken(context) != null

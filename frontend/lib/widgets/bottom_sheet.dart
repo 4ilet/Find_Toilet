@@ -121,17 +121,17 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: widget.showReview ? 0.6 : 0.4,
+      initialChildSize: widget.showReview ? 0.6 : 0.2,
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,
           listScroll: controller,
-          toolbarHeight: widget.showReview ? 40 : 80,
+          toolbarHeight: widget.showReview ? 40 : 30,
           expandedHeight: widget.showReview
               ? screenHeight(context) * 0.44
-              : screenHeight(context) * 0.15,
+              : screenHeight(context) * 0.13,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,

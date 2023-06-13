@@ -3,7 +3,6 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
-import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -107,13 +106,17 @@ class _MainState extends State<Main> {
                 toiletModel: widget.toiletModel,
               ),
               watchPressed(context)
-                  ? const Center(
+                  ? Center(
                       child: CustomBox(
-                        height: 60,
-                        width: 300,
-                        color: whiteColor,
-                        child: CustomText(
-                          title: '뒤로 가기 버튼을 한 번 더 누르시면 앱이 종료됩니다',
+                        height: 80,
+                        width: isDefaultTheme(context) ? 300 : 350,
+                        color: const Color.fromRGBO(0, 0, 0, 0.6),
+                        child: const Center(
+                          child: CustomText(
+                            title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
+                            isCentered: true,
+                            color: CustomColors.whiteColor,
+                          ),
                         ),
                       ),
                     )

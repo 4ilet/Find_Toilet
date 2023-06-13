@@ -52,19 +52,22 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
 String? getFontSize(BuildContext context) =>
     context.read<SettingsProvider>().fontState;
 
+bool isDefaultTheme(BuildContext context) =>
+    context.read<SettingsProvider>().fontState == '기본';
+
 FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
-  if (context.read<SettingsProvider>().fontState == '기본') {
+  if (isDefaultTheme(context)) {
     return defaultFont;
   } else {
     switch (defaultFont) {
       case FontSize.titleSize:
         return FontSize.largeTitleSize;
       case FontSize.largeSize:
-        return FontSize.titleSize;
+        return FontSize.largeLargeSize;
       case FontSize.defaultSize:
-        return FontSize.largeSize;
+        return FontSize.largeDefaultSize;
       default:
-        return FontSize.defaultSize;
+        return FontSize.largeSmallSize;
     }
   }
 }

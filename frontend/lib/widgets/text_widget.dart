@@ -51,7 +51,8 @@ class CustomTextField extends StatelessWidget {
           ),
           maxLines: 5,
           style: TextStyle(
-            fontSize: getFontSize(context) == '기본' ? defaultSize : largeSize,
+            fontSize:
+                getFontSize(context) == '기본' ? defaultSize : defaultSize + 3,
             height: 1,
           ),
           textInputAction: searchMode ? TextInputAction.search : null,
@@ -68,15 +69,16 @@ class CustomText extends StatelessWidget {
   final FontSize fontSize;
   final CustomColors color;
   final bool isBoldText, isCentered, applyTheme;
-  const CustomText(
-      {super.key,
-      required this.title,
-      this.fontSize = FontSize.defaultSize,
-      this.color = CustomColors.blackColor,
-      this.font,
-      this.isBoldText = false,
-      this.isCentered = false,
-      this.applyTheme = true});
+  const CustomText({
+    super.key,
+    required this.title,
+    this.fontSize = FontSize.defaultSize,
+    this.color = CustomColors.blackColor,
+    this.font,
+    this.isBoldText = false,
+    this.isCentered = false,
+    this.applyTheme = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,8 @@ class CustomText extends StatelessWidget {
       style: TextStyle(
         color: convertedColor(color),
         fontSize: convertedSize(
-            applyTheme ? applyDefaultTheme(context, fontSize) : fontSize),
+          applyTheme ? applyDefaultTheme(context, fontSize) : fontSize,
+        ),
         fontFamily: font,
         fontWeight: isBoldText ? FontWeight.bold : null,
       ),
