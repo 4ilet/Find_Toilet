@@ -29,7 +29,16 @@ typedef ToiletList = List<ToiletModel>;
 
 //* enums
 
-enum FontSize { titleSize, largeSize, defaultSize, smallSize }
+enum FontSize {
+  largeTitleSize,
+  titleSize,
+  largeLargeSize,
+  largeSize,
+  largeDefaultSize,
+  defaultSize,
+  largeSmallSize,
+  smallSize,
+}
 
 enum CustomColors {
   whiteColor,
@@ -64,12 +73,20 @@ Color convertedColor(CustomColors color) {
 
 double convertedSize(FontSize size) {
   switch (size) {
+    case FontSize.largeTitleSize:
+      return largeTitleSize;
     case FontSize.titleSize:
       return titleSize;
+    case FontSize.largeLargeSize:
+      return largeLargeSize;
     case FontSize.largeSize:
       return largeSize;
+    case FontSize.largeSmallSize:
+      return largeSmallSize;
     case FontSize.smallSize:
       return smallSize;
+    case FontSize.largeDefaultSize:
+      return largeDefaultSize;
     default:
       return defaultSize;
   }

@@ -2,9 +2,11 @@ import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
+import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +26,7 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   final controller = ScrollController();
-  // bool additional = false;
-  // bool working = false;
   List data = [];
-  // int page = 0;
-  // int cnt = 20;
   int? toiletId;
 
   @override
@@ -123,17 +121,17 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: widget.showReview ? 0.6 : 0.4,
+      initialChildSize: widget.showReview ? 0.6 : 0.2,
       minChildSize: 0.08,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,
           listScroll: controller,
-          toolbarHeight: widget.showReview ? 40 : 80,
+          toolbarHeight: widget.showReview ? 40 : 30,
           expandedHeight: widget.showReview
               ? screenHeight(context) * 0.44
-              : screenHeight(context) * 0.15,
+              : screenHeight(context) * 0.13,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
@@ -151,6 +149,12 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                     ),
                     child: Row(
                       children: [
+                        widget.showReview
+                            ? CustomIconButton(
+                                color: CustomColors.whiteColor,
+                                icon: exitIcon,
+                                onPressed: routerPop(context))
+                            : const SizedBox(),
                         CustomText(
                           title: widget.showReview ? '화장실 조회' : '주변 화장실',
                           fontSize: FontSize.largeSize,

@@ -101,7 +101,7 @@ class CustomIconButton extends StatelessWidget {
 //* 원으로 감싸진 버튼
 class CustomCircleButton extends StatelessWidget {
   final Color color;
-  final bool shadow;
+  final bool shadow, hasBorder;
   final double width, height;
   final Widget child;
 
@@ -109,6 +109,7 @@ class CustomCircleButton extends StatelessWidget {
     super.key,
     this.color = whiteColor,
     this.shadow = true,
+    this.hasBorder = false,
     required this.width,
     required this.height,
     required this.child,
@@ -121,6 +122,7 @@ class CustomCircleButton extends StatelessWidget {
         shape: BoxShape.circle,
         color: color,
         boxShadow: shadow ? [defaultShadow] : null,
+        border: hasBorder ? Border.all(color: mainColor) : null,
       ),
       width: width,
       height: height,

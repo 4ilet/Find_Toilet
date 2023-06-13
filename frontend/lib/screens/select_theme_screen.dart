@@ -1,11 +1,14 @@
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectFontTheme extends StatefulWidget {
   const SelectFontTheme({super.key});
@@ -28,7 +31,7 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
   }
 
   void applyTheme() {
-    changeOptions(context, 1);
+    context.read<SettingsProvider>().initOption(isLargeSize);
     removedRouterPush(context, page: const Main());
   }
 
@@ -53,24 +56,29 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                         fontSize: FontSize.titleSize,
                         color: CustomColors.whiteColor,
                         font: kimm,
+                        applyTheme: false,
                       ),
                       SizedBox(height: 10),
                       CustomText(
                         title: '사용하실 테마를 선택해주세요.',
                         color: CustomColors.whiteColor,
                         font: kimm,
+                        applyTheme: false,
                       ),
                     ],
                   )),
                   ThemeBox(
                     text: '큰 글씨',
                     selected: isLargeSize,
+                    fontSize: FontSize.largeSize,
                     onTap: changeFontSize(true),
+                    path: largeTheme,
                   ),
                   ThemeBox(
                     text: '기본',
                     selected: !isLargeSize,
                     onTap: changeFontSize(false),
+                    path: defaultTheme,
                   ),
                   CustomButton(onPressed: applyTheme)
                 ],

@@ -81,6 +81,8 @@ flutter:
     - assets/images/kakao_map.png
     - assets/images/naver_map.png
     - assets/images/kakao_login_medium.png
+    - assets/images/default_font.jpeg
+    - assets/images/large_font.jpeg
     - .env
 
 

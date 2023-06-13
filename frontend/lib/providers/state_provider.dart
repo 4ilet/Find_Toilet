@@ -100,7 +100,8 @@ class ApplyChangeProvider with ChangeNotifier {
 
 //* setttings
 class SettingsProvider with ChangeNotifier {
-  static late int _fontIdx, _magnigyIdx, _radiusIdx;
+  static late int _magnigyIdx, _radiusIdx;
+  static int? _fontIdx;
   static String? _fontState;
   static late String _magnigyState, _radiusState;
   final List<StringList> _optionList = [
@@ -115,7 +116,7 @@ class SettingsProvider with ChangeNotifier {
   get radiusState => _radiusState;
   get radius => _valueList[_radiusIdx];
 
-  Future<bool> initSettings() async {
+  FutureBool initSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _magnigyIdx = prefs.getInt('magnigyIdx') ?? 0;
     _magnigyState = _optionList[0][_magnigyIdx];
@@ -123,18 +124,27 @@ class SettingsProvider with ChangeNotifier {
     final font = prefs.getInt('fontIdx');
     if (font != null) {
       _fontIdx = font;
-    } else {
-      _fontIdx = 0;
+      _fontState = _optionList[1][_fontIdx!];
     }
-    _fontState = _optionList[1][_magnigyIdx];
 
     _radiusIdx = prefs.getInt('radiusIdx') ?? 1;
     _radiusState = _optionList[2][_radiusIdx];
+    notifyListeners();
 
     return true;
   }
 
 //* public
+  void initOption(bool option) {
+    if (option) {
+      _applyShowMagnify();
+      _setShowMagnify();
+    }
+    _initFont(option);
+    _setFont();
+    notifyListeners();
+  }
+
   void applyOption(int menuIdx) {
     switch (menuIdx) {
       case 0:
@@ -149,19 +159,23 @@ class SettingsProvider with ChangeNotifier {
         _applyRadius();
         _setRadius();
     }
+    notifyListeners();
   }
 
 //* private
+  void _initFont(bool option) {
+    _fontIdx = option ? 0 : 1;
+    _fontState = _optionList[1][_fontIdx!];
+  }
 
   void _setFont() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('fontIdx', _fontIdx);
+    await prefs.setInt('fontIdx', _fontIdx!);
   }
 
   void _applyFont() {
-    _fontIdx = 1 - _fontIdx;
-    _fontState = _optionList[1][_fontIdx];
-    notifyListeners();
+    _fontIdx = 1 - _fontIdx!;
+    _fontState = _optionList[1][_fontIdx!];
   }
 
   void _setRadius() async {
@@ -172,8 +186,7 @@ class SettingsProvider with ChangeNotifier {
   void _applyRadius() {
     _radiusIdx += 1;
     if (_radiusIdx >= 3) _radiusIdx = 0;
-    _radiusState = _optionList[2][_fontIdx];
-    notifyListeners();
+    _radiusState = _optionList[2][_radiusIdx];
   }
 
   void _setShowMagnify() async {
@@ -184,7 +197,6 @@ class SettingsProvider with ChangeNotifier {
   void _applyShowMagnify() {
     _magnigyIdx = 1 - _magnigyIdx;
     _magnigyState = _optionList[0][_magnigyIdx];
-    notifyListeners();
   }
 }
 
@@ -219,6 +231,7 @@ class GlobalProvider with ChangeNotifier {
   static int _sortIdx = 0;
   static double _lat = 37.537229;
   static double _lng = 127.005515;
+  static final Map<String, String?> _query = {'value': null};
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
     'allDay': _allDay,
@@ -244,6 +257,7 @@ class GlobalProvider with ChangeNotifier {
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
+  String? get query => _query['value'];
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
@@ -262,6 +276,10 @@ class GlobalProvider with ChangeNotifier {
   void initPage() {
     _setPage(0);
     notifyListeners();
+  }
+
+  void setQuery(String? value) {
+    _setQuery(value);
   }
 
   // void setCnt(int newVal) {
@@ -299,6 +317,11 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void initToiletList() {
+    _initToiletList();
+    // notifyListeners();
+  }
+
   void setLoading(bool value) {
     _setLoading(value);
     notifyListeners();
@@ -311,6 +334,7 @@ class GlobalProvider with ChangeNotifier {
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;
+  void _setQuery(String? value) => _query['value'] = value;
   void _setKey(GlobalKey key) => _globalKey = key;
   void _setWorking(bool newVal) => _working = newVal;
   void _setAdditional(bool newVal) => _additional = newVal;
@@ -338,6 +362,8 @@ class GlobalProvider with ChangeNotifier {
 
   void _addToiletList(ToiletList toiletList) =>
       _mainToiletList.addAll(toiletList);
+
+  void _initToiletList() => _mainToiletList.clear();
 
   void _setLoading(bool value) => _loading = value;
 

@@ -3,7 +3,6 @@ import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
-import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
@@ -116,7 +115,6 @@ class _ReviewFormState extends State<ReviewForm> {
             const Flexible(
               child: CustomText(
                 title: '어떠셨나요?',
-                fontSize: FontSize.defaultSize,
                 color: CustomColors.whiteColor,
               ),
             ),
@@ -126,7 +124,12 @@ class _ReviewFormState extends State<ReviewForm> {
             ),
             Flexible(
               flex: 5,
-              child: reviewInput(),
+              child: CustomTextField(
+                initValue: reviewData['comment'],
+                onChanged: changeComment,
+                maxLines: 5,
+                height: 200,
+              ),
             ),
             Flexible(
               flex: 3,
@@ -156,27 +159,6 @@ class _ReviewFormState extends State<ReviewForm> {
               ),
             ),
         ],
-      ),
-    );
-  }
-
-  CustomBox reviewInput() {
-    return CustomBox(
-      width: 350,
-      color: whiteColor,
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: TextField(
-          controller: TextEditingController(text: reviewData['comment']),
-          onChanged: changeComment,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-          ),
-          maxLines: 5,
-          style: const TextStyle(
-            fontSize: defaultSize,
-          ),
-        ),
       ),
     );
   }
