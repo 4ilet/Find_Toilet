@@ -5,7 +5,6 @@ import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
-import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/select_box.dart';
 import 'package:find_toilet/widgets/silvers.dart';
@@ -26,15 +25,15 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final StringList sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
+  // final StringList sortOrder = ['거리 순', '평점 순', '리뷰 많은 순'];
   final StringList sortValues = ['distance', 'score', 'comment'];
   final ToiletList toiletList = [];
   final scrollController = ScrollController();
   final cnt = 10;
-  final selectedBoxKey = GlobalKey();
-  Offset? position;
+  // final selectedBoxKey = GlobalKey();
+  // Offset? position;
 
-  bool showList = false;
+  // bool showList = false;
   DynamicMap searchData = {};
   late String selectedValue;
   late bool allDay, diaper, disabled, kids;
@@ -47,7 +46,7 @@ class _SearchState extends State<Search> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initLoadingData(context);
       firstSearch();
-      getOffset();
+      // getOffset();
       scrollController.addListener(() async {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent * 0.9) {
@@ -88,7 +87,6 @@ class _SearchState extends State<Search> {
       'size': cnt,
       'order': sortValues[sortIdx],
     };
-    selectedValue = sortOrder[sortIdx];
   }
 
   void firstSearch() async {
@@ -117,94 +115,94 @@ class _SearchState extends State<Search> {
     }
   }
 
-  void changeShowState() {
-    setState(() {
-      if (!showList) {
-        showList = true;
-      } else {
-        showList = false;
-      }
-    });
-  }
+  // void changeShowState() {
+  //   setState(() {
+  //     if (!showList) {
+  //       showList = true;
+  //     } else {
+  //       showList = false;
+  //     }
+  //   });
+  // }
 
-  void changeSelected(int i) {
-    setState(() {
-      if (selectedValue != sortOrder[i]) {
-        setSortIdx(context, i);
-        searchData['order'] = sortValues[i];
-        selectedValue = sortOrder[i];
-        searchData['page'] = -1;
-        initLoadingData(context);
-        changeShowState();
-        setLoading(context, true);
-        firstSearch();
-      } else {
-        changeShowState();
-      }
-    });
-  }
+  // void changeSelected(int i) {
+  //   setState(() {
+  //     if (selectedValue != sortOrder[i]) {
+  //       setSortIdx(context, i);
+  //       searchData['order'] = sortValues[i];
+  //       selectedValue = sortOrder[i];
+  //       searchData['page'] = -1;
+  //       initLoadingData(context);
+  //       changeShowState();
+  //       setLoading(context, true);
+  //       firstSearch();
+  //     } else {
+  //       changeShowState();
+  //     }
+  //   });
+  // }
 
-  bool isChanged() {
-    if (searchData['keyword'] != widget.query) {
-      return true;
-    } else if (searchData['allDay'] != allDay) {
-      return true;
-    } else if (searchData['diaper'] != diaper) {
-      return true;
-    } else if (searchData['disabled'] != diaper) {
-      return true;
-    } else if (searchData['kids'] != diaper) {
-      return true;
-    }
-    return false;
-  }
+  // bool isChanged() {
+  //   if (searchData['keyword'] != widget.query) {
+  //     return true;
+  //   } else if (searchData['allDay'] != allDay) {
+  //     return true;
+  //   } else if (searchData['diaper'] != diaper) {
+  //     return true;
+  //   } else if (searchData['disabled'] != diaper) {
+  //     return true;
+  //   } else if (searchData['kids'] != diaper) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
-  void onSearchAction() {
-    final keyword = searchData['keyword'];
-    if (keyword == null || keyword == '') {
-      showModal(
-        context,
-        page: const AlertModal(
-          title: '검색어 입력',
-          content: '검색어를 입력해주세요',
-        ),
-      );
-      return;
-    } else if (isChanged()) {
-      routerPush(
-        context,
-        page: Search(query: keyword!),
-      );
-    }
-    return;
-  }
+  // void onSearchAction() {
+  //   final keyword = searchData['keyword'];
+  //   if (keyword == null || keyword == '') {
+  //     showModal(
+  //       context,
+  //       page: const AlertModal(
+  //         title: '검색어 입력',
+  //         content: '검색어를 입력해주세요',
+  //       ),
+  //     );
+  //     return;
+  //   } else if (isChanged()) {
+  //     routerPush(
+  //       context,
+  //       page: Search(query: keyword!),
+  //     );
+  //   }
+  //   return;
+  // }
 
-  void getOffset() {
-    if (selectedBoxKey.currentContext != null) {
-      final renderBox =
-          selectedBoxKey.currentContext!.findRenderObject() as RenderBox;
-      setState(() {
-        position = renderBox.localToGlobal(Offset.zero);
-      });
-    }
-  }
+  // void getOffset() {
+  //   if (selectedBoxKey.currentContext != null) {
+  //     final renderBox =
+  //         selectedBoxKey.currentContext!.findRenderObject() as RenderBox;
+  //     setState(() {
+  //       position = renderBox.localToGlobal(Offset.zero);
+  //     });
+  //   }
+  // }
 
-  void changeFilterState(int index) {
-    switch (index) {
-      case 0:
-        searchData['diaper'] = !searchData['diaper'];
-        return;
-      case 1:
-        searchData['kids'] = !searchData['kids'];
-        return;
-      case 2:
-        searchData['disabled'] = !searchData['disabled'];
-        return;
-      default:
-        searchData['allDay'] = !searchData['allDay'];
-        return;
-    }
-  }
+  // void changeFilterState(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       searchData['diaper'] = !searchData['diaper'];
+  //       return;
+  //     case 1:
+  //       searchData['kids'] = !searchData['kids'];
+  //       return;
+  //     case 2:
+  //       searchData['disabled'] = !searchData['disabled'];
+  //       return;
+  //     default:
+  //       searchData['allDay'] = !searchData['allDay'];
+  //       return;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

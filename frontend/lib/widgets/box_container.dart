@@ -208,11 +208,19 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final heartKey = GlobalKey();
     BoolList availableList = [
       data.can24hour,
       data.privateDiaper,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
       data.privateChildF || data.privateChildM1 || data.privateChildM2
+    ];
+
+    StringList facilityList = [
+      '• 24시간 이용',
+      '• 장애인 전용',
+      '• 유아 전용',
+      '• 기저귀 교환대',
     ];
 
     bool existState() {
@@ -223,12 +231,6 @@ class ListItem extends StatelessWidget {
     }
 
     String available(int limit) {
-      StringList facilityList = [
-        '• 24시간 이용',
-        '• 장애인 전용',
-        '• 유아 전용',
-        '• 기저귀 교환대',
-      ];
       String result = '';
       int length = 0;
       for (int i = 0; i < 4; i += 1) {
@@ -311,6 +313,7 @@ class ListItem extends StatelessWidget {
                         Stack(
                           children: [
                             IconButton(
+                              key: heartKey,
                               onPressed: pressedHeart,
                               icon: CustomIcon(
                                 icon: data.folderId.isNotEmpty
@@ -320,16 +323,20 @@ class ListItem extends StatelessWidget {
                               ),
                             ),
                             data.folderId.isNotEmpty
-                                ? CustomCircleButton(
-                                    width: 20,
-                                    height: 20,
-                                    shadow: false,
-                                    hasBorder: true,
-                                    child: Center(
-                                      child: CustomText(
-                                        title: '${data.folderId.length}',
-                                        fontSize: FontSize.smallSize,
-                                        color: CustomColors.mainColor,
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(25, 20, 0, 0),
+                                    child: CustomCircleButton(
+                                      width: 20,
+                                      height: 20,
+                                      shadow: true,
+                                      hasBorder: true,
+                                      child: Center(
+                                        child: CustomText(
+                                          title: '${data.folderId.length}',
+                                          fontSize: FontSize.smallSize,
+                                          color: CustomColors.mainColor,
+                                        ),
                                       ),
                                     ),
                                   )
@@ -444,9 +451,11 @@ class ListItem extends StatelessWidget {
 //* filter 상자
 class FilterBox extends StatefulWidget {
   final ReturnVoid? onPressed;
+  final bool applyLong;
   const FilterBox({
     super.key,
     this.onPressed,
+    this.applyLong = true,
   });
 
   @override
@@ -454,7 +463,8 @@ class FilterBox extends StatefulWidget {
 }
 
 class _FilterBoxState extends State<FilterBox> {
-  StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
+  StringList filterList = ['24시간', '장애인', '유아용', '기저귀'];
+  StringList longFilterList = ['24시간 운영', '장애인용 화장실', '어린이용 화장실', '기저귀 교환대'];
 
   @override
   void initState() {
@@ -466,36 +476,67 @@ class _FilterBoxState extends State<FilterBox> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        for (int i = 0; i < 4; i += 1)
-          CustomBox(
-            onTap: () {
-              setFilter(context, i);
-              if (widget.onPressed != null) {
-                widget.onPressed!();
-              }
-            },
-            // width: 100,
-            // height: 30,
-            color: getFilter(context, i) ? mainColor : whiteColor,
-            radius: 5,
-            boxShadow: const [defaultShadow],
-            child: Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                child: CustomText(
-                  title: filterList[i],
-                  font: kimm,
-                  fontSize: FontSize.smallSize,
-                  color: getFilter(context, i)
-                      ? CustomColors.whiteColor
-                      : CustomColors.blackColor,
+      children: widget.applyLong
+          ? [
+              for (int i = 0; i < 2; i += 1)
+                for (int j = 0; j < 2; j += 1)
+                  CustomBox(
+                    border: getFilter(context, i)
+                        ? Border.all(color: redColor)
+                        : null,
+                    onTap: () {
+                      setFilter(context, 2 * i + j);
+                      if (widget.onPressed != null) {
+                        widget.onPressed!();
+                      }
+                    },
+                    radius: 5,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 12,
+                        ),
+                        child: CustomText(
+                          title: longFilterList[i],
+                          font: kimm,
+                          fontSize: FontSize.smallSize,
+                          color: CustomColors.blackColor,
+                        ),
+                      ),
+                    ),
+                  ),
+            ]
+          : [
+              for (int i = 0; i < 4; i += 1)
+                CustomBox(
+                  onTap: () {
+                    setFilter(context, i);
+                    if (widget.onPressed != null) {
+                      widget.onPressed!();
+                    }
+                  },
+                  // width: 100,
+                  // height: 30,
+                  color: getFilter(context, i) ? mainColor : whiteColor,
+                  radius: 5,
+                  boxShadow: const [defaultShadow],
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 12),
+                      child: CustomText(
+                        title: filterList[i],
+                        font: kimm,
+                        fontSize: FontSize.smallSize,
+                        color: getFilter(context, i)
+                            ? CustomColors.whiteColor
+                            : CustomColors.blackColor,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-      ],
+            ],
     );
   }
 }
@@ -510,17 +551,18 @@ class CustomBox extends StatelessWidget {
   final ShadowList? boxShadow;
   final BorderRadius? borderRadius;
   final Border? border;
-  const CustomBox(
-      {super.key,
-      this.onTap,
-      required this.child,
-      this.width,
-      this.height,
-      this.color,
-      this.radius = 10,
-      this.boxShadow,
-      this.borderRadius,
-      this.border});
+  const CustomBox({
+    super.key,
+    this.onTap,
+    required this.child,
+    this.width,
+    this.height,
+    this.color,
+    this.radius = 10,
+    this.boxShadow,
+    this.borderRadius,
+    this.border,
+  });
 
   @override
   Widget build(BuildContext context) {

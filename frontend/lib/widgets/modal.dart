@@ -431,42 +431,53 @@ class CustomModal extends StatelessWidget {
 
 //* 상단 위 종료 버튼 존재 모달
 class CustomModalWithClose extends StatelessWidget {
-  final String? title;
+  final String? title, font;
   final WidgetList children;
-  final CustomColors titleColor;
+  final CustomColors titleColor, iconColor;
+  final bool isBoldText;
+  final ReturnVoid? onClosed;
   const CustomModalWithClose({
     super.key,
     this.title,
     required this.children,
     this.titleColor = CustomColors.mainColor,
+    this.iconColor = CustomColors.blackColor,
+    this.isBoldText = true,
+    this.font,
+    this.onClosed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                title != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: CustomText(
+                          title: title!,
+                          color: titleColor,
+                          isBoldText: isBoldText,
+                          font: font,
+                          fontSize: FontSize.smallSize,
+                        ),
+                      )
+                    : const SizedBox(),
                 CustomIconButton(
-                    color: CustomColors.blackColor,
-                    icon: closeIcon,
-                    onPressed: routerPop(context))
+                  color: iconColor,
+                  icon: closeIcon,
+                  onPressed: onClosed ?? routerPop(context),
+                )
               ],
             ),
-            title != null
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: CustomText(
-                        title: title!,
-                        fontSize: FontSize.largeSize,
-                        color: titleColor),
-                  )
-                : const SizedBox(),
             ...children,
           ],
         ),
@@ -563,10 +574,12 @@ class AddOrDeleteBookMarkModal extends StatefulWidget {
 
 class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
   Set selectedFolder = {};
+  Set initialFolder = {};
   @override
   void initState() {
     super.initState();
     selectedFolder.addAll(widget.folderId);
+    initialFolder.addAll(widget.folderId);
   }
 
   ReturnVoid selectFolder(int id) {
@@ -583,64 +596,115 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomModal(
-      title: '즐겨찾기 폴더 선택',
-      buttonText: '적용',
-      onPressed: () {
-        if (widget.folderId.toSet() != selectedFolder) {
-          BookMarkProvider()
-              .addOrDeleteToilet(
-            folderId: 1,
-            // selectedFolder.toList(),
-            toiletId: widget.toiletId,
-          )
-              .then((_) {
-            changeRefresh(context);
-            routerPop(context)();
-          });
-        }
-      },
+    return CustomModalWithClose(
+      title: '즐겨찾기 추가 / 삭제',
+      iconColor: CustomColors.mainColor,
+      onClosed: initialFolder != selectedFolder
+          ? () => showModal(
+                context,
+                page: CustomModal(
+                  onPressed: () {
+                    routerPop(context)();
+                    routerPop(context)();
+                  },
+                  title: '즐겨찾기 추가/삭제 취소',
+                  children: const [
+                    CustomText(title: '즐겨찾기 추가/삭제 작업을 취소하시겠습니까?')
+                  ],
+                ),
+              )
+          : routerPop(context),
+      font: kimm,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: FutureBuilder(
-            future: FolderProvider().getFolderList(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Flexible(
-                  child: CustomListView(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final folderInfo = snapshot.data![index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: CustomBox(
-                            onTap: selectFolder(folderInfo.folderId),
-                            color: whiteColor,
-                            border: Border.all(),
-                            boxShadow:
-                                selectedFolder.contains(folderInfo.folderId)
-                                    ? const [highlightShadow]
-                                    : null,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 10,
-                              ),
-                              child: CustomText(
-                                title: folderInfo.folderName,
-                                fontSize: FontSize.defaultSize,
-                              ),
-                            ),
-                          ),
+        CustomBox(
+          height: screenHeight(context) * 0.6,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Scrollbar(
+              thumbVisibility: true,
+              thickness: 10,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: FutureBuilder(
+                    future: FolderProvider().getFolderList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Flexible(
+                          child: CustomListView(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final folderInfo = snapshot.data![index];
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: CustomBox(
+                                    onTap: selectFolder(folderInfo.folderId),
+                                    color: whiteColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        // horizontal: 10,
+                                      ),
+                                      child: TextWithIcon(
+                                        flex: 12,
+                                        icon: selectedFolder
+                                                .contains(folderInfo.folderId)
+                                            ? heartIcon
+                                            : emptyHeartIcon,
+                                        iconColor: CustomColors.redColor,
+                                        text: folderInfo.folderName,
+                                        fontSize: FontSize.smallSize,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                         );
-                      }),
-                );
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: CustomButton(
+                buttonColor: mainColor,
+                textColor: CustomColors.whiteColor,
+                fontSize: isDefaultTheme(context)
+                    ? FontSize.smallSize
+                    : FontSize.largeSmallSize,
+                onPressed: () {
+                  if (initialFolder != selectedFolder) {
+                    BookMarkProvider()
+                        .addOrDeleteToilet(
+                      addFolderIdList:
+                          (selectedFolder.difference(initialFolder)).toList(),
+                      delFolderIdList:
+                          (initialFolder.difference(selectedFolder)).toList(),
+                      toiletId: widget.toiletId,
+                    )
+                        .then((_) {
+                      changeRefresh(context);
+                      routerPop(context)();
+                      showModal(
+                        context,
+                        page: const AlertModal(
+                            title: '즐겨찾기 추가/삭제 완료', content: '작업이 성공했습니다'),
+                      );
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -709,7 +773,7 @@ class NavigationModal extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomText(
                       title: appList[i],
-                      fontSize: FontSize.defaultSize,
+                      fontSize: FontSize.smallSize,
                     ),
                   )
                 ],

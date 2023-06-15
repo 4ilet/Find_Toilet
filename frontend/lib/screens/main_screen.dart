@@ -45,7 +45,6 @@ class _MainState extends State<Main> {
     if (query['value'] != '') {
       return routerPush(
         context,
-        // page: const Search(),
         page: Search(query: query['value'] ?? ''),
       )();
     }
@@ -95,11 +94,15 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              SearchBar(
-                isMain: true,
-                onChange: (value) => setQuery(context, value),
-                onSearchAction: onSearchAction,
-                pressedFilter: refreshMain,
+              Column(
+                children: [
+                  SearchBar(
+                    isMain: true,
+                    onChange: (value) => setQuery(context, value),
+                    // onSearchAction: onSearchAction,
+                  ),
+                  FilterBox(onPressed: refreshMain),
+                ],
               ),
               ToiletBottomSheet(
                 showReview: widget.showReview,
