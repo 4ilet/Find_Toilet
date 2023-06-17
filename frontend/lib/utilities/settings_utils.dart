@@ -9,8 +9,8 @@ const privatePolicy = '서비스 제공자(포일렛)은 사용자의 개인 정
 const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
 const license = '글꼴\n위치 정보';
 
-//* 오류 시 문의하기 내부 내용
-String errorBody() {
+//* 문의하기 내부 내용
+String inquiryBody() {
   return '''안녕하세요, 화장실을 찾아서 개발팀입니다.\n
 저희 서비스에 관심을 보내주셔서 감사합니다.\n
 아래 양식에 맞추어 team.4ilet@gmail.com에
@@ -45,6 +45,8 @@ Future<String> body() async {
 OS 버전: Android ${version['release']} (SDK ${version['sdkInt']})
 사용 기종 : $manufacturer $model $device \n
 사용 버전 : $appVersion \n
+
+화장실을 찾아서 개발팀 (team.4ilet@gmail.com)
 ''';
   } catch (error) {
     throw Error();

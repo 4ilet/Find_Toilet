@@ -338,14 +338,9 @@ class InputModal extends StatelessWidget {
       isAlert: isAlert,
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: TextField(
-              onChanged: fillData,
-              controller: TextEditingController(
-                text: data,
-              ),
-            ),
+          child: CustomTextField(
+            onChanged: fillData,
+            initValue: data,
           ),
         ),
       ],
@@ -403,15 +398,15 @@ class CustomModal extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         modalButton(
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                        ),
+                        modalButton(
                           onPressed: onPressed ??
                               routerPop(
                                 getKey(context)?.currentContext ?? context,
                               ),
                           buttonText: buttonText,
-                        ),
-                        modalButton(
-                          onPressed: routerPop(context),
-                          buttonText: '취소',
                         ),
                       ],
                     ),
@@ -516,7 +511,9 @@ class DeleteModal extends StatelessWidget {
         showModal(
           context,
           page: const AlertModal(
-              title: '삭제 확인', content: '성공적으로 삭제 작업이 완료되었습니다.'),
+            title: '삭제 확인',
+            content: '성공적으로 삭제 작업이 완료되었습니다.',
+          ),
         );
         changeRefresh(context);
       } catch (error) {
@@ -689,7 +686,8 @@ class NavigationModal extends StatelessWidget {
           await launchUrl(uriList[i]);
         } catch (error) {
           await launchUrl(
-              Uri.parse('market://details?id=${packageNameList[i]}'));
+            Uri.parse('market://details?id=${packageNameList[i]}'),
+          );
         }
       };
     }

@@ -21,11 +21,15 @@ class ThemeBox extends StatefulWidget {
   final String text;
   final bool selected;
   final ReturnVoid onTap;
+  final FontSize fontSize;
+  final String path;
   const ThemeBox({
     super.key,
     required this.text,
     required this.selected,
     required this.onTap,
+    required this.path,
+    this.fontSize = FontSize.defaultSize,
   });
 
   @override
@@ -45,12 +49,17 @@ class _ThemeBoxState extends State<ThemeBox> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomBox(
-            color: greyColor,
             height: screenHeight(context) * 0.2,
             width: screenWidth(context) * 0.6,
-            child: const SizedBox(),
+            child: Image.asset(
+              widget.path,
+              fit: BoxFit.fitWidth,
+            ),
           ),
-          CustomText(title: widget.text)
+          CustomText(
+            title: widget.text,
+            fontSize: widget.fontSize,
+          )
         ],
       ),
     );
@@ -93,6 +102,7 @@ class FolderBox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
+              flex: 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -204,19 +214,7 @@ class ListItem extends StatelessWidget {
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
       data.privateChildF || data.privateChildM1 || data.privateChildM2
     ];
-    // final IconDataList iconList = [
-    //   locationIcon,
-    //   phoneIcon,
-    //   clockIcon,
-    //   starIcon
-    // ];
 
-    // final infoList = [
-    //   data.address,
-    //   data.phoneNo,
-    //   data.duration,
-    //   '${data.score} (${data.commentCnt}개)'
-    // ];
     bool existState() {
       for (int i = 0; i < 4; i += 1) {
         if (availableList[i]) return true;
@@ -226,10 +224,10 @@ class ListItem extends StatelessWidget {
 
     String available(int limit) {
       StringList facilityList = [
-        '24시간 이용',
-        '장애인 전용',
-        '유아 전용',
-        '기저귀 교환대',
+        '• 24시간 이용',
+        '• 장애인 전용',
+        '• 유아 전용',
+        '• 기저귀 교환대',
       ];
       String result = '';
       int length = 0;
@@ -278,21 +276,6 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    // ReturnVoid pressedBox() {
-    //   if (readToken(context) != null) {
-    //     return routerPush(
-    //       context,
-    //       page: Main(
-    //         showReview: true,
-    //         toiletModel: data,
-    //       ),
-    //     );
-    //   }
-    //   return () {
-    //     showModal(context, page: const LoginConfirmModal());
-    //   };
-    // }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: CustomBox(
@@ -304,9 +287,7 @@ class ListItem extends StatelessWidget {
           ),
         )(),
         color: whiteColor,
-        // height: 200,
-        // width: screenWidth(context) * 0.8,
-        height: screenHeight(context) * 0.33,
+        height: getFontSize(context) == '기본' ? 250 : 300,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
@@ -315,8 +296,6 @@ class ListItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // toiletTopInfo(context),
-                  // for (int i = 0; i < 2; i += 1) toiletInfo(i),
                   Expanded(
                     flex: 2,
                     child: CustomText(
@@ -329,14 +308,33 @@ class ListItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
-                          onPressed: pressedHeart,
-                          icon: CustomIcon(
-                            icon: data.folderId.isNotEmpty
-                                ? heartIcon
-                                : emptyHeartIcon,
-                            color: redColor,
-                          ),
+                        Stack(
+                          children: [
+                            IconButton(
+                              onPressed: pressedHeart,
+                              icon: CustomIcon(
+                                icon: data.folderId.isNotEmpty
+                                    ? heartIcon
+                                    : emptyHeartIcon,
+                                color: redColor,
+                              ),
+                            ),
+                            data.folderId.isNotEmpty
+                                ? CustomCircleButton(
+                                    width: 20,
+                                    height: 20,
+                                    shadow: false,
+                                    hasBorder: true,
+                                    child: Center(
+                                      child: CustomText(
+                                        title: '${data.folderId.length}',
+                                        fontSize: FontSize.smallSize,
+                                        color: CustomColors.mainColor,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
                         ),
                         IconButton(
                           onPressed: () => showModal(
@@ -371,11 +369,12 @@ class ListItem extends StatelessWidget {
                   ),
                   data.phoneNo != ''
                       ? Flexible(
-                          flex: 12,
+                          flex: 13,
                           child: TextWithIcon(
                             icon: phoneIcon,
                             text: data.phoneNo,
                             flex: 6,
+                            gap: 7,
                           ),
                         )
                       : const SizedBox(),
@@ -395,7 +394,8 @@ class ListItem extends StatelessWidget {
                   Flexible(
                     child: TextWithIcon(
                       icon: starIcon,
-                      text: '${data.score} (${data.commentCnt}개)',
+                      text:
+                          '${data.score}${isDefaultTheme(context) && data.commentCnt < 10 ? ' ' : '\n'}(${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
                       iconColor: CustomColors.yellowColor,
                     ),
                   ),
@@ -443,7 +443,11 @@ class ListItem extends StatelessWidget {
 
 //* filter 상자
 class FilterBox extends StatefulWidget {
-  const FilterBox({super.key});
+  final ReturnVoid? onPressed;
+  const FilterBox({
+    super.key,
+    this.onPressed,
+  });
 
   @override
   State<FilterBox> createState() => _FilterBoxState();
@@ -465,7 +469,12 @@ class _FilterBoxState extends State<FilterBox> {
       children: [
         for (int i = 0; i < 4; i += 1)
           CustomBox(
-            onTap: () => setFilter(context, i),
+            onTap: () {
+              setFilter(context, i);
+              if (widget.onPressed != null) {
+                widget.onPressed!();
+              }
+            },
             // width: 100,
             // height: 30,
             color: getFilter(context, i) ? mainColor : whiteColor,
