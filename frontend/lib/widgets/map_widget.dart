@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
 import 'package:find_toilet/utilities/viewport_painter.dart';
@@ -20,7 +21,7 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   final controller = MapController(
-    location: const LatLng(35.203, 126.809),
+    location: const LatLng(35.145, 126.844),
     zoom: 16,
   );
   final bool _darkMode = false;
@@ -29,9 +30,12 @@ class MapScreenState extends State<MapScreen> {
 
   void getLocation() async {
     LocationPermission permission = await Geolocator.requestPermission();
+    print(permission);
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     controller.center = LatLng(position.latitude, position.longitude);
+    GlobalProvider().setLatLng(position.latitude, position.longitude);
+
     if (markers == []) {
       markers.add(LatLng(position.latitude, position.longitude));
     } else {
@@ -108,7 +112,7 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerWidget(Offset pos, Color color, double size,
-      [IconData icon = Icons.location_on]) {
+      [IconData icon = Icons.radio_button_checked]) {
     return Positioned(
       left: pos.dx - 24,
       top: pos.dy - 48,
@@ -154,14 +158,14 @@ class MapScreenState extends State<MapScreen> {
           if (markers != []) {
             final markerPositions = markers.map(transformer.toOffset).toList();
             markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, Colors.red, 60),
+              (pos) => _buildMarkerWidget(pos, Colors.red, 48),
             );
           } else {
             final markerPositions = [const LatLng(35.203, 126.809)]
                 .map(transformer.toOffset)
                 .toList();
             markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 60),
+              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 48),
             );
           }
           return GestureDetector(
@@ -255,7 +259,8 @@ class MapScreenState extends State<MapScreen> {
             ),
           ),
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment(
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.15),
             child: FloatingActionButton(
               // onPressed: _gotoDefault,
               onPressed: () {

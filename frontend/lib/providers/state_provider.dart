@@ -217,8 +217,8 @@ class GlobalProvider with ChangeNotifier {
   static bool _disabled = false;
   static bool _allDay = false;
   static int _sortIdx = 0;
-  static double _lat = 37.537229;
-  static double _lng = 127.005515;
+  static double _lat = 35.1451033;
+  static double _lng = 126.84396;
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
     'allDay': _allDay,
@@ -244,6 +244,8 @@ class GlobalProvider with ChangeNotifier {
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
+  double get lat => _lat;
+  double get lng => _lng;
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
