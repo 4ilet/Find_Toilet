@@ -123,7 +123,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
     return DraggableScrollableSheet(
       initialChildSize: widget.showReview ? 0.6 : 0.2,
       minChildSize: 0.08,
-      maxChildSize: 0.8,
+      maxChildSize: isDefaultTheme(context) ? 0.8 : 0.75,
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,

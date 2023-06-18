@@ -55,6 +55,9 @@ String? getFontSize(BuildContext context) =>
 bool isDefaultTheme(BuildContext context) =>
     context.read<SettingsProvider>().fontState == '기본';
 
+String getThemeState(BuildContext context) =>
+    context.watch<SettingsProvider>().fontState;
+
 FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
   if (isDefaultTheme(context)) {
     return defaultFont;
@@ -143,7 +146,7 @@ bool readFilter(BuildContext context, int index) {
     case 0:
       return context.read<GlobalProvider>().diaper;
     case 1:
-      return context.read<GlobalProvider>().child;
+      return context.read<GlobalProvider>().kids;
     case 2:
       return context.read<GlobalProvider>().disabled;
     default:
@@ -156,7 +159,7 @@ bool getFilter(BuildContext context, int index) {
     case 0:
       return context.watch<GlobalProvider>().diaper;
     case 1:
-      return context.watch<GlobalProvider>().child;
+      return context.watch<GlobalProvider>().kids;
     case 2:
       return context.watch<GlobalProvider>().disabled;
     default:
@@ -168,6 +171,10 @@ bool getFilter(BuildContext context, int index) {
 void setSortIdx(BuildContext context, int index) =>
     context.read<GlobalProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
+
+//* 현위치
+double? readLat(BuildContext context) => context.read<GlobalProvider>().lat;
+double? readLng(BuildContext context) => context.read<GlobalProvider>().lng;
 
 //* main toilet list
 void addToiletList(BuildContext context, ToiletList toiletList) =>

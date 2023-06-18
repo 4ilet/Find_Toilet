@@ -88,7 +88,8 @@ class ApplyChangeProvider with ChangeNotifier {
     if (!_pressedOnce) {
       _pressedOnce = true;
       notifyListeners();
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(
+          Duration(seconds: SettingsProvider().fontState == '기본' ? 2 : 3), () {
         _pressedOnce = false;
         notifyListeners();
       });
@@ -225,7 +226,7 @@ class GlobalProvider with ChangeNotifier {
   static bool _working = false;
   static bool _additional = false;
   static bool _diaper = false;
-  static bool _child = false;
+  static bool _kids = false;
   static bool _disabled = false;
   static bool _allDay = false;
   static int _sortIdx = 0;
@@ -237,7 +238,7 @@ class GlobalProvider with ChangeNotifier {
     'allDay': _allDay,
     'diaper': _diaper,
     'disabled': _disabled,
-    'kids': _child,
+    'kids': _kids,
     'lat': _lat,
     'lon': _lng,
     'radius': 1000,
@@ -251,13 +252,15 @@ class GlobalProvider with ChangeNotifier {
   bool get working => _working;
   bool get additional => _additional;
   bool get diaper => _diaper;
-  bool get child => _child;
+  bool get kids => _kids;
   bool get disabled => _disabled;
   bool get allDay => _allDay;
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
   String? get query => _query['value'];
+  double? get lat => _lat;
+  double? get lng => _lng;
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
@@ -347,7 +350,7 @@ class GlobalProvider with ChangeNotifier {
         _diaper = !_diaper;
         return;
       case 1:
-        _child = !_child;
+        _kids = !_kids;
         return;
       case 2:
         _disabled = !_disabled;

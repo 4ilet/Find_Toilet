@@ -594,26 +594,31 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
     };
   }
 
+  void onClosed() {
+    if (initialFolder.length == selectedFolder.length &&
+        initialFolder.containsAll(selectedFolder)) {
+      routerPop(context)();
+    } else {
+      showModal(
+        context,
+        page: CustomModal(
+          onPressed: () {
+            routerPop(context)();
+            routerPop(context)();
+          },
+          title: '즐겨찾기 추가/삭제 취소',
+          children: const [CustomText(title: '즐겨찾기 추가/삭제 작업을 종료하시겠습니까?')],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomModalWithClose(
       title: '즐겨찾기 추가 / 삭제',
       iconColor: CustomColors.mainColor,
-      onClosed: initialFolder != selectedFolder
-          ? () => showModal(
-                context,
-                page: CustomModal(
-                  onPressed: () {
-                    routerPop(context)();
-                    routerPop(context)();
-                  },
-                  title: '즐겨찾기 추가/삭제 취소',
-                  children: const [
-                    CustomText(title: '즐겨찾기 추가/삭제 작업을 취소하시겠습니까?')
-                  ],
-                ),
-              )
-          : routerPop(context),
+      onClosed: onClosed,
       font: kimm,
       children: [
         CustomBox(

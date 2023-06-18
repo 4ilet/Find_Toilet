@@ -32,10 +32,9 @@ class _MainState extends State<Main> {
 
   @override
   void initState() {
-    super.initState();
-    refreshMain();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        setQuery(context, null);
         setKey(context, globalKey);
       },
     );
@@ -57,8 +56,7 @@ class _MainState extends State<Main> {
     );
   }
 
-  void refreshMain() {
-    setQuery(context, null);
+  void refreshMain(int index) {
     if (!widget.showReview) {
       context.read<GlobalProvider>().initToiletList();
       ToiletProvider()
@@ -94,19 +92,30 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  SearchBar(
-                    isMain: true,
-                    onChange: (value) => setQuery(context, value),
-                    // onSearchAction: onSearchAction,
-                  ),
-                  FilterBox(onPressed: refreshMain),
-                ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
+                child: Column(
+                  children: [
+                    FilterBox(
+                      onPressed: refreshMain,
+                      applyLong: !isDefaultTheme(context),
+                      isMain: true,
+                    ),
+                  ],
+                ),
               ),
               ToiletBottomSheet(
                 showReview: widget.showReview,
                 toiletModel: widget.toiletModel,
+              ),
+              Column(
+                children: const [
+                  SearchBar(
+                    isMain: true,
+                    // onChange: (value) => setQuery(context, value),
+                    // onSearchAction: onSearchAction,
+                  ),
+                ],
               ),
               watchPressed(context)
                   ? Center(

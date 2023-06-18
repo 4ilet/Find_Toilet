@@ -118,12 +118,15 @@ class _SettingsState extends State<Settings> {
                       child: GestureDetector(
                         onTap: loginOrLogout,
                         child: getToken(context) != null
-                            ? const TextWithIcon(
+                            ? TextWithIcon(
                                 icon: logoutIcon,
                                 text: '로그아웃',
                                 iconColor: CustomColors.blackColor,
-                                fontSize: FontSize.defaultSize,
+                                fontSize: getThemeState(context) == '기본'
+                                    ? FontSize.defaultSize
+                                    : FontSize.largeDefaultSize,
                                 mainAxisAlignment: MainAxisAlignment.end,
+                                applyTheme: false,
                               )
                             : Image.asset(kakaoLogin),
                       ),

@@ -14,12 +14,15 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
   final bool isMain;
-  final void Function(String value) onChange;
+  final String? query;
+  final ReturnVoid? onSearchMode;
+  // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
   const SearchBar({
     super.key,
     required this.isMain,
-    required this.onChange,
+    this.onSearchMode,
+    this.query,
     // required this.onSearchAction,
   });
 
@@ -30,44 +33,38 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   bool showDetail = false;
   final StringList sortOrder = ['가까운 순', '리뷰 많은 순', '평점 좋은 순'];
-  // final StringList sortValues = ['distance', 'score', 'comment'];
+  final StringList sortValues = ['distance', 'score', 'comment'];
+  final BoolList selectedFilters = List.generate(4, (index) => false);
+  final DynamicMap searchData = {};
+  final StringList filterKeyList = ['diaper', 'kids', 'disabled', 'allDay'];
+  final BoolList filterValueList = [];
   late int sortIdx;
   late String sortValue;
-  IntList selectedFilters = [];
-  // DynamicMap searchData = {
-  //     'allDay': allDay,
-  //     'diaper': diaper,
-  //     'disabled': disabled,
-  //     'kids': kids,
-  //     'keyword': widget.query,
-  //     // 'keyword': readQuery(context),
-  //     'lat': 37.537229,
-  //     'lon': 127.005515,
-  //     'page': -1,
-  //     'size': cnt,
-  //     'order': sortValues[sortIdx],
-  //   };
 
   @override
   void initState() {
+    super.initState();
     sortIdx = getSortIdx(context);
     sortValue = sortOrder[sortIdx];
-    super.initState();
+    for (int i = 0; i < 4; i += 1) {
+      filterValueList.add(readFilter(context, i));
+    }
+    searchData.addAll({
+      'keyword': widget.query,
+    });
   }
 
   bool isChanged() {
     if (searchData['keyword'] != widget.query) {
       return true;
-    } else if (searchData['allDay'] != allDay) {
-      return true;
-    } else if (searchData['diaper'] != diaper) {
-      return true;
-    } else if (searchData['disabled'] != diaper) {
-      return true;
-    } else if (searchData['kids'] != diaper) {
-      return true;
+    } else {
+      for (int i = 0; i < 4; i += 1) {
+        if (filterValueList[i] != searchData[filterKeyList[i]]) {
+          return true;
+        }
+      }
+      return false;
     }
-    return false;
   }
 
   void onSearchAction() {
@@ -83,16 +80,23 @@ class _SearchBarState extends State<SearchBar> {
       return;
     } else if (isChanged()) {
       setSortIdx(context, sortIdx);
-      // setFilter(context, index);
-      routerPush(
-        context,
-        page: Search(query: keyword!),
-      );
+      for (int i = 0; i < 4; i += 1) {
+        if (filterValueList[i] != searchData[filterKeyList[i]]) {
+          setFilter(context, i);
+        }
+        routerPush(
+          context,
+          page: Search(query: keyword),
+        )();
+      }
     }
     return;
   }
 
   void changeShowVar(bool value) {
+    if (widget.onSearchMode != null) {
+      widget.onSearchMode!();
+    }
     setState(() {
       showDetail = value;
     });
@@ -100,27 +104,16 @@ class _SearchBarState extends State<SearchBar> {
 
   void changeSortValue(int i) {
     setState(() {
-      if (selectedValue != sortOrder[i]) {
-        sort selectedValue = sortOrder[i];
+      if (sortIdx != i) {
+        sortIdx = i;
       }
     });
   }
 
   void changeFilterState(int index) {
-    switch (index) {
-      case 0:
-        searchData['diaper'] = !searchData['diaper'];
-        return;
-      case 1:
-        searchData['kids'] = !searchData['kids'];
-        return;
-      case 2:
-        searchData['disabled'] = !searchData['disabled'];
-        return;
-      default:
-        searchData['allDay'] = !searchData['allDay'];
-        return;
-    }
+    setState(() {
+      selectedFilters[index] = !selectedFilters[index];
+    });
   }
 
   void onPressed() {
@@ -134,6 +127,10 @@ class _SearchBarState extends State<SearchBar> {
           );
   }
 
+  void onChange(String value) {
+    searchData['keyword'] = value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomBox(
@@ -141,56 +138,59 @@ class _SearchBarState extends State<SearchBar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(height: 100),
-              Focus(
-                onFocusChange: changeShowVar,
-                child: CustomTextField(
-                  width: showDetail
-                      ? screenWidth(context) * 0.9
-                      : screenWidth(context) * 0.8,
-                  padding: const EdgeInsetsDirectional.all(0),
-                  boxShadow: const [defaultShadow],
-                  onChanged: widget.onChange,
-                  searchMode: true,
-                  onSubmitted: (_) => onSearchAction(),
-                  initValue: getQuery(context),
-                  hintText: '검색어를 입력하세요',
-                  prefixIcon: CustomIconButton(
-                    icon: widget.isMain ? hamburgerIcon : exitIcon,
-                    onPressed: routerPush(
-                      context,
-                      page: widget.isMain ? const Settings() : const Main(),
-                    ),
-                    color: CustomColors.blackColor,
-                  ),
-                  suffixIcon:
-                      getQuery(context) != null && getQuery(context) != ''
-                          ? CustomIconButton(
-                              icon: closeIcon,
-                              onPressed: () {
-                                widget.onChange('');
-                                print(readQuery(context));
-                              },
-                              color: CustomColors.blackColor,
-                            )
-                          : null,
-                ),
-              ),
-              showDetail
-                  ? const SizedBox()
-                  : CustomCircleButton(
-                      width: 40,
-                      height: 40,
-                      child: CustomIconButton(
-                        onPressed: onPressed,
-                        icon: bookMarkIcon,
-                        color: CustomColors.blackColor,
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Focus(
+                  onFocusChange: changeShowVar,
+                  child: CustomTextField(
+                    width: showDetail
+                        ? screenWidth(context) * 0.9
+                        : screenWidth(context) * 0.8,
+                    padding: const EdgeInsetsDirectional.all(0),
+                    boxShadow: const [defaultShadow],
+                    onChanged: onChange,
+                    searchMode: true,
+                    onSubmitted: (_) => onSearchAction(),
+                    initValue: searchData['keyword'],
+                    hintText: '검색어를 입력하세요',
+                    prefixIcon: CustomIconButton(
+                      icon: widget.isMain ? hamburgerIcon : exitIcon,
+                      onPressed: routerPush(
+                        context,
+                        page: widget.isMain ? const Settings() : const Main(),
                       ),
+                      color: CustomColors.blackColor,
                     ),
-            ],
+                    suffixIcon:
+                        getQuery(context) != null && getQuery(context) != ''
+                            ? CustomIconButton(
+                                icon: closeIcon,
+                                onPressed: () {
+                                  // widget.onChange('');
+                                  onChange('');
+                                  print(readQuery(context));
+                                },
+                                color: CustomColors.blackColor,
+                              )
+                            : null,
+                  ),
+                ),
+                showDetail
+                    ? const SizedBox()
+                    : CustomCircleButton(
+                        width: 40,
+                        height: 40,
+                        child: CustomIconButton(
+                          onPressed: onPressed,
+                          icon: bookMarkIcon,
+                          color: CustomColors.blackColor,
+                        ),
+                      ),
+              ],
+            ),
           ),
           showDetail
               ? Padding(
@@ -198,42 +198,84 @@ class _SearchBarState extends State<SearchBar> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Column(
                     children: [
-                      const CustomText(
-                        title: '원하는 조건이 있으신가요?',
-                        color: CustomColors.whiteColor,
-                        fontSize: FontSize.smallSize,
-                        font: kimm,
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: CustomText(
+                          title: '원하는 조건이 있으신가요?',
+                          color: CustomColors.whiteColor,
+                          fontSize: FontSize.smallSize,
+                          font: kimm,
+                        ),
                       ),
-                      const FilterBox(),
-                      const CustomText(
-                        title: '어떻게 정렬해드릴까요?',
-                        color: CustomColors.whiteColor,
-                        fontSize: FontSize.smallSize,
-                        font: kimm,
+                      // const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: FilterBox(
+                          onPressed: changeFilterState,
+                          filterList: selectedFilters,
+                        ),
                       ),
-                      for (String value in sortOrder)
-                        CustomBox(child: CustomText(title: value)),
-                      GestureDetector(
-                        onTap: onSearchAction,
-                        child: CustomBox(
-                          width: screenWidth(context) * 0.9,
-                          height: 50,
-                          color: whiteColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomIconButton(
-                                onPressed: () {},
-                                icon: searchIcon,
-                                color: CustomColors.mainColor,
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: CustomText(
+                          title: '어떻게 정렬해드릴까요?',
+                          color: CustomColors.whiteColor,
+                          fontSize: FontSize.smallSize,
+                          font: kimm,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int i = 0; i < 3; i += 1)
+                            CustomBox(
+                              color: whiteColor,
+                              border: sortIdx == i
+                                  ? Border.all(color: redColor)
+                                  : null,
+                              onTap: () => changeSortValue(i),
+                              radius: 5,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 12,
+                                  ),
+                                  child: CustomText(
+                                    title: sortOrder[i],
+                                    font: kimm,
+                                    fontSize: FontSize.smallSize,
+                                    color: CustomColors.blackColor,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(width: 5),
-                              const CustomText(
-                                title: '검색하기',
-                                font: kimm,
-                                color: CustomColors.mainColor,
-                              )
-                            ],
+                            ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: GestureDetector(
+                          onTap: onSearchAction,
+                          child: CustomBox(
+                            width: screenWidth(context) * 0.9,
+                            height: 50,
+                            color: whiteColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomIconButton(
+                                  onPressed: onSearchAction,
+                                  icon: searchIcon,
+                                  color: CustomColors.mainColor,
+                                ),
+                                const SizedBox(width: 5),
+                                const CustomText(
+                                  title: '검색하기',
+                                  font: kimm,
+                                  color: CustomColors.mainColor,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

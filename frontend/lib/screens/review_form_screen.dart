@@ -129,6 +129,11 @@ class _ReviewFormState extends State<ReviewForm> {
                 onChanged: changeComment,
                 maxLines: 5,
                 height: 200,
+                textHeight: 1.5,
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 30,
+                  vertical: 20,
+                ),
               ),
             ),
             Flexible(
