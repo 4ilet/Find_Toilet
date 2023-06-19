@@ -305,8 +305,8 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setFilter(int index) {
-    _setFilter(index);
+  void setFilter(int index, bool value) {
+    _setFilter(index, value);
     notifyListeners();
   }
 
@@ -344,19 +344,19 @@ class GlobalProvider with ChangeNotifier {
   void _setPage(int newVal) => _page = newVal;
   void _setTotal(int? newVal) => _totalPages = newVal;
 
-  void _setFilter(int index) {
+  void _setFilter(int index, bool value) {
     switch (index) {
       case 0:
-        _diaper = !_diaper;
+        _diaper = value;
         return;
       case 1:
-        _kids = !_kids;
+        _kids = value;
         return;
       case 2:
-        _disabled = !_disabled;
+        _disabled = value;
         return;
       default:
-        _allDay = !_allDay;
+        _allDay = value;
         return;
     }
   }

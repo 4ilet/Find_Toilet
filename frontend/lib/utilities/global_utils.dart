@@ -139,8 +139,8 @@ void setQuery(BuildContext context, String? value) =>
     context.read<GlobalProvider>().setQuery(value);
 
 //* 필터
-void setFilter(BuildContext context, int index) =>
-    context.read<GlobalProvider>().setFilter(index);
+void setFilter(BuildContext context, int index, bool value) =>
+    context.read<GlobalProvider>().setFilter(index, value);
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:

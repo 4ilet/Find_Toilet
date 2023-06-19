@@ -520,7 +520,8 @@ class _FilterBoxState extends State<FilterBox> {
   }
 
   void onTapInMain(int index) {
-    setFilter(context, index);
+    print(index);
+    setFilter(context, index, !readFilter(context, index));
     widget.onPressed(index);
   }
 
@@ -530,13 +531,16 @@ class _FilterBoxState extends State<FilterBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    // for (int i = 0; i < 4; i += 1) {
+    //   print(readFilter(context, i));
+    // }
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: widget.applyLong
           ? [
               for (int i = 0; i < 2; i += 1)
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     for (int j = 0; j < 2; j += 1)
@@ -544,19 +548,20 @@ class _FilterBoxState extends State<FilterBox> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: CustomBox(
                           width: screenWidth(context) * 0.44,
-                          color: widget.isMain && getFilter(context, 2 * i + j)
-                              ? mainColor
-                              : whiteColor,
+                          color:
+                              widget.isMain && getFilter(context, (2 * i) + j)
+                                  ? mainColor
+                                  : whiteColor,
                           boxShadow: const [defaultShadow],
                           border: Border.all(
-                            color:
-                                !widget.isMain && widget.filterList![2 * i + j]
-                                    ? redColor
-                                    : whiteColor,
+                            color: !widget.isMain &&
+                                    widget.filterList![(2 * i) + j]
+                                ? redColor
+                                : whiteColor,
                           ),
                           onTap: widget.isMain
-                              ? () => onTapInMain(2 * i + j)
-                              : () => onTapInSearch(2 * i + j),
+                              ? () => onTapInMain((2 * i) + j)
+                              : () => onTapInSearch((2 * i) + j),
                           radius: 5,
                           child: Center(
                             child: Padding(
@@ -565,11 +570,11 @@ class _FilterBoxState extends State<FilterBox> {
                                 horizontal: 12,
                               ),
                               child: CustomText(
-                                title: longFilterList[2 * i + j],
+                                title: longFilterList[(2 * i) + j],
                                 font: kimm,
                                 fontSize: FontSize.smallSize,
                                 color: widget.isMain &&
-                                        getFilter(context, 2 * i + j)
+                                        getFilter(context, (2 * i) + j)
                                     ? CustomColors.whiteColor
                                     : CustomColors.blackColor,
                               ),
@@ -581,29 +586,36 @@ class _FilterBoxState extends State<FilterBox> {
                 )
             ]
           : [
-              for (int i = 0; i < 4; i += 1)
-                CustomBox(
-                  onTap: () => onTapInMain(i),
-                  // width: 100,
-                  // height: 30,
-                  color: getFilter(context, i) ? mainColor : whiteColor,
-                  radius: 5,
-                  boxShadow: const [defaultShadow],
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
-                      child: CustomText(
-                        title: filterList[i],
-                        font: kimm,
-                        fontSize: FontSize.smallSize,
-                        color: getFilter(context, i)
-                            ? CustomColors.whiteColor
-                            : CustomColors.blackColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 4; i += 1)
+                    CustomBox(
+                      onTap: () => onTapInMain(i),
+                      // width: 100,
+                      // height: 30,
+                      color: getFilter(context, i) ? mainColor : whiteColor,
+                      radius: 5,
+                      boxShadow: const [defaultShadow],
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 12,
+                          ),
+                          child: CustomText(
+                            title: filterList[i],
+                            font: kimm,
+                            fontSize: FontSize.smallSize,
+                            color: getFilter(context, i)
+                                ? CustomColors.whiteColor
+                                : CustomColors.blackColor,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                ],
+              )
             ],
     );
   }

@@ -34,7 +34,6 @@ class _SearchBarState extends State<SearchBar> {
   bool showDetail = false;
   final StringList sortOrder = ['가까운 순', '리뷰 많은 순', '평점 좋은 순'];
   final StringList sortValues = ['distance', 'score', 'comment'];
-  final BoolList selectedFilters = List.generate(4, (index) => false);
   final DynamicMap searchData = {};
   final StringList filterKeyList = ['diaper', 'kids', 'disabled', 'allDay'];
   final BoolList filterValueList = [];
@@ -51,7 +50,11 @@ class _SearchBarState extends State<SearchBar> {
     }
     searchData.addAll({
       'keyword': widget.query,
+      for (int i = 0; i < 4; i += 1) filterKeyList[i]: filterValueList[i],
     });
+    // setState(() {
+    // });
+    print(searchData);
   }
 
   bool isChanged() {
@@ -80,15 +83,16 @@ class _SearchBarState extends State<SearchBar> {
       return;
     } else if (isChanged()) {
       setSortIdx(context, sortIdx);
+      // print(filterValueList);
       for (int i = 0; i < 4; i += 1) {
         if (filterValueList[i] != searchData[filterKeyList[i]]) {
-          setFilter(context, i);
+          setFilter(context, i, filterValueList[i]);
         }
-        routerPush(
-          context,
-          page: Search(query: keyword),
-        )();
       }
+      routerPush(
+        context,
+        page: Search(query: keyword),
+      )();
     }
     return;
   }
@@ -112,7 +116,7 @@ class _SearchBarState extends State<SearchBar> {
 
   void changeFilterState(int index) {
     setState(() {
-      selectedFilters[index] = !selectedFilters[index];
+      filterValueList[index] = !filterValueList[index];
     });
   }
 
@@ -164,18 +168,19 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       color: CustomColors.blackColor,
                     ),
-                    suffixIcon:
-                        getQuery(context) != null && getQuery(context) != ''
-                            ? CustomIconButton(
-                                icon: closeIcon,
-                                onPressed: () {
-                                  // widget.onChange('');
-                                  onChange('');
-                                  print(readQuery(context));
-                                },
-                                color: CustomColors.blackColor,
-                              )
-                            : null,
+                    suffixIcon: searchData['keyword'] != null &&
+                            searchData['keyword'] != ''
+                        ? CustomIconButton(
+                            icon: closeIcon,
+                            onPressed: () {
+                              print('초기화');
+                              // widget.onChange('');
+                              onChange('');
+                              print(readQuery(context));
+                            },
+                            color: CustomColors.blackColor,
+                          )
+                        : null,
                   ),
                 ),
                 showDetail
@@ -212,7 +217,7 @@ class _SearchBarState extends State<SearchBar> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: FilterBox(
                           onPressed: changeFilterState,
-                          filterList: selectedFilters,
+                          filterList: filterValueList,
                         ),
                       ),
                       const Padding(

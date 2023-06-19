@@ -2,7 +2,6 @@ import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
-import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
@@ -32,7 +31,7 @@ class _SearchState extends State<Search> {
 
   DynamicMap searchData = {};
   late String selectedValue;
-  late bool allDay, diaper, disabled, kids;
+  // late bool allDay, diaper, disabled, kids;
 
   @override
   void initState() {
@@ -63,16 +62,17 @@ class _SearchState extends State<Search> {
   }
 
   void initData() {
+    print('init data');
     final sortIdx = getSortIdx(context);
-    allDay = readFilter(context, 0);
-    diaper = readFilter(context, 1);
-    disabled = readFilter(context, 2);
-    kids = readFilter(context, 3);
+    // allDay = readFilter(context, 0);
+    // diaper = readFilter(context, 1);
+    // disabled = readFilter(context, 2);
+    // kids = readFilter(context, 3);
     searchData = {
-      'allDay': allDay,
-      'diaper': diaper,
-      'disabled': disabled,
-      'kids': kids,
+      'diaper': readFilter(context, 0),
+      'kids': readFilter(context, 1),
+      'disabled': readFilter(context, 2),
+      'allDay': readFilter(context, 3),
       'keyword': widget.query,
       // 'keyword': readQuery(context),
       'lat': readLat(context),
@@ -86,9 +86,8 @@ class _SearchState extends State<Search> {
   void firstSearch() async {
     if (readLoading(context)) {
       searchData['page'] += 1;
+      print(searchData);
       ToiletProvider().searchToilet(searchData).then((data) {
-        print('first search : $searchData');
-        print(data);
         setState(() {
           toiletList.addAll(data);
         });
@@ -106,8 +105,8 @@ class _SearchState extends State<Search> {
         setLoading(context, false);
         setAdditional(context, false);
         setWorking(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
@@ -204,8 +203,8 @@ class _SearchState extends State<Search> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Flexible(
+        children: const [
+          Flexible(
             child: CustomText(
               title: '검색 결과',
               fontSize: FontSize.largeSize,
@@ -213,18 +212,18 @@ class _SearchState extends State<Search> {
               font: kimm,
             ),
           ),
-          Flexible(
-            child: GestureDetector(
-              onTap: changeExpandSearch,
-              child: const TextWithIcon(
-                icon: settingsIcon,
-                text: '검색 설정',
-                iconColor: CustomColors.whiteColor,
-                textColor: CustomColors.whiteColor,
-                font: kimm,
-              ),
-            ),
-          )
+          // Flexible(
+          //   child: GestureDetector(
+          //     onTap: changeExpandSearch,
+          //     child: const TextWithIcon(
+          //       icon: settingsIcon,
+          //       text: '검색 설정',
+          //       iconColor: CustomColors.whiteColor,
+          //       textColor: CustomColors.whiteColor,
+          //       font: kimm,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
