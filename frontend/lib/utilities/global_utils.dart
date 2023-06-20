@@ -141,6 +141,10 @@ void setQuery(BuildContext context, String? value) =>
 //* 필터
 void setFilter(BuildContext context, int index, bool value) =>
     context.read<GlobalProvider>().setFilter(index, value);
+
+void applyFilter(BuildContext context, int index) =>
+    context.read<GlobalProvider>().applyFilter(index);
+
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
@@ -185,6 +189,24 @@ DynamicMap mainToiletData(BuildContext context) =>
 
 ToiletList mainToiletList(BuildContext context) =>
     context.read<GlobalProvider>().mainToiletList;
+
+//* review list
+void addReviewList(BuildContext context, ReviewList reviewData) =>
+    context.read<GlobalProvider>().addReviewList(reviewData);
+
+ReviewList reviewList(BuildContext context) =>
+    context.read<GlobalProvider>().reviewList;
+
+//* refresh main
+// void refreshMain(
+//   BuildContext context,
+//   bool showReview,
+//   int? toiletId,
+// ) =>
+//     context.read<GlobalProvider>().refreshMain(
+//           showReview,
+//           toiletId,
+//         );
 
 //* scroll
 

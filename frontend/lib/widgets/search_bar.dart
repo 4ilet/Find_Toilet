@@ -13,16 +13,21 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
-  final bool isMain;
+  final bool isMain, showReview;
   final String? query;
+  // final ReturnVoid refreshPage;
+  // final int? toiletId;
   final ReturnVoid? onSearchMode;
   // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
   const SearchBar({
     super.key,
     required this.isMain,
+    this.showReview = false,
+    // required this.refreshPage,
     this.onSearchMode,
     this.query,
+    // this.toiletId,
     // required this.onSearchAction,
   });
 
@@ -39,6 +44,8 @@ class _SearchBarState extends State<SearchBar> {
   final BoolList filterValueList = [];
   late int sortIdx;
   late String sortValue;
+  bool enabledBookMark = true;
+  bool enabledSearch = true;
 
   @override
   void initState() {
@@ -71,30 +78,36 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void onSearchAction() {
-    final keyword = searchData['keyword'];
-    if (keyword == null || keyword == '') {
-      showModal(
-        context,
-        page: const AlertModal(
-          title: '검색어 입력',
-          content: '검색어를 입력해주세요',
-        ),
-      );
-      return;
-    } else if (isChanged()) {
-      setSortIdx(context, sortIdx);
-      // print(filterValueList);
-      for (int i = 0; i < 4; i += 1) {
-        if (filterValueList[i] != searchData[filterKeyList[i]]) {
-          setFilter(context, i, filterValueList[i]);
+    if (enabledSearch) {
+      setState(() {
+        enabledSearch = false;
+      });
+      final keyword = searchData['keyword'];
+      if (keyword == null || keyword == '') {
+        showModal(
+          context,
+          page: const AlertModal(
+            title: '검색어 입력',
+            content: '검색어를 입력해주세요',
+          ),
+        );
+      } else if (isChanged()) {
+        setSortIdx(context, sortIdx);
+        // print(filterValueList);
+        for (int i = 0; i < 4; i += 1) {
+          if (filterValueList[i] != searchData[filterKeyList[i]]) {
+            setFilter(context, i, filterValueList[i]);
+          }
         }
+        routerPush(
+          context,
+          page: Search(query: keyword),
+        )();
       }
-      routerPush(
-        context,
-        page: Search(query: keyword),
-      )();
+      setState(() {
+        enabledSearch = true;
+      });
     }
-    return;
   }
 
   void changeShowVar(bool value) {
@@ -120,19 +133,33 @@ class _SearchBarState extends State<SearchBar> {
     });
   }
 
-  void onPressed() {
-    readToken(context) != null
-        ? routerPush(context, page: const BookMarkFolderList())()
-        : showModal(
-            context,
-            page: const LoginConfirmModal(
-              page: BookMarkFolderList(),
-            ),
-          );
+  void onPressed() async {
+    if (enabledBookMark) {
+      setState(() {
+        enabledBookMark = false;
+      });
+      if (readToken(context) != null) {
+        routerPush(context, page: const BookMarkFolderList())();
+      } else {
+        await showModal(
+          context,
+          page: const LoginConfirmModal(
+            page: BookMarkFolderList(),
+          ),
+        );
+        // widget.refreshPage();
+      }
+      setState(() {
+        enabledBookMark = true;
+      });
+    }
   }
 
-  void onChange(String value) {
+  void onChange(String? value) {
     searchData['keyword'] = value;
+    if (value == null) {
+      setState(() {});
+    }
   }
 
   @override
@@ -150,9 +177,10 @@ class _SearchBarState extends State<SearchBar> {
                 Focus(
                   onFocusChange: changeShowVar,
                   child: CustomTextField(
-                    width: showDetail
-                        ? screenWidth(context) * 0.9
-                        : screenWidth(context) * 0.8,
+                    width: screenWidth(context) * 0.8,
+                    // showDetail
+                    //     ? screenWidth(context) * 0.9
+                    //     : screenWidth(context) * 0.8,
                     padding: const EdgeInsetsDirectional.all(0),
                     boxShadow: const [defaultShadow],
                     onChanged: onChange,
@@ -164,7 +192,11 @@ class _SearchBarState extends State<SearchBar> {
                       icon: widget.isMain ? hamburgerIcon : exitIcon,
                       onPressed: routerPush(
                         context,
-                        page: widget.isMain ? const Settings() : const Main(),
+                        page: widget.isMain
+                            ? const Settings(
+                                // refreshPage: widget.refreshPage,
+                                )
+                            : const Main(),
                       ),
                       color: CustomColors.blackColor,
                     ),
@@ -175,7 +207,7 @@ class _SearchBarState extends State<SearchBar> {
                             onPressed: () {
                               print('초기화');
                               // widget.onChange('');
-                              onChange('');
+                              onChange(null);
                               print(readQuery(context));
                             },
                             color: CustomColors.blackColor,
@@ -183,17 +215,18 @@ class _SearchBarState extends State<SearchBar> {
                         : null,
                   ),
                 ),
-                showDetail
-                    ? const SizedBox()
-                    : CustomCircleButton(
-                        width: 40,
-                        height: 40,
-                        child: CustomIconButton(
-                          onPressed: onPressed,
-                          icon: bookMarkIcon,
-                          color: CustomColors.blackColor,
-                        ),
-                      ),
+                // showDetail
+                //     ? const SizedBox()
+                //     :
+                CustomCircleButton(
+                  width: 40,
+                  height: 40,
+                  child: CustomIconButton(
+                    onPressed: onPressed,
+                    icon: bookMarkIcon,
+                    color: CustomColors.blackColor,
+                  ),
+                ),
               ],
             ),
           ),

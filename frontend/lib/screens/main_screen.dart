@@ -1,4 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/screens/search_screen.dart';
@@ -32,8 +33,11 @@ class _MainState extends State<Main> {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        initLoadingData(context);
+        initData();
         setQuery(context, null);
         setKey(context, globalKey);
       },
@@ -44,7 +48,9 @@ class _MainState extends State<Main> {
     if (query['value'] != '') {
       return routerPush(
         context,
-        page: Search(query: query['value'] ?? ''),
+        page: Search(
+          query: query['value'] ?? '',
+        ),
       )();
     }
     showModal(
@@ -57,16 +63,56 @@ class _MainState extends State<Main> {
   }
 
   void refreshMain(int index) {
-    if (!widget.showReview) {
-      context.read<GlobalProvider>().initToiletList();
-      ToiletProvider()
-          .getNearToilet(mainToiletData(context))
-          .then((data) => addToiletList(context, data));
+    if (!readLoading(context)) {
+      setLoading(context, true);
+      if (readLoading(context)) {
+        if (!widget.showReview) {
+          context.read<GlobalProvider>().initToiletList();
+          ToiletProvider().getNearToilet(mainToiletData(context)).then((data) {
+            addToiletList(context, data);
+            setLoading(context, false);
+          });
+        } else {
+          context.read<GlobalProvider>().initReviewList();
+          ReviewProvider()
+              .getReviewList(widget.toiletModel!.toiletId, getPage(context))
+              .then((reviewData) {
+            addReviewList(context, reviewData);
+            setLoading(context, false);
+          });
+        }
+      }
+    }
+  }
+
+  void initData() async {
+    if (readLoading(context)) {
+      if (widget.showReview) {
+        ReviewProvider()
+            .getReviewList(widget.toiletModel!.toiletId, getPage(context))
+            .then((reviewData) {
+          addReviewList(context, reviewData);
+          setLoading(context, false);
+        });
+      } else {
+        ToiletProvider()
+            .getNearToilet(mainToiletData(context))
+            .then((toiletData) {
+          addToiletList(context, toiletData);
+          setLoading(context, false);
+        });
+      }
+      increasePage(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build');
+    // if (onRefresh(context) == '') {
+    //   print('yeah');
+    //   initData();
+    // }
     return WillPopScope(
       onWillPop: widget.showReview
           ? () {
@@ -92,18 +138,20 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
-                child: Column(
-                  children: [
-                    FilterBox(
-                      onPressed: refreshMain,
-                      applyLong: !isDefaultTheme(context),
-                      isMain: true,
+              widget.showReview
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
+                      child: Column(
+                        children: [
+                          FilterBox(
+                            onPressed: refreshMain,
+                            applyLong: !isDefaultTheme(context),
+                            isMain: true,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
               ToiletBottomSheet(
                 showReview: widget.showReview,
                 toiletModel: widget.toiletModel,
@@ -112,8 +160,9 @@ class _MainState extends State<Main> {
                 children: const [
                   SearchBar(
                     isMain: true,
-                    // onChange: (value) => setQuery(context, value),
-                    // onSearchAction: onSearchAction,
+                    // refreshPage: () => refreshMain(0)
+                    // showReview: widget.showReview,
+                    // toiletId: widget.toiletModel?.toiletId,
                   ),
                 ],
               ),
@@ -133,7 +182,6 @@ class _MainState extends State<Main> {
                       ),
                     )
                   : const SizedBox(),
-              CustomText(title: onRefresh(context).trim())
             ],
           ),
         ),

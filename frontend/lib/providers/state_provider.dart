@@ -233,6 +233,7 @@ class GlobalProvider with ChangeNotifier {
   static double _lat = 37.537229;
   static double _lng = 127.005515;
   static final Map<String, String?> _query = {'value': null};
+  static final ReviewList _reviewList = [];
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
     'allDay': _allDay,
@@ -264,6 +265,7 @@ class GlobalProvider with ChangeNotifier {
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
+  ReviewList get reviewList => _reviewList;
 
   //* public
   void setKey(GlobalKey key) {
@@ -310,6 +312,8 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void applyFilter(int index) => _applyFilter(index);
+
   void setSortIdx(int index) {
     _setSortIdx(index);
     notifyListeners();
@@ -320,9 +324,17 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addReviewList(ReviewList reviewData) {
+    _addReviewList(reviewData);
+    notifyListeners();
+  }
+
   void initToiletList() {
     _initToiletList();
-    // notifyListeners();
+  }
+
+  void initReviewList() {
+    _initReviewList();
   }
 
   void setLoading(bool value) {
@@ -334,6 +346,11 @@ class GlobalProvider with ChangeNotifier {
     _setLatLng(newLat, newLng);
     notifyListeners();
   }
+
+  // void refreshMain(bool showReview, int? toiletId) {
+  //   _refreshMain(showReview, toiletId);
+  //   notifyListeners();
+  // }
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;
@@ -361,12 +378,33 @@ class GlobalProvider with ChangeNotifier {
     }
   }
 
+  void _applyFilter(int index) {
+    switch (index) {
+      case 0:
+        _mainToiletData['diaper'] = _diaper;
+        return;
+      case 1:
+        _mainToiletData['kids'] = _kids;
+        return;
+      case 2:
+        _mainToiletData['disabled'] = _disabled;
+        return;
+      default:
+        _mainToiletData['allDay'] = _allDay;
+        return;
+    }
+  }
+
   void _setSortIdx(int index) => _sortIdx = index;
 
   void _addToiletList(ToiletList toiletList) =>
       _mainToiletList.addAll(toiletList);
 
+  void _addReviewList(ReviewList reviewData) => _reviewList.addAll(reviewData);
+
   void _initToiletList() => _mainToiletList.clear();
+
+  void _initReviewList() => _reviewList.clear();
 
   void _setLoading(bool value) => _loading = value;
 
@@ -374,4 +412,27 @@ class GlobalProvider with ChangeNotifier {
     _lat = newLat;
     _lng = newLng;
   }
+
+  // void _refreshMain(bool showReview, int? toiletId) {
+  //   if (!_loading) {
+  //     _setLoading(true);
+  //     if (_loading) {
+  //       if (showReview) {
+  //         _initToiletList();
+  //         ToiletProvider().getNearToilet(_mainToiletData).then((data) {
+  //           _addToiletList(data);
+  //           _setLoading(false);
+  //         });
+  //       } else {
+  //         _initReviewList();
+  //         ReviewProvider()
+  //             .getReviewList(toiletId!, _totalPages!)
+  //             .then((reviewData) {
+  //           _addReviewList(reviewData);
+  //           _setLoading(false);
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 }

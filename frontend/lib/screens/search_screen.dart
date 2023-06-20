@@ -127,35 +127,34 @@ class _SearchState extends State<Search> {
         routerPush(context, page: const Main());
         return Future.value(false);
       },
-      child: Scaffold(
-        backgroundColor: mainColor,
-        body: CustomBoxWithScrollView(
-          expandedHeight: expandSearch ? 500 : 130,
-          listScroll: scrollController,
-          flexibleSpace: Column(
-            children: [
-              SearchBar(
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: mainColor,
+          body: CustomBoxWithScrollView(
+            expandedHeight: expandSearch ? 500 : 130,
+            listScroll: scrollController,
+            flexibleSpace: Column(
+              children: [
+                SearchBar(
+                  isMain: false,
+                  query: widget.query,
+                  onSearchMode: changeExpandSearch,
+                  // refreshPage: search,
+                ),
+                topOfAppBar(),
+              ],
+            ),
+            silverChild: [
+              CustomSilverList(
+                showReview: false,
                 isMain: false,
-                onSearchMode: changeExpandSearch,
-                // onChange: (value) {
-                //   setQuery(context, value);
-                //   searchData['keyword'] = value;
-                //   print('data: ${searchData['keyword']}');
-                //   print('value : $value');
-                // },
-                // onSearchAction: onSearchAction,
-              ),
-              topOfAppBar(),
+                isSearch: true,
+                data: toiletList,
+                // refreshPage: search,
+              )
             ],
           ),
-          silverChild: [
-            CustomSilverList(
-              showReview: false,
-              isMain: false,
-              isSearch: true,
-              data: toiletList,
-            )
-          ],
         ),
       ),
     );

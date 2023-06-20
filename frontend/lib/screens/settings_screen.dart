@@ -13,7 +13,14 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  // final bool showReview;
+  // final int? toiletId;
+  // final ReturnVoid refreshPage;
+  const Settings({
+    super.key,
+    // required this.showReview,
+    // required this.refreshPage,
+  });
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -64,9 +71,11 @@ class _SettingsState extends State<Settings> {
       if (token == null || token == '') {
         await login(context);
       } else {
-        if (!mounted) return;
         changeToken(context, token: null, refresh: null);
       }
+      // widget.refreshPage();
+      // if (!mounted) return;
+      // refreshMain(context, widget.showReview, null);
     } catch (error) {
       showModal(
         context,

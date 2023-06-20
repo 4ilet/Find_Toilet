@@ -242,10 +242,12 @@ class _AddBoxState extends State<AddBox> {
 class ListItem extends StatelessWidget {
   final ToiletModel data;
   final bool showReview;
+  // final ReturnVoid refreshPage;
   const ListItem({
     super.key,
     required this.data,
     required this.showReview,
+    // required this.refreshPage,
   });
 
   @override
@@ -253,9 +255,9 @@ class ListItem extends StatelessWidget {
     final heartKey = GlobalKey();
     BoolList availableList = [
       data.can24hour,
-      data.privateDiaper,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
-      data.privateChildF || data.privateChildM1 || data.privateChildM2
+      data.privateChildF || data.privateChildM1 || data.privateChildM2,
+      data.privateDiaper,
     ];
 
     StringList facilityList = [
@@ -320,16 +322,22 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: CustomBox(
-        onTap: () => routerPush(
+    void toReview() {
+      if (!showReview) {
+        routerPush(
           context,
           page: Main(
             showReview: true,
             toiletModel: data,
           ),
-        )(),
+        )();
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: CustomBox(
+        onTap: toReview,
         color: whiteColor,
         height: getFontSize(context) == '기본' ? 250 : 300,
         child: Padding(
@@ -520,8 +528,8 @@ class _FilterBoxState extends State<FilterBox> {
   }
 
   void onTapInMain(int index) {
-    print(index);
     setFilter(context, index, !readFilter(context, index));
+    applyFilter(context, index);
     widget.onPressed(index);
   }
 

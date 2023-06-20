@@ -42,8 +42,7 @@ class CustomSilverList extends StatelessWidget {
   final int? toiletId, folderId;
   final String? toiletName;
   final List data;
-  // final void Function(ReturnVoid) addScrollListener;
-  // final ScrollController controller;
+  // final ReturnVoid refreshPage;
   const CustomSilverList({
     super.key,
     required this.showReview,
@@ -53,11 +52,8 @@ class CustomSilverList extends StatelessWidget {
     this.folderId,
     this.toiletName,
     required this.data,
-    // required this.addScrollListener,
-    // required this.controller,
+    // required this.refreshPage,
   });
-
-  // bool additional = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +90,7 @@ class CustomSilverList extends StatelessWidget {
                           : ListItem(
                               showReview: false,
                               data: data[i],
+                              // refreshPage: refreshPage,
                             );
 
                       return Column(

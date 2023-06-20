@@ -26,7 +26,6 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   final controller = ScrollController();
-  List data = [];
   int? toiletId;
 
   @override
@@ -34,8 +33,6 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        initLoadingData(context);
-        initData();
         toiletId = widget.toiletModel?.toiletId;
         controller.addListener(
           () {
@@ -60,56 +57,19 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
     );
   }
 
-  void initData() async {
-    if (readLoading(context)) {
-      if (widget.showReview) {
-        ReviewProvider()
-            .getReviewList(widget.toiletModel!.toiletId, getPage(context))
-            .then((toiletData) {
-          setState(() {
-            data.addAll(toiletData);
-          });
-          setLoading(context, false);
-        });
-      } else {
-        ToiletProvider()
-            .getNearToilet(mainToiletData(context))
-            .then((toiletData) {
-          setState(() {
-            data.addAll(toiletData);
-          });
-          setLoading(context, false);
-          addToiletList(
-            context,
-            toiletData,
-          );
-        });
-      }
-      increasePage(context);
-    }
-  }
-
   void moreData() {
     if (getAdditional(context)) {
       if (widget.showReview) {
         ReviewProvider()
             .getReviewList(toiletId!, getPage(context))
             .then((reviewData) {
-          setState(() {
-            data.addAll(reviewData);
-          });
+          addReviewList(context, reviewData);
         });
       } else {
         ToiletProvider()
             .getNearToilet(mainToiletData(context))
             .then((toiletData) {
-          setState(() {
-            data.addAll(toiletData);
-          });
-          addToiletList(
-            context,
-            toiletData,
-          );
+          addToiletList(context, toiletData);
         });
       }
       setAdditional(context, false);
@@ -186,12 +146,14 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
           ),
           silverChild: [
             CustomSilverList(
-              showReview: widget.showReview,
               isMain: true,
               isSearch: false,
               toiletId: widget.toiletModel?.toiletId,
               toiletName: widget.toiletModel?.toiletName,
-              data: data,
+              showReview: widget.showReview,
+              data: widget.showReview
+                  ? reviewList(context)
+                  : mainToiletList(context),
               // addScrollListener: addScrollListener,
             ),
           ],
