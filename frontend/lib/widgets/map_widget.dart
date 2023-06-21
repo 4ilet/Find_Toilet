@@ -7,6 +7,7 @@ import 'package:find_toilet/utilities/viewport_painter.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
@@ -29,21 +30,25 @@ class MapScreenState extends State<MapScreen> {
   List<LatLng> markers = [];
 
   void getLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    print(permission);
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    controller.center = LatLng(position.latitude, position.longitude);
-    GlobalProvider().setLatLng(position.latitude, position.longitude);
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+      print(permission);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      controller.center = LatLng(position.latitude, position.longitude);
+      GlobalProvider().setLatLng(position.latitude, position.longitude);
 
-    if (markers == []) {
-      markers.add(LatLng(position.latitude, position.longitude));
-    } else {
-      markers.clear();
-      markers.add(LatLng(position.latitude, position.longitude));
+      if (markers == []) {
+        markers.add(LatLng(position.latitude, position.longitude));
+      } else {
+        markers.clear();
+        markers.add(LatLng(position.latitude, position.longitude));
+      }
+      // controller.zoom = 16;
+      setState(() {});
+    } catch (error) {
+      SystemNavigator.pop();
     }
-    // controller.zoom = 16;
-    setState(() {});
   }
 
   void zoomIn() {
