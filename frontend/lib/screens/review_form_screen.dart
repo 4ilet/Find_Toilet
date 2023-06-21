@@ -65,27 +65,49 @@ class _ReviewFormState extends State<ReviewForm> {
         });
         late final String state;
         if (widget.reviewId == 0) {
-          await ReviewProvider().postNewReview(
+          ReviewProvider()
+              .postNewReview(
             toiletId: widget.toiletId,
             reviewData: reviewData,
-          );
+          )
+              .then((_) {
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
+              toiletId: widget.toiletId,
+            );
+          });
+
           state = '등록';
         } else {
-          await ReviewProvider().updateReview(
+          ReviewProvider()
+              .updateReview(
             widget.reviewId,
             reviewData: reviewData,
-          );
+          )
+              .then((result) {
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
+              toiletId: widget.toiletId,
+            );
+          });
           state = '수정';
         }
         if (!mounted) return;
-        routerPop(context)();
         showModal(
           context,
           page: AlertModal(
             title: '리뷰 $state',
             content: '리뷰가 성공적으로\n $state되었습니다',
           ),
-        );
+        ).then((_) {
+          routerPop(context)();
+        });
       }
     } catch (error) {
       print(error);

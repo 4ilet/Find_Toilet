@@ -302,9 +302,7 @@ class ListItem extends StatelessWidget {
               reviewId: data.reviewId,
             ))();
       } else {
-        showModal(context, page: const LoginConfirmModal()).then((_) {
-          routerPop(context)();
-        });
+        showModal(context, page: const LoginConfirmModal());
       }
     }
 
@@ -366,13 +364,15 @@ class ListItem extends StatelessWidget {
                               key: heartKey,
                               onPressed: pressedHeart,
                               icon: CustomIcon(
-                                icon: data.folderId.isNotEmpty
+                                icon: getToken(context) != null &&
+                                        data.folderId.isNotEmpty
                                     ? heartIcon
                                     : emptyHeartIcon,
                                 color: redColor,
                               ),
                             ),
-                            data.folderId.isNotEmpty
+                            getToken(context) != null &&
+                                    data.folderId.isNotEmpty
                                 ? GestureDetector(
                                     onTap: pressedHeart,
                                     child: Padding(
@@ -488,7 +488,10 @@ class ListItem extends StatelessWidget {
                     CustomButton(
                       fontSize: FontSize.smallSize,
                       onPressed: addOrEditReview,
-                      buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
+                      buttonText:
+                          getToken(context) == null || data.reviewId == 0
+                              ? '리뷰 남기기'
+                              : '리뷰 수정하기',
                     )
                   ],
                 ),
@@ -708,8 +711,9 @@ class ReviewBox extends StatelessWidget {
                           title: review.nickname,
                           fontSize: FontSize.smallSize,
                         ),
-                        review.nickname ==
-                                context.read<UserInfoProvider>().nickname
+                        getToken(context) != null &&
+                                review.nickname ==
+                                    context.read<UserInfoProvider>().nickname
                             ? Row(
                                 children: [
                                   CustomIconButton(

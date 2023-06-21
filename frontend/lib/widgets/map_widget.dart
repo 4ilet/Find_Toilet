@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
 import 'package:find_toilet/utilities/viewport_painter.dart';
@@ -28,18 +29,22 @@ class MapScreenState extends State<MapScreen> {
   List<LatLng> markers = [];
 
   void getLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    controller.center = LatLng(position.latitude, position.longitude);
-    if (markers == []) {
-      markers.add(LatLng(position.latitude, position.longitude));
-    } else {
-      markers.clear();
-      markers.add(LatLng(position.latitude, position.longitude));
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      controller.center = LatLng(position.latitude, position.longitude);
+      if (markers == []) {
+        markers.add(LatLng(position.latitude, position.longitude));
+      } else {
+        markers.clear();
+        markers.add(LatLng(position.latitude, position.longitude));
+      }
+      // controller.zoom = 16;
+      setState(() {});
+    } catch (error) {
+      routerPop(context)();
     }
-    // controller.zoom = 16;
-    setState(() {});
   }
 
   void zoomIn() {

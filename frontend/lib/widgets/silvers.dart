@@ -57,6 +57,7 @@ class CustomSilverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('review build');
     int cnt = 5;
     String ifEmpty() {
       String showedContent = '';

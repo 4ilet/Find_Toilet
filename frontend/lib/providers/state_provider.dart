@@ -1,3 +1,5 @@
+import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,7 +42,7 @@ class UserInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setStoreName(String newName) {
+  void setStoreName(String? newName) {
     _setStoreName(newName);
     _setStore('nickname', newName);
     notifyListeners();
@@ -351,6 +353,38 @@ class GlobalProvider with ChangeNotifier {
   //   _refreshMain(showReview, toiletId);
   //   notifyListeners();
   // }
+
+  void initMainData({required bool showReview, int? toiletId}) {
+    print('in!! loading : $loading');
+    if (_loading) {
+      print('call');
+      showReview ? _getReviewList(toiletId!) : _getToiletList();
+    }
+  }
+
+  void _getReviewList(int toiletId) {
+    ReviewProvider().getReviewList(toiletId, _page).then((reviewData) {
+      print('reivew data : $reviewData');
+      _initReviewList();
+      print('초기화 $_reviewList');
+      _addReviewList(reviewData);
+      print('add $reviewList');
+      _setLoading(false);
+      notifyListeners();
+      print('전역 갱신 ${_reviewList[0].comment}');
+    });
+    increasePage();
+  }
+
+  void _getToiletList() {
+    ToiletProvider().getNearToilet(_mainToiletData).then((toiletData) {
+      _initToiletList();
+      _addToiletList(toiletData);
+      _setLoading(false);
+      notifyListeners();
+    });
+    increasePage();
+  }
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;

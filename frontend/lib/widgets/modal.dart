@@ -175,7 +175,7 @@ class NicknameInputModal extends StatelessWidget {
           UserProvider().changeName(data).then((result) {
             print('result: $result');
             if (result['success'] != null) {
-              context.read<UserInfoProvider>().setStoreName(result['success']);
+              changeName(context, result['success']);
               showModal(
                 context,
                 page: const AlertModal(
@@ -824,9 +824,11 @@ class AlertModal extends StatelessWidget {
 class LoginConfirmModal extends StatelessWidget {
   // final GlobalKey? globalKey;
   // final ReturnVoid nextAction;
+  // final ReturnVoid afterLogin;
   final Widget? page;
   const LoginConfirmModal({
     super.key,
+    // required this.afterLogin,
     // this.globalKey,
     // required this.nextAction,
     this.page,
@@ -853,6 +855,7 @@ class LoginConfirmModal extends StatelessWidget {
           } else {
             changeRefresh(context);
           }
+
           // routerPop(context);
           // nextAction();
         });

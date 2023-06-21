@@ -80,6 +80,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print('bottom build');
     return DraggableScrollableSheet(
       initialChildSize: widget.showReview ? 0.6 : 0.2,
       minChildSize: 0.08,

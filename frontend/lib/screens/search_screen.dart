@@ -85,6 +85,7 @@ class _SearchState extends State<Search> {
 
   void firstSearch() async {
     if (readLoading(context)) {
+      initPage(context);
       searchData['page'] += 1;
       print(searchData);
       ToiletProvider().searchToilet(searchData).then((data) {

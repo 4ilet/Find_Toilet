@@ -16,7 +16,7 @@ class SearchBar extends StatefulWidget {
   final bool isMain, showReview;
   final String? query;
   // final ReturnVoid refreshPage;
-  // final int? toiletId;
+  final int? toiletId;
   final ReturnVoid? onSearchMode;
   // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
@@ -27,7 +27,7 @@ class SearchBar extends StatefulWidget {
     // required this.refreshPage,
     this.onSearchMode,
     this.query,
-    // this.toiletId,
+    this.toiletId,
     // required this.onSearchAction,
   });
 
@@ -193,9 +193,11 @@ class _SearchBarState extends State<SearchBar> {
                       onPressed: routerPush(
                         context,
                         page: widget.isMain
-                            ? const Settings(
+                            ? Settings(
+                                toiletId: widget.toiletId,
+                                showReview: widget.showReview,
                                 // refreshPage: widget.refreshPage,
-                                )
+                              )
                             : const Main(),
                       ),
                       color: CustomColors.blackColor,
