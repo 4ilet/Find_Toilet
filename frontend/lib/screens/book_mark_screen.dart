@@ -62,6 +62,7 @@ class _BookMarkListState extends State<BookMarkList> {
 
   void initData() async {
     if (readLoading(context)) {
+      initPage(context);
       BookMarkProvider()
           .getToiletList(widget.folderId, getPage(context))
           .then((toiletData) {
@@ -86,8 +87,8 @@ class _BookMarkListState extends State<BookMarkList> {
         setLoading(context, false);
         setAdditional(context, false);
         setWorking(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 

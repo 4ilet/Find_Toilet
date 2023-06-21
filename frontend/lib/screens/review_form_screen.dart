@@ -29,6 +29,8 @@ class ReviewForm extends StatefulWidget {
 
 class _ReviewFormState extends State<ReviewForm> {
   DynamicMap reviewData = {'comment': '', 'score': 0.0};
+  bool enabled = true;
+
   void initData() async {
     final data = await ReviewProvider().getReview(widget.reviewId);
     changeScore(data.score.toInt() - 1);
@@ -57,29 +59,56 @@ class _ReviewFormState extends State<ReviewForm> {
   void changeComment(String comment) => reviewData['comment'] = comment;
   void addOrEditReview() async {
     try {
-      late final String state;
-      if (widget.reviewId == 0) {
-        await ReviewProvider().postNewReview(
-          toiletId: widget.toiletId,
-          reviewData: reviewData,
-        );
-        state = '등록';
-      } else {
-        await ReviewProvider().updateReview(
-          widget.reviewId,
-          reviewData: reviewData,
-        );
-        state = '수정';
+      if (enabled) {
+        setState(() {
+          enabled = false;
+        });
+        late final String state;
+        if (widget.reviewId == 0) {
+          ReviewProvider()
+              .postNewReview(
+            toiletId: widget.toiletId,
+            reviewData: reviewData,
+          )
+              .then((_) {
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
+              toiletId: widget.toiletId,
+            );
+          });
+
+          state = '등록';
+        } else {
+          ReviewProvider()
+              .updateReview(
+            widget.reviewId,
+            reviewData: reviewData,
+          )
+              .then((result) {
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
+              toiletId: widget.toiletId,
+            );
+          });
+          state = '수정';
+        }
+        if (!mounted) return;
+        showModal(
+          context,
+          page: AlertModal(
+            title: '리뷰 $state',
+            content: '리뷰가 성공적으로\n $state되었습니다',
+          ),
+        ).then((_) {
+          routerPop(context)();
+        });
       }
-      if (!mounted) return;
-      routerPop(context)();
-      showModal(
-        context,
-        page: AlertModal(
-          title: '리뷰 $state',
-          content: '리뷰가 성공적으로\n $state되었습니다',
-        ),
-      );
     } catch (error) {
       print(error);
       final state = widget.reviewId != 0 ? '수정' : '등록';
@@ -90,6 +119,9 @@ class _ReviewFormState extends State<ReviewForm> {
           content: '오류가 발생해 \n리뷰가 $state되지 않았습니다.',
         ),
       );
+      setState(() {
+        enabled = true;
+      });
     }
   }
 
@@ -129,6 +161,11 @@ class _ReviewFormState extends State<ReviewForm> {
                 onChanged: changeComment,
                 maxLines: 5,
                 height: 200,
+                textHeight: 1.5,
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: 30,
+                  vertical: 20,
+                ),
               ),
             ),
             Flexible(

@@ -19,16 +19,15 @@ import 'package:provider/provider.dart';
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
   final String text;
-  final bool selected;
+  final bool selected, isLarge;
   final ReturnVoid onTap;
   final FontSize fontSize;
-  final String path;
   const ThemeBox({
     super.key,
     required this.text,
     required this.selected,
     required this.onTap,
-    required this.path,
+    required this.isLarge,
     this.fontSize = FontSize.defaultSize,
   });
 
@@ -49,16 +48,59 @@ class _ThemeBoxState extends State<ThemeBox> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomBox(
-            height: screenHeight(context) * 0.2,
-            width: screenWidth(context) * 0.6,
-            child: Image.asset(
-              widget.path,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+              height: screenHeight(context) * 0.2,
+              width: screenWidth(context) * 0.6,
+              child: CustomBox(
+                color: mainColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomText(
+                      title: '제목',
+                      color: CustomColors.whiteColor,
+                      fontSize: widget.isLarge
+                          ? FontSize.largeDefaultSize
+                          : FontSize.defaultSize,
+                      applyTheme: false,
+                    ),
+                    CustomText(
+                      title: '내용',
+                      color: CustomColors.whiteColor,
+                      fontSize: widget.isLarge
+                          ? FontSize.largeSmallSize
+                          : FontSize.smallSize,
+                      applyTheme: false,
+                    ),
+                    CustomText(
+                      title: '제목',
+                      font: kimm,
+                      fontSize: widget.isLarge
+                          ? FontSize.largeDefaultSize
+                          : FontSize.defaultSize,
+                      color: CustomColors.whiteColor,
+                      applyTheme: false,
+                    ),
+                    CustomText(
+                      title: '내용',
+                      font: kimm,
+                      fontSize: widget.isLarge
+                          ? FontSize.largeSmallSize
+                          : FontSize.smallSize,
+                      color: CustomColors.whiteColor,
+                      applyTheme: false,
+                    )
+                  ],
+                ),
+              )
+              // Image.asset(
+              //   widget.path,
+              //   fit: BoxFit.fitWidth,
+              // ),
+              ),
           CustomText(
             title: widget.text,
             fontSize: widget.fontSize,
+            font: kimm,
           )
         ],
       ),
@@ -200,19 +242,29 @@ class _AddBoxState extends State<AddBox> {
 class ListItem extends StatelessWidget {
   final ToiletModel data;
   final bool showReview;
+  // final ReturnVoid refreshPage;
   const ListItem({
     super.key,
     required this.data,
     required this.showReview,
+    // required this.refreshPage,
   });
 
   @override
   Widget build(BuildContext context) {
+    final heartKey = GlobalKey();
     BoolList availableList = [
       data.can24hour,
-      data.privateDiaper,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
-      data.privateChildF || data.privateChildM1 || data.privateChildM2
+      data.privateChildF || data.privateChildM1 || data.privateChildM2,
+      data.privateDiaper,
+    ];
+
+    StringList facilityList = [
+      '• 24시간 이용',
+      '• 장애인 전용',
+      '• 유아 전용',
+      '• 기저귀 교환대',
     ];
 
     bool existState() {
@@ -223,12 +275,6 @@ class ListItem extends StatelessWidget {
     }
 
     String available(int limit) {
-      StringList facilityList = [
-        '• 24시간 이용',
-        '• 장애인 전용',
-        '• 유아 전용',
-        '• 기저귀 교환대',
-      ];
       String result = '';
       int length = 0;
       for (int i = 0; i < 4; i += 1) {
@@ -256,9 +302,7 @@ class ListItem extends StatelessWidget {
               reviewId: data.reviewId,
             ))();
       } else {
-        showModal(context, page: const LoginConfirmModal()).then((_) {
-          routerPop(context)();
-        });
+        showModal(context, page: const LoginConfirmModal());
       }
     }
 
@@ -276,16 +320,22 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: CustomBox(
-        onTap: () => routerPush(
+    void toReview() {
+      if (!showReview) {
+        routerPush(
           context,
           page: Main(
             showReview: true,
             toiletModel: data,
           ),
-        )(),
+        )();
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: CustomBox(
+        onTap: toReview,
         color: whiteColor,
         height: getFontSize(context) == '기본' ? 250 : 300,
         child: Padding(
@@ -311,25 +361,35 @@ class ListItem extends StatelessWidget {
                         Stack(
                           children: [
                             IconButton(
+                              key: heartKey,
                               onPressed: pressedHeart,
                               icon: CustomIcon(
-                                icon: data.folderId.isNotEmpty
+                                icon: getToken(context) != null &&
+                                        data.folderId.isNotEmpty
                                     ? heartIcon
                                     : emptyHeartIcon,
                                 color: redColor,
                               ),
                             ),
-                            data.folderId.isNotEmpty
-                                ? CustomCircleButton(
-                                    width: 20,
-                                    height: 20,
-                                    shadow: false,
-                                    hasBorder: true,
-                                    child: Center(
-                                      child: CustomText(
-                                        title: '${data.folderId.length}',
-                                        fontSize: FontSize.smallSize,
-                                        color: CustomColors.mainColor,
+                            getToken(context) != null &&
+                                    data.folderId.isNotEmpty
+                                ? GestureDetector(
+                                    onTap: pressedHeart,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          25, 20, 0, 0),
+                                      child: CustomCircleButton(
+                                        width: 20,
+                                        height: 20,
+                                        shadow: true,
+                                        hasBorder: true,
+                                        child: Center(
+                                          child: CustomText(
+                                            title: '${data.folderId.length}',
+                                            fontSize: FontSize.smallSize,
+                                            color: CustomColors.mainColor,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )
@@ -428,7 +488,10 @@ class ListItem extends StatelessWidget {
                     CustomButton(
                       fontSize: FontSize.smallSize,
                       onPressed: addOrEditReview,
-                      buttonText: data.reviewId == 0 ? '리뷰 남기기' : '리뷰 수정하기',
+                      buttonText:
+                          getToken(context) == null || data.reviewId == 0
+                              ? '리뷰 남기기'
+                              : '리뷰 수정하기',
                     )
                   ],
                 ),
@@ -443,10 +506,15 @@ class ListItem extends StatelessWidget {
 
 //* filter 상자
 class FilterBox extends StatefulWidget {
-  final ReturnVoid? onPressed;
+  final void Function(int) onPressed;
+  final bool applyLong, isMain;
+  final BoolList? filterList;
   const FilterBox({
     super.key,
-    this.onPressed,
+    required this.onPressed,
+    this.applyLong = true,
+    this.isMain = false,
+    this.filterList,
   });
 
   @override
@@ -455,47 +523,111 @@ class FilterBox extends StatefulWidget {
 
 class _FilterBoxState extends State<FilterBox> {
   StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
+  StringList longFilterList = ['기저귀 교환대', '어린이용 화장실', '장애인용 화장실', '24시간 운영'];
 
   @override
   void initState() {
     super.initState();
   }
 
+  void onTapInMain(int index) {
+    setFilter(context, index, !readFilter(context, index));
+    applyFilter(context, index);
+    widget.onPressed(index);
+  }
+
+  void onTapInSearch(int index) {
+    widget.onPressed(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
+    // for (int i = 0; i < 4; i += 1) {
+    //   print(readFilter(context, i));
+    // }
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        for (int i = 0; i < 4; i += 1)
-          CustomBox(
-            onTap: () {
-              setFilter(context, i);
-              if (widget.onPressed != null) {
-                widget.onPressed!();
-              }
-            },
-            // width: 100,
-            // height: 30,
-            color: getFilter(context, i) ? mainColor : whiteColor,
-            radius: 5,
-            boxShadow: const [defaultShadow],
-            child: Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                child: CustomText(
-                  title: filterList[i],
-                  font: kimm,
-                  fontSize: FontSize.smallSize,
-                  color: getFilter(context, i)
-                      ? CustomColors.whiteColor
-                      : CustomColors.blackColor,
-                ),
-              ),
-            ),
-          ),
-      ],
+      children: widget.applyLong
+          ? [
+              for (int i = 0; i < 2; i += 1)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (int j = 0; j < 2; j += 1)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: CustomBox(
+                          width: screenWidth(context) * 0.44,
+                          color:
+                              widget.isMain && getFilter(context, (2 * i) + j)
+                                  ? mainColor
+                                  : whiteColor,
+                          boxShadow: const [defaultShadow],
+                          border: Border.all(
+                            color: !widget.isMain &&
+                                    widget.filterList![(2 * i) + j]
+                                ? redColor
+                                : whiteColor,
+                          ),
+                          onTap: widget.isMain
+                              ? () => onTapInMain((2 * i) + j)
+                              : () => onTapInSearch((2 * i) + j),
+                          radius: 5,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 12,
+                              ),
+                              child: CustomText(
+                                title: longFilterList[(2 * i) + j],
+                                font: kimm,
+                                fontSize: FontSize.smallSize,
+                                color: widget.isMain &&
+                                        getFilter(context, (2 * i) + j)
+                                    ? CustomColors.whiteColor
+                                    : CustomColors.blackColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                )
+            ]
+          : [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 4; i += 1)
+                    CustomBox(
+                      onTap: () => onTapInMain(i),
+                      // width: 100,
+                      // height: 30,
+                      color: getFilter(context, i) ? mainColor : whiteColor,
+                      radius: 5,
+                      boxShadow: const [defaultShadow],
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 12,
+                          ),
+                          child: CustomText(
+                            title: filterList[i],
+                            font: kimm,
+                            fontSize: FontSize.smallSize,
+                            color: getFilter(context, i)
+                                ? CustomColors.whiteColor
+                                : CustomColors.blackColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              )
+            ],
     );
   }
 }
@@ -510,17 +642,18 @@ class CustomBox extends StatelessWidget {
   final ShadowList? boxShadow;
   final BorderRadius? borderRadius;
   final Border? border;
-  const CustomBox(
-      {super.key,
-      this.onTap,
-      required this.child,
-      this.width,
-      this.height,
-      this.color,
-      this.radius = 10,
-      this.boxShadow,
-      this.borderRadius,
-      this.border});
+  const CustomBox({
+    super.key,
+    this.onTap,
+    required this.child,
+    this.width,
+    this.height,
+    this.color,
+    this.radius = 10,
+    this.boxShadow,
+    this.borderRadius,
+    this.border,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -578,8 +711,9 @@ class ReviewBox extends StatelessWidget {
                           title: review.nickname,
                           fontSize: FontSize.smallSize,
                         ),
-                        review.nickname ==
-                                context.read<UserInfoProvider>().nickname
+                        getToken(context) != null &&
+                                review.nickname ==
+                                    context.read<UserInfoProvider>().nickname
                             ? Row(
                                 children: [
                                   CustomIconButton(

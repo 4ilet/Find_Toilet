@@ -8,6 +8,7 @@ const starIcon = Icons.star_rounded;
 const hamburgerIcon = Icons.menu;
 const personIcon = Icons.person;
 const scaleIcon = Icons.hdr_strong_rounded;
+const settingsIcon = Icons.settings;
 // const scaleIcon = Icons.iso_rounded;
 const gpsIcon = Icons.gps_fixed_rounded;
 const fontIcon = Icons.format_size_rounded;

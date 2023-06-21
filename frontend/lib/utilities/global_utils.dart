@@ -48,12 +48,19 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
   userInfo.setStoreRefresh(refresh);
 }
 
+//* 닉네임 변경
+void changeName(BuildContext context, String? name) =>
+    context.read<UserInfoProvider>().setStoreName(name);
+
 //* 현재 글자 크기
 String? getFontSize(BuildContext context) =>
     context.read<SettingsProvider>().fontState;
 
 bool isDefaultTheme(BuildContext context) =>
     context.read<SettingsProvider>().fontState == '기본';
+
+String getThemeState(BuildContext context) =>
+    context.watch<SettingsProvider>().fontState;
 
 FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
   if (isDefaultTheme(context)) {
@@ -97,15 +104,14 @@ bool watchPressed(BuildContext context) =>
     context.watch<ApplyChangeProvider>().pressedOnce;
 
 //* 로그인
-FutureBool login(BuildContext context) async {
-  UserProvider().login().then((result) {
-    changeToken(context, token: result['token'], refresh: result['refresh']);
-    context.read<UserInfoProvider>().setStoreName(result['nickname']);
-    if (result['state'] != 'login' || result['nickname'] == null) {
-      showModal(context, page: const NicknameInputModal(isAlert: true));
-    }
-  });
-  return true;
+Future<Map<String, dynamic>> login(BuildContext context) async {
+  final DynamicMap result = await UserProvider().login();
+  changeToken(context, token: result['token'], refresh: result['refresh']);
+  changeName(context, result['nickname']);
+  if (result['state'] != 'login' || result['nickname'] == null) {
+    showModal(context, page: const NicknameInputModal(isAlert: true));
+  }
+  return result;
 }
 
 //* 새로고침 확인
@@ -136,14 +142,18 @@ void setQuery(BuildContext context, String? value) =>
     context.read<GlobalProvider>().setQuery(value);
 
 //* 필터
-void setFilter(BuildContext context, int index) =>
-    context.read<GlobalProvider>().setFilter(index);
+void setFilter(BuildContext context, int index, bool value) =>
+    context.read<GlobalProvider>().setFilter(index, value);
+
+void applyFilter(BuildContext context, int index) =>
+    context.read<GlobalProvider>().applyFilter(index);
+
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
       return context.read<GlobalProvider>().diaper;
     case 1:
-      return context.read<GlobalProvider>().child;
+      return context.read<GlobalProvider>().kids;
     case 2:
       return context.read<GlobalProvider>().disabled;
     default:
@@ -156,7 +166,7 @@ bool getFilter(BuildContext context, int index) {
     case 0:
       return context.watch<GlobalProvider>().diaper;
     case 1:
-      return context.watch<GlobalProvider>().child;
+      return context.watch<GlobalProvider>().kids;
     case 2:
       return context.watch<GlobalProvider>().disabled;
     default:
@@ -169,6 +179,10 @@ void setSortIdx(BuildContext context, int index) =>
     context.read<GlobalProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
 
+//* 현위치
+double? readLat(BuildContext context) => context.read<GlobalProvider>().lat;
+double? readLng(BuildContext context) => context.read<GlobalProvider>().lng;
+
 //* main toilet list
 void addToiletList(BuildContext context, ToiletList toiletList) =>
     context.read<GlobalProvider>().addToiletList(toiletList);
@@ -178,6 +192,34 @@ DynamicMap mainToiletData(BuildContext context) =>
 
 ToiletList mainToiletList(BuildContext context) =>
     context.read<GlobalProvider>().mainToiletList;
+
+//* review list
+void addReviewList(BuildContext context, ReviewList reviewData) =>
+    context.read<GlobalProvider>().addReviewList(reviewData);
+
+ReviewList reviewList(BuildContext context) =>
+    context.read<GlobalProvider>().reviewList;
+
+//* init main/search/review data
+void initMainData(
+  BuildContext context, {
+  required bool showReview,
+  int? toiletId,
+}) =>
+    context.read<GlobalProvider>().initMainData(
+          showReview: showReview,
+          toiletId: toiletId,
+        );
+
+// void refreshMain(
+//   BuildContext context,
+//   bool showReview,
+//   int? toiletId,
+// ) =>
+//     context.read<GlobalProvider>().refreshMain(
+//           showReview,
+//           toiletId,
+//         );
 
 //* scroll
 

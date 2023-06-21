@@ -8,7 +8,7 @@ class CustomTextField extends StatelessWidget {
   final String? initValue, hintText;
   final void Function(String)? onChanged, onSubmitted;
   final int maxLines;
-  final double width, height, radius;
+  final double width, height, radius, textHeight;
   final Widget? prefixIcon, suffixIcon;
   final List<BoxShadow>? boxShadow;
   final EdgeInsetsGeometry padding;
@@ -22,25 +22,28 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.prefixIcon,
     this.suffixIcon,
-    this.height = 40,
+    this.height = 50,
     this.boxShadow,
     this.radius = 5,
     this.padding = const EdgeInsetsDirectional.all(30),
     this.onSubmitted,
     this.searchMode = false,
+    this.textHeight = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomBox(
       width: width,
-      height: getFontSize(context) == '기본' ? height : height * 1.2,
+      height: height,
+      // isDefaultTheme(context) ? height : height * 1.2,
       radius: radius,
       color: whiteColor,
       boxShadow: boxShadow,
       child: Padding(
         padding: padding,
         child: TextField(
+          // textAlignVertical: TextAlignVertical.bottom,
           controller: TextEditingController(text: initValue),
           onChanged: onChanged,
           decoration: InputDecoration(
@@ -51,9 +54,9 @@ class CustomTextField extends StatelessWidget {
           ),
           maxLines: 5,
           style: TextStyle(
-            fontSize:
-                getFontSize(context) == '기본' ? defaultSize : defaultSize + 3,
-            height: 1,
+            fontSize: isDefaultTheme(context) ? defaultSize : largeDefaultSize,
+            height: textHeight,
+            letterSpacing: 1,
           ),
           textInputAction: searchMode ? TextInputAction.search : null,
           onSubmitted: onSubmitted,
@@ -108,6 +111,7 @@ class TextWithIcon extends StatelessWidget {
   final int flex;
   final MainAxisAlignment mainAxisAlignment;
   final double gap;
+  final bool applyTheme;
   const TextWithIcon({
     super.key,
     required this.icon,
@@ -119,6 +123,7 @@ class TextWithIcon extends StatelessWidget {
     this.flex = 4,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.gap = 10,
+    this.applyTheme = true,
   });
 
   @override
@@ -144,6 +149,7 @@ class TextWithIcon extends StatelessWidget {
             fontSize: fontSize,
             color: textColor,
             font: font,
+            applyTheme: applyTheme,
           ),
         )
       ],
