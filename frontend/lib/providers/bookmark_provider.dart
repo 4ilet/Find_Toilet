@@ -62,14 +62,16 @@ class BookMarkProvider extends ApiProvider {
 
   //* 즐겨찾기에 추가/삭제
   FutureVoid addOrDeleteToilet({
-    required int folderId,
+    required List addFolderIdList,
+    required List delFolderIdList,
     required int toiletId,
   }) async =>
       createApi(
-        addToiletUrl(
-          folderId: folderId,
-          toiletId: toiletId,
-        ),
-        data: {},
+        addToiletUrl,
+        data: {
+          'addFolderIdList': addFolderIdList,
+          'delFolderIdList': delFolderIdList,
+          'toiletId': toiletId,
+        },
       );
 }

@@ -1,7 +1,6 @@
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
-import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
@@ -49,36 +48,36 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Center(
-                      child: Column(
-                    children: const [
-                      CustomText(
-                        title: '어서오세요',
-                        fontSize: FontSize.titleSize,
-                        color: CustomColors.whiteColor,
-                        font: kimm,
-                        applyTheme: false,
-                      ),
-                      SizedBox(height: 10),
-                      CustomText(
-                        title: '사용하실 테마를 선택해주세요.',
-                        color: CustomColors.whiteColor,
-                        font: kimm,
-                        applyTheme: false,
-                      ),
-                    ],
-                  )),
+                    child: Column(
+                      children: const [
+                        CustomText(
+                          title: '어서오세요!',
+                          fontSize: FontSize.titleSize,
+                          color: CustomColors.whiteColor,
+                          font: kimm,
+                          applyTheme: false,
+                        ),
+                        SizedBox(height: 10),
+                        CustomText(
+                          title: '사용하실 테마를 선택해주세요.',
+                          color: CustomColors.whiteColor,
+                          applyTheme: false,
+                        ),
+                      ],
+                    ),
+                  ),
                   ThemeBox(
                     text: '큰 글씨',
                     selected: isLargeSize,
                     fontSize: FontSize.largeSize,
                     onTap: changeFontSize(true),
-                    path: largeTheme,
+                    isLarge: true,
                   ),
                   ThemeBox(
                     text: '기본',
                     selected: !isLargeSize,
                     onTap: changeFontSize(false),
-                    path: defaultTheme,
+                    isLarge: false,
                   ),
                   CustomButton(onPressed: applyTheme)
                 ],

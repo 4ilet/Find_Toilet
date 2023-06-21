@@ -13,7 +13,15 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final bool showReview;
+  final int? toiletId;
+  // final ReturnVoid refreshPage;
+  const Settings({
+    super.key,
+    required this.showReview,
+    this.toiletId,
+    // required this.refreshPage,
+  });
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -62,12 +70,31 @@ class _SettingsState extends State<Settings> {
     try {
       final token = readToken(context);
       if (token == null || token == '') {
-        await login(context);
+        login(context).then((result) {
+          setLoading(context, true);
+          initPage(context);
+          initMainData(
+            context,
+            showReview: widget.showReview,
+            toiletId: widget.toiletId,
+          );
+        });
       } else {
-        if (!mounted) return;
         changeToken(context, token: null, refresh: null);
+        changeName(context, null);
+        setLoading(context, true);
+        initPage(context);
+        initMainData(
+          context,
+          showReview: widget.showReview,
+          toiletId: widget.toiletId,
+        );
       }
+      // widget.refreshPage();
+      // if (!mounted) return;
+      // refreshMain(context, widget.showReview, null);
     } catch (error) {
+      setLoading(context, false);
       showModal(
         context,
         page: const AlertModal(
@@ -118,12 +145,15 @@ class _SettingsState extends State<Settings> {
                       child: GestureDetector(
                         onTap: loginOrLogout,
                         child: getToken(context) != null
-                            ? const TextWithIcon(
+                            ? TextWithIcon(
                                 icon: logoutIcon,
                                 text: '로그아웃',
                                 iconColor: CustomColors.blackColor,
-                                fontSize: FontSize.defaultSize,
+                                fontSize: getThemeState(context) == '기본'
+                                    ? FontSize.defaultSize
+                                    : FontSize.largeDefaultSize,
                                 mainAxisAlignment: MainAxisAlignment.end,
+                                applyTheme: false,
                               )
                             : Image.asset(kakaoLogin),
                       ),

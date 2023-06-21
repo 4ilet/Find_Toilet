@@ -1,17 +1,12 @@
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/state_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
-import 'package:find_toilet/screens/search_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
 import 'package:find_toilet/widgets/box_container.dart';
-import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/map_widget.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
   final bool showReview;
@@ -27,49 +22,82 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  DynamicMap query = {'value': null};
+  // DynamicMap query = {'value': null};
   final globalKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    refreshMain();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        initLoadingData(context);
+        initMainData(
+          context,
+          showReview: widget.showReview,
+          toiletId: widget.toiletModel?.toiletId,
+        );
+        setQuery(context, null);
         setKey(context, globalKey);
       },
     );
   }
 
-  void onSearchAction() {
-    if (query['value'] != '') {
-      return routerPush(
+  // void onSearchAction() {
+  //   if (query['value'] != '') {
+  //     return routerPush(
+  //       context,
+  //       page: Search(
+  //         query: query['value'] ?? '',
+  //       ),
+  //     )();
+  //   }
+  //   showModal(
+  //     context,
+  //     page: const AlertModal(
+  //       title: '검색어 입력',
+  //       content: '검색어를 입력해주세요',
+  //     ),
+  //   );
+  // }
+
+  void refreshMain(int index) {
+    print('refresh main! ${readLoading(context)}');
+    print('get token : ${readToken(context)}');
+    if (!readLoading(context)) {
+      setLoading(context, true);
+      initPage(context);
+      initMainData(
         context,
-        // page: const Search(),
-        page: Search(query: query['value'] ?? ''),
-      )();
+        showReview: widget.showReview,
+        toiletId: widget.toiletModel?.toiletId,
+      );
     }
-    showModal(
-      context,
-      page: const AlertModal(
-        title: '검색어 입력',
-        content: '검색어를 입력해주세요',
-      ),
-    );
   }
 
-  void refreshMain() {
-    setQuery(context, null);
-    if (!widget.showReview) {
-      context.read<GlobalProvider>().initToiletList();
-      ToiletProvider()
-          .getNearToilet(mainToiletData(context))
-          .then((data) => addToiletList(context, data));
-    }
-  }
+  // void initData() {
+  //   if (readLoading(context)) {
+  //     if (widget.showReview) {
+  //       ReviewProvider()
+  //           .getReviewList(widget.toiletModel!.toiletId, getPage(context))
+  //           .then((reviewData) {
+  //         addReviewList(context, reviewData);
+  //         setLoading(context, false);
+  //       });
+  //     } else {
+  //       ToiletProvider()
+  //           .getNearToilet(mainToiletData(context))
+  //           .then((toiletData) {
+  //         addToiletList(context, toiletData);
+  //         setLoading(context, false);
+  //       });
+  //     }
+  //     increasePage(context);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    print('main build');
     return WillPopScope(
       onWillPop: widget.showReview
           ? () {
@@ -95,15 +123,33 @@ class _MainState extends State<Main> {
                   ),
                 ],
               ),
-              SearchBar(
-                isMain: true,
-                onChange: (value) => setQuery(context, value),
-                onSearchAction: onSearchAction,
-                pressedFilter: refreshMain,
-              ),
+              widget.showReview
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
+                      child: Column(
+                        children: [
+                          FilterBox(
+                            onPressed: refreshMain,
+                            applyLong: !isDefaultTheme(context),
+                            isMain: true,
+                          ),
+                        ],
+                      ),
+                    ),
               ToiletBottomSheet(
                 showReview: widget.showReview,
                 toiletModel: widget.toiletModel,
+              ),
+              Column(
+                children: [
+                  SearchBar(
+                    isMain: true,
+                    // refreshPage: () => refreshMain(0)
+                    showReview: widget.showReview,
+                    toiletId: widget.toiletModel?.toiletId,
+                  ),
+                ],
               ),
               watchPressed(context)
                   ? Center(
@@ -121,7 +167,6 @@ class _MainState extends State<Main> {
                       ),
                     )
                   : const SizedBox(),
-              CustomText(title: onRefresh(context).trim())
             ],
           ),
         ),

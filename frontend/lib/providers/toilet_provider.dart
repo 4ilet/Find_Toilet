@@ -6,6 +6,7 @@ import 'package:find_toilet/utilities/type_enum.dart';
 class ToiletProvider extends ApiProvider {
   Future<ToiletList> getNearToilet(DynamicMap queryData) async {
     try {
+      print('token : $token');
       final response = token == null
           ? await dio.get(
               nearToiletUrl,
@@ -16,6 +17,7 @@ class ToiletProvider extends ApiProvider {
               queryParameters: queryData,
             );
       final data = response.data['content'];
+      print(response);
       if (data.isNotEmpty) {
         ToiletList toiletList = data.map<ToiletModel>((json) {
           return ToiletModel.fromJson(json);

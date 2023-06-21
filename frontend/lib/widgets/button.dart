@@ -44,7 +44,12 @@ class CustomButton extends StatelessWidget {
 //* 나가기 버튼
 class ExitPage extends StatelessWidget {
   final CustomColors color;
-  const ExitPage({super.key, this.color = CustomColors.whiteColor});
+  // final ReturnVoid? onTap;
+  const ExitPage({
+    super.key,
+    this.color = CustomColors.whiteColor,
+    // this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +59,11 @@ class ExitPage extends StatelessWidget {
         children: [
           CustomText(
             title: '나가기',
-            fontSize: FontSize.largeSize,
+            fontSize: getThemeState(context) == '기본'
+                ? FontSize.largeSize
+                : FontSize.largeLargeSize,
             color: color,
+            applyTheme: false,
           ),
           CustomIcon(
             icon: exitIcon,

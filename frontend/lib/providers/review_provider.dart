@@ -8,7 +8,6 @@ class ReviewProvider extends ApiProvider {
   Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
-      print(token);
       final response = token == null
           ? await dio.get(
               reviewListUrl(toiletId),
@@ -63,7 +62,7 @@ class ReviewProvider extends ApiProvider {
       );
 
   //* 리뷰 수정
-  FutureVoid updateReview(
+  FutureDynamicMap updateReview(
     int reviewId, {
     required DynamicMap reviewData,
   }) async =>
