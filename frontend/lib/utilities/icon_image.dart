@@ -25,6 +25,10 @@ const deleteIcon = Icons.delete;
 const exitIcon = Icons.chevron_left_rounded;
 const logoutIcon = Icons.logout_outlined;
 
+const linkIcon = Icons.link;
+const circleIcon = Icons.circle_outlined;
+const checkedIcon = Icons.check_circle;
+
 //* filter 선택
 const toLeftIcon = Icons.arrow_left_sharp;
 const toRightIcon = Icons.arrow_right_sharp;

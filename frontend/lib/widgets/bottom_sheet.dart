@@ -13,10 +13,12 @@ import 'package:flutter/material.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
+  // final int? index;
   final ToiletModel? toiletModel;
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
+    // this.index,
     this.toiletModel,
   });
 
@@ -26,13 +28,21 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   final controller = ScrollController();
+  // ToiletModel? toiletModel;
   int? toiletId;
 
   @override
   void initState() {
     super.initState();
+    // print('bottom index : ${widget.index}');
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        // if (widget.index != null) {
+        //   setState(() {
+        //     toiletModel = mainToiletList(context)[widget.index!];
+        //   });
+        // }
+        // toiletId = toiletModel?.toiletId;
         toiletId = widget.toiletModel?.toiletId;
         controller.addListener(
           () {
@@ -89,7 +99,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,
           listScroll: controller,
-          toolbarHeight: widget.showReview ? 40 : 30,
+          toolbarHeight: widget.showReview ? 55 : 40,
           expandedHeight: widget.showReview
               ? screenHeight(context) * 0.44
               : screenHeight(context) * 0.13,
@@ -127,8 +137,10 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                   ),
                   widget.showReview
                       ? ListItem(
+                          // index: widget.index!,
                           data: widget.toiletModel!,
                           showReview: true,
+                          isMain: true,
                         )
                       : const Padding(
                           padding: EdgeInsets.symmetric(
@@ -149,6 +161,8 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
             CustomSilverList(
               isMain: true,
               isSearch: false,
+              // toiletId: toiletModel?.toiletId,
+              // toiletName: toiletModel?.toiletName,
               toiletId: widget.toiletModel?.toiletId,
               toiletName: widget.toiletModel?.toiletName,
               showReview: widget.showReview,

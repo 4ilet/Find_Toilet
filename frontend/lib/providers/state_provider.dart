@@ -234,7 +234,7 @@ class GlobalProvider with ChangeNotifier {
   static int _sortIdx = 0;
   static double _lat = 37.537229;
   static double _lng = 127.005515;
-  static final Map<String, String?> _query = {'value': null};
+  // static final Map<String, String?> _query = {'value': null};
   static final ReviewList _reviewList = [];
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
@@ -249,6 +249,20 @@ class GlobalProvider with ChangeNotifier {
     'size': 20,
   };
 
+//   static final DynamicMap _searchData = {
+//       'allDay': _allDay,
+//     'diaper': _diaper,
+//     'disabled': _disabled,
+//     'kids': _kids,
+//       'keyword': null,
+//       // 'keyword': readQuery(context),
+// 'lat': _lat,
+//     'lon': _lng,
+//       'page': 0,
+//       'size': 20,
+//       'order': sortValues[sortIdx],
+//     }
+
   //* getter
   GlobalKey? get globalKey => _globalKey;
   bool get loading => _loading;
@@ -261,9 +275,10 @@ class GlobalProvider with ChangeNotifier {
   int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
-  double get lat => _lat;
-  double get lng => _lng;
-  String? get query => _query['value'];
+
+  // String? get query => _query['value'];
+  double? get lat => _lat;
+  double? get lng => _lng;
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
@@ -285,9 +300,9 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setQuery(String? value) {
-    _setQuery(value);
-  }
+  // void setQuery(String? value) {
+  //   _setQuery(value);
+  // }
 
   // void setCnt(int newVal) {
   //   _setCnt(newVal);
@@ -364,14 +379,14 @@ class GlobalProvider with ChangeNotifier {
 
   void _getReviewList(int toiletId) {
     ReviewProvider().getReviewList(toiletId, _page).then((reviewData) {
-      print('reivew data : $reviewData');
+      // print('reivew data : $reviewData');
       _initReviewList();
-      print('초기화 $_reviewList');
+      // print('초기화 $_reviewList');
       _addReviewList(reviewData);
-      print('add $reviewList');
+      // print('add $reviewList');
       _setLoading(false);
       notifyListeners();
-      print('전역 갱신 ${_reviewList[0].comment}');
+      // print('전역 갱신 ${_reviewList[0].comment}');
     });
     increasePage();
   }
@@ -388,7 +403,7 @@ class GlobalProvider with ChangeNotifier {
 
   //* private
   // void _setCnt(int newVal) => _cnt = newVal;
-  void _setQuery(String? value) => _query['value'] = value;
+  // void _setQuery(String? value) => _query['value'] = value;
   void _setKey(GlobalKey key) => _globalKey = key;
   void _setWorking(bool newVal) => _working = newVal;
   void _setAdditional(bool newVal) => _additional = newVal;
@@ -445,6 +460,8 @@ class GlobalProvider with ChangeNotifier {
   void _setLatLng(double newLat, double newLng) {
     _lat = newLat;
     _lng = newLng;
+    _mainToiletData['lat'] = newLat;
+    _mainToiletData['lon'] = newLng;
     _mainToiletData['lat'] = newLat;
     _mainToiletData['lon'] = newLng;
   }

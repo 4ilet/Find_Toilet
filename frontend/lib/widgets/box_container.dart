@@ -241,10 +241,13 @@ class _AddBoxState extends State<AddBox> {
 //* 화장실, 리뷰 목록 아이템
 class ListItem extends StatelessWidget {
   final ToiletModel data;
-  final bool showReview;
+  // final int index;
+  final bool showReview, isMain;
   // final ReturnVoid refreshPage;
   const ListItem({
     super.key,
+    // required this.index,
+    required this.isMain,
     required this.data,
     required this.showReview,
     // required this.refreshPage,
@@ -253,6 +256,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final heartKey = GlobalKey();
+    // ToiletModel data = mainToiletList(context)[index];
     BoolList availableList = [
       data.can24hour,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
@@ -302,7 +306,12 @@ class ListItem extends StatelessWidget {
               reviewId: data.reviewId,
             ))();
       } else {
-        showModal(context, page: const LoginConfirmModal());
+        showModal(context,
+            page: LoginConfirmModal(
+              showReview: showReview,
+              toiletId: data.toiletId,
+              isMain: isMain,
+            ));
       }
     }
 
@@ -316,7 +325,12 @@ class ListItem extends StatelessWidget {
           ),
         );
       } else {
-        showModal(context, page: const LoginConfirmModal());
+        showModal(context,
+            page: LoginConfirmModal(
+              showReview: showReview,
+              toiletId: data.toiletId,
+              isMain: isMain,
+            ));
       }
     }
 
@@ -326,6 +340,7 @@ class ListItem extends StatelessWidget {
           context,
           page: Main(
             showReview: true,
+            // index: index,
             toiletModel: data,
           ),
         )();
@@ -400,7 +415,10 @@ class ListItem extends StatelessWidget {
                           onPressed: () => showModal(
                             context,
                             page: NavigationModal(
-                              startPoint: const [37.537229, 127.005515],
+                              startPoint: [
+                                readLat(context)!,
+                                readLng(context)!
+                              ],
                               endPoint: [data.lat, data.lng],
                               destination: data.toiletName,
                             ),

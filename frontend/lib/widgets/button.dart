@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget {
   final CustomColors textColor;
   final Color? buttonColor;
   final FontSize fontSize;
-  final String font;
+  final String? font;
   const CustomButton({
     super.key,
     required this.onPressed,
@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
     this.textColor = CustomColors.mainColor,
     this.buttonColor = whiteColor,
     this.fontSize = FontSize.defaultSize,
-    this.font = 'Kimm',
+    this.font,
   });
 
   @override

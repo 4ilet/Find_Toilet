@@ -143,8 +143,11 @@ class _SearchBarState extends State<SearchBar> {
       } else {
         await showModal(
           context,
-          page: const LoginConfirmModal(
-            page: BookMarkFolderList(),
+          page: LoginConfirmModal(
+            page: const BookMarkFolderList(),
+            isMain: widget.isMain,
+            showReview: widget.showReview,
+            toiletId: widget.toiletId,
           ),
         );
         // widget.refreshPage();
@@ -207,10 +210,8 @@ class _SearchBarState extends State<SearchBar> {
                         ? CustomIconButton(
                             icon: closeIcon,
                             onPressed: () {
-                              print('초기화');
-                              // widget.onChange('');
                               onChange(null);
-                              print(readQuery(context));
+                              // print(readQuery(context));
                             },
                             color: CustomColors.blackColor,
                           )

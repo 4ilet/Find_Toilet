@@ -90,7 +90,9 @@ class CustomSilverList extends StatelessWidget {
                             )
                           : ListItem(
                               showReview: false,
+                              // index: i,
                               data: data[i],
+                              isMain: isMain,
                               // refreshPage: refreshPage,
                             );
 

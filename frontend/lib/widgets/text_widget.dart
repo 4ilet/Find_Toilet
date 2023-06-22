@@ -71,7 +71,8 @@ class CustomText extends StatelessWidget {
   final String? font;
   final FontSize fontSize;
   final CustomColors color;
-  final bool isBoldText, isCentered, applyTheme;
+  final double? height;
+  final bool isBoldText, isCentered, applyTheme, hasUnderline;
   const CustomText({
     super.key,
     required this.title,
@@ -81,6 +82,8 @@ class CustomText extends StatelessWidget {
     this.isBoldText = false,
     this.isCentered = false,
     this.applyTheme = true,
+    this.hasUnderline = false,
+    this.height,
   });
 
   @override
@@ -93,8 +96,10 @@ class CustomText extends StatelessWidget {
         fontSize: convertedSize(
           applyTheme ? applyDefaultTheme(context, fontSize) : fontSize,
         ),
+        height: height,
         fontFamily: font,
         fontWeight: isBoldText ? FontWeight.bold : null,
+        decoration: hasUnderline ? TextDecoration.underline : null,
       ),
       // overflow: TextOverflow.ellipsis,
       // maxLines: 3,
@@ -111,7 +116,7 @@ class TextWithIcon extends StatelessWidget {
   final int flex;
   final MainAxisAlignment mainAxisAlignment;
   final double gap;
-  final bool applyTheme;
+  final bool applyTheme, hasUnderline;
   const TextWithIcon({
     super.key,
     required this.icon,
@@ -124,6 +129,7 @@ class TextWithIcon extends StatelessWidget {
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.gap = 10,
     this.applyTheme = true,
+    this.hasUnderline = false,
   });
 
   @override
@@ -150,6 +156,7 @@ class TextWithIcon extends StatelessWidget {
             color: textColor,
             font: font,
             applyTheme: applyTheme,
+            hasUnderline: hasUnderline,
           ),
         )
       ],
