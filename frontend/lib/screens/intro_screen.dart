@@ -36,12 +36,10 @@ class _IntroState extends State<Intro> {
     preparation();
     context.read<SettingsProvider>().initSettings();
     Future.delayed(const Duration(seconds: 5), () {
-      removedRouterPush(
-        context,
-        page: getFontSize(context) == null
-            ? const SelectFontTheme()
-            : const Main(),
-      );
+      removedRouterPush(context,
+          page: getFontSize(context) == null
+              ? const SelectFontTheme()
+              : const Main());
     });
   }
 

@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
@@ -7,6 +10,7 @@ import 'package:find_toilet/utilities/viewport_painter.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
@@ -21,12 +25,13 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   final controller = MapController(
-    location: const LatLng(35.203, 126.809),
-    zoom: 16,
+    location: const LatLng(35.145, 126.844),
+    zoom: 15,
   );
   final bool _darkMode = false;
 
   List<LatLng> markers = [];
+  List<LatLng> toiletMarkers = [];
 
   void getLocation() async {
     try {
@@ -34,6 +39,9 @@ class MapScreenState extends State<MapScreen> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       controller.center = LatLng(position.latitude, position.longitude);
+      if (controller.zoom < 16) controller.zoom = 16;
+      setLatLng(context, position.latitude, position.longitude);
+
       if (markers == []) {
         markers.add(LatLng(position.latitude, position.longitude));
       } else {
@@ -41,9 +49,23 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
       // controller.zoom = 16;
+      setLoading(context, true);
+      initPage(context);
+      initMainData(context, showReview: false);
+      // print(GlobalProvider().mainToiletList.length);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (GlobalProvider().mainToiletList.isNotEmpty) {
+          toiletMarkers.clear();
+          for (int i = 0; i < mainToiletList(context).length; i++) {
+            toiletMarkers.add(LatLng(mainToiletList(context)[i].lat,
+                mainToiletList(context)[i].lng));
+          }
+        }
+      });
       setState(() {});
+      // refreshMain;
     } catch (error) {
-      routerPop(context)();
+      SystemNavigator.pop();
     }
   }
 
@@ -113,7 +135,7 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerWidget(Offset pos, Color color, double size,
-      [IconData icon = Icons.location_on]) {
+      [IconData icon = Icons.radio_button_checked]) {
     return Positioned(
       left: pos.dx - 24,
       top: pos.dy - 48,
@@ -126,8 +148,8 @@ class MapScreenState extends State<MapScreen> {
           size: size,
         ),
         onTap: () {
-          if (controller.zoom < 16) {
-            controller.zoom = 16;
+          if (controller.zoom < 18) {
+            controller.zoom = 18;
           }
           getLocation();
         },
@@ -159,14 +181,30 @@ class MapScreenState extends State<MapScreen> {
           if (markers != []) {
             final markerPositions = markers.map(transformer.toOffset).toList();
             markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, Colors.red, 60),
+              (pos) => _buildMarkerWidget(pos, Colors.red, 48),
             );
           } else {
             final markerPositions = [const LatLng(35.203, 126.809)]
                 .map(transformer.toOffset)
                 .toList();
             markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 60),
+              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 48),
+            );
+          }
+          late final Iterable<Widget> toiletMarkerWidgets;
+          if (toiletMarkers != []) {
+            final toileMarkerPositions =
+                toiletMarkers.map(transformer.toOffset).toList();
+            toiletMarkerWidgets = toileMarkerPositions.map(
+              (pos) =>
+                  _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
+            );
+          } else {
+            final toileMarkerPositions = [const LatLng(35.203, 126.810)]
+                .map(transformer.toOffset)
+                .toList();
+            toiletMarkerWidgets = toileMarkerPositions.map(
+              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 36),
             );
           }
           return GestureDetector(
@@ -217,6 +255,7 @@ class MapScreenState extends State<MapScreen> {
                     ),
                   ),
                   ...markerWidgets,
+                  ...toiletMarkerWidgets,
                 ],
               ),
             ),
@@ -227,7 +266,7 @@ class MapScreenState extends State<MapScreen> {
         children: <Widget>[
           Align(
             alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.4),
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.55),
             child: GestureDetector(
               onTap: () => zoomIn(),
               child: Container(
@@ -244,7 +283,7 @@ class MapScreenState extends State<MapScreen> {
           ),
           Align(
             alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.3),
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
             child: GestureDetector(
               onTap: () => zoomOut(),
               child: Container(
@@ -260,12 +299,11 @@ class MapScreenState extends State<MapScreen> {
             ),
           ),
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment(
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
             child: FloatingActionButton(
               // onPressed: _gotoDefault,
-              onPressed: () {
-                getLocation();
-              },
+              onPressed: getLocation,
               backgroundColor: whiteColor,
               mini: true,
               tooltip: 'My Location',
