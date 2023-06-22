@@ -18,10 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -84,10 +81,33 @@ public class ToiletController {
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
 
-        System.out.println("memberId"+reqMemberId);
-
         Map<String, Object> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
 
         return ResponseEntity.ok().body(page);
+    }
+    @ApiOperation(value = "화장실 정보 조회 API", notes = "특정 화장실의 정보를 반환합니다!")
+    @GetMapping("/{toiletId}")
+    public ResponseEntity<?> getToilet(HttpServletRequest request, @PathVariable("toiletId") long toiletId) {
+
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        String accessToken = request.getHeader("Authorization");
+
+        Long reqMemberId = null;
+
+        if (accessToken != null) {
+            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+        }
+        try{
+            Map<String, Object> result = toiletService.getToilet(reqMemberId, toiletId);
+
+            return ResponseEntity.ok().body(result);
+        }catch (NullPointerException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage("존재하지 않는 화장실입니다.");
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 }
