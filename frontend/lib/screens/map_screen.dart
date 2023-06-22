@@ -5,6 +5,7 @@ import 'package:find_toilet/utilities/tile_servers.dart';
 import 'package:find_toilet/utilities/viewport_painter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
@@ -28,14 +29,19 @@ class MapScreenState extends State<MapScreen> {
   final bool _darkMode = false;
 
   void getLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    // print(position.latitude.abs());
-    // print(position.longitude.abs());
-    controller.center = LatLng(position.latitude, position.longitude);
-    controller.zoom = 15;
-    setState(() {});
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      // print(position.latitude.abs());
+      // print(position.longitude.abs());
+      controller.center = LatLng(position.latitude, position.longitude);
+      controller.zoom = 15;
+      setState(() {});
+    } catch (error) {
+      // routerPop(context)();
+      SystemNavigator.pop();
+    }
   }
 
   // void _gotoDefault() {
