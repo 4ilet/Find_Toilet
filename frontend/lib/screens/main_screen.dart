@@ -154,7 +154,7 @@ class _MainState extends State<Main> {
               ),
               Column(
                 children: [
-                  SearchBar(
+                  CustomSearchBar(
                     isMain: true,
                     showReview: widget.showReview,
                     // toiletId: toiletModel?.toiletId,
