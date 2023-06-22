@@ -106,9 +106,12 @@ bool watchPressed(BuildContext context) =>
 //* 로그인
 Future<Map<String, dynamic>> login(BuildContext context) async {
   final DynamicMap result = await UserProvider().login();
+  // ignore: use_build_context_synchronously
   changeToken(context, token: result['token'], refresh: result['refresh']);
+  // ignore: use_build_context_synchronously
   changeName(context, result['nickname']);
   if (result['state'] != 'login' || result['nickname'] == null) {
+    // ignore: use_build_context_synchronously
     showModal(context, page: const NicknameInputModal(isAlert: true));
   }
   return result;
@@ -136,10 +139,10 @@ void setTotal(BuildContext context, int? newTotal) =>
     context.read<GlobalProvider>().setTotal(newTotal);
 
 //* 검색어
-String? getQuery(BuildContext context) => context.watch<GlobalProvider>().query;
-String? readQuery(BuildContext context) => context.read<GlobalProvider>().query;
-void setQuery(BuildContext context, String? value) =>
-    context.read<GlobalProvider>().setQuery(value);
+// String? getQuery(BuildContext context) => context.watch<GlobalProvider>().query;
+// String? readQuery(BuildContext context) => context.read<GlobalProvider>().query;
+// void setQuery(BuildContext context, String? value) =>
+//     context.read<GlobalProvider>().setQuery(value);
 
 //* 필터
 void setFilter(BuildContext context, int index, bool value) =>
@@ -182,6 +185,8 @@ int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
 //* 현위치
 double? readLat(BuildContext context) => context.read<GlobalProvider>().lat;
 double? readLng(BuildContext context) => context.read<GlobalProvider>().lng;
+void setLatLng(BuildContext context, double newLat, double newLng) =>
+    context.read<GlobalProvider>().setLatLng(newLat, newLng);
 
 //* main toilet list
 void addToiletList(BuildContext context, ToiletList toiletList) =>

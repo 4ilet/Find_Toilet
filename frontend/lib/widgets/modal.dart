@@ -825,9 +825,14 @@ class LoginConfirmModal extends StatelessWidget {
   // final GlobalKey? globalKey;
   // final ReturnVoid nextAction;
   // final ReturnVoid afterLogin;
+  final bool showReview, isMain;
+  final int? toiletId;
   final Widget? page;
   const LoginConfirmModal({
     super.key,
+    required this.showReview,
+    required this.isMain,
+    this.toiletId,
     // required this.afterLogin,
     // this.globalKey,
     // required this.nextAction,
@@ -848,13 +853,30 @@ class LoginConfirmModal extends StatelessWidget {
         // SchedulerBinding.instance.addPostFrameCallback(
         //   (_) {
         final newContext = getKey(context)?.currentContext;
-        login(newContext!).then((_) {
-          routerPop(newContext)();
+        login(newContext ?? context).then((_) {
           if (page != null) {
             routerPush(context, page: page!);
           } else {
             changeRefresh(context);
           }
+          setLoading(context, true);
+          initPage(context);
+          initMainData(
+            context,
+            showReview: false,
+          );
+          if (showReview) {
+            print('$showReview, $toiletId');
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
+              toiletId: toiletId,
+            );
+          }
+
+          routerPop(context)();
 
           // routerPop(context);
           // nextAction();
@@ -866,6 +888,7 @@ class LoginConfirmModal extends StatelessWidget {
   }
 }
 
+//* 오류 발생 alert
 class ErrorModal extends StatelessWidget {
   final String feature;
   const ErrorModal({super.key, required this.feature});
@@ -875,6 +898,182 @@ class ErrorModal extends StatelessWidget {
     return AlertModal(
       title: '$feature 오류',
       content: '오류가 발생해 $feature(이)가 처리되지 않았습니다.',
+    );
+  }
+}
+
+//* 회원가입 수집 정보
+class JoinModal extends StatefulWidget {
+  // final ReturnVoid onPressed;
+  final bool showReview;
+  final int? toiletId;
+  const JoinModal(
+      {super.key,
+      // required this.onPressed,
+      required this.showReview,
+      this.toiletId});
+
+  @override
+  State<JoinModal> createState() => _JoinModalState();
+}
+
+class _JoinModalState extends State<JoinModal> {
+  bool checked = false;
+  void changeChecked() {
+    setState(() {
+      checked = !checked;
+    });
+  }
+
+  void joinOrLogin() {
+    login(context).then((result) {
+      setLoading(context, true);
+      initPage(context);
+      initMainData(
+        context,
+        showReview: false,
+      );
+      if (widget.showReview) {
+        setLoading(context, true);
+        initPage(context);
+        initMainData(
+          context,
+          showReview: true,
+          toiletId: widget.toiletId,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomModalWithClose(
+      titleColor: CustomColors.mainColor,
+      iconColor: CustomColors.mainColor,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: CustomBox(
+            height: screenHeight(context) * 0.5,
+            child: Column(
+              children: [
+                Row(
+                  children: const [
+                    CustomText(
+                      title: '화장실을 찾아서',
+                      color: CustomColors.mainColor,
+                      font: kimm,
+                    ),
+                    CustomText(title: '는', font: kimm),
+                  ],
+                ),
+                Row(
+                  children: const [
+                    CustomText(title: '회원가입하실 때', font: kimm),
+                  ],
+                ),
+                Row(
+                  children: const [
+                    Flexible(
+                      child: CustomText(title: '이런 정보를 제공 받아요!', font: kimm),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: const [
+                    CustomText(
+                      title: '수집 정보 : 이름, 이메일',
+                      fontSize: FontSize.smallSize,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: const [
+                    CustomText(
+                      title: '수집 이유 : 회원 식별',
+                      fontSize: FontSize.smallSize,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // Flexible(
+                //   // flex: 5,
+                //   child: GestureDetector(
+                //     onTap: () {},
+                //     child: const TextWithIcon(
+                //       flex: 8,
+                //       icon: linkIcon,
+                //       text: '개인 정보 및 위치 처리방침',
+                //       textColor: CustomColors.mainColor,
+                //       iconColor: CustomColors.mainColor,
+                //       fontSize: FontSize.smallSize,
+                //       hasUnderline: true,
+                //     ),
+                //   ),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      // flex: 5,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: const TextWithIcon(
+                          flex: 8,
+                          icon: linkIcon,
+                          text: '개인 정보 및 위치 처리방침',
+                          textColor: CustomColors.mainColor,
+                          iconColor: CustomColors.mainColor,
+                          fontSize: FontSize.smallSize,
+                        ),
+                      ),
+                    ),
+                    // const Flexible(
+                    //   child: CustomText(
+                    //     title: '을',
+                    //     fontSize: FontSize.smallSize,
+                    //   ),
+                    // )
+                  ],
+                ),
+                const CustomText(
+                  title: '을 통해 더 자세히 확인하실 수 있어요',
+                  fontSize: FontSize.smallSize,
+                ),
+                const SizedBox(height: 30),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: changeChecked,
+                    child: TextWithIcon(
+                      icon: checked ? checkedIcon : circleIcon,
+                      text: '다시 보지 않기',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomButton(
+                      onPressed: routerPop(context),
+                      buttonText: '취소',
+                      buttonColor: greyColor,
+                      textColor: CustomColors.whiteColor,
+                    ),
+                    CustomButton(
+                      onPressed: joinOrLogin,
+                      buttonText: '회원가입',
+                      buttonColor: mainColor,
+                      textColor: CustomColors.whiteColor,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

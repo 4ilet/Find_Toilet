@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 
 class Main extends StatefulWidget {
   final bool showReview;
+  // final int? index;
   final ToiletModel? toiletModel;
   const Main({
     super.key,
     this.showReview = false,
+    // this.index,
     this.toiletModel,
   });
 
@@ -24,19 +26,26 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   // DynamicMap query = {'value': null};
   final globalKey = GlobalKey<ScaffoldState>();
+  // ToiletModel? toiletModel;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        // if (widget.index != null) {
+        //   setState(() {
+        //     toiletModel = mainToiletData(context)[widget.index];
+        //   });
+        // }
         initLoadingData(context);
         initMainData(
           context,
           showReview: widget.showReview,
           toiletId: widget.toiletModel?.toiletId,
+          // toiletId: toiletModel?.toiletId,
         );
-        setQuery(context, null);
+        // setQuery(context, null);
         setKey(context, globalKey);
       },
     );
@@ -70,6 +79,7 @@ class _MainState extends State<Main> {
         context,
         showReview: widget.showReview,
         toiletId: widget.toiletModel?.toiletId,
+        // toiletId: widget.toiletModel?.toiletId,
       );
     }
   }
@@ -139,14 +149,15 @@ class _MainState extends State<Main> {
                     ),
               ToiletBottomSheet(
                 showReview: widget.showReview,
+                // index: widget.index,
                 toiletModel: widget.toiletModel,
               ),
               Column(
                 children: [
                   SearchBar(
                     isMain: true,
-                    // refreshPage: () => refreshMain(0)
                     showReview: widget.showReview,
+                    // toiletId: toiletModel?.toiletId,
                     toiletId: widget.toiletModel?.toiletId,
                   ),
                 ],
