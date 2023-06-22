@@ -182,6 +182,8 @@ int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
 //* 현위치
 double? readLat(BuildContext context) => context.read<GlobalProvider>().lat;
 double? readLng(BuildContext context) => context.read<GlobalProvider>().lng;
+void setLatLng(BuildContext context, double newLat, double newLng) =>
+    context.read<GlobalProvider>().setLatLng(newLat, newLng);
 
 //* main toilet list
 void addToiletList(BuildContext context, ToiletList toiletList) =>
@@ -267,3 +269,5 @@ void setKey(BuildContext context, GlobalKey key) =>
     context.read<GlobalProvider>().setKey(key);
 GlobalKey? getKey(BuildContext context) =>
     context.read<GlobalProvider>().globalKey;
+
+//* radius

@@ -264,8 +264,6 @@ class GlobalProvider with ChangeNotifier {
   double get lat => _lat;
   double get lng => _lng;
   String? get query => _query['value'];
-  double? get lat => _lat;
-  double? get lng => _lng;
   // int get cnt => _cnt;
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
@@ -447,6 +445,8 @@ class GlobalProvider with ChangeNotifier {
   void _setLatLng(double newLat, double newLng) {
     _lat = newLat;
     _lng = newLng;
+    _mainToiletData['lat'] = newLat;
+    _mainToiletData['lon'] = newLng;
   }
 
   // void _refreshMain(bool showReview, int? toiletId) {

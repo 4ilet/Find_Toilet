@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
 import 'package:find_toilet/utilities/viewport_painter.dart';
@@ -23,20 +26,21 @@ class MapScreen extends StatefulWidget {
 class MapScreenState extends State<MapScreen> {
   final controller = MapController(
     location: const LatLng(35.145, 126.844),
-    zoom: 16,
+    zoom: 15,
   );
   final bool _darkMode = false;
 
   List<LatLng> markers = [];
+  List<LatLng> toiletMarkers = [];
 
   void getLocation() async {
     try {
       LocationPermission permission = await Geolocator.requestPermission();
-      print(permission);
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       controller.center = LatLng(position.latitude, position.longitude);
-      GlobalProvider().setLatLng(position.latitude, position.longitude);
+      if (controller.zoom < 16) controller.zoom = 16;
+      setLatLng(context, position.latitude, position.longitude);
 
       if (markers == []) {
         markers.add(LatLng(position.latitude, position.longitude));
@@ -45,7 +49,21 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
       // controller.zoom = 16;
+      setLoading(context, true);
+      initPage(context);
+      initMainData(context, showReview: false);
+      // print(GlobalProvider().mainToiletList.length);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (GlobalProvider().mainToiletList.isNotEmpty) {
+          toiletMarkers.clear();
+          for (int i = 0; i < mainToiletList(context).length; i++) {
+            toiletMarkers.add(LatLng(mainToiletList(context)[i].lat,
+                mainToiletList(context)[i].lng));
+          }
+        }
+      });
       setState(() {});
+      // refreshMain;
     } catch (error) {
       SystemNavigator.pop();
     }
@@ -130,8 +148,8 @@ class MapScreenState extends State<MapScreen> {
           size: size,
         ),
         onTap: () {
-          if (controller.zoom < 16) {
-            controller.zoom = 16;
+          if (controller.zoom < 18) {
+            controller.zoom = 18;
           }
           getLocation();
         },
@@ -171,6 +189,22 @@ class MapScreenState extends State<MapScreen> {
                 .toList();
             markerWidgets = markerPositions.map(
               (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 48),
+            );
+          }
+          late final Iterable<Widget> toiletMarkerWidgets;
+          if (toiletMarkers != []) {
+            final toileMarkerPositions =
+                toiletMarkers.map(transformer.toOffset).toList();
+            toiletMarkerWidgets = toileMarkerPositions.map(
+              (pos) =>
+                  _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
+            );
+          } else {
+            final toileMarkerPositions = [const LatLng(35.203, 126.810)]
+                .map(transformer.toOffset)
+                .toList();
+            toiletMarkerWidgets = toileMarkerPositions.map(
+              (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 36),
             );
           }
           return GestureDetector(
@@ -221,6 +255,7 @@ class MapScreenState extends State<MapScreen> {
                     ),
                   ),
                   ...markerWidgets,
+                  ...toiletMarkerWidgets,
                 ],
               ),
             ),
@@ -231,7 +266,7 @@ class MapScreenState extends State<MapScreen> {
         children: <Widget>[
           Align(
             alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.4),
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.55),
             child: GestureDetector(
               onTap: () => zoomIn(),
               child: Container(
@@ -248,7 +283,7 @@ class MapScreenState extends State<MapScreen> {
           ),
           Align(
             alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.3),
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
             child: GestureDetector(
               onTap: () => zoomOut(),
               child: Container(
@@ -265,12 +300,10 @@ class MapScreenState extends State<MapScreen> {
           ),
           Align(
             alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.15),
+                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
             child: FloatingActionButton(
               // onPressed: _gotoDefault,
-              onPressed: () {
-                getLocation();
-              },
+              onPressed: getLocation,
               backgroundColor: whiteColor,
               mini: true,
               tooltip: 'My Location',
