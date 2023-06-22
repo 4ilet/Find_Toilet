@@ -12,7 +12,7 @@ import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatefulWidget {
+class CustomSearchBar extends StatefulWidget {
   final bool isMain, showReview;
   final String? query;
   // final ReturnVoid refreshPage;
@@ -20,7 +20,7 @@ class SearchBar extends StatefulWidget {
   final ReturnVoid? onSearchMode;
   // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
-  const SearchBar({
+  const CustomSearchBar({
     super.key,
     required this.isMain,
     this.showReview = false,
@@ -32,10 +32,10 @@ class SearchBar extends StatefulWidget {
   });
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<CustomSearchBar> createState() => _CustomSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _CustomSearchBarState extends State<CustomSearchBar> {
   bool showDetail = false;
   final StringList sortOrder = ['가까운 순', '리뷰 많은 순', '평점 좋은 순'];
   final StringList sortValues = ['distance', 'score', 'comment'];

@@ -137,7 +137,7 @@ class _SearchState extends State<Search> {
             listScroll: scrollController,
             flexibleSpace: Column(
               children: [
-                SearchBar(
+                CustomSearchBar(
                   isMain: false,
                   query: widget.query,
                   onSearchMode: changeExpandSearch,
