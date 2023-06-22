@@ -852,35 +852,61 @@ class LoginConfirmModal extends StatelessWidget {
       onPressed: () async {
         // SchedulerBinding.instance.addPostFrameCallback(
         //   (_) {
-        final newContext = getKey(context)?.currentContext;
-        login(newContext ?? context).then((_) {
-          if (page != null) {
-            routerPush(context, page: page!);
-          } else {
-            changeRefresh(context);
-          }
+        //* test용
+        changeToken(
+          context,
+          token:
+              'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImlkIjoyNCwiZXhwIjoxNjg3NTA1NzIzLCJlbWFpbCI6ImdpbWV3bjExMjBAa2FrYW8uY29tIn0.fEItknS5X0wbTCrBRGXhtzuC3ZlZhPtJmGA-Gy64sPzmaDKgUX9BZwXnDCCcaCzCHuFEuMVNOZ0nhXo6r-xhjQ',
+          refresh:
+              'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2ODg2Mjg5MjN9.gQnsGBin7mvm4s9Z5UwEZ_CCa7sodBryEMwpIYIV_Y7koHu9PoEDD0d8L_Yl3wC6JCG4IZu9JplF0ETLR4fwNA',
+        );
+        setLoading(context, true);
+        initPage(context);
+        initMainData(
+          context,
+          showReview: false,
+        );
+        if (showReview) {
+          print('$showReview, $toiletId');
           setLoading(context, true);
           initPage(context);
           initMainData(
             context,
-            showReview: false,
+            showReview: true,
+            toiletId: toiletId,
           );
-          if (showReview) {
-            print('$showReview, $toiletId');
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
-              context,
-              showReview: true,
-              toiletId: toiletId,
-            );
-          }
+        }
 
-          routerPop(context)();
+        routerPop(context)();
 
-          // routerPop(context);
-          // nextAction();
-        });
+        //* login
+
+        // final newContext = getKey(context)?.currentContext;
+        // login(newContext ?? context).then((_) {
+        //   // if (page != null) {
+        //   //   routerPush(context, page: page!);
+        //   // } else {
+        //   //   changeRefresh(context);
+        //   // }
+        //   setLoading(context, true);
+        //   initPage(context);
+        //   initMainData(
+        //     context,
+        //     showReview: false,
+        //   );
+        //   if (showReview) {
+        //     print('$showReview, $toiletId');
+        //     setLoading(context, true);
+        //     initPage(context);
+        //     initMainData(
+        //       context,
+        //       showReview: true,
+        //       toiletId: toiletId,
+        //     );
+        //   }
+
+        //   routerPop(context)();
+        // });
         //   },
         // );
       },
@@ -907,11 +933,12 @@ class JoinModal extends StatefulWidget {
   // final ReturnVoid onPressed;
   final bool showReview;
   final int? toiletId;
-  const JoinModal(
-      {super.key,
-      // required this.onPressed,
-      required this.showReview,
-      this.toiletId});
+  const JoinModal({
+    super.key,
+    // required this.onPressed,
+    required this.showReview,
+    this.toiletId,
+  });
 
   @override
   State<JoinModal> createState() => _JoinModalState();
@@ -926,23 +953,33 @@ class _JoinModalState extends State<JoinModal> {
   }
 
   void joinOrLogin() {
-    login(context).then((result) {
-      setLoading(context, true);
-      initPage(context);
-      initMainData(
-        context,
-        showReview: false,
-      );
-      if (widget.showReview) {
-        setLoading(context, true);
-        initPage(context);
-        initMainData(
-          context,
-          showReview: true,
-          toiletId: widget.toiletId,
-        );
-      }
-    });
+    //* test용
+    changeToken(
+      context,
+      token:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImlkIjoyNCwiZXhwIjoxNjg3NTA1NzIzLCJlbWFpbCI6ImdpbWV3bjExMjBAa2FrYW8uY29tIn0.fEItknS5X0wbTCrBRGXhtzuC3ZlZhPtJmGA-Gy64sPzmaDKgUX9BZwXnDCCcaCzCHuFEuMVNOZ0nhXo6r-xhjQ',
+      refresh:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2ODg2Mjg5MjN9.gQnsGBin7mvm4s9Z5UwEZ_CCa7sodBryEMwpIYIV_Y7koHu9PoEDD0d8L_Yl3wC6JCG4IZu9JplF0ETLR4fwNA',
+    );
+    //*
+    // login(context).then((result) {
+    //   setLoading(context, true);
+    //   initPage(context);
+    //   initMainData(
+    //     context,
+    //     showReview: false,
+    //   );
+    //   if (widget.showReview) {
+    //     setLoading(context, true);
+    //     initPage(context);
+    //     initMainData(
+    //       context,
+    //       showReview: true,
+    //       toiletId: widget.toiletId,
+    //     );
+    //   }
+    // });
+    routerPop(context)();
   }
 
   @override
