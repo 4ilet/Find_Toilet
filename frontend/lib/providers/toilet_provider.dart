@@ -17,7 +17,7 @@ class ToiletProvider extends ApiProvider {
               queryParameters: queryData,
             );
       final data = response.data['content'];
-      print(response);
+      print('response : $response');
       if (data.isNotEmpty) {
         ToiletList toiletList = data.map<ToiletModel>((json) {
           return ToiletModel.fromJson(json);

@@ -136,6 +136,7 @@ class ApiProvider extends UrlClass {
       print('refesth response : $response');
       if (response.statusCode == 200) {
         final headers = response.headers;
+        print('refresh headers : $headers');
         return {
           'token': headers['Authorization']!.first,
           'refresh': headers['Authorization-refresh']!.first,

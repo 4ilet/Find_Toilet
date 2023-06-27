@@ -70,11 +70,30 @@ class _SettingsState extends State<Settings> {
     try {
       final token = readToken(context);
       if (token == null || token == '') {
-        showModal(context,
-            page: JoinModal(
-              showReview: widget.showReview,
+        login(context).then((result) {
+          setLoading(context, true);
+          initPage(context);
+          initMainData(
+            context,
+            showReview: false,
+          );
+          if (widget.showReview) {
+            setLoading(context, true);
+            initPage(context);
+            initMainData(
+              context,
+              showReview: true,
               toiletId: widget.toiletId,
-            ));
+            );
+          }
+        });
+        // showModal(
+        //   context,
+        //   page: JoinModal(
+        //     showReview: widget.showReview,
+        //     toiletId: widget.toiletId,
+        //   ),
+        // );
       } else {
         changeToken(context, token: null, refresh: null);
         changeName(context, null);
