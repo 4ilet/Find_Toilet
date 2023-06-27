@@ -32,7 +32,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
 
-    public void postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto){
+    public void postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto) {
         LOGGER.info("CALL postReview");
         Member member = memberRepository.findById(memberId);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
@@ -40,31 +40,32 @@ public class ReviewService {
             throw new NullPointerException("존재하지 않는 회원입니다");
         }
 
-        if (toilet == null){
+        if (toilet == null) {
             throw new NullPointerException("존재하지 않는 화장실입니다");
         }
 
-        if (postReviewDto.getComment().isEmpty()){
+        if (postReviewDto.getComment().isEmpty()) {
             throw new IllegalArgumentException("리뷰를 작성하지 않았습니다");
         }
 
-        float score = (float)postReviewDto.getScore();
-        if ( score < 0  || score > 5){
+        float score = (float) postReviewDto.getScore();
+        if (score < 0 || score > 5) {
             throw new IllegalArgumentException("점수는 0 ~ 5 사이의 점수를 입력해주세요");
         }
         List<Review> alreadyPostedReviewByMember = reviewRepository.findAllByMember(member);
 
-        for (Review review : alreadyPostedReviewByMember ){ // 해당 멤버가 등록한 리뷰의 리스트들
-            if (review.getToilet() == toilet){ // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
+        for (Review review : alreadyPostedReviewByMember) { // 해당 멤버가 등록한 리뷰의 리스트들
+            if (review.getToilet() == toilet) { // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
                 throw new DuplicatedReviewerException(); // 존재하면 throw
+            }
+            // 리뷰 등록
+            Review newReview = new Review();
+            newReview.setToilet(toilet);
+            newReview.setMember(member);
+            newReview.setComment(postReviewDto.getComment());
+            newReview.setScore(postReviewDto.getScore());
+            reviewRepository.save(newReview);
         }
-        // 리뷰 등록
-        Review newReview = new Review();
-        newReview.setToilet(toilet);
-        newReview.setMember(member);
-        newReview.setComment(postReviewDto.getComment());
-        newReview.setScore(postReviewDto.getScore());
-        reviewRepository.save(newReview);
     }
 
 
