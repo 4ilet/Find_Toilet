@@ -57,23 +57,17 @@ public class ReviewService {
         for (Review review : alreadyPostedReviewByMember ){ // 해당 멤버가 등록한 리뷰의 리스트들
             if (review.getToilet() == toilet){ // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
                 throw new DuplicatedReviewerException(); // 존재하면 throw
-
-            } else { // 없으면 리뷰를 등록하기
-                Review newReview = new Review();
-                newReview.setToilet(toilet);
-                newReview.setMember(member);
-                newReview.setComment(postReviewDto.getComment());
-                newReview.setScore(postReviewDto.getScore());
-                reviewRepository.save(newReview);
-            }
         }
-//        Review newReview = new Review();
-//        newReview.setToilet(toilet);
-//        newReview.setMember(member);
-//        newReview.setComment(postReviewDto.getComment());
-//        newReview.setScore(postReviewDto.getScore());
-//        reviewRepository.save(newReview);
+        // 리뷰 등록
+        Review newReview = new Review();
+        newReview.setToilet(toilet);
+        newReview.setMember(member);
+        newReview.setComment(postReviewDto.getComment());
+        newReview.setScore(postReviewDto.getScore());
+        reviewRepository.save(newReview);
     }
+
+
     public ReviewDto.GetReviewListDto getReview(long toiletId, int page){
         LOGGER.info("CALL GET REVIEW");
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
