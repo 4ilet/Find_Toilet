@@ -11,14 +11,14 @@ const lightGreyColor = Color(0xFFE5E5E5);
 const lightBlueColor = Colors.lightBlue;
 
 //* 글씨 관련
-const double largeTitleSize = 33;
-const double titleSize = 30;
-const double largeLargeSize = 27;
-const double largeSize = 24;
-const double largeDefaultSize = 22;
-const double defaultSize = 19;
-const double largeSmallSize = 16;
-const double smallSize = 13;
+const double largeTitleSize = 34;
+const double titleSize = 31;
+const double largeLargeSize = 28;
+const double largeSize = 25;
+const double largeDefaultSize = 23;
+const double defaultSize = 20;
+const double largeSmallSize = 17;
+const double smallSize = 14;
 
 //* 그림자
 const defaultShadow = BoxShadow(

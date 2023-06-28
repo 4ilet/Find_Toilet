@@ -116,10 +116,13 @@ class CustomSilverList extends StatelessWidget {
                       );
                     },
                   )
-                : Center(
-                    child: CustomText(
-                      title: ifEmpty(),
-                      color: CustomColors.whiteColor,
+                : Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Center(
+                      child: CustomText(
+                        title: ifEmpty(),
+                        color: CustomColors.whiteColor,
+                      ),
                     ),
                   )
             : const Center(child: CircularProgressIndicator()),

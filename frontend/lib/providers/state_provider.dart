@@ -204,19 +204,20 @@ class SettingsProvider with ChangeNotifier {
 }
 
 //* width, height
-class SizeProvider with ChangeNotifier {
-  static double _screenWidth = 0.0;
-  static double _screenHeight = 0.0;
-  double get screenWidth => _screenWidth;
-  double get screenHeight => _screenHeight;
-  void _initWidthHeight(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    _screenWidth = size.width;
-    _screenHeight = size.height;
-  }
+// class SizeProvider with ChangeNotifier {
+//   static double _screenWidth = 0.0;
+//   static double _screenHeight = 0.0;
+//   double get screenWidth => _screenWidth;
+//   double get screenHeight => _screenHeight;
 
-  void initWidthHeight(BuildContext context) => _initWidthHeight(context);
-}
+//   void _initWidthHeight(BuildContext context) {
+//     final size = MediaQuery.of(context).size;
+//     _screenWidth = size.width;
+//     _screenHeight = size.height;
+//   }
+
+//   void initWidthHeight(BuildContext context) => _initWidthHeight(context);
+// }
 
 //* main, search
 class GlobalProvider with ChangeNotifier {

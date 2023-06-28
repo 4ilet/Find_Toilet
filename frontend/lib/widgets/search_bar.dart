@@ -73,6 +73,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           return true;
         }
       }
+      if (getSortIdx(context) != sortIdx) {
+        return true;
+      }
       return false;
     }
   }
@@ -173,7 +176,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -236,17 +239,21 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           showDetail
               ? Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: CustomText(
-                          title: '원하는 조건이 있으신가요?',
-                          color: CustomColors.whiteColor,
-                          fontSize: FontSize.smallSize,
-                          font: kimm,
-                        ),
+                      Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: CustomText(
+                              title: '원하는 조건이 있으신가요?',
+                              color: CustomColors.whiteColor,
+                              // fontSize: FontSize.smallSize,
+                              font: kimm,
+                            ),
+                          ),
+                        ],
                       ),
                       // const SizedBox(height: 10),
                       Padding(
@@ -256,14 +263,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                           filterList: filterValueList,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: CustomText(
-                          title: '어떻게 정렬해드릴까요?',
-                          color: CustomColors.whiteColor,
-                          fontSize: FontSize.smallSize,
-                          font: kimm,
-                        ),
+                      Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: CustomText(
+                              title: '어떻게 정렬해드릴까요?',
+                              color: CustomColors.whiteColor,
+                              // fontSize: FontSize.smallSize,
+                              font: kimm,
+                            ),
+                          ),
+                        ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -111,11 +111,13 @@ class _ThemeBoxState extends State<ThemeBox> {
 //* 즐겨찾기 폴더
 class FolderBox extends StatelessWidget {
   final FolderModel folderInfo;
-  final bool add;
+  final bool add, onlyOne;
+
   const FolderBox({
     super.key,
     required this.folderInfo,
     this.add = false,
+    this.onlyOne = false,
   });
 
   @override
@@ -135,8 +137,8 @@ class FolderBox extends StatelessWidget {
           folderId: folderId,
         ),
       ),
-      height: 150,
-      width: 150,
+      height: screenWidth(context) * 0.42,
+      width: screenWidth(context) * 0.42,
       color: whiteColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -153,6 +155,7 @@ class FolderBox extends StatelessWidget {
                       title: folderName,
                       fontSize: FontSize.defaultSize,
                       color: CustomColors.mainColor,
+                      font: kimm,
                     ),
                   ),
                 ],
@@ -164,24 +167,26 @@ class FolderBox extends StatelessWidget {
                 children: [
                   CustomText(
                     title: '$bookmarkCnt 개',
-                    fontSize: FontSize.smallSize,
+                    // fontSize: FontSize.smallSize,
                     color: CustomColors.blackColor,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomIconButton(
-                        icon: editIcon,
-                        color: CustomColors.mainColor,
-                        onPressed: () => showModal(
-                          context,
-                          page: CreateOrEditFolderModal(
-                            folderId: folderId,
-                            folderName: folderName,
-                          ),
-                        ),
-                        iconSize: 30,
-                      ),
+                      onlyOne
+                          ? const SizedBox()
+                          : CustomIconButton(
+                              icon: editIcon,
+                              color: CustomColors.mainColor,
+                              onPressed: () => showModal(
+                                context,
+                                page: CreateOrEditFolderModal(
+                                  folderId: folderId,
+                                  folderName: folderName,
+                                ),
+                              ),
+                              // iconSize: 30,
+                            ),
                       CustomIconButton(
                         icon: deleteIcon,
                         color: CustomColors.redColor,
@@ -192,7 +197,7 @@ class FolderBox extends StatelessWidget {
                             id: folderId,
                           ),
                         ),
-                        iconSize: 30,
+                        // iconSize: 30,
                       ),
                     ],
                   ),
@@ -255,7 +260,8 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heartKey = GlobalKey();
+    final boxKey = GlobalKey();
+    double? itemHeight;
     // ToiletModel data = mainToiletList(context)[index];
     BoolList availableList = [
       data.can24hour,
@@ -334,12 +340,24 @@ class ListItem extends StatelessWidget {
       }
     }
 
+    void getSize() {
+      if (boxKey.currentContext != null) {
+        final renderBox =
+            boxKey.currentContext!.findRenderObject() as RenderBox;
+        itemHeight = renderBox.size.height;
+      }
+    }
+
     void toReview() {
       if (!showReview) {
+        if (itemHeight == null) {
+          getSize();
+        }
         routerPush(
           context,
           page: Main(
             showReview: true,
+            itemHeight: itemHeight,
             // index: index,
             toiletModel: data,
           ),
@@ -349,172 +367,200 @@ class ListItem extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: CustomBox(
-        onTap: toReview,
-        color: whiteColor,
-        height: getFontSize(context) == '기본' ? 250 : 300,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: CustomText(
-                      color: CustomColors.mainColor,
-                      title: data.toiletName,
-                      fontSize: FontSize.defaultSize,
-                    ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Stack(
+      child: Flexible(
+        child: CustomBox(
+          key: boxKey,
+          onTap: toReview,
+          color: whiteColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: CustomText(
+                          color: CustomColors.mainColor,
+                          title: data.toiletName,
+                          fontSize: FontSize.defaultSize,
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              key: heartKey,
-                              onPressed: pressedHeart,
-                              icon: CustomIcon(
-                                icon: getToken(context) != null &&
+                            Stack(
+                              children: [
+                                IconButton(
+                                  onPressed: pressedHeart,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  constraints: const BoxConstraints(),
+                                  icon: CustomIcon(
+                                    icon: getToken(context) != null &&
+                                            data.folderId.isNotEmpty
+                                        ? heartIcon
+                                        : emptyHeartIcon,
+                                    color: redColor,
+                                  ),
+                                ),
+                                getToken(context) != null &&
                                         data.folderId.isNotEmpty
-                                    ? heartIcon
-                                    : emptyHeartIcon,
-                                color: redColor,
-                              ),
-                            ),
-                            getToken(context) != null &&
-                                    data.folderId.isNotEmpty
-                                ? GestureDetector(
-                                    onTap: pressedHeart,
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          25, 20, 0, 0),
-                                      child: CustomCircleButton(
-                                        width: 20,
-                                        height: 20,
-                                        shadow: true,
-                                        hasBorder: true,
-                                        child: Center(
-                                          child: CustomText(
-                                            title: '${data.folderId.length}',
-                                            fontSize: FontSize.smallSize,
-                                            color: CustomColors.mainColor,
+                                    ? GestureDetector(
+                                        onTap: pressedHeart,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              25, 10, 0, 0),
+                                          child: CustomCircleButton(
+                                            width: 20,
+                                            height: 20,
+                                            shadow: true,
+                                            hasBorder: true,
+                                            child: Center(
+                                              child: CustomText(
+                                                title:
+                                                    '${data.folderId.length}',
+                                                fontSize: FontSize.smallSize,
+                                                color: CustomColors.mainColor,
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () => showModal(
+                                context,
+                                page: NavigationModal(
+                                  startPoint: [
+                                    readLat(context)!,
+                                    readLng(context)!
+                                  ],
+                                  endPoint: [data.lat, data.lng],
+                                  destination: data.toiletName,
+                                ),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              constraints: const BoxConstraints(),
+                              icon: const CustomIcon(
+                                icon: planeIcon,
+                                color: Colors.lightBlue,
+                                size: 35,
+                              ),
+                            ),
                           ],
                         ),
-                        IconButton(
-                          onPressed: () => showModal(
-                            context,
-                            page: NavigationModal(
-                              startPoint: [
-                                readLat(context)!,
-                                readLng(context)!
-                              ],
-                              endPoint: [data.lat, data.lng],
-                              destination: data.toiletName,
-                            ),
-                          ),
-                          icon: const CustomIcon(
-                            icon: planeIcon,
-                            color: Colors.lightBlue,
-                            size: 35,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 17,
-                    child: TextWithIcon(
-                      icon: locationIcon,
-                      text: data.address,
-                      flex: data.phoneNo != '' ? 10 : 18,
-                    ),
-                  ),
-                  data.phoneNo != ''
-                      ? Flexible(
-                          flex: 13,
-                          child: TextWithIcon(
-                            icon: phoneIcon,
-                            text: data.phoneNo,
-                            flex: 6,
-                            gap: 7,
-                          ),
-                        )
-                      : const SizedBox(),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 2,
-                    child: TextWithIcon(
-                      icon: clockIcon,
-                      text: data.duration,
-                      flex: 10,
-                    ),
-                  ),
-                  Flexible(
-                    child: TextWithIcon(
-                      icon: starIcon,
-                      text:
-                          '${data.score}${isDefaultTheme(context) && data.commentCnt < 10 ? ' ' : '\n'}(${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
-                      iconColor: CustomColors.yellowColor,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    existState()
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const CustomText(
-                                title: '이용 가능 시설',
-                                fontSize: FontSize.smallSize,
-                                color: CustomColors.mainColor,
-                                isBoldText: true,
-                              ),
-                              const SizedBox(height: 10),
-                              CustomText(
-                                title: available(15),
-                                fontSize: FontSize.smallSize,
-                                isCentered: true,
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
-                    CustomButton(
-                      fontSize: FontSize.smallSize,
-                      onPressed: addOrEditReview,
-                      buttonText:
-                          getToken(context) == null || data.reviewId == 0
-                              ? '리뷰 남기기'
-                              : '리뷰 수정하기',
-                    )
-                  ],
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        // flex: 17,
+                        child: TextWithIcon(
+                          icon: locationIcon,
+                          text: data.address,
+                          flex: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        // flex: 2,
+                        child: TextWithIcon(
+                          icon: clockIcon,
+                          text: data.duration,
+                          flex: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        flex: 7,
+                        child: TextWithIcon(
+                          icon: starIcon,
+                          text:
+                              '${data.score} (${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
+                          iconColor: CustomColors.yellowColor,
+                        ),
+                      ),
+                      data.phoneNo != ''
+                          ? Flexible(
+                              flex: 8,
+                              child: TextWithIcon(
+                                icon: phoneIcon,
+                                text: data.phoneNo,
+                                flex: 6,
+                                gap: 7,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      existState()
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CustomText(
+                                  title: '이용 가능 시설',
+                                  fontSize: FontSize.smallSize,
+                                  color: CustomColors.mainColor,
+                                  isBoldText: true,
+                                ),
+                                const SizedBox(height: 10),
+                                CustomText(
+                                  title: available(15),
+                                  fontSize: FontSize.smallSize,
+                                  height: 1.6,
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                      CustomButton(
+                        fontSize: FontSize.smallSize,
+                        onPressed: addOrEditReview,
+                        buttonText:
+                            getToken(context) == null || data.reviewId == 0
+                                ? '리뷰 남기기'
+                                : '리뷰 수정하기',
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -570,7 +616,9 @@ class _FilterBoxState extends State<FilterBox> {
           ? [
               for (int i = 0; i < 2; i += 1)
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: widget.isMain
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.spaceBetween,
                   children: [
                     for (int j = 0; j < 2; j += 1)
                       Padding(
@@ -721,14 +769,16 @@ class ReviewBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
+                    flex: 4,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
                           color: CustomColors.mainColor,
                           title: review.nickname,
                           fontSize: FontSize.smallSize,
                         ),
+                        const SizedBox(width: 10),
                         getToken(context) != null &&
                                 review.nickname ==
                                     context.read<UserInfoProvider>().nickname
@@ -749,6 +799,7 @@ class ReviewBox extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 10),
                                   CustomIconButton(
                                     color: CustomColors.redColor,
                                     icon: deleteIcon,
@@ -772,6 +823,7 @@ class ReviewBox extends StatelessWidget {
                       icon: starIcon,
                       text: '${review.score}',
                       iconColor: CustomColors.yellowColor,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                     ),
                   ),
                 ],
