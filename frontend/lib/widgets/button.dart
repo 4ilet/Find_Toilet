@@ -82,18 +82,20 @@ class CustomIconButton extends StatelessWidget {
   final ReturnVoid onPressed;
   final CustomColors color;
   final IconData icon;
+  final EdgeInsetsGeometry padding;
   const CustomIconButton({
     super.key,
     required this.color,
     required this.icon,
     required this.onPressed,
     this.iconSize = 30,
+    this.padding = EdgeInsets.zero,
   });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      padding: EdgeInsets.zero,
+      padding: padding,
       constraints: const BoxConstraints(),
       onPressed: onPressed,
       iconSize: iconSize,

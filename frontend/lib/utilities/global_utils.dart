@@ -57,7 +57,7 @@ String? getFontSize(BuildContext context) =>
     context.read<SettingsProvider>().fontState;
 
 bool isDefaultTheme(BuildContext context) =>
-    context.read<SettingsProvider>().fontState == '기본';
+    context.watch<SettingsProvider>().fontState == '기본';
 
 String getThemeState(BuildContext context) =>
     context.watch<SettingsProvider>().fontState;
@@ -126,11 +126,12 @@ void changeRefresh(BuildContext context) =>
     context.read<ApplyChangeProvider>().refreshPage();
 
 //* 너비, 높이
-double screenWidth(BuildContext context) =>
-    context.read<SizeProvider>().screenWidth;
+double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 
-double screenHeight(BuildContext context) =>
-    context.read<SizeProvider>().screenHeight;
+double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+double statusBarHeight(BuildContext context) =>
+    MediaQuery.of(context).padding.top;
 
 //* 총 페이지 수
 int? getTotal(BuildContext context) =>

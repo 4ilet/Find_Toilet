@@ -62,10 +62,11 @@ class UserProvider extends ApiProvider {
       OAuthToken kakaoResponse;
       if (withKakaoTalk) {
         kakaoResponse = await UserApi.instance.loginWithKakaoTalk();
+        return _sendToken(kakaoResponse.accessToken);
       } else {
         kakaoResponse = await UserApi.instance.loginWithKakaoAccount();
+        return _sendToken(kakaoResponse.accessToken);
       }
-      return _sendToken(kakaoResponse.accessToken);
     } catch (error) {
       if (error is PlatformException && error.code == 'CANCELED') {
         return {'result': false};

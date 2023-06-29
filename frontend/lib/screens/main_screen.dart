@@ -12,9 +12,11 @@ class Main extends StatefulWidget {
   final bool showReview;
   // final int? index;
   final ToiletModel? toiletModel;
+  final double? itemHeight;
   const Main({
     super.key,
     this.showReview = false,
+    this.itemHeight,
     // this.index,
     this.toiletModel,
   });
@@ -26,6 +28,7 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   // DynamicMap query = {'value': null};
   final globalKey = GlobalKey<ScaffoldState>();
+  double paddingTop = 0;
   // ToiletModel? toiletModel;
 
   @override
@@ -33,6 +36,9 @@ class _MainState extends State<Main> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        setState(() {
+          paddingTop = statusBarHeight(context);
+        });
         // if (widget.index != null) {
         //   setState(() {
         //     toiletModel = mainToiletData(context)[widget.index];
@@ -120,65 +126,69 @@ class _MainState extends State<Main> {
         child: Scaffold(
           key: globalKey,
           resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: screenWidth(context),
-                    height: screenHeight(context),
-                    child: const MapScreen(),
-                  ),
-                ],
-              ),
-              widget.showReview
-                  ? const SizedBox()
-                  : Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 90, 0, 0),
-                      child: Column(
-                        children: [
-                          FilterBox(
-                            onPressed: refreshMain,
-                            applyLong: !isDefaultTheme(context),
-                            isMain: true,
-                          ),
-                        ],
-                      ),
+          body: Padding(
+            padding: EdgeInsets.only(top: paddingTop),
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: screenWidth(context),
+                      height: screenHeight(context) - paddingTop,
+                      child: const MapScreen(),
                     ),
-              ToiletBottomSheet(
-                showReview: widget.showReview,
-                // index: widget.index,
-                toiletModel: widget.toiletModel,
-              ),
-              Column(
-                children: [
-                  CustomSearchBar(
-                    isMain: true,
-                    showReview: widget.showReview,
-                    // toiletId: toiletModel?.toiletId,
-                    toiletId: widget.toiletModel?.toiletId,
-                  ),
-                ],
-              ),
-              watchPressed(context)
-                  ? Center(
-                      child: CustomBox(
-                        height: 80,
-                        width: isDefaultTheme(context) ? 300 : 350,
-                        color: const Color.fromRGBO(0, 0, 0, 0.6),
-                        child: const Center(
-                          child: CustomText(
-                            title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
-                            isCentered: true,
-                            color: CustomColors.whiteColor,
-                          ),
+                  ],
+                ),
+                widget.showReview
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 65),
+                        child: Column(
+                          children: [
+                            FilterBox(
+                              onPressed: refreshMain,
+                              applyLong: !isDefaultTheme(context),
+                              isMain: true,
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  : const SizedBox(),
-            ],
+                ToiletBottomSheet(
+                  showReview: widget.showReview,
+                  itemHeight: widget.itemHeight,
+                  // index: widget.index,
+                  toiletModel: widget.toiletModel,
+                ),
+                Column(
+                  children: [
+                    CustomSearchBar(
+                      isMain: true,
+                      showReview: widget.showReview,
+                      // toiletId: toiletModel?.toiletId,
+                      toiletId: widget.toiletModel?.toiletId,
+                    ),
+                  ],
+                ),
+                watchPressed(context)
+                    ? Center(
+                        child: CustomBox(
+                          height: 80,
+                          width: isDefaultTheme(context) ? 300 : 350,
+                          color: const Color.fromRGBO(0, 0, 0, 0.6),
+                          child: const Center(
+                            child: CustomText(
+                              title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
+                              isCentered: true,
+                              color: CustomColors.whiteColor,
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
       ),

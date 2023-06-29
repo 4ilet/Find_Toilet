@@ -21,12 +21,16 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
         ChangeNotifierProvider(create: (context) => ApplyChangeProvider()),
         ChangeNotifierProvider(create: (context) => SettingsProvider()),
-        ChangeNotifierProvider(create: (context) => SizeProvider()),
+        // ChangeNotifierProvider(create: (context) => SizeProvider()),
         ChangeNotifierProvider(create: (context) => GlobalProvider()),
       ],
       child: MaterialApp(
         title: 'Find Toilet',
         theme: ThemeData(fontFamily: 'Noto Sans'),
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child!,
+        ),
         home: const Intro(),
       ),
     );

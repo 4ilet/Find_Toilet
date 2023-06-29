@@ -17,56 +17,60 @@ class BookMarkFolderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: mainColor,
+        toolbarHeight: 65,
+        flexibleSpace: Padding(
+          padding:
+              EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
+          child: Flexible(
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: CustomIconButton(
+                    icon: exitIcon,
+                    color: CustomColors.whiteColor,
+                    onPressed: routerPop(context),
+                    iconSize: 45,
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+                Flexible(
+                  flex: 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomText(
+                        title:
+                            '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                        fontSize: FontSize.largeSize,
+                        color: CustomColors.whiteColor,
+                        font: kimm,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        automaticallyImplyLeading: false,
+      ),
       resizeToAvoidBottomInset: false,
       backgroundColor: mainColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: CustomIconButton(
-                        icon: exitIcon,
-                        color: CustomColors.whiteColor,
-                        onPressed: routerPop(context),
-                        iconSize: 80,
-                      ),
-                    ),
-                    Flexible(
-                      flex: 4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomText(
-                            title:
-                                '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
-                            isCentered: true,
-                            fontSize: FontSize.largeSize,
-                            color: CustomColors.whiteColor,
-                            font: kimm,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              FutureBuilder(
-                future: FolderProvider().getFolderList(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Flexible(child: folderListView(snapshot));
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
-            ],
+          child: FutureBuilder(
+            future: FolderProvider().getFolderList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Flexible(child: folderListView(snapshot));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
         ),
       ),
@@ -106,7 +110,10 @@ class BookMarkFolderList extends StatelessWidget {
         children = [const AddBox()];
       } else {
         children = [
-          FolderBox(folderInfo: snapshot.data![2 * index]),
+          FolderBox(
+            folderInfo: snapshot.data![2 * index],
+            onlyOne: length == 1,
+          ),
           const AddBox()
         ];
       }

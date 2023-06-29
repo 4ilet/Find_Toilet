@@ -132,29 +132,32 @@ class _SearchState extends State<Search> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           backgroundColor: mainColor,
-          body: CustomBoxWithScrollView(
-            expandedHeight: expandSearch ? 500 : 130,
-            listScroll: scrollController,
-            flexibleSpace: Column(
-              children: [
-                CustomSearchBar(
+          body: Padding(
+            padding: EdgeInsets.only(top: statusBarHeight(context)),
+            child: CustomBoxWithScrollView(
+              expandedHeight: expandSearch ? 430 : 100,
+              listScroll: scrollController,
+              flexibleSpace: Column(
+                children: [
+                  CustomSearchBar(
+                    isMain: false,
+                    query: widget.query,
+                    onSearchMode: changeExpandSearch,
+                    // refreshPage: search,
+                  ),
+                  topOfAppBar(),
+                ],
+              ),
+              silverChild: [
+                CustomSilverList(
+                  showReview: false,
                   isMain: false,
-                  query: widget.query,
-                  onSearchMode: changeExpandSearch,
+                  isSearch: true,
+                  data: toiletList,
                   // refreshPage: search,
-                ),
-                topOfAppBar(),
+                )
               ],
             ),
-            silverChild: [
-              CustomSilverList(
-                showReview: false,
-                isMain: false,
-                isSearch: true,
-                data: toiletList,
-                // refreshPage: search,
-              )
-            ],
           ),
         ),
       ),
@@ -200,7 +203,7 @@ class _SearchState extends State<Search> {
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [

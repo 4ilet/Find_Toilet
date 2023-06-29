@@ -594,6 +594,25 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
     };
   }
 
+  void addOrDelete() {
+    if (initialFolder != selectedFolder) {
+      BookMarkProvider()
+          .addOrDeleteToilet(
+        addFolderIdList: (selectedFolder.difference(initialFolder)).toList(),
+        delFolderIdList: (initialFolder.difference(selectedFolder)).toList(),
+        toiletId: widget.toiletId,
+      )
+          .then((_) {
+        changeRefresh(context);
+        routerPop(context)();
+        showModal(
+          context,
+          page: const AlertModal(title: '즐겨찾기 추가/삭제 완료', content: '작업이 성공했습니다'),
+        );
+      });
+    }
+  }
+
   void onClosed() {
     if (initialFolder.length == selectedFolder.length &&
         initialFolder.containsAll(selectedFolder)) {
@@ -680,33 +699,12 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
           children: [
             Expanded(
               child: CustomButton(
-                buttonColor: mainColor,
-                textColor: CustomColors.whiteColor,
-                fontSize: isDefaultTheme(context)
-                    ? FontSize.smallSize
-                    : FontSize.largeSmallSize,
-                onPressed: () {
-                  if (initialFolder != selectedFolder) {
-                    BookMarkProvider()
-                        .addOrDeleteToilet(
-                      addFolderIdList:
-                          (selectedFolder.difference(initialFolder)).toList(),
-                      delFolderIdList:
-                          (initialFolder.difference(selectedFolder)).toList(),
-                      toiletId: widget.toiletId,
-                    )
-                        .then((_) {
-                      changeRefresh(context);
-                      routerPop(context)();
-                      showModal(
-                        context,
-                        page: const AlertModal(
-                            title: '즐겨찾기 추가/삭제 완료', content: '작업이 성공했습니다'),
-                      );
-                    });
-                  }
-                },
-              ),
+                  buttonColor: mainColor,
+                  textColor: CustomColors.whiteColor,
+                  fontSize: isDefaultTheme(context)
+                      ? FontSize.smallSize
+                      : FontSize.largeSmallSize,
+                  onPressed: addOrDelete),
             ),
           ],
         )

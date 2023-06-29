@@ -15,11 +15,13 @@ class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
   // final int? index;
   final ToiletModel? toiletModel;
+  final double? itemHeight;
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
     // this.index,
     this.toiletModel,
+    this.itemHeight,
   });
 
   @override
@@ -90,7 +92,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    print('bottom build');
+    print('bottom build => ${widget.itemHeight}, ${screenHeight(context)}');
     return DraggableScrollableSheet(
       initialChildSize: widget.showReview ? 0.6 : 0.2,
       minChildSize: 0.08,
@@ -101,7 +103,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
           listScroll: controller,
           toolbarHeight: widget.showReview ? 55 : 40,
           expandedHeight: widget.showReview
-              ? screenHeight(context) * 0.44
+              ? widget.itemHeight! + 80
               : screenHeight(context) * 0.13,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
@@ -109,13 +111,12 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
             radius: 30,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
                       vertical: 15,
                     ),
                     child: Row(
@@ -124,13 +125,19 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                             ? CustomIconButton(
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
-                                onPressed: routerPop(context))
+                                onPressed: routerPop(context),
+                                padding: EdgeInsets.zero,
+                                iconSize: 35,
+                              )
                             : const SizedBox(),
-                        CustomText(
-                          title: widget.showReview ? '화장실 조회' : '주변 화장실',
-                          fontSize: FontSize.largeSize,
-                          color: CustomColors.whiteColor,
-                          font: kimm,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: CustomText(
+                            title: widget.showReview ? '화장실 조회' : '주변 화장실',
+                            fontSize: FontSize.largeSize,
+                            color: CustomColors.whiteColor,
+                            font: kimm,
+                          ),
                         ),
                       ],
                     ),
@@ -145,7 +152,6 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                       : const Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10,
-                            // vertical: 5,
                           ),
                           child: CustomText(
                             title: '필터를 적용한 결과입니다',

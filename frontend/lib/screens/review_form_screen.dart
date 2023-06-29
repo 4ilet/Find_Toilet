@@ -161,11 +161,8 @@ class _ReviewFormState extends State<ReviewForm> {
                 onChanged: changeComment,
                 maxLines: 5,
                 height: 200,
-                textHeight: 1.5,
-                padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 30,
-                  vertical: 20,
-                ),
+                // textHeight: 1.5,
+                padding: const EdgeInsetsDirectional.all(20),
               ),
             ),
             Flexible(
@@ -212,7 +209,8 @@ class _ReviewFormState extends State<ReviewForm> {
         CustomButton(
           onPressed: addOrEditReview,
           buttonText: widget.reviewId != 0 ? '수정' : '등록',
-          buttonColor: whiteColor,
+          buttonColor: redColor,
+          textColor: CustomColors.whiteColor,
         ),
       ],
     );

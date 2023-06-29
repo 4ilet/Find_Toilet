@@ -43,7 +43,8 @@ class CustomTextField extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: TextField(
-          // textAlignVertical: TextAlignVertical.bottom,
+          textAlignVertical: TextAlignVertical.bottom,
+          // textAlign: TextAlign.left,
           controller: TextEditingController(text: initValue),
           onChanged: onChanged,
           decoration: InputDecoration(
@@ -115,6 +116,7 @@ class TextWithIcon extends StatelessWidget {
   final CustomColors textColor, iconColor;
   final int flex;
   final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
   final double gap;
   final bool applyTheme, hasUnderline;
   const TextWithIcon({
@@ -127,6 +129,7 @@ class TextWithIcon extends StatelessWidget {
     this.font,
     this.flex = 4,
     this.mainAxisAlignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
     this.gap = 10,
     this.applyTheme = true,
     this.hasUnderline = false,
@@ -136,7 +139,7 @@ class TextWithIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: crossAxisAlignment,
       children: [
         Flexible(
           flex: 2,
