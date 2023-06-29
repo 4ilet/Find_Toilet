@@ -596,7 +596,6 @@ class _FilterBoxState extends State<FilterBox> {
 
   void onTapInMain(int index) {
     setFilter(context, index, !readFilter(context, index));
-    applyFilter(context, index);
     widget.onPressed(index);
   }
 

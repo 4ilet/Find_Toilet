@@ -176,7 +176,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -184,9 +184,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   onFocusChange: changeShowVar,
                   child: CustomTextField(
                     width: screenWidth(context) * 0.8,
-                    // showDetail
-                    //     ? screenWidth(context) * 0.9
-                    //     : screenWidth(context) * 0.8,
                     padding: const EdgeInsetsDirectional.all(0),
                     boxShadow: const [defaultShadow],
                     onChanged: onChange,
@@ -305,7 +302,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         child: GestureDetector(
                           onTap: onSearchAction,
                           child: CustomBox(

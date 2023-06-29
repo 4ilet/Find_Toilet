@@ -79,13 +79,10 @@ class _MainState extends State<Main> {
     print('refresh main! ${readLoading(context)}');
     print('get token : ${readToken(context)}');
     if (!readLoading(context)) {
-      setLoading(context, true);
-      initPage(context);
-      initMainData(
+      refreshData(
         context,
-        showReview: widget.showReview,
-        toiletId: widget.toiletModel?.toiletId,
-        // toiletId: widget.toiletModel?.toiletId,
+        isMain: true,
+        showReview: false,
       );
     }
   }
@@ -144,7 +141,7 @@ class _MainState extends State<Main> {
                 widget.showReview
                     ? const SizedBox()
                     : Padding(
-                        padding: const EdgeInsets.only(top: 65),
+                        padding: const EdgeInsets.only(top: 70),
                         child: Column(
                           children: [
                             FilterBox(

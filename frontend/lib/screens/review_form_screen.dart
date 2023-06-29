@@ -71,10 +71,9 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((_) {
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
+            refreshData(
               context,
+              isMain: true,
               showReview: true,
               toiletId: widget.toiletId,
             );
@@ -88,10 +87,9 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((result) {
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
+            refreshData(
               context,
+              isMain: true,
               showReview: true,
               toiletId: widget.toiletId,
             );

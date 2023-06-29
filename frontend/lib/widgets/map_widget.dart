@@ -49,9 +49,7 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
       // controller.zoom = 16;
-      setLoading(context, true);
-      initPage(context);
-      initMainData(context, showReview: false);
+      refreshData(context, isMain: true, showReview: false);
       // print(GlobalProvider().mainToiletList.length);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (GlobalProvider().mainToiletList.isNotEmpty) {

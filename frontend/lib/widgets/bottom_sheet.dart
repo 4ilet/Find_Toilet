@@ -102,9 +102,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
           appBarScroll: scrollController,
           listScroll: controller,
           toolbarHeight: widget.showReview ? 55 : 40,
-          expandedHeight: widget.showReview
-              ? widget.itemHeight! + 80
-              : screenHeight(context) * 0.13,
+          expandedHeight: widget.showReview ? widget.itemHeight! + 80 : 95,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,

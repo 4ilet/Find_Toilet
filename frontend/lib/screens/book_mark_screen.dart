@@ -26,6 +26,8 @@ class BookMarkList extends StatefulWidget {
 
 class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
+  final textKey = GlobalKey();
+  double appBarHeight = 0;
   List data = [];
 
   @override
@@ -98,36 +100,42 @@ class _BookMarkListState extends State<BookMarkList> {
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
         listScroll: controller,
-        toolbarHeight: 130,
-        expandedHeight: 130,
+        toolbarHeight: 100,
+        expandedHeight: 100,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding:
+              EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Flexible(
                 child: CustomIconButton(
-                  onPressed: routerPop(context),
                   icon: exitIcon,
                   color: CustomColors.whiteColor,
-                  iconSize: 35,
+                  onPressed: routerPop(context),
+                  iconSize: 45,
+                  padding: EdgeInsets.zero,
                 ),
               ),
               Flexible(
+                key: textKey,
                 flex: 5,
-                fit: FlexFit.loose,
                 child: CustomText(
                   title: '${widget.folderName}${onRefresh(context)}',
                   fontSize: FontSize.titleSize,
                   color: CustomColors.whiteColor,
+                  font: kimm,
                 ),
               ),
-              Flexible(
-                child: CustomText(
-                  title: '${widget.bookmarkCnt}',
-                  fontSize: FontSize.defaultSize,
-                  color: CustomColors.whiteColor,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                child: Flexible(
+                  child: CustomText(
+                    title: '${widget.bookmarkCnt}',
+                    fontSize: FontSize.defaultSize,
+                    color: CustomColors.whiteColor,
+                  ),
                 ),
               ),
             ],

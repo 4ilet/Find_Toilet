@@ -20,7 +20,7 @@ class BookMarkFolderList extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: mainColor,
-        toolbarHeight: 65,
+        toolbarHeight: isDefaultTheme(context) ? 65 : 75,
         flexibleSpace: Padding(
           padding:
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),

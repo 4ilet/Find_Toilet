@@ -149,9 +149,6 @@ void setTotal(BuildContext context, int? newTotal) =>
 void setFilter(BuildContext context, int index, bool value) =>
     context.read<GlobalProvider>().setFilter(index, value);
 
-void applyFilter(BuildContext context, int index) =>
-    context.read<GlobalProvider>().applyFilter(index);
-
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
@@ -217,6 +214,30 @@ void initMainData(
           toiletId: toiletId,
         );
 
+void refreshData(
+  BuildContext context, {
+  required bool isMain,
+  required bool showReview,
+  int? toiletId,
+}) {
+  if (isMain) {
+    setLoading(context, true);
+    initPage(context);
+    initMainData(
+      context,
+      showReview: false,
+    );
+    if (showReview) {
+      setLoading(context, true);
+      initPage(context);
+      initMainData(
+        context,
+        showReview: true,
+        toiletId: toiletId,
+      );
+    }
+  }
+}
 // void refreshMain(
 //   BuildContext context,
 //   bool showReview,
