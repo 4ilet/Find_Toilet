@@ -58,14 +58,14 @@ public class ReviewService {
             if (review.getToilet() == toilet) { // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
                 throw new DuplicatedReviewerException(); // 존재하면 throw
             }
-            // 리뷰 등록
-            Review newReview = new Review();
-            newReview.setToilet(toilet);
-            newReview.setMember(member);
-            newReview.setComment(postReviewDto.getComment());
-            newReview.setScore(postReviewDto.getScore());
-            reviewRepository.save(newReview);
         }
+        // 리뷰 등록
+        Review newReview = new Review();
+        newReview.setToilet(toilet);
+        newReview.setMember(member);
+        newReview.setComment(postReviewDto.getComment());
+        newReview.setScore(postReviewDto.getScore());
+        reviewRepository.save(newReview);
     }
 
 
