@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_folder_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/search_screen.dart';
@@ -11,12 +12,11 @@ import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final bool isMain, showReview;
   final String? query;
-  // final ReturnVoid refreshPage;
-  final int? toiletId;
   final ReturnVoid? onSearchMode;
   // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
@@ -27,7 +27,6 @@ class CustomSearchBar extends StatefulWidget {
     // required this.refreshPage,
     this.onSearchMode,
     this.query,
-    this.toiletId,
     // required this.onSearchAction,
   });
 
@@ -37,8 +36,7 @@ class CustomSearchBar extends StatefulWidget {
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
   bool showDetail = false;
-  final StringList sortOrder = ['가까운 순', '리뷰 많은 순', '평점 좋은 순'];
-  final StringList sortValues = ['distance', 'score', 'comment'];
+  final StringList sortOrder = ['가까운 순', '평점 좋은 순', '리뷰 많은 순'];
   final DynamicMap searchData = {};
   final StringList filterKeyList = ['diaper', 'kids', 'disabled', 'allDay'];
   final BoolList filterValueList = [];
@@ -61,7 +59,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     });
     // setState(() {
     // });
-    print(searchData);
   }
 
   bool isChanged() {
@@ -102,6 +99,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             setFilter(context, i, filterValueList[i]);
           }
         }
+        context.read<MainSearchProvider>().setSearchData(searchData);
         routerPush(
           context,
           page: Search(query: keyword),
@@ -150,7 +148,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             page: const BookMarkFolderList(),
             isMain: widget.isMain,
             showReview: widget.showReview,
-            toiletId: widget.toiletId,
+            toiletId: getToiletId(context),
           ),
         );
         // widget.refreshPage();
@@ -197,7 +195,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                         context,
                         page: widget.isMain
                             ? Settings(
-                                toiletId: widget.toiletId,
+                                toiletId: getToiletId(context),
                                 showReview: widget.showReview,
                                 // refreshPage: widget.refreshPage,
                               )

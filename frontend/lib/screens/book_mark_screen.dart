@@ -1,4 +1,3 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -28,7 +27,6 @@ class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
   final textKey = GlobalKey();
   double appBarHeight = 0;
-  List data = [];
 
   @override
   void initState() {
@@ -44,9 +42,7 @@ class _BookMarkListState extends State<BookMarkList> {
               print('${getPage(context)}, ${getTotal(context)}');
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
-                  setState(() {
-                    setWorking(context, true);
-                  });
+                  setWorking(context, true);
                   Future.delayed(const Duration(milliseconds: 2000), () {
                     if (!getAdditional(context)) {
                       setAdditional(context, true);
@@ -62,35 +58,28 @@ class _BookMarkListState extends State<BookMarkList> {
     );
   }
 
-  void initData() async {
+  void initData() {
     if (readLoading(context)) {
-      initPage(context);
-      BookMarkProvider()
-          .getToiletList(widget.folderId, getPage(context))
-          .then((toiletData) {
-        setState(() {
-          data.addAll(toiletData);
-        });
+      getBookmarkList(
+        context,
+        folderId: widget.folderId,
+      ).then((_) {
         setLoading(context, false);
-        print('data : $data toiletData : $toiletData');
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
   void moreData() {
     if (getAdditional(context)) {
-      BookMarkProvider()
-          .getToiletList(widget.folderId, getPage(context))
-          .then((toiletData) {
-        // setState(() {
-        // });
-        data.addAll(toiletData);
-        setLoading(context, false);
-        setAdditional(context, false);
+      getBookmarkList(
+        context,
+        folderId: widget.folderId,
+      ).then((_) {
         setWorking(context, false);
+        setAdditional(context, false);
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
@@ -147,7 +136,7 @@ class _BookMarkListState extends State<BookMarkList> {
             showReview: false,
             isMain: false,
             isSearch: false,
-            data: data,
+            data: bookmarkList(context),
             // addScrollListener: addScrollListener,
           )
         ],

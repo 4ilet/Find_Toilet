@@ -513,6 +513,7 @@ class DeleteModal extends StatelessWidget {
           case 0:
             ReviewProvider().deleteReview(id).then((_) {
               refreshData(context, isMain: true, showReview: false);
+              setToilet(context, getToilet(context)!);
             });
             break;
           default:
@@ -702,12 +703,13 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
           children: [
             Expanded(
               child: CustomButton(
-                  buttonColor: mainColor,
-                  textColor: CustomColors.whiteColor,
-                  fontSize: isDefaultTheme(context)
-                      ? FontSize.smallSize
-                      : FontSize.largeSmallSize,
-                  onPressed: addOrDelete),
+                buttonColor: mainColor,
+                textColor: CustomColors.whiteColor,
+                fontSize: isDefaultTheme(context)
+                    ? FontSize.smallSize
+                    : FontSize.largeSmallSize,
+                onPressed: addOrDelete,
+              ),
             ),
           ],
         )

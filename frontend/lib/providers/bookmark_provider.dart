@@ -38,8 +38,24 @@ class FolderProvider extends ApiProvider {
 }
 
 class BookMarkProvider extends ApiProvider {
+  //* private
+
+  FutureToiletList getToiletList(int folderId, int page) =>
+      _getToiletList(folderId, page);
+
+  FutureVoid addOrDeleteToilet({
+    required List addFolderIdList,
+    required List delFolderIdList,
+    required int toiletId,
+  }) =>
+      _addOrDeleteToilet(
+        addFolderIdList: addFolderIdList,
+        delFolderIdList: delFolderIdList,
+        toiletId: toiletId,
+      );
+
   //* 즐겨찾기 목록 조회
-  Future<ToiletList> getToiletList(int folderId, int page) async {
+  FutureToiletList _getToiletList(int folderId, int page) async {
     ToiletList toiletList = [];
     try {
       final response =
@@ -52,7 +68,7 @@ class BookMarkProvider extends ApiProvider {
       data.forEach((element) {
         toiletList.add(ToiletModel.fromJson(element));
       });
-      GlobalProvider().setTotal(response.data['size']);
+      ScrollProvider().setTotal(response.data['size']);
       return toiletList;
     } catch (error) {
       print(error);
@@ -61,7 +77,7 @@ class BookMarkProvider extends ApiProvider {
   }
 
   //* 즐겨찾기에 추가/삭제
-  FutureVoid addOrDeleteToilet({
+  FutureVoid _addOrDeleteToilet({
     required List addFolderIdList,
     required List delFolderIdList,
     required int toiletId,

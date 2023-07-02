@@ -23,6 +23,7 @@ class UrlClass extends UserInfoProvider {
   //* toilet
   static const _toiletUrl = '/toilet';
   final nearToiletUrl = '$_toiletUrl/near';
+  String eachToiletUrl(int toiletId) => '$_toiletUrl/$toiletId';
   final searchToiletUrl = '$_toiletUrl/search';
 
   //* review

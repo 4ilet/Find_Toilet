@@ -4,9 +4,20 @@ import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 class ToiletProvider extends ApiProvider {
-  Future<ToiletList> getNearToilet(DynamicMap queryData) async {
+  //* public
+  FutureToiletList searchToilet(DynamicMap queryData) =>
+      _searchToilet(queryData);
+
+  FutureToiletList getNearToilet(DynamicMap queryData) =>
+      _getNearToilet(queryData);
+
+  Future<ToiletModel> getToilet(int toiletId) => _getToilet(toiletId);
+
+  //* private
+  FutureToiletList _getNearToilet(DynamicMap queryData) async {
     try {
       print('token : $token');
+      print('queryData : $queryData');
       final response = token == null
           ? await dio.get(
               nearToiletUrl,
@@ -22,7 +33,7 @@ class ToiletProvider extends ApiProvider {
         ToiletList toiletList = data.map<ToiletModel>((json) {
           return ToiletModel.fromJson(json);
         }).toList();
-        GlobalProvider().setTotal(response.data['totalPages']);
+        ScrollProvider().setTotal(response.data['totalPages']);
         return toiletList;
       } else {
         return [];
@@ -33,9 +44,27 @@ class ToiletProvider extends ApiProvider {
     }
   }
 
-  Future<ToiletList> searchToilet(DynamicMap queryData) =>
-      _searchToilet(queryData);
-  Future<ToiletList> _searchToilet(DynamicMap queryData) async {
+  Future<ToiletModel> _getToilet(int toiletId) async {
+    try {
+      final response = token == null
+          ? await dio.get(eachToiletUrl(toiletId))
+          : await dioWithToken(url: eachToiletUrl(toiletId), method: 'GET').get(
+              eachToiletUrl(toiletId),
+            );
+      final data = response.data['content'];
+      if (data.isNotEmpty) {
+        ToiletModel toiletModel = ToiletModel.fromJson(data);
+        return toiletModel;
+      } else {
+        throw Error();
+      }
+    } catch (error) {
+      print(error);
+      throw Error();
+    }
+  }
+
+  FutureToiletList _searchToilet(DynamicMap queryData) async {
     try {
       final response = token == null
           ? await dio.get(
@@ -50,7 +79,7 @@ class ToiletProvider extends ApiProvider {
       ToiletList toiletList = data.map<ToiletModel>((json) {
         return ToiletModel.fromJson(json);
       }).toList();
-      GlobalProvider().setTotal(response.data['totalPages']);
+      ScrollProvider().setTotal(response.data['totalPages']);
       return toiletList;
     } catch (error) {
       print(error);

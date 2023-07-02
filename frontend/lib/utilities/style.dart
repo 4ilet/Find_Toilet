@@ -27,6 +27,7 @@ const defaultShadow = BoxShadow(
   spreadRadius: 0.1,
   offset: Offset(0, 1),
 );
+
 const highlightShadow = BoxShadow(
   color: mainColor,
   blurRadius: 3,

@@ -1,5 +1,4 @@
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -23,20 +22,18 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final StringList sortValues = ['distance', 'score', 'comment'];
-  final ToiletList toiletList = [];
+  // final StringList sortValues = ['distance', 'score', 'comment'];
+  // final ToiletList toiletList = [];
   final scrollController = ScrollController();
   final cnt = 10;
   bool expandSearch = false;
 
-  DynamicMap searchData = {};
+  // DynamicMap searchData = {};
   late String selectedValue;
-  // late bool allDay, diaper, disabled, kids;
 
   @override
   void initState() {
     super.initState();
-    initData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initLoadingData(context);
       firstSearch();
@@ -45,9 +42,7 @@ class _SearchState extends State<Search> {
             scrollController.position.maxScrollExtent * 0.9) {
           if (getPage(context) < getTotal(context)!) {
             if (!getWorking(context)) {
-              setState(() {
-                setWorking(context, true);
-              });
+              setWorking(context, true);
               Future.delayed(const Duration(milliseconds: 2000), () {
                 if (!getAdditional(context)) {
                   setAdditional(context, true);
@@ -61,53 +56,22 @@ class _SearchState extends State<Search> {
     });
   }
 
-  void initData() {
-    print('init data');
-    final sortIdx = getSortIdx(context);
-    // allDay = readFilter(context, 0);
-    // diaper = readFilter(context, 1);
-    // disabled = readFilter(context, 2);
-    // kids = readFilter(context, 3);
-    searchData = {
-      'diaper': readFilter(context, 0),
-      'kids': readFilter(context, 1),
-      'disabled': readFilter(context, 2),
-      'allDay': readFilter(context, 3),
-      'keyword': widget.query,
-      // 'keyword': readQuery(context),
-      'lat': readLat(context),
-      'lon': readLng(context),
-      'page': -1,
-      'size': cnt,
-      'order': sortValues[sortIdx],
-    };
-  }
-
-  void firstSearch() async {
+  void firstSearch() {
     if (readLoading(context)) {
-      initPage(context);
-      searchData['page'] += 1;
-      print(searchData);
-      ToiletProvider().searchToilet(searchData).then((data) {
-        setState(() {
-          toiletList.addAll(data);
-        });
+      getSearchList(context).then((_) {
         setLoading(context, false);
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
   void search() async {
     if (getAdditional(context)) {
-      searchData['page'] += 1;
-      ToiletProvider().searchToilet(searchData).then((data) {
-        toiletList.addAll(data);
-        setLoading(context, false);
+      getSearchList(context).then((_) {
         setAdditional(context, false);
         setWorking(context, false);
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
@@ -125,7 +89,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        routerPush(context, page: const Main());
+        removedRouterPush(context, page: const Main());
         return Future.value(false);
       },
       child: GestureDetector(
@@ -135,7 +99,11 @@ class _SearchState extends State<Search> {
           body: Padding(
             padding: EdgeInsets.only(top: statusBarHeight(context)),
             child: CustomBoxWithScrollView(
-              expandedHeight: expandSearch ? 430 : 100,
+              expandedHeight: expandSearch
+                  ? 430
+                  : isDefaultTheme(context)
+                      ? 100
+                      : 130,
               listScroll: scrollController,
               flexibleSpace: Column(
                 children: [
@@ -153,7 +121,7 @@ class _SearchState extends State<Search> {
                   showReview: false,
                   isMain: false,
                   isSearch: true,
-                  data: toiletList,
+                  data: searchToiletList(context),
                   // refreshPage: search,
                 )
               ],

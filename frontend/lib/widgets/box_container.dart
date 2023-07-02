@@ -173,32 +173,32 @@ class FolderBox extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      onlyOne
-                          ? const SizedBox()
-                          : CustomIconButton(
-                              icon: editIcon,
-                              color: CustomColors.mainColor,
-                              onPressed: () => showModal(
-                                context,
-                                page: CreateOrEditFolderModal(
-                                  folderId: folderId,
-                                  folderName: folderName,
-                                ),
-                              ),
-                              // iconSize: 30,
-                            ),
                       CustomIconButton(
-                        icon: deleteIcon,
-                        color: CustomColors.redColor,
+                        icon: editIcon,
+                        color: CustomColors.mainColor,
                         onPressed: () => showModal(
                           context,
-                          page: DeleteModal(
-                            deleteMode: 1,
-                            id: folderId,
+                          page: CreateOrEditFolderModal(
+                            folderId: folderId,
+                            folderName: folderName,
                           ),
                         ),
                         // iconSize: 30,
                       ),
+                      onlyOne
+                          ? const SizedBox()
+                          : CustomIconButton(
+                              icon: deleteIcon,
+                              color: CustomColors.redColor,
+                              onPressed: () => showModal(
+                                context,
+                                page: DeleteModal(
+                                  deleteMode: 1,
+                                  id: folderId,
+                                ),
+                              ),
+                              // iconSize: 30,
+                            ),
                     ],
                   ),
                 ],
@@ -229,8 +229,8 @@ class _AddBoxState extends State<AddBox> {
         context: context,
         builder: (context) => const CreateOrEditFolderModal(),
       ),
-      height: 150,
-      width: 150,
+      height: screenWidth(context) * 0.42,
+      width: screenWidth(context) * 0.42,
       color: whiteColor,
       child: const Center(
         child: CustomIcon(
@@ -245,24 +245,20 @@ class _AddBoxState extends State<AddBox> {
 
 //* 화장실, 리뷰 목록 아이템
 class ListItem extends StatelessWidget {
-  final ToiletModel data;
-  // final int index;
-  final bool showReview, isMain;
-  // final ReturnVoid refreshPage;
+  final bool isMain, showReview;
+  final ToiletModel? toiletModel;
+
   const ListItem({
     super.key,
-    // required this.index,
+    this.toiletModel,
     required this.isMain,
-    required this.data,
     required this.showReview,
-    // required this.refreshPage,
   });
 
   @override
   Widget build(BuildContext context) {
     final boxKey = GlobalKey();
-    double? itemHeight;
-    // ToiletModel data = mainToiletList(context)[index];
+    ToiletModel data = toiletModel ?? getToilet(context)!;
     BoolList availableList = [
       data.can24hour,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
@@ -310,6 +306,7 @@ class ListItem extends StatelessWidget {
               toiletName: data.toiletName,
               toiletId: data.toiletId,
               reviewId: data.reviewId,
+              showReview: showReview,
             ))();
       } else {
         showModal(context,
@@ -340,27 +337,21 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    void getSize() {
+    void setHeight() {
       if (boxKey.currentContext != null) {
         final renderBox =
             boxKey.currentContext!.findRenderObject() as RenderBox;
-        itemHeight = renderBox.size.height;
+        setItemHeight(context, renderBox.size.height);
       }
     }
 
     void toReview() {
       if (!showReview) {
-        if (itemHeight == null) {
-          getSize();
-        }
+        setHeight();
+        setToilet(context, data);
         routerPush(
           context,
-          page: Main(
-            showReview: true,
-            itemHeight: itemHeight,
-            // index: index,
-            toiletModel: data,
-          ),
+          page: const Main(showReview: true),
         )();
       }
     }
@@ -795,6 +786,7 @@ class ReviewBox extends StatelessWidget {
                                         reviewId: review.id,
                                         preComment: review.comment,
                                         preScore: review.score,
+                                        showReview: true,
                                       ),
                                     ),
                                   ),

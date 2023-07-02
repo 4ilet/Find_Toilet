@@ -1,5 +1,6 @@
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 
 //* review CRUD
@@ -25,8 +26,10 @@ class ReviewProvider extends ApiProvider {
           data.forEach((review) {
             reviewList.add(ReviewModel.fromJson(review));
           });
+          ScrollProvider().setTotal(response.data['size']);
           return reviewList;
         case 204:
+          ScrollProvider().setTotal(0);
           return [];
         default:
           throw Error();

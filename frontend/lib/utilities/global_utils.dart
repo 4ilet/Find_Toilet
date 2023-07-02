@@ -1,3 +1,4 @@
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -135,9 +136,9 @@ double statusBarHeight(BuildContext context) =>
 
 //* 총 페이지 수
 int? getTotal(BuildContext context) =>
-    context.read<GlobalProvider>().totalPages;
+    context.read<ScrollProvider>().totalPages;
 void setTotal(BuildContext context, int? newTotal) =>
-    context.read<GlobalProvider>().setTotal(newTotal);
+    context.read<ScrollProvider>().setTotal(newTotal);
 
 //* 검색어
 // String? getQuery(BuildContext context) => context.watch<GlobalProvider>().query;
@@ -147,136 +148,177 @@ void setTotal(BuildContext context, int? newTotal) =>
 
 //* 필터
 void setFilter(BuildContext context, int index, bool value) =>
-    context.read<GlobalProvider>().setFilter(index, value);
+    context.read<MainSearchProvider>().setFilter(index, value);
 
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
-      return context.read<GlobalProvider>().diaper;
+      return context.read<MainSearchProvider>().diaper;
     case 1:
-      return context.read<GlobalProvider>().kids;
+      return context.read<MainSearchProvider>().kids;
     case 2:
-      return context.read<GlobalProvider>().disabled;
+      return context.read<MainSearchProvider>().disabled;
     default:
-      return context.read<GlobalProvider>().allDay;
+      return context.read<MainSearchProvider>().allDay;
   }
 }
 
 bool getFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
-      return context.watch<GlobalProvider>().diaper;
+      return context.watch<MainSearchProvider>().diaper;
     case 1:
-      return context.watch<GlobalProvider>().kids;
+      return context.watch<MainSearchProvider>().kids;
     case 2:
-      return context.watch<GlobalProvider>().disabled;
+      return context.watch<MainSearchProvider>().disabled;
     default:
-      return context.watch<GlobalProvider>().allDay;
+      return context.watch<MainSearchProvider>().allDay;
   }
 }
 
 //* 정렬
 void setSortIdx(BuildContext context, int index) =>
-    context.read<GlobalProvider>().setSortIdx(index);
-int getSortIdx(BuildContext context) => context.read<GlobalProvider>().sortIdx;
+    context.read<MainSearchProvider>().setSortIdx(index);
+int getSortIdx(BuildContext context) =>
+    context.read<MainSearchProvider>().sortIdx;
 
 //* 현위치
-double? readLat(BuildContext context) => context.read<GlobalProvider>().lat;
-double? readLng(BuildContext context) => context.read<GlobalProvider>().lng;
+double? readLat(BuildContext context) => context.read<MainSearchProvider>().lat;
+double? readLng(BuildContext context) => context.read<MainSearchProvider>().lng;
 void setLatLng(BuildContext context, double newLat, double newLng) =>
-    context.read<GlobalProvider>().setLatLng(newLat, newLng);
+    context.read<MainSearchProvider>().setLatLng(newLat, newLng);
 
 //* main toilet list
 void addToiletList(BuildContext context, ToiletList toiletList) =>
-    context.read<GlobalProvider>().addToiletList(toiletList);
+    context.read<MainSearchProvider>().addToiletList(toiletList);
 
 DynamicMap mainToiletData(BuildContext context) =>
-    context.read<GlobalProvider>().mainToiletData;
+    context.read<MainSearchProvider>().mainToiletData;
 
 ToiletList mainToiletList(BuildContext context) =>
-    context.read<GlobalProvider>().mainToiletList;
+    context.read<MainSearchProvider>().mainToiletList;
+
+FutureToiletList getMainToiletList(BuildContext context) =>
+    context.read<MainSearchProvider>().getMainToiletList();
+
+void initToiletList(BuildContext context) =>
+    context.read<MainSearchProvider>().initToiletList();
 
 //* review list
 void addReviewList(BuildContext context, ReviewList reviewData) =>
-    context.read<GlobalProvider>().addReviewList(reviewData);
+    context.read<ReviewBookMarkProvider>().addReviewList(reviewData);
 
 ReviewList reviewList(BuildContext context) =>
-    context.read<GlobalProvider>().reviewList;
+    context.read<ReviewBookMarkProvider>().reviewList;
 
-//* init main/search/review data
-void initMainData(
+ToiletModel? getToilet(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().toiletInfo;
+
+void setToilet(BuildContext context, ToiletModel toiletModel) =>
+    context.read<ReviewBookMarkProvider>().setToiletInfo(toiletModel);
+
+double? getItemHeight(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().itemHeight;
+
+void setItemHeight(BuildContext context, double height) =>
+    context.read<ReviewBookMarkProvider>().setItemHeight(height);
+
+int? getToiletId(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().toiletId;
+
+FutureReviewList getReviewList(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().getReviewList(getPage(context));
+
+void initReviewList(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().initReviewList();
+
+//* bookmark list
+ToiletList bookmarkList(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().bookmarkList;
+FutureToiletList getBookmarkList(
+  BuildContext context, {
+  required int folderId,
+}) =>
+    context
+        .read<ReviewBookMarkProvider>()
+        .getBookmarkList(folderId, getPage(context));
+
+//* search list
+ToiletList searchToiletList(BuildContext context) =>
+    context.read<MainSearchProvider>().searchToiletList;
+FutureToiletList getSearchList(BuildContext context) =>
+    context.read<MainSearchProvider>().getSearchList();
+
+//* init main/search/review/bookmark data
+FutureList initMainData(
   BuildContext context, {
   required bool showReview,
-  int? toiletId,
-}) =>
-    context.read<GlobalProvider>().initMainData(
-          showReview: showReview,
-          toiletId: toiletId,
-        );
+  required bool needClear,
+}) {
+  if (needClear) {
+    showReview ? initReviewList(context) : initToiletList(context);
+  }
+  return showReview ? getReviewList(context) : getMainToiletList(context);
+}
 
 void refreshData(
   BuildContext context, {
   required bool isMain,
   required bool showReview,
   int? toiletId,
-}) {
+}) async {
   if (isMain) {
     setLoading(context, true);
     initPage(context);
     initMainData(
       context,
       showReview: false,
-    );
-    if (showReview) {
-      setLoading(context, true);
-      initPage(context);
-      initMainData(
-        context,
-        showReview: true,
-        toiletId: toiletId,
-      );
-    }
+      needClear: true,
+    ).then((_) {
+      setLoading(context, false);
+      if (showReview) {
+        setLoading(context, true);
+        initMainData(
+          context,
+          showReview: true,
+          needClear: true,
+        ).then((_) {
+          setLoading(context, false);
+        });
+      }
+    });
   }
 }
-// void refreshMain(
-//   BuildContext context,
-//   bool showReview,
-//   int? toiletId,
-// ) =>
-//     context.read<GlobalProvider>().refreshMain(
-//           showReview,
-//           toiletId,
-//         );
 
 //* scroll
 
 bool readLoading(BuildContext context) =>
-    context.read<GlobalProvider>().loading;
+    context.read<ScrollProvider>().loading;
 
 bool getLoading(BuildContext context) =>
-    context.watch<GlobalProvider>().loading;
+    context.watch<ScrollProvider>().loading;
 
 void setLoading(BuildContext context, bool value) =>
-    context.read<GlobalProvider>().setLoading(value);
+    context.read<ScrollProvider>().setLoading(value);
 
-int getPage(BuildContext context) => context.read<GlobalProvider>().page;
+int getPage(BuildContext context) => context.read<ScrollProvider>().page;
 
 void increasePage(BuildContext context) =>
-    context.read<GlobalProvider>().increasePage();
+    context.read<ScrollProvider>().increasePage();
 
 void initPage(BuildContext context) =>
-    context.read<GlobalProvider>().initPage();
+    context.read<ScrollProvider>().initPage();
 
-bool getWorking(BuildContext context) => context.read<GlobalProvider>().working;
+bool getWorking(BuildContext context) => context.read<ScrollProvider>().working;
 
 void setWorking(BuildContext context, bool value) =>
-    context.read<GlobalProvider>().setWorking(value);
+    context.read<ScrollProvider>().setWorking(value);
 
 bool getAdditional(BuildContext context) =>
-    context.read<GlobalProvider>().additional;
+    context.read<ScrollProvider>().additional;
 
 void setAdditional(BuildContext context, bool value) =>
-    context.read<GlobalProvider>().setAdditional(value);
+    context.read<ScrollProvider>().setAdditional(value);
 
 void initLoadingData(BuildContext context) {
   setLoading(context, true);
@@ -291,8 +333,8 @@ void initLoadingData(BuildContext context) {
 
 //* key
 void setKey(BuildContext context, GlobalKey key) =>
-    context.read<GlobalProvider>().setKey(key);
+    context.read<MainSearchProvider>().setKey(key);
 GlobalKey? getKey(BuildContext context) =>
-    context.read<GlobalProvider>().globalKey;
+    context.read<MainSearchProvider>().globalKey;
 
 //* radius

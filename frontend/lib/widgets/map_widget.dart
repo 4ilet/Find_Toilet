@@ -2,7 +2,6 @@
 
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
@@ -52,7 +51,7 @@ class MapScreenState extends State<MapScreen> {
       refreshData(context, isMain: true, showReview: false);
       // print(GlobalProvider().mainToiletList.length);
       Future.delayed(const Duration(milliseconds: 500), () {
-        if (GlobalProvider().mainToiletList.isNotEmpty) {
+        if (mainToiletList(context).isNotEmpty) {
           toiletMarkers.clear();
           for (int i = 0; i < mainToiletList(context).length; i++) {
             toiletMarkers.add(LatLng(mainToiletList(context)[i].lat,

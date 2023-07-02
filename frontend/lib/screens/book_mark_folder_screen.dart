@@ -40,8 +40,9 @@ class BookMarkFolderList extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      const SizedBox(width: 5),
                       CustomText(
                         title:
                             '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',

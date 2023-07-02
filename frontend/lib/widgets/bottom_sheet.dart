@@ -1,6 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -10,18 +9,14 @@ import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/silvers.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
-  // final int? index;
-  final ToiletModel? toiletModel;
-  final double? itemHeight;
+
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
-    // this.index,
-    this.toiletModel,
-    this.itemHeight,
   });
 
   @override
@@ -30,22 +25,16 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   final controller = ScrollController();
-  // ToiletModel? toiletModel;
+  ToiletModel? toiletModel;
   int? toiletId;
 
   @override
   void initState() {
     super.initState();
-    // print('bottom index : ${widget.index}');
+    toiletModel = getToilet(context);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        // if (widget.index != null) {
-        //   setState(() {
-        //     toiletModel = mainToiletList(context)[widget.index!];
-        //   });
-        // }
-        // toiletId = toiletModel?.toiletId;
-        toiletId = widget.toiletModel?.toiletId;
+        toiletId = getToiletId(context);
         controller.addListener(
           () {
             if (controller.position.pixels >=
@@ -71,38 +60,34 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
 
   void moreData() {
     if (getAdditional(context)) {
-      if (widget.showReview) {
-        ReviewProvider()
-            .getReviewList(toiletId!, getPage(context))
-            .then((reviewData) {
-          addReviewList(context, reviewData);
-        });
-      } else {
-        ToiletProvider()
-            .getNearToilet(mainToiletData(context))
-            .then((toiletData) {
-          addToiletList(context, toiletData);
-        });
-      }
-      setAdditional(context, false);
-      setWorking(context, false);
-      increasePage(context);
+      initMainData(
+        context,
+        showReview: widget.showReview,
+        needClear: false,
+      ).then((data) {
+        setAdditional(context, false);
+        setWorking(context, false);
+        increasePage(context);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('bottom build => ${widget.itemHeight}, ${screenHeight(context)}');
     return DraggableScrollableSheet(
       initialChildSize: widget.showReview ? 0.6 : 0.2,
-      minChildSize: 0.08,
-      maxChildSize: isDefaultTheme(context) ? 0.8 : 0.75,
+      minChildSize: 0.2,
+      maxChildSize: widget.showReview
+          ? 0.9
+          : isDefaultTheme(context)
+              ? 0.8
+              : 0.75,
       builder: (BuildContext context, ScrollController scrollController) {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,
           listScroll: controller,
           toolbarHeight: widget.showReview ? 55 : 40,
-          expandedHeight: widget.showReview ? widget.itemHeight! + 80 : 95,
+          expandedHeight: widget.showReview ? getItemHeight(context)! + 95 : 95,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
@@ -123,7 +108,12 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                             ? CustomIconButton(
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
-                                onPressed: routerPop(context),
+                                onPressed: () {
+                                  routerPop(context)();
+                                  context
+                                      .read<ReviewBookMarkProvider>()
+                                      .initToiletInfo();
+                                },
                                 padding: EdgeInsets.zero,
                                 iconSize: 35,
                               )
@@ -141,9 +131,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                     ),
                   ),
                   widget.showReview
-                      ? ListItem(
-                          // index: widget.index!,
-                          data: widget.toiletModel!,
+                      ? const ListItem(
                           showReview: true,
                           isMain: true,
                         )
@@ -165,15 +153,12 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
             CustomSilverList(
               isMain: true,
               isSearch: false,
-              // toiletId: toiletModel?.toiletId,
-              // toiletName: toiletModel?.toiletName,
-              toiletId: widget.toiletModel?.toiletId,
-              toiletName: widget.toiletModel?.toiletName,
+              toiletId: getToiletId(context),
+              toiletName: getToilet(context)?.toiletName,
               showReview: widget.showReview,
               data: widget.showReview
                   ? reviewList(context)
                   : mainToiletList(context),
-              // addScrollListener: addScrollListener,
             ),
           ],
         );
