@@ -26,6 +26,8 @@ typedef FutureDynamicMap = Future<DynamicMap>;
 typedef ReviewList = List<ReviewModel>;
 typedef FolderList = List<FolderModel>;
 typedef ToiletList = List<ToiletModel>;
+typedef FutureToiletList = Future<ToiletList>;
+typedef FutureReviewList = Future<ReviewList>;
 
 //* enums
 

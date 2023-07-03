@@ -20,7 +20,7 @@ class BookMarkFolderList extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: mainColor,
-        toolbarHeight: 65,
+        toolbarHeight: isDefaultTheme(context) ? 65 : 75,
         flexibleSpace: Padding(
           padding:
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
@@ -40,8 +40,9 @@ class BookMarkFolderList extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      const SizedBox(width: 5),
                       CustomText(
                         title:
                             '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',

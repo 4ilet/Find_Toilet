@@ -57,8 +57,7 @@ class CustomSilverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('review build');
-    int cnt = 5;
+    int cnt = showReview || (!isMain && !isSearch) ? 10 : 20;
     String ifEmpty() {
       String showedContent = '';
       if (isSearch) {
@@ -90,15 +89,14 @@ class CustomSilverList extends StatelessWidget {
                             )
                           : ListItem(
                               showReview: false,
-                              // index: i,
-                              data: data[i],
+                              toiletModel: data[i],
                               isMain: isMain,
-                              // refreshPage: refreshPage,
                             );
 
                       return Column(
                         children: [
-                          i < getPage(context) * cnt || !getAdditional(context)
+                          i < getPage(context) * cnt
+                              //  || !getAdditional(context)
                               ? returnedWidget
                               : const SizedBox(),
                           i == data.length - 1 &&

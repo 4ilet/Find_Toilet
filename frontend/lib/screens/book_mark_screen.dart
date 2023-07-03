@@ -1,4 +1,3 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -26,7 +25,8 @@ class BookMarkList extends StatefulWidget {
 
 class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
-  List data = [];
+  final textKey = GlobalKey();
+  double appBarHeight = 0;
 
   @override
   void initState() {
@@ -42,9 +42,7 @@ class _BookMarkListState extends State<BookMarkList> {
               print('${getPage(context)}, ${getTotal(context)}');
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
-                  setState(() {
-                    setWorking(context, true);
-                  });
+                  setWorking(context, true);
                   Future.delayed(const Duration(milliseconds: 2000), () {
                     if (!getAdditional(context)) {
                       setAdditional(context, true);
@@ -60,35 +58,28 @@ class _BookMarkListState extends State<BookMarkList> {
     );
   }
 
-  void initData() async {
+  void initData() {
     if (readLoading(context)) {
-      initPage(context);
-      BookMarkProvider()
-          .getToiletList(widget.folderId, getPage(context))
-          .then((toiletData) {
-        setState(() {
-          data.addAll(toiletData);
-        });
+      getBookmarkList(
+        context,
+        folderId: widget.folderId,
+      ).then((_) {
         setLoading(context, false);
-        print('data : $data toiletData : $toiletData');
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
   void moreData() {
     if (getAdditional(context)) {
-      BookMarkProvider()
-          .getToiletList(widget.folderId, getPage(context))
-          .then((toiletData) {
-        // setState(() {
-        // });
-        data.addAll(toiletData);
-        setLoading(context, false);
-        setAdditional(context, false);
+      getBookmarkList(
+        context,
+        folderId: widget.folderId,
+      ).then((_) {
         setWorking(context, false);
+        setAdditional(context, false);
+        increasePage(context);
       });
-      increasePage(context);
     }
   }
 
@@ -98,36 +89,42 @@ class _BookMarkListState extends State<BookMarkList> {
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
         listScroll: controller,
-        toolbarHeight: 130,
-        expandedHeight: 130,
+        toolbarHeight: 100,
+        expandedHeight: 100,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding:
+              EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Flexible(
                 child: CustomIconButton(
-                  onPressed: routerPop(context),
                   icon: exitIcon,
                   color: CustomColors.whiteColor,
-                  iconSize: 35,
+                  onPressed: routerPop(context),
+                  iconSize: 45,
+                  padding: EdgeInsets.zero,
                 ),
               ),
               Flexible(
+                key: textKey,
                 flex: 5,
-                fit: FlexFit.loose,
                 child: CustomText(
                   title: '${widget.folderName}${onRefresh(context)}',
                   fontSize: FontSize.titleSize,
                   color: CustomColors.whiteColor,
+                  font: kimm,
                 ),
               ),
-              Flexible(
-                child: CustomText(
-                  title: '${widget.bookmarkCnt}',
-                  fontSize: FontSize.defaultSize,
-                  color: CustomColors.whiteColor,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                child: Flexible(
+                  child: CustomText(
+                    title: '${widget.bookmarkCnt}',
+                    fontSize: FontSize.defaultSize,
+                    color: CustomColors.whiteColor,
+                  ),
                 ),
               ),
             ],
@@ -139,7 +136,7 @@ class _BookMarkListState extends State<BookMarkList> {
             showReview: false,
             isMain: false,
             isSearch: false,
-            data: data,
+            data: bookmarkList(context),
             // addScrollListener: addScrollListener,
           )
         ],

@@ -140,6 +140,7 @@ class TextWithIcon extends StatelessWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      textBaseline: TextBaseline.alphabetic,
       children: [
         Flexible(
           flex: 2,

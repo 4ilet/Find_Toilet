@@ -71,21 +71,7 @@ class _SettingsState extends State<Settings> {
       final token = readToken(context);
       if (token == null || token == '') {
         login(context).then((result) {
-          setLoading(context, true);
-          initPage(context);
-          initMainData(
-            context,
-            showReview: false,
-          );
-          if (widget.showReview) {
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
-              context,
-              showReview: true,
-              toiletId: widget.toiletId,
-            );
-          }
+          refreshData(context, isMain: true, showReview: widget.showReview);
         });
         // showModal(
         //   context,
@@ -97,25 +83,8 @@ class _SettingsState extends State<Settings> {
       } else {
         changeToken(context, token: null, refresh: null);
         changeName(context, null);
-        setLoading(context, true);
-        initPage(context);
-        initMainData(
-          context,
-          showReview: false,
-        );
-        if (widget.showReview) {
-          setLoading(context, true);
-          initPage(context);
-          initMainData(
-            context,
-            showReview: true,
-            toiletId: widget.toiletId,
-          );
-        }
+        refreshData(context, isMain: true, showReview: widget.showReview);
       }
-      // widget.refreshPage();
-      // if (!mounted) return;
-      // refreshMain(context, widget.showReview, null);
     } catch (error) {
       setLoading(context, false);
       showModal(

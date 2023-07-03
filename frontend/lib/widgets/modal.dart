@@ -511,7 +511,10 @@ class DeleteModal extends StatelessWidget {
       try {
         switch (deleteMode) {
           case 0:
-            await ReviewProvider().deleteReview(id);
+            ReviewProvider().deleteReview(id).then((_) {
+              refreshData(context, isMain: true, showReview: false);
+              setToilet(context, getToilet(context)!);
+            });
             break;
           default:
             await FolderProvider().deleteFolder(id);
@@ -603,6 +606,7 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
         toiletId: widget.toiletId,
       )
           .then((_) {
+        refreshData(context, isMain: true, showReview: false);
         changeRefresh(context);
         routerPop(context)();
         showModal(
@@ -699,12 +703,13 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
           children: [
             Expanded(
               child: CustomButton(
-                  buttonColor: mainColor,
-                  textColor: CustomColors.whiteColor,
-                  fontSize: isDefaultTheme(context)
-                      ? FontSize.smallSize
-                      : FontSize.largeSmallSize,
-                  onPressed: addOrDelete),
+                buttonColor: mainColor,
+                textColor: CustomColors.whiteColor,
+                fontSize: isDefaultTheme(context)
+                    ? FontSize.smallSize
+                    : FontSize.largeSmallSize,
+                onPressed: addOrDelete,
+              ),
             ),
           ],
         )
@@ -860,22 +865,7 @@ class LoginConfirmModal extends StatelessWidget {
           // } else {
           //   changeRefresh(context);
           // }
-          setLoading(context, true);
-          initPage(context);
-          initMainData(
-            context,
-            showReview: false,
-          );
-          if (showReview) {
-            print('$showReview, $toiletId');
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
-              context,
-              showReview: true,
-              toiletId: toiletId,
-            );
-          }
+          refreshData(context, isMain: isMain, showReview: showReview);
 
           routerPop(context)();
         });
@@ -925,21 +915,7 @@ class _JoinModalState extends State<JoinModal> {
   void joinOrLogin() {
     final newContext = getKey(context)?.currentContext;
     login(context).then((result) {
-      setLoading(context, true);
-      initPage(context);
-      initMainData(
-        context,
-        showReview: false,
-      );
-      if (widget.showReview) {
-        setLoading(context, true);
-        initPage(context);
-        initMainData(
-          context,
-          showReview: true,
-          toiletId: widget.toiletId,
-        );
-      }
+      refreshData(context, isMain: true, showReview: widget.showReview);
     });
     routerPop(context)();
   }

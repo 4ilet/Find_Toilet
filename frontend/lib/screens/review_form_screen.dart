@@ -1,4 +1,6 @@
+import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
+import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -14,6 +16,7 @@ class ReviewForm extends StatefulWidget {
   final double? preScore;
   final String? preComment;
   final int reviewId;
+  final bool showReview;
   const ReviewForm({
     super.key,
     required this.toiletName,
@@ -21,6 +24,7 @@ class ReviewForm extends StatefulWidget {
     this.preComment,
     this.preScore,
     required this.reviewId,
+    required this.showReview,
   });
 
   @override
@@ -30,9 +34,11 @@ class ReviewForm extends StatefulWidget {
 class _ReviewFormState extends State<ReviewForm> {
   DynamicMap reviewData = {'comment': '', 'score': 0.0};
   bool enabled = true;
+  late ToiletModel toiletInfo;
 
   void initData() async {
     final data = await ReviewProvider().getReview(widget.reviewId);
+    toiletInfo = await ToiletProvider().getToilet(widget.toiletId);
     changeScore(data.score.toInt() - 1);
     changeComment(data.comment);
   }
@@ -71,13 +77,15 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((_) {
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
+            refreshData(
               context,
-              showReview: true,
+              isMain: true,
+              showReview: widget.showReview,
               toiletId: widget.toiletId,
             );
+            if (widget.showReview) {
+              setToilet(context, toiletInfo);
+            }
           });
 
           state = '등록';
@@ -88,13 +96,15 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((result) {
-            setLoading(context, true);
-            initPage(context);
-            initMainData(
+            refreshData(
               context,
+              isMain: true,
               showReview: true,
               toiletId: widget.toiletId,
             );
+            if (widget.showReview) {
+              setToilet(context, getToilet(context)!);
+            }
           });
           state = '수정';
         }

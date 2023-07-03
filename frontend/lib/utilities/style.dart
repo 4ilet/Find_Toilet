@@ -15,8 +15,8 @@ const double largeTitleSize = 34;
 const double titleSize = 31;
 const double largeLargeSize = 28;
 const double largeSize = 25;
-const double largeDefaultSize = 23;
-const double defaultSize = 20;
+const double largeDefaultSize = 22;
+const double defaultSize = 19;
 const double largeSmallSize = 17;
 const double smallSize = 14;
 
@@ -27,6 +27,7 @@ const defaultShadow = BoxShadow(
   spreadRadius: 0.1,
   offset: Offset(0, 1),
 );
+
 const highlightShadow = BoxShadow(
   color: mainColor,
   blurRadius: 3,

@@ -1,4 +1,3 @@
-import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
@@ -10,15 +9,9 @@ import 'package:flutter/material.dart';
 
 class Main extends StatefulWidget {
   final bool showReview;
-  // final int? index;
-  final ToiletModel? toiletModel;
-  final double? itemHeight;
   const Main({
     super.key,
     this.showReview = false,
-    this.itemHeight,
-    // this.index,
-    this.toiletModel,
   });
 
   @override
@@ -29,7 +22,6 @@ class _MainState extends State<Main> {
   // DynamicMap query = {'value': null};
   final globalKey = GlobalKey<ScaffoldState>();
   double paddingTop = 0;
-  // ToiletModel? toiletModel;
 
   @override
   void initState() {
@@ -39,19 +31,15 @@ class _MainState extends State<Main> {
         setState(() {
           paddingTop = statusBarHeight(context);
         });
-        // if (widget.index != null) {
-        //   setState(() {
-        //     toiletModel = mainToiletData(context)[widget.index];
-        //   });
-        // }
         initLoadingData(context);
         initMainData(
           context,
           showReview: widget.showReview,
-          toiletId: widget.toiletModel?.toiletId,
-          // toiletId: toiletModel?.toiletId,
-        );
-        // setQuery(context, null);
+          needClear: true,
+        ).then((_) {
+          setLoading(context, false);
+          increasePage(context);
+        });
         setKey(context, globalKey);
       },
     );
@@ -79,37 +67,16 @@ class _MainState extends State<Main> {
     print('refresh main! ${readLoading(context)}');
     print('get token : ${readToken(context)}');
     if (!readLoading(context)) {
-      setLoading(context, true);
-      initPage(context);
       initMainData(
         context,
         showReview: widget.showReview,
-        toiletId: widget.toiletModel?.toiletId,
-        // toiletId: widget.toiletModel?.toiletId,
-      );
+        needClear: true,
+      ).then((_) {
+        setLoading(context, false);
+        increasePage(context);
+      });
     }
   }
-
-  // void initData() {
-  //   if (readLoading(context)) {
-  //     if (widget.showReview) {
-  //       ReviewProvider()
-  //           .getReviewList(widget.toiletModel!.toiletId, getPage(context))
-  //           .then((reviewData) {
-  //         addReviewList(context, reviewData);
-  //         setLoading(context, false);
-  //       });
-  //     } else {
-  //       ToiletProvider()
-  //           .getNearToilet(mainToiletData(context))
-  //           .then((toiletData) {
-  //         addToiletList(context, toiletData);
-  //         setLoading(context, false);
-  //       });
-  //     }
-  //     increasePage(context);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +111,7 @@ class _MainState extends State<Main> {
                 widget.showReview
                     ? const SizedBox()
                     : Padding(
-                        padding: const EdgeInsets.only(top: 65),
+                        padding: const EdgeInsets.only(top: 70),
                         child: Column(
                           children: [
                             FilterBox(
@@ -157,17 +124,12 @@ class _MainState extends State<Main> {
                       ),
                 ToiletBottomSheet(
                   showReview: widget.showReview,
-                  itemHeight: widget.itemHeight,
-                  // index: widget.index,
-                  toiletModel: widget.toiletModel,
                 ),
                 Column(
                   children: [
                     CustomSearchBar(
                       isMain: true,
                       showReview: widget.showReview,
-                      // toiletId: toiletModel?.toiletId,
-                      toiletId: widget.toiletModel?.toiletId,
                     ),
                   ],
                 ),

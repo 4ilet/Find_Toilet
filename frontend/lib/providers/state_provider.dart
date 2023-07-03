@@ -1,3 +1,5 @@
+import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
@@ -219,77 +221,18 @@ class SettingsProvider with ChangeNotifier {
 //   void initWidthHeight(BuildContext context) => _initWidthHeight(context);
 // }
 
-//* main, search
-class GlobalProvider with ChangeNotifier {
-  static GlobalKey? _globalKey;
+class ScrollProvider with ChangeNotifier {
   static int? _totalPages;
   static bool _loading = true;
   static int _page = 0;
-  // static int _cnt = 20;
   static bool _working = false;
   static bool _additional = false;
-  static bool _diaper = false;
-  static bool _kids = false;
-  static bool _disabled = false;
-  static bool _allDay = false;
-  static int _sortIdx = 0;
-  static double _lat = 37.537229;
-  static double _lng = 127.005515;
-  // static final Map<String, String?> _query = {'value': null};
-  static final ReviewList _reviewList = [];
-  static final ToiletList _mainToiletList = [];
-  static final DynamicMap _mainToiletData = {
-    'allDay': _allDay,
-    'diaper': _diaper,
-    'disabled': _disabled,
-    'kids': _kids,
-    'lat': _lat,
-    'lon': _lng,
-    'radius': 1000,
-    'page': _page,
-    'size': 20,
-  };
 
-//   static final DynamicMap _searchData = {
-//       'allDay': _allDay,
-//     'diaper': _diaper,
-//     'disabled': _disabled,
-//     'kids': _kids,
-//       'keyword': null,
-//       // 'keyword': readQuery(context),
-// 'lat': _lat,
-//     'lon': _lng,
-//       'page': 0,
-//       'size': 20,
-//       'order': sortValues[sortIdx],
-//     }
-
-  //* getter
-  GlobalKey? get globalKey => _globalKey;
   bool get loading => _loading;
   bool get working => _working;
   bool get additional => _additional;
-  bool get diaper => _diaper;
-  bool get kids => _kids;
-  bool get disabled => _disabled;
-  bool get allDay => _allDay;
-  int get sortIdx => _sortIdx;
   int? get totalPages => _totalPages;
   int get page => _page;
-
-  // String? get query => _query['value'];
-  double? get lat => _lat;
-  double? get lng => _lng;
-  // int get cnt => _cnt;
-  ToiletList get mainToiletList => _mainToiletList;
-  DynamicMap get mainToiletData => _mainToiletData;
-  ReviewList get reviewList => _reviewList;
-
-  //* public
-  void setKey(GlobalKey key) {
-    _setKey(key);
-    notifyListeners();
-  }
 
   void increasePage() {
     _setPage(_page + 1);
@@ -300,15 +243,6 @@ class GlobalProvider with ChangeNotifier {
     _setPage(0);
     notifyListeners();
   }
-
-  // void setQuery(String? value) {
-  //   _setQuery(value);
-  // }
-
-  // void setCnt(int newVal) {
-  //   _setCnt(newVal);
-  //   notifyListeners();
-  // }
 
   void setWorking(bool newVal) {
     _setWorking(newVal);
@@ -325,12 +259,158 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setLoading(bool value) {
+    _setLoading(value);
+    notifyListeners();
+  }
+
+  //* private
+  void _setWorking(bool newVal) => _working = newVal;
+  void _setAdditional(bool newVal) => _additional = newVal;
+  void _setPage(int newVal) => _page = newVal;
+  void _setTotal(int? newVal) => _totalPages = newVal;
+  void _setLoading(bool value) => _loading = value;
+}
+
+//* main, search, review, book mark
+class ReviewBookMarkProvider with ChangeNotifier {
+  static ToiletModel? _toiletInfo;
+  static int? _toiletId;
+  static double? _itemHeight;
+  static final ReviewList _reviewList = [];
+  static final ToiletList _bookmarkList = [];
+  // String? get query => _query['value'];
+  //* get
+  ToiletModel? get toiletInfo => _toiletInfo;
+  int? get toiletId => _toiletId;
+  double? get itemHeight => _itemHeight;
+  ReviewList get reviewList => _reviewList;
+  ToiletList get bookmarkList => _bookmarkList;
+
+  //* private
+  //* review
+  FutureReviewList _getReviewList(int page) async {
+    final reviewData = await ReviewProvider().getReviewList(_toiletId!, page);
+    _addReviewList(reviewData);
+    notifyListeners();
+    return reviewData;
+  }
+
+  void _addReviewList(ReviewList reviewData) => _reviewList.addAll(reviewData);
+  void _initReviewList() => _reviewList.clear();
+  void _setItemHeight(double height) => _itemHeight = height;
+  void _setToiletInfo(ToiletModel toiletData) {
+    _toiletInfo = toiletData;
+    _toiletId = toiletData.toiletId;
+  }
+
+  void _initToiletInfo() {
+    _toiletInfo = null;
+    _toiletId = null;
+  }
+
+  //* bookmark
+  FutureToiletList _getBookmarkList(int folderId, int page) async {
+    final bookmarkList = await BookMarkProvider().getToiletList(folderId, page);
+    _addBookmarkList(bookmarkList);
+    return bookmarkList;
+  }
+
+  void _addBookmarkList(ToiletList bookmarkList) =>
+      _bookmarkList.addAll(bookmarkList);
+
+  //* public
+  void addReviewList(ReviewList reviewData) => _addReviewList(reviewData);
+
+  FutureToiletList getBookmarkList(int folderId, int page) =>
+      _getBookmarkList(folderId, page);
+
+  void initReviewList() => _initReviewList();
+  FutureReviewList getReviewList(int page) => _getReviewList(page);
+
+  void setItemHeight(double height) {
+    _setItemHeight(height);
+    notifyListeners();
+  }
+
+  void setToiletInfo(ToiletModel toiletData) {
+    _setToiletInfo(toiletData);
+    notifyListeners();
+  }
+
+  void initToiletInfo() => _initToiletInfo();
+}
+
+class MainSearchProvider with ChangeNotifier {
+  static GlobalKey? _globalKey;
+  static final StringList _sortValues = ['distance', 'score', 'comment'];
+  // static int _cnt = 20;
+  // static final Map<String, String?> _query = {'value': null};
+  static double? _lat = 37.537229;
+  static double? _lng = 127.005515;
+  static int _sortIdx = 0;
+  static final ToiletList _mainToiletList = [];
+  static final DynamicMap _mainToiletData = {
+    'allDay': false,
+    'diaper': false,
+    'disabled': false,
+    'kids': false,
+    'lat': _lat,
+    'lon': _lng,
+    'radius': 1000,
+    'page': 0,
+    'size': 20,
+  };
+
+  static final ToiletList _searchToiletList = [];
+
+  static final DynamicMap _searchData = {
+    'allDay': false,
+    'diaper': false,
+    'disabled': false,
+    'kids': false,
+    'keyword': null,
+    'lat': _lat,
+    'lon': _lng,
+    'page': 0,
+    'size': 20,
+    'order': _sortValues[_sortIdx]
+  };
+
+  //* getter
+  GlobalKey? get globalKey => _globalKey;
+
+  bool get diaper => _mainToiletData['diaper'];
+  bool get kids => _mainToiletData['kids'];
+  bool get disabled => _mainToiletData['disabled'];
+  bool get allDay => _mainToiletData['allDay'];
+  int get sortIdx => _sortIdx;
+
+  double? get lat => _lat;
+  double? get lng => _lng;
+  // int get cnt => _cnt;
+  ToiletList get mainToiletList => _mainToiletList;
+  DynamicMap get mainToiletData => _mainToiletData;
+
+  ToiletList get searchToiletList => _searchToiletList;
+  //* public
+  void setKey(GlobalKey key) {
+    _setKey(key);
+    notifyListeners();
+  }
+  // void setQuery(String? value) {
+  //   _setQuery(value);
+  // }
+
+  // void setCnt(int newVal) {
+  //   _setCnt(newVal);
+  //   notifyListeners();
+  // }
+
   void setFilter(int index, bool value) {
     _setFilter(index, value);
     notifyListeners();
   }
-
-  void applyFilter(int index) => _applyFilter(index);
 
   void setSortIdx(int index) {
     _setSortIdx(index);
@@ -342,105 +422,69 @@ class GlobalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addReviewList(ReviewList reviewData) {
-    _addReviewList(reviewData);
-    notifyListeners();
-  }
-
-  void initToiletList() {
-    _initToiletList();
-  }
-
-  void initReviewList() {
-    _initReviewList();
-  }
-
-  void setLoading(bool value) {
-    _setLoading(value);
-    notifyListeners();
-  }
+  void initToiletList() => _initToiletList();
 
   void setLatLng(double newLat, double newLng) {
     _setLatLng(newLat, newLng);
+    _applyLatLng();
     notifyListeners();
   }
 
-  // void refreshMain(bool showReview, int? toiletId) {
-  //   _refreshMain(showReview, toiletId);
-  //   notifyListeners();
-  // }
+  FutureToiletList getMainToiletList() => _getMainToiletList();
 
-  void initMainData({required bool showReview, int? toiletId}) {
-    print('in!! loading : $loading');
-    if (_loading) {
-      print('call');
-      showReview ? _getReviewList(toiletId!) : _getToiletList();
-    }
-  }
+  FutureToiletList getSearchList() => _getSearchList();
 
-  void _getReviewList(int toiletId) {
-    ReviewProvider().getReviewList(toiletId, _page).then((reviewData) {
-      // print('reivew data : $reviewData');
-      _initReviewList();
-      // print('초기화 $_reviewList');
-      _addReviewList(reviewData);
-      // print('add $reviewList');
-      _setLoading(false);
-      notifyListeners();
-      // print('전역 갱신 ${_reviewList[0].comment}');
-    });
-    increasePage();
-  }
-
-  void _getToiletList() {
-    ToiletProvider().getNearToilet(_mainToiletData).then((toiletData) {
-      _initToiletList();
-      _addToiletList(toiletData);
-      _setLoading(false);
-      notifyListeners();
-    });
-    increasePage();
-  }
+  void setSearchData(DynamicMap newData) => _setSearchData(newData);
 
   //* private
+  FutureToiletList _getMainToiletList() async {
+    final toiletData = await ToiletProvider().getNearToilet(_mainToiletData);
+    _addToiletList(toiletData);
+    notifyListeners();
+    return toiletData;
+  }
+
+  FutureToiletList _getSearchList() async {
+    final toiletData = await ToiletProvider().searchToilet(_searchData);
+    _searchToiletList.addAll(toiletData);
+    notifyListeners();
+    return toiletData;
+  }
+
+  void _setSearchData(DynamicMap newData) async {
+    _searchData.addAll(newData);
+    notifyListeners();
+  }
+
+  void _setLatLng(double newLat, double newLng) {
+    _lat = newLat;
+    _lng = newLng;
+  }
+
+  void _applyLatLng() {
+    _mainToiletData['lat'] = _lat;
+    _mainToiletData['lon'] = _lng;
+    _searchData['lat'] = _lat;
+    _searchData['lon'] = _lng;
+  }
+
   // void _setCnt(int newVal) => _cnt = newVal;
   // void _setQuery(String? value) => _query['value'] = value;
   void _setKey(GlobalKey key) => _globalKey = key;
-  void _setWorking(bool newVal) => _working = newVal;
-  void _setAdditional(bool newVal) => _additional = newVal;
-  void _setPage(int newVal) => _page = newVal;
-  void _setTotal(int? newVal) => _totalPages = newVal;
 
   void _setFilter(int index, bool value) {
     switch (index) {
       case 0:
-        _diaper = value;
+        _mainToiletData['diaper'] = value;
         return;
       case 1:
-        _kids = value;
+        _mainToiletData['kids'] = value;
         return;
       case 2:
-        _disabled = value;
+        _mainToiletData['disabled'] = value;
         return;
       default:
-        _allDay = value;
-        return;
-    }
-  }
-
-  void _applyFilter(int index) {
-    switch (index) {
-      case 0:
-        _mainToiletData['diaper'] = _diaper;
-        return;
-      case 1:
-        _mainToiletData['kids'] = _kids;
-        return;
-      case 2:
-        _mainToiletData['disabled'] = _disabled;
-        return;
-      default:
-        _mainToiletData['allDay'] = _allDay;
+        _mainToiletData['allDay'] = value;
         return;
     }
   }
@@ -450,43 +494,5 @@ class GlobalProvider with ChangeNotifier {
   void _addToiletList(ToiletList toiletList) =>
       _mainToiletList.addAll(toiletList);
 
-  void _addReviewList(ReviewList reviewData) => _reviewList.addAll(reviewData);
-
   void _initToiletList() => _mainToiletList.clear();
-
-  void _initReviewList() => _reviewList.clear();
-
-  void _setLoading(bool value) => _loading = value;
-
-  void _setLatLng(double newLat, double newLng) {
-    _lat = newLat;
-    _lng = newLng;
-    _mainToiletData['lat'] = newLat;
-    _mainToiletData['lon'] = newLng;
-    _mainToiletData['lat'] = newLat;
-    _mainToiletData['lon'] = newLng;
-  }
-
-  // void _refreshMain(bool showReview, int? toiletId) {
-  //   if (!_loading) {
-  //     _setLoading(true);
-  //     if (_loading) {
-  //       if (showReview) {
-  //         _initToiletList();
-  //         ToiletProvider().getNearToilet(_mainToiletData).then((data) {
-  //           _addToiletList(data);
-  //           _setLoading(false);
-  //         });
-  //       } else {
-  //         _initReviewList();
-  //         ReviewProvider()
-  //             .getReviewList(toiletId!, _totalPages!)
-  //             .then((reviewData) {
-  //           _addReviewList(reviewData);
-  //           _setLoading(false);
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
 }
