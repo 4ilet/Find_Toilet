@@ -58,12 +58,13 @@ class _SearchState extends State<Search> {
 
   void firstSearch() {
     if (readLoading(context)) {
+      initSearchList(context);
       getSearchList(context).then((_) {
         setLoading(context, false);
-      });
-      setState(() {
         refreshState = false;
       });
+      // setState(() {
+      // });
       increasePage(context);
     }
   }

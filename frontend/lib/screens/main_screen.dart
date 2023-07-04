@@ -65,12 +65,12 @@ class _MainState extends State<Main> {
             needClear: true,
           ).then((_) {
             setLoading(context, false);
-            increasePage(context);
-          });
-          setKey(context, globalKey);
-          setState(() {
             refreshState = false;
           });
+          increasePage(context);
+          setKey(context, globalKey);
+          // setState(() {
+          // });
         },
       );
     }

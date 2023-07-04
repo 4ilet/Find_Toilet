@@ -251,11 +251,17 @@ FutureToiletList getBookmarkList(
         .read<ReviewBookMarkProvider>()
         .getBookmarkList(folderId, getPage(context));
 
+void initBookmarkList(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().initBookmarkList();
+
 //* search list
 ToiletList searchToiletList(BuildContext context) =>
     context.read<MainSearchProvider>().searchToiletList;
 FutureToiletList getSearchList(BuildContext context) =>
     context.read<MainSearchProvider>().getSearchList();
+
+void initSearchList(BuildContext context) =>
+    context.read<MainSearchProvider>().initSearchList();
 
 //* init main/search/review/bookmark data
 FutureList initMainData(

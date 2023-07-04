@@ -334,6 +334,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
   void _addBookmarkList(ToiletList bookmarkList) =>
       _bookmarkList.addAll(bookmarkList);
 
+  void _initBookmarkList() => _bookmarkList.clear();
+
   //* public
   void addReviewList(ReviewList reviewData) => _addReviewList(reviewData);
 
@@ -354,6 +356,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
   }
 
   void initToiletInfo() => _initToiletInfo();
+
+  void initBookmarkList() => _initBookmarkList();
 }
 
 class MainSearchProvider with ChangeNotifier {
@@ -452,6 +456,8 @@ class MainSearchProvider with ChangeNotifier {
 
   void setSearchData(DynamicMap newData) => _setSearchData(newData);
 
+  void initSearchList() => _initSearchList();
+
   //* private
   FutureToiletList _getMainToiletList() async {
     final toiletData = await ToiletProvider().getNearToilet(_mainToiletData);
@@ -466,6 +472,8 @@ class MainSearchProvider with ChangeNotifier {
     notifyListeners();
     return toiletData;
   }
+
+  void _initSearchList() => _searchToiletList.clear();
 
   void _setSearchData(DynamicMap newData) async {
     _searchData.addAll(newData);

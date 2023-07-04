@@ -26,14 +26,13 @@ class BookMarkList extends StatefulWidget {
 class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
   double appBarHeight = 0;
+  bool refreshState = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        initLoadingData(context);
-        initData();
         controller.addListener(
           () {
             if (controller.position.pixels >=
@@ -64,8 +63,8 @@ class _BookMarkListState extends State<BookMarkList> {
         folderId: widget.folderId,
       ).then((_) {
         setLoading(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
@@ -77,13 +76,25 @@ class _BookMarkListState extends State<BookMarkList> {
       ).then((_) {
         setWorking(context, false);
         setAdditional(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (refreshState) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          initLoadingData(context);
+          initBookmarkList(context);
+          initData();
+          setState(() {
+            refreshState = false;
+          });
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
@@ -136,7 +147,9 @@ class _BookMarkListState extends State<BookMarkList> {
             isSearch: false,
             data: bookmarkList(context),
             refreshPage: () {
-              setState(() {});
+              setState(() {
+                refreshState = true;
+              });
             },
           )
         ],
