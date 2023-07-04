@@ -162,15 +162,21 @@ public class ToiletService {
 
         // 해당 화장실의 리뷰 목록
         List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
-        for (Review review : reviewList) {
-            review_cnt += 1;
-            review_score += review.getScore();
-            if(member != null) {
-                if (review.getMember().getMemberId() == memberId) { // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
-                    alreadyReviewed = review.getReviewId();
+        if (reviewList.size() > 0 ) {
+            for (Review review : reviewList) {
+                review_cnt += 1;
+                review_score += review.getScore();
+                if(member != null) {
+                    if (review.getMember().getMemberId() == memberId) { // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
+                        alreadyReviewed = review.getReviewId();
+                    }
                 }
             }
+            toiletDto.setScore(Double.valueOf(String.format("%.2f", review_score / review_cnt)));
+        }else{
+            toiletDto.setScore((double) 0);
         }
+
         if(member != null){
             // 로그인한 상태라면 유저가 해당 화장실을 북마크했는지 확인
             List<Folder> folderList = folderRepository.findAllByMember(member);
@@ -184,7 +190,7 @@ public class ToiletService {
 
         toiletDto.setReviewId(alreadyReviewed);
         toiletDto.setComment(review_cnt);
-        toiletDto.setScore(Double.valueOf(String.format("%.2f", review_score / review_cnt)));
+
 
         result.put("content", toiletDto);
 

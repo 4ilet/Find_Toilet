@@ -32,7 +32,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
 
-    public void postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto){
+    public void postReview(long memberId, long toiletId, ReviewDto.PostReviewDto postReviewDto) {
         LOGGER.info("CALL postReview");
         Member member = memberRepository.findById(memberId);
         Toilet toilet = toiletRepository.findById(toiletId).orElse(null);
@@ -40,16 +40,16 @@ public class ReviewService {
             throw new NullPointerException("존재하지 않는 회원입니다");
         }
 
-        if (toilet == null){
+        if (toilet == null) {
             throw new NullPointerException("존재하지 않는 화장실입니다");
         }
 
-        if (postReviewDto.getComment().isEmpty()){
+        if (postReviewDto.getComment().isEmpty()) {
             throw new IllegalArgumentException("리뷰를 작성하지 않았습니다");
         }
 
-        float score = (float)postReviewDto.getScore();
-        if ( score < 0  || score > 5){
+        float score = (float) postReviewDto.getScore();
+        if (score < 0 || score > 5) {
             throw new IllegalArgumentException("점수는 0 ~ 5 사이의 점수를 입력해주세요");
         }
         List<Review> alreadyPostedReviewByMember = reviewRepository.findAllByMember(member);
