@@ -18,13 +18,14 @@ class CustomSearchBar extends StatefulWidget {
   final bool isMain, showReview;
   final String? query;
   final ReturnVoid? onSearchMode;
+  final ReturnVoid refreshPage;
   // final void Function(String value) onChange;
   // final ReturnVoid onSearchAction;
   const CustomSearchBar({
     super.key,
     required this.isMain,
     this.showReview = false,
-    // required this.refreshPage,
+    required this.refreshPage,
     this.onSearchMode,
     this.query,
     // required this.onSearchAction,
@@ -144,14 +145,20 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       } else {
         await showModal(
           context,
-          page: LoginConfirmModal(
-            page: const BookMarkFolderList(),
-            isMain: widget.isMain,
-            showReview: widget.showReview,
-            toiletId: getToiletId(context),
-          ),
+          page: hideModal(context)
+              ? LoginConfirmModal(
+                  showReview: widget.showReview,
+                  toiletId: getToiletId(context),
+                  isMain: widget.isMain,
+                  afterLogin: () {
+                    setState(() {});
+                  },
+                )
+              : JoinModal(
+                  showReview: false,
+                  refreshPage: widget.refreshPage,
+                ),
         );
-        // widget.refreshPage();
       }
       setState(() {
         enabledBookMark = true;
@@ -197,9 +204,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                             ? Settings(
                                 toiletId: getToiletId(context),
                                 showReview: widget.showReview,
-                                // refreshPage: widget.refreshPage,
+                                refreshPage: widget.refreshPage,
                               )
                             : const Main(),
+                        afterPush: () {
+                          setState(() {});
+                        },
                       ),
                       color: CustomColors.blackColor,
                     ),

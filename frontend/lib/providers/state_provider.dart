@@ -105,6 +105,7 @@ class ApplyChangeProvider with ChangeNotifier {
 
 //* setttings
 class SettingsProvider with ChangeNotifier {
+  static late bool _hideModal;
   static late int _magnigyIdx, _radiusIdx;
   static int? _fontIdx;
   static String? _fontState;
@@ -120,6 +121,7 @@ class SettingsProvider with ChangeNotifier {
   get magnigyState => _magnigyState;
   get radiusState => _radiusState;
   get radius => _valueList[_radiusIdx];
+  get hideModal => _hideModal;
 
   FutureBool initSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -134,6 +136,8 @@ class SettingsProvider with ChangeNotifier {
 
     _radiusIdx = prefs.getInt('radiusIdx') ?? 1;
     _radiusState = _optionList[2][_radiusIdx];
+
+    _hideModal = prefs.getBool('join') ?? false;
     notifyListeners();
 
     return true;
@@ -164,6 +168,11 @@ class SettingsProvider with ChangeNotifier {
         _applyRadius();
         _setRadius();
     }
+    notifyListeners();
+  }
+
+  void setJoin() {
+    _setJoin();
     notifyListeners();
   }
 
@@ -202,6 +211,12 @@ class SettingsProvider with ChangeNotifier {
   void _applyShowMagnify() {
     _magnigyIdx = 1 - _magnigyIdx;
     _magnigyState = _optionList[0][_magnigyIdx];
+  }
+
+  void _setJoin() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('join', true);
+    _hideModal = true;
   }
 }
 
@@ -343,6 +358,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
 
 class MainSearchProvider with ChangeNotifier {
   static GlobalKey? _globalKey;
+  static bool checked = false;
   static final StringList _sortValues = ['distance', 'score', 'comment'];
   // static int _cnt = 20;
   // static final Map<String, String?> _query = {'value': null};

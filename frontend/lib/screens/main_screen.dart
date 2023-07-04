@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 
 class Main extends StatefulWidget {
   final bool showReview;
+  final ReturnVoid? refreshPage;
   const Main({
     super.key,
     this.showReview = false,
+    this.refreshPage,
   });
 
   @override
@@ -19,9 +21,9 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  // DynamicMap query = {'value': null};
   final globalKey = GlobalKey<ScaffoldState>();
   double paddingTop = 0;
+  bool refreshState = true;
 
   @override
   void initState() {
@@ -31,37 +33,9 @@ class _MainState extends State<Main> {
         setState(() {
           paddingTop = statusBarHeight(context);
         });
-        initLoadingData(context);
-        initMainData(
-          context,
-          showReview: widget.showReview,
-          needClear: true,
-        ).then((_) {
-          setLoading(context, false);
-          increasePage(context);
-        });
-        setKey(context, globalKey);
       },
     );
   }
-
-  // void onSearchAction() {
-  //   if (query['value'] != '') {
-  //     return routerPush(
-  //       context,
-  //       page: Search(
-  //         query: query['value'] ?? '',
-  //       ),
-  //     )();
-  //   }
-  //   showModal(
-  //     context,
-  //     page: const AlertModal(
-  //       title: '검색어 입력',
-  //       content: '검색어를 입력해주세요',
-  //     ),
-  //   );
-  // }
 
   void refreshMain(int index) {
     print('refresh main! ${readLoading(context)}');
@@ -81,79 +55,111 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     print('main build');
+    if (refreshState) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          initLoadingData(context);
+          initMainData(
+            context,
+            showReview: widget.showReview,
+            needClear: true,
+          ).then((_) {
+            setLoading(context, false);
+            increasePage(context);
+          });
+          setKey(context, globalKey);
+          setState(() {
+            refreshState = false;
+          });
+        },
+      );
+    }
     return WillPopScope(
-      onWillPop: widget.showReview
-          ? () {
-              routerPop(context)();
-              return Future.value(false);
-            }
-          : () => exitApp(context),
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          key: globalKey,
-          resizeToAvoidBottomInset: false,
-          body: Padding(
-            padding: EdgeInsets.only(top: paddingTop),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: screenWidth(context),
-                      height: screenHeight(context) - paddingTop,
-                      child: const MapScreen(),
-                    ),
-                  ],
-                ),
-                widget.showReview
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 70),
-                        child: Column(
-                          children: [
-                            FilterBox(
-                              onPressed: refreshMain,
-                              applyLong: !isDefaultTheme(context),
-                              isMain: true,
-                            ),
-                          ],
-                        ),
+        onWillPop: widget.showReview
+            ? () {
+                routerPop(context)();
+                return Future.value(false);
+              }
+            : () => exitApp(context),
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            key: globalKey,
+            resizeToAvoidBottomInset: false,
+            body: Padding(
+              padding: EdgeInsets.only(top: paddingTop),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: screenWidth(context),
+                        height: screenHeight(context) - paddingTop,
+                        child: const MapScreen(),
                       ),
-                ToiletBottomSheet(
-                  showReview: widget.showReview,
-                ),
-                Column(
-                  children: [
-                    CustomSearchBar(
-                      isMain: true,
-                      showReview: widget.showReview,
-                    ),
-                  ],
-                ),
-                watchPressed(context)
-                    ? Center(
-                        child: CustomBox(
-                          height: 80,
-                          width: isDefaultTheme(context) ? 300 : 350,
-                          color: const Color.fromRGBO(0, 0, 0, 0.6),
-                          child: const Center(
-                            child: CustomText(
-                              title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
-                              isCentered: true,
-                              color: CustomColors.whiteColor,
-                            ),
+                    ],
+                  ),
+                  widget.showReview
+                      ? const SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 70),
+                          child: Column(
+                            children: [
+                              FilterBox(
+                                onPressed: refreshMain,
+                                applyLong: !isDefaultTheme(context),
+                                isMain: true,
+                              ),
+                            ],
                           ),
                         ),
-                      )
-                    : const SizedBox(),
-              ],
+                  ToiletBottomSheet(
+                      showReview: widget.showReview,
+                      refreshPage: () {
+                        if (widget.refreshPage != null) {
+                          widget.refreshPage!();
+                        }
+                        setState(() {
+                          refreshState = true;
+                        });
+                      }),
+                  Column(
+                    children: [
+                      CustomSearchBar(
+                          isMain: true,
+                          showReview: widget.showReview,
+                          refreshPage: () {
+                            if (widget.refreshPage != null) {
+                              widget.refreshPage!();
+                            }
+                            setState(() {
+                              refreshState = true;
+                            });
+                          }),
+                    ],
+                  ),
+                  watchPressed(context)
+                      ? Center(
+                          child: CustomBox(
+                            height: 80,
+                            width: isDefaultTheme(context) ? 300 : 350,
+                            color: const Color.fromRGBO(0, 0, 0, 0.6),
+                            child: const Center(
+                              child: CustomText(
+                                title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
+                                isCentered: true,
+                                color: CustomColors.whiteColor,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

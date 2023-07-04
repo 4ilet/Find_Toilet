@@ -42,7 +42,7 @@ class CustomSilverList extends StatelessWidget {
   final int? toiletId, folderId;
   final String? toiletName;
   final List data;
-  // final ReturnVoid refreshPage;
+  final ReturnVoid refreshPage;
   const CustomSilverList({
     super.key,
     required this.showReview,
@@ -52,7 +52,7 @@ class CustomSilverList extends StatelessWidget {
     this.folderId,
     this.toiletName,
     required this.data,
-    // required this.refreshPage,
+    required this.refreshPage,
   });
 
   @override
@@ -86,11 +86,13 @@ class CustomSilverList extends StatelessWidget {
                               review: data[i],
                               toiletId: toiletId!,
                               toiletName: toiletName!,
+                              refreshPage: refreshPage,
                             )
                           : ListItem(
                               showReview: false,
                               toiletModel: data[i],
                               isMain: isMain,
+                              refreshPage: refreshPage,
                             );
 
                       return Column(

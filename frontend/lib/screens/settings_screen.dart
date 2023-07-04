@@ -15,12 +15,12 @@ import 'package:provider/provider.dart';
 class Settings extends StatefulWidget {
   final bool showReview;
   final int? toiletId;
-  // final ReturnVoid refreshPage;
+  final ReturnVoid refreshPage;
   const Settings({
     super.key,
     required this.showReview,
     this.toiletId,
-    // required this.refreshPage,
+    required this.refreshPage,
   });
 
   @override
@@ -28,9 +28,11 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  late bool hasToken;
   @override
   void initState() {
     super.initState();
+    hasToken = readToken(context) != null;
   }
 
   //* 모달 목록
@@ -59,7 +61,8 @@ class _SettingsState extends State<Settings> {
           title: '문의하기',
           content: emailBody ?? inquiryBody(),
           onPressed: () => Clipboard.setData(
-              ClipboardData(text: emailBody ?? inquiryBody())),
+            ClipboardData(text: emailBody ?? inquiryBody()),
+          ),
         ),
       );
     }
@@ -70,20 +73,22 @@ class _SettingsState extends State<Settings> {
     try {
       final token = readToken(context);
       if (token == null || token == '') {
-        login(context).then((result) {
-          refreshData(context, isMain: true, showReview: widget.showReview);
-        });
-        // showModal(
-        //   context,
-        //   page: JoinModal(
-        //     showReview: widget.showReview,
-        //     toiletId: widget.toiletId,
-        //   ),
-        // );
+        if (hideModal(context)) {
+          login(context).then((result) {});
+        } else {
+          showModal(
+            context,
+            page: JoinModal(
+              showReview: widget.showReview,
+              toiletId: widget.toiletId,
+              refreshPage: widget.refreshPage,
+              pageContext: context,
+            ),
+          );
+        }
       } else {
         changeToken(context, token: null, refresh: null);
         changeName(context, null);
-        refreshData(context, isMain: true, showReview: widget.showReview);
       }
     } catch (error) {
       setLoading(context, false);
@@ -145,6 +150,7 @@ class _SettingsState extends State<Settings> {
                                     ? FontSize.defaultSize
                                     : FontSize.largeDefaultSize,
                                 mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 applyTheme: false,
                               )
                             : Image.asset(kakaoLogin),
@@ -192,8 +198,19 @@ class _SettingsState extends State<Settings> {
                 flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    ExitPage(color: CustomColors.blackColor),
+                  children: [
+                    ExitPage(
+                      color: CustomColors.blackColor,
+                      onTap: () {
+                        routerPop(context)();
+                      },
+                      // , onTap: () {
+                      //   routerPop(context).then((_) {
+                      //     setState(() {
+
+                      //     });
+                      //   })}
+                    ),
                   ],
                 ),
               )

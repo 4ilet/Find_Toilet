@@ -44,17 +44,19 @@ class CustomButton extends StatelessWidget {
 //* 나가기 버튼
 class ExitPage extends StatelessWidget {
   final CustomColors color;
+  final void Function()? onTap;
   // final ReturnVoid? onTap;
   const ExitPage({
     super.key,
     this.color = CustomColors.whiteColor,
+    this.onTap,
     // this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: routerPop(context),
+      onTap: onTap ?? routerPop(context),
       child: Row(
         children: [
           CustomText(

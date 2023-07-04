@@ -1,6 +1,7 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -11,6 +12,7 @@ import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/list_view.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -386,9 +388,14 @@ class CustomModal extends StatelessWidget {
           ...children,
           isAlert
               ? Flexible(
-                  child: modalButton(
-                    onPressed: onPressed ?? routerPop(context),
-                    buttonText: buttonText,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      modalButton(
+                        onPressed: onPressed ?? routerPop(context),
+                        buttonText: buttonText,
+                      ),
+                    ],
                   ),
                 )
               : Flexible(
@@ -432,6 +439,7 @@ class CustomModal extends StatelessWidget {
 //* 상단 위 종료 버튼 존재 모달
 class CustomModalWithClose extends StatelessWidget {
   final String? title, font;
+  final Widget? titleWidget;
   final WidgetList children;
   final CustomColors titleColor, iconColor;
   final bool isBoldText;
@@ -440,6 +448,7 @@ class CustomModalWithClose extends StatelessWidget {
     super.key,
     this.title,
     required this.children,
+    this.titleWidget,
     this.titleColor = CustomColors.mainColor,
     this.iconColor = CustomColors.blackColor,
     this.isBoldText = true,
@@ -456,27 +465,28 @@ class CustomModalWithClose extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                title != null
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: CustomText(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  title != null
+                      ? CustomText(
                           title: title!,
                           color: titleColor,
                           isBoldText: isBoldText,
                           font: font,
                           fontSize: FontSize.smallSize,
-                        ),
-                      )
-                    : const SizedBox(),
-                CustomIconButton(
-                  color: iconColor,
-                  icon: closeIcon,
-                  onPressed: onClosed ?? routerPop(context),
-                )
-              ],
+                        )
+                      : titleWidget ?? const SizedBox(),
+                  CustomIconButton(
+                    color: iconColor,
+                    icon: closeIcon,
+                    onPressed: onClosed ?? routerPop(context),
+                  )
+                ],
+              ),
             ),
             ...children,
           ],
@@ -489,7 +499,15 @@ class CustomModalWithClose extends StatelessWidget {
 // * 삭제 확인 모달
 class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
-  const DeleteModal({super.key, required this.deleteMode, required this.id});
+  final ReturnVoid? refreshPage;
+  final BuildContext? reviewContext;
+  const DeleteModal({
+    super.key,
+    required this.deleteMode,
+    required this.id,
+    this.refreshPage,
+    this.reviewContext,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -512,12 +530,16 @@ class DeleteModal extends StatelessWidget {
         switch (deleteMode) {
           case 0:
             ReviewProvider().deleteReview(id).then((_) {
-              refreshData(context, isMain: true, showReview: false);
-              setToilet(context, getToilet(context)!);
+              ToiletProvider().getToilet(getToiletId(context)!).then((data) {
+                setToilet(reviewContext ?? context, data);
+                refreshPage!();
+              });
             });
             break;
           default:
-            await FolderProvider().deleteFolder(id);
+            FolderProvider().deleteFolder(id).then((_) {
+              changeRefresh(context);
+            });
             break;
         }
         if (!context.mounted) return;
@@ -529,7 +551,6 @@ class DeleteModal extends StatelessWidget {
             content: '성공적으로 삭제 작업이 완료되었습니다.',
           ),
         );
-        changeRefresh(context);
       } catch (error) {
         routerPop(context)();
         showModal(
@@ -550,10 +571,11 @@ class DeleteModal extends StatelessWidget {
       children: [
         Center(
           child: CustomText(
-              title: message,
-              isCentered: true,
-              fontSize: FontSize.defaultSize,
-              color: CustomColors.blackColor),
+            title: message,
+            isCentered: true,
+            fontSize: FontSize.defaultSize,
+            color: CustomColors.blackColor,
+          ),
         ),
       ],
     );
@@ -564,10 +586,12 @@ class DeleteModal extends StatelessWidget {
 class AddOrDeleteBookMarkModal extends StatefulWidget {
   final int toiletId;
   final List folderId;
+  final ReturnVoid afterWork;
   const AddOrDeleteBookMarkModal({
     super.key,
     required this.toiletId,
     required this.folderId,
+    required this.afterWork,
   });
 
   @override
@@ -606,12 +630,19 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
         toiletId: widget.toiletId,
       )
           .then((_) {
-        refreshData(context, isMain: true, showReview: false);
         changeRefresh(context);
         routerPop(context)();
         showModal(
           context,
           page: const AlertModal(title: '즐겨찾기 추가/삭제 완료', content: '작업이 성공했습니다'),
+        ).then((value) {
+          widget.afterWork();
+        });
+      }).catchError((_) {
+        showModal(
+          context,
+          page: const AlertModal(
+              title: '오류 발생', content: '오류가 발생해 작업이 처리되지 않았습니다'),
         );
       });
     }
@@ -827,7 +858,7 @@ class AlertModal extends StatelessWidget {
 class LoginConfirmModal extends StatelessWidget {
   // final GlobalKey? globalKey;
   // final ReturnVoid nextAction;
-  // final ReturnVoid afterLogin;
+  final ReturnVoid afterLogin;
   final bool showReview, isMain;
   final int? toiletId;
   final Widget? page;
@@ -836,9 +867,7 @@ class LoginConfirmModal extends StatelessWidget {
     required this.showReview,
     required this.isMain,
     this.toiletId,
-    // required this.afterLogin,
-    // this.globalKey,
-    // required this.nextAction,
+    required this.afterLogin,
     this.page,
   });
 
@@ -853,20 +882,11 @@ class LoginConfirmModal extends StatelessWidget {
         )
       ],
       onPressed: () async {
-        // SchedulerBinding.instance.addPostFrameCallback(
-        //   (_) {
-
         //* login
 
         final newContext = getKey(context)?.currentContext;
         login(newContext ?? context).then((_) {
-          // if (page != null) {
-          //   routerPush(context, page: page!);
-          // } else {
-          //   changeRefresh(context);
-          // }
-          refreshData(context, isMain: isMain, showReview: showReview);
-
+          afterLogin();
           routerPop(context)();
         });
       },
@@ -890,14 +910,16 @@ class ErrorModal extends StatelessWidget {
 
 //* 회원가입 수집 정보
 class JoinModal extends StatefulWidget {
-  // final ReturnVoid onPressed;
+  final ReturnVoid refreshPage;
   final bool showReview;
   final int? toiletId;
+  final BuildContext? pageContext;
   const JoinModal({
     super.key,
-    // required this.onPressed,
+    required this.refreshPage,
     required this.showReview,
     this.toiletId,
+    this.pageContext,
   });
 
   @override
@@ -913,9 +935,12 @@ class _JoinModalState extends State<JoinModal> {
   }
 
   void joinOrLogin() {
-    final newContext = getKey(context)?.currentContext;
-    login(context).then((result) {
-      refreshData(context, isMain: true, showReview: widget.showReview);
+    if (checked) {
+      setJoin(context);
+    }
+    final newContext = widget.pageContext ?? getKey(context)?.currentContext;
+    login(newContext ?? context).then((result) {
+      widget.refreshPage();
     });
     routerPop(context)();
   }
@@ -925,130 +950,123 @@ class _JoinModalState extends State<JoinModal> {
     return CustomModalWithClose(
       titleColor: CustomColors.mainColor,
       iconColor: CustomColors.mainColor,
+      titleWidget: RichText(
+        text: TextSpan(
+          text: '화장실을 찾아서',
+          style: titleStyle(color: mainColor),
+          children: [
+            TextSpan(
+              text: '는\n회원가입하실 때\n이런 정보를\n제공 받아요!',
+              style: titleStyle(),
+            ),
+          ],
+        ),
+      ),
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: CustomBox(
-            height: screenHeight(context) * 0.5,
-            child: Column(
-              children: [
-                Row(
-                  children: const [
-                    CustomText(
-                      title: '화장실을 찾아서',
-                      color: CustomColors.mainColor,
-                      font: kimm,
-                    ),
-                    CustomText(title: '는', font: kimm),
-                  ],
-                ),
-                Row(
-                  children: const [
-                    CustomText(title: '회원가입하실 때', font: kimm),
-                  ],
-                ),
-                Row(
-                  children: const [
-                    Flexible(
-                      child: CustomText(title: '이런 정보를 제공 받아요!', font: kimm),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: const [
-                    CustomText(
-                      title: '수집 정보 : 이름, 이메일',
-                      fontSize: FontSize.smallSize,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: const [
-                    CustomText(
-                      title: '수집 이유 : 회원 식별',
-                      fontSize: FontSize.smallSize,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Flexible(
-                //   // flex: 5,
-                //   child: GestureDetector(
-                //     onTap: () {},
-                //     child: const TextWithIcon(
-                //       flex: 8,
-                //       icon: linkIcon,
-                //       text: '개인 정보 및 위치 처리방침',
-                //       textColor: CustomColors.mainColor,
-                //       iconColor: CustomColors.mainColor,
-                //       fontSize: FontSize.smallSize,
-                //       hasUnderline: true,
-                //     ),
-                //   ),
-                // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      // flex: 5,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: const TextWithIcon(
-                          flex: 8,
-                          icon: linkIcon,
-                          text: '개인 정보 및 위치 처리방침',
-                          textColor: CustomColors.mainColor,
-                          iconColor: CustomColors.mainColor,
-                          fontSize: FontSize.smallSize,
-                        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: CustomBox(
+              height: screenHeight(context) * 0.4,
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  Row(
+                    children: const [
+                      CustomText(
+                        title: '수집 정보 : 이름, 이메일',
+                        fontSize: FontSize.smallSize,
                       ),
-                    ),
-                    // const Flexible(
-                    //   child: CustomText(
-                    //     title: '을',
-                    //     fontSize: FontSize.smallSize,
-                    //   ),
-                    // )
-                  ],
-                ),
-                const CustomText(
-                  title: '을 통해 더 자세히 확인하실 수 있어요',
-                  fontSize: FontSize.smallSize,
-                ),
-                const SizedBox(height: 30),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: changeChecked,
-                    child: TextWithIcon(
-                      icon: checked ? checkedIcon : circleIcon,
-                      text: '다시 보지 않기',
+                    ],
+                  ),
+                  Row(
+                    children: const [
+                      CustomText(
+                        title: '수집 이유 : 회원 식별',
+                        fontSize: FontSize.smallSize,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        const WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Icon(linkIcon, color: mainColor),
+                        ),
+                        TextSpan(
+                          text: '개인 정보 및 위치 처리방침',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              showModal(
+                                context,
+                                page: const PolicyModal(),
+                              );
+                            },
+                          style: TextStyle(
+                            height: 1.5,
+                            color: mainColor,
+                            decoration: TextDecoration.underline,
+                            fontSize: isDefaultTheme(context)
+                                ? smallSize
+                                : largeSmallSize,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '을 통해 더 자세히 확인하실 수 있어요',
+                          style: TextStyle(
+                            height: 1.5,
+                            color: blackColor,
+                            fontSize: isDefaultTheme(context)
+                                ? smallSize
+                                : largeSmallSize,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomButton(
-                      onPressed: routerPop(context),
-                      buttonText: '취소',
-                      buttonColor: greyColor,
-                      textColor: CustomColors.whiteColor,
+                  const SizedBox(height: 20),
+                  Flexible(
+                    child: GestureDetector(
+                      onTap: changeChecked,
+                      child: TextWithIcon(
+                        icon: checked ? checkedIcon : circleIcon,
+                        text: '다시 보지 않기',
+                      ),
                     ),
-                    CustomButton(
-                      onPressed: joinOrLogin,
-                      buttonText: '회원가입',
-                      buttonColor: mainColor,
-                      textColor: CustomColors.whiteColor,
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CustomButton(
+                        onPressed: routerPop(context),
+                        buttonText: '취소',
+                        buttonColor: greyColor,
+                        textColor: CustomColors.whiteColor,
+                      ),
+                      CustomButton(
+                        onPressed: joinOrLogin,
+                        buttonText: '회원가입',
+                        buttonColor: mainColor,
+                        textColor: CustomColors.whiteColor,
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ],
     );
   }
+
+  TextStyle titleStyle({Color? color}) => TextStyle(
+        color: color ?? blackColor,
+        fontFamily: kimm,
+        fontSize: isDefaultTheme(context) ? defaultSize : largeDefaultSize,
+        height: 1.3,
+      );
 }
