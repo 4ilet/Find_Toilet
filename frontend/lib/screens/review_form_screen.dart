@@ -1,4 +1,3 @@
-import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/review_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
@@ -17,6 +16,7 @@ class ReviewForm extends StatefulWidget {
   final String? preComment;
   final int reviewId;
   final bool showReview;
+  final ReturnVoid afterWork;
   const ReviewForm({
     super.key,
     required this.toiletName,
@@ -25,6 +25,7 @@ class ReviewForm extends StatefulWidget {
     this.preScore,
     required this.reviewId,
     required this.showReview,
+    required this.afterWork,
   });
 
   @override
@@ -34,11 +35,9 @@ class ReviewForm extends StatefulWidget {
 class _ReviewFormState extends State<ReviewForm> {
   DynamicMap reviewData = {'comment': '', 'score': 0.0};
   bool enabled = true;
-  late ToiletModel toiletInfo;
 
   void initData() async {
     final data = await ReviewProvider().getReview(widget.reviewId);
-    toiletInfo = await ToiletProvider().getToilet(widget.toiletId);
     changeScore(data.score.toInt() - 1);
     changeComment(data.comment);
   }
@@ -77,14 +76,10 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((_) {
-            refreshData(
-              context,
-              isMain: true,
-              showReview: widget.showReview,
-              toiletId: widget.toiletId,
-            );
             if (widget.showReview) {
-              setToilet(context, toiletInfo);
+              ToiletProvider().getToilet(widget.toiletId).then((data) {
+                setToilet(context, data);
+              });
             }
           });
 
@@ -96,14 +91,10 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((result) {
-            refreshData(
-              context,
-              isMain: true,
-              showReview: true,
-              toiletId: widget.toiletId,
-            );
             if (widget.showReview) {
-              setToilet(context, getToilet(context)!);
+              ToiletProvider().getToilet(widget.toiletId).then((data) {
+                setToilet(context, data);
+              });
             }
           });
           state = '수정';
@@ -117,6 +108,7 @@ class _ReviewFormState extends State<ReviewForm> {
           ),
         ).then((_) {
           routerPop(context)();
+          widget.afterWork();
         });
       }
     } catch (error) {

@@ -27,6 +27,8 @@ class _SearchState extends State<Search> {
   final scrollController = ScrollController();
   final cnt = 10;
   bool expandSearch = false;
+  bool refreshState = true;
+  final globalKey = GlobalKey<ScaffoldState>();
 
   // DynamicMap searchData = {};
   late String selectedValue;
@@ -35,8 +37,6 @@ class _SearchState extends State<Search> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      initLoadingData(context);
-      firstSearch();
       scrollController.addListener(() async {
         if (scrollController.position.pixels >=
             scrollController.position.maxScrollExtent * 0.9) {
@@ -60,8 +60,11 @@ class _SearchState extends State<Search> {
     if (readLoading(context)) {
       getSearchList(context).then((_) {
         setLoading(context, false);
-        increasePage(context);
       });
+      setState(() {
+        refreshState = false;
+      });
+      increasePage(context);
     }
   }
 
@@ -70,8 +73,8 @@ class _SearchState extends State<Search> {
       getSearchList(context).then((_) {
         setAdditional(context, false);
         setWorking(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
@@ -87,6 +90,15 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    if (refreshState) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          initLoadingData(context);
+          firstSearch();
+          setKey(context, globalKey);
+        },
+      );
+    }
     return WillPopScope(
       onWillPop: () {
         removedRouterPush(context, page: const Main());
@@ -95,6 +107,8 @@ class _SearchState extends State<Search> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          key: globalKey,
+          resizeToAvoidBottomInset: false,
           backgroundColor: mainColor,
           body: Padding(
             padding: EdgeInsets.only(top: statusBarHeight(context)),
@@ -111,7 +125,13 @@ class _SearchState extends State<Search> {
                     isMain: false,
                     query: widget.query,
                     onSearchMode: changeExpandSearch,
-                    // refreshPage: search,
+                    refreshPage: () {
+                      // initLoadingData(context);
+                      // firstSearch();
+                      setState(() {
+                        refreshState = true;
+                      });
+                    },
                   ),
                   topOfAppBar(),
                 ],
@@ -122,6 +142,13 @@ class _SearchState extends State<Search> {
                   isMain: false,
                   isSearch: true,
                   data: searchToiletList(context),
+                  refreshPage: () {
+                    // initLoadingData(context);
+                    // firstSearch();
+                    setState(() {
+                      refreshState = true;
+                    });
+                  },
                   // refreshPage: search,
                 )
               ],

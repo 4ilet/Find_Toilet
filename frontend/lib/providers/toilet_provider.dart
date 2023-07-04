@@ -52,6 +52,7 @@ class ToiletProvider extends ApiProvider {
               eachToiletUrl(toiletId),
             );
       final data = response.data['content'];
+      print('get toilet => $data');
       if (data.isNotEmpty) {
         ToiletModel toiletModel = ToiletModel.fromJson(data);
         return toiletModel;

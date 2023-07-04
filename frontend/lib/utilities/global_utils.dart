@@ -17,14 +17,22 @@ Future<bool?> removedRouterPush(BuildContext context, {required Widget page}) =>
     );
 
 //* 화면 이동
-ReturnVoid routerPush(BuildContext context, {required Widget page}) {
-  return () =>
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+Future<bool?> Function() routerPush(BuildContext context,
+    {required Widget page, ReturnVoid? afterPush}) {
+  return () {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page))
+        .then((value) {
+      if (afterPush != null) {
+        afterPush();
+      }
+    });
+    return Future.value(false);
+  };
 }
 
 //* 나가기, 뒤로 가기
 ReturnVoid routerPop(BuildContext context) {
-  return () => Navigator.pop(context);
+  return () => Navigator.pop<Future<bool?>>(context);
 }
 
 //* 모달 띄우기
@@ -261,35 +269,6 @@ FutureList initMainData(
   return showReview ? getReviewList(context) : getMainToiletList(context);
 }
 
-void refreshData(
-  BuildContext context, {
-  required bool isMain,
-  required bool showReview,
-  int? toiletId,
-}) async {
-  if (isMain) {
-    setLoading(context, true);
-    initPage(context);
-    initMainData(
-      context,
-      showReview: false,
-      needClear: true,
-    ).then((_) {
-      setLoading(context, false);
-      if (showReview) {
-        setLoading(context, true);
-        initMainData(
-          context,
-          showReview: true,
-          needClear: true,
-        ).then((_) {
-          setLoading(context, false);
-        });
-      }
-    });
-  }
-}
-
 //* scroll
 
 bool readLoading(BuildContext context) =>
@@ -337,4 +316,9 @@ void setKey(BuildContext context, GlobalKey key) =>
 GlobalKey? getKey(BuildContext context) =>
     context.read<MainSearchProvider>().globalKey;
 
-//* radius
+//* 회원가입 모달
+bool hideModal(BuildContext context) =>
+    context.read<SettingsProvider>().hideModal;
+
+void setJoin(BuildContext context) =>
+    context.read<SettingsProvider>().setJoin();

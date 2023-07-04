@@ -25,7 +25,6 @@ class BookMarkList extends StatefulWidget {
 
 class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
-  final textKey = GlobalKey();
   double appBarHeight = 0;
 
   @override
@@ -108,10 +107,9 @@ class _BookMarkListState extends State<BookMarkList> {
                 ),
               ),
               Flexible(
-                key: textKey,
                 flex: 5,
                 child: CustomText(
-                  title: '${widget.folderName}${onRefresh(context)}',
+                  title: widget.folderName,
                   fontSize: FontSize.titleSize,
                   color: CustomColors.whiteColor,
                   font: kimm,
@@ -137,7 +135,9 @@ class _BookMarkListState extends State<BookMarkList> {
             isMain: false,
             isSearch: false,
             data: bookmarkList(context),
-            // addScrollListener: addScrollListener,
+            refreshPage: () {
+              setState(() {});
+            },
           )
         ],
       ),
