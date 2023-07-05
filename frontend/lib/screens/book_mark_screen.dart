@@ -26,14 +26,13 @@ class BookMarkList extends StatefulWidget {
 class _BookMarkListState extends State<BookMarkList> {
   final controller = ScrollController();
   double appBarHeight = 0;
+  bool refreshState = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        initLoadingData(context);
-        initData();
         controller.addListener(
           () {
             if (controller.position.pixels >=
@@ -42,7 +41,7 @@ class _BookMarkListState extends State<BookMarkList> {
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
                   setWorking(context, true);
-                  Future.delayed(const Duration(milliseconds: 2000), () {
+                  Future.delayed(const Duration(seconds: 3), () {
                     if (!getAdditional(context)) {
                       setAdditional(context, true);
                       moreData();
@@ -64,32 +63,51 @@ class _BookMarkListState extends State<BookMarkList> {
         folderId: widget.folderId,
       ).then((_) {
         setLoading(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
   void moreData() {
     if (getAdditional(context)) {
+      print('요청!!!!!!!!!!!!!!!!!!!!!!');
       getBookmarkList(
         context,
         folderId: widget.folderId,
       ).then((_) {
         setWorking(context, false);
         setAdditional(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (refreshState) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          initLoadingData(context);
+          initBookmarkList(context);
+          initData();
+          setState(() {
+            refreshState = false;
+          });
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
         listScroll: controller,
         toolbarHeight: 100,
-        expandedHeight: 100,
+        expandedHeight: isDefaultTheme(context)
+            ? widget.folderName.length > 7
+                ? 110
+                : 60
+            : widget.folderName.length > 6
+                ? 120
+                : 70,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
           padding:
@@ -136,7 +154,9 @@ class _BookMarkListState extends State<BookMarkList> {
             isSearch: false,
             data: bookmarkList(context),
             refreshPage: () {
-              setState(() {});
+              setState(() {
+                refreshState = true;
+              });
             },
           )
         ],

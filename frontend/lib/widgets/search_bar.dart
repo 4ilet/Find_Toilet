@@ -167,6 +167,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void onChange(String? value) {
+    print('value => $value');
     searchData['keyword'] = value;
     if (value == null) {
       setState(() {});
@@ -188,6 +189,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 Focus(
                   onFocusChange: changeShowVar,
                   child: CustomTextField(
+                    textHeight: 1.2,
                     width: screenWidth(context) * 0.8,
                     padding: const EdgeInsetsDirectional.all(0),
                     boxShadow: const [defaultShadow],
@@ -195,7 +197,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     searchMode: true,
                     onSubmitted: (_) => onSearchAction(),
                     initValue: searchData['keyword'],
-                    hintText: '검색어를 입력하세요',
+                    hintText: widget.isMain ? '검색어를 입력하세요' : '',
                     prefixIcon: CustomIconButton(
                       icon: widget.isMain ? hamburgerIcon : exitIcon,
                       onPressed: routerPush(
@@ -207,9 +209,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                                 refreshPage: widget.refreshPage,
                               )
                             : const Main(),
-                        afterPush: () {
-                          setState(() {});
-                        },
+                        afterPush: widget.refreshPage,
                       ),
                       color: CustomColors.blackColor,
                     ),
