@@ -48,7 +48,6 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
       // controller.zoom = 16;
-      refreshMap(context, isMain: true, showReview: false);
       // print(GlobalProvider().mainToiletList.length);
       Future.delayed(const Duration(milliseconds: 200), () {
         print("데이터 앞");

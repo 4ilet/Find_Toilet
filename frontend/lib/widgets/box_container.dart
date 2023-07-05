@@ -247,12 +247,14 @@ class _AddBoxState extends State<AddBox> {
 class ListItem extends StatelessWidget {
   final bool isMain, showReview;
   final ToiletModel? toiletModel;
+  final ReturnVoid refreshPage;
 
   const ListItem({
     super.key,
     this.toiletModel,
     required this.isMain,
     required this.showReview,
+    required this.refreshPage,
   });
 
   @override
@@ -307,33 +309,52 @@ class ListItem extends StatelessWidget {
               toiletId: data.toiletId,
               reviewId: data.reviewId,
               showReview: showReview,
+              afterWork: refreshPage,
             ))();
       } else {
-        showModal(context,
-            page: LoginConfirmModal(
-              showReview: showReview,
-              toiletId: data.toiletId,
-              isMain: isMain,
-            ));
+        showModal(
+          context,
+          page: hideModal(context)
+              ? LoginConfirmModal(
+                  showReview: showReview,
+                  toiletId: data.toiletId,
+                  isMain: isMain,
+                  afterLogin: refreshPage,
+                )
+              : JoinModal(
+                  showReview: false,
+                  refreshPage: refreshPage,
+                ),
+        );
       }
     }
 
     void pressedHeart() {
-      if (readToken(context) != null) {
+      final token = readToken(context);
+      if (token != null && token != '') {
         showModal(
           context,
           page: AddOrDeleteBookMarkModal(
             toiletId: data.toiletId,
             folderId: data.folderId,
+            afterWork: refreshPage,
           ),
         );
       } else {
-        showModal(context,
-            page: LoginConfirmModal(
-              showReview: showReview,
-              toiletId: data.toiletId,
-              isMain: isMain,
-            ));
+        showModal(
+          context,
+          page: hideModal(context)
+              ? LoginConfirmModal(
+                  showReview: showReview,
+                  toiletId: data.toiletId,
+                  isMain: isMain,
+                  afterLogin: refreshPage,
+                )
+              : JoinModal(
+                  showReview: false,
+                  refreshPage: refreshPage,
+                ),
+        );
       }
     }
 
@@ -351,7 +372,10 @@ class ListItem extends StatelessWidget {
         setToilet(context, data);
         routerPush(
           context,
-          page: const Main(showReview: true),
+          page: Main(
+            showReview: true,
+            refreshPage: refreshPage,
+          ),
         )();
       }
     }
@@ -736,11 +760,13 @@ class ReviewBox extends StatelessWidget {
   final String toiletName;
   final ReviewModel review;
   final int toiletId;
+  final ReturnVoid refreshPage;
   const ReviewBox({
     super.key,
     required this.review,
     required this.toiletId,
     required this.toiletName,
+    required this.refreshPage,
   });
 
   @override
@@ -787,6 +813,7 @@ class ReviewBox extends StatelessWidget {
                                         preComment: review.comment,
                                         preScore: review.score,
                                         showReview: true,
+                                        afterWork: refreshPage,
                                       ),
                                     ),
                                   ),
@@ -800,6 +827,8 @@ class ReviewBox extends StatelessWidget {
                                       page: DeleteModal(
                                         deleteMode: 0,
                                         id: review.id,
+                                        refreshPage: refreshPage,
+                                        reviewContext: context,
                                       ),
                                     ),
                                   ),

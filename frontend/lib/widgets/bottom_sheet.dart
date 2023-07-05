@@ -13,10 +13,12 @@ import 'package:provider/provider.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
+  final ReturnVoid refreshPage;
 
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
+    required this.refreshPage,
   });
 
   @override
@@ -131,9 +133,10 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                     ),
                   ),
                   widget.showReview
-                      ? const ListItem(
+                      ? ListItem(
                           showReview: true,
                           isMain: true,
+                          refreshPage: widget.refreshPage,
                         )
                       : const Padding(
                           padding: EdgeInsets.symmetric(
@@ -159,6 +162,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
               data: widget.showReview
                   ? reviewList(context)
                   : mainToiletList(context),
+              refreshPage: widget.refreshPage,
             ),
           ],
         );
