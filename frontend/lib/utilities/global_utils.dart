@@ -290,6 +290,35 @@ void refreshData(
   }
 }
 
+void refreshMap(
+  BuildContext context, {
+  required bool isMain,
+  required bool showReview,
+  int? toiletId,
+}) async {
+  if (isMain) {
+    setLoading(context, true);
+    initPage(context);
+    initMainData(
+      context,
+      showReview: false,
+      needClear: false,
+    ).then((_) {
+      setLoading(context, false);
+      if (showReview) {
+        setLoading(context, true);
+        initMainData(
+          context,
+          showReview: true,
+          needClear: true,
+        ).then((_) {
+          setLoading(context, false);
+        });
+      }
+    });
+  }
+}
+
 //* scroll
 
 bool readLoading(BuildContext context) =>

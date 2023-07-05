@@ -48,9 +48,12 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
       // controller.zoom = 16;
-      refreshData(context, isMain: true, showReview: false);
+      refreshMap(context, isMain: true, showReview: false);
       // print(GlobalProvider().mainToiletList.length);
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        print("데이터 앞");
+        print(mainToiletList(context).length);
+        print("데이터 뒤");
         if (mainToiletList(context).isNotEmpty) {
           toiletMarkers.clear();
           for (int i = 0; i < mainToiletList(context).length; i++) {
@@ -253,6 +256,7 @@ class MapScreenState extends State<MapScreen> {
                   ),
                   ...markerWidgets,
                   ...toiletMarkerWidgets,
+                  // ...(!getLoading(context) ? toiletMarkerWidgets : []),
                 ],
               ),
             ),

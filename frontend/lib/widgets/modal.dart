@@ -386,9 +386,14 @@ class CustomModal extends StatelessWidget {
           ...children,
           isAlert
               ? Flexible(
-                  child: modalButton(
-                    onPressed: onPressed ?? routerPop(context),
-                    buttonText: buttonText,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      modalButton(
+                        onPressed: onPressed ?? routerPop(context),
+                        buttonText: buttonText,
+                      ),
+                    ],
                   ),
                 )
               : Flexible(
@@ -797,11 +802,13 @@ class NavigationModal extends StatelessWidget {
 class AlertModal extends StatelessWidget {
   final String title, content;
   final ReturnVoid? onPressed;
+  final double? width;
   const AlertModal({
     super.key,
     required this.title,
     required this.content,
     this.onPressed,
+    this.width,
   });
 
   @override
