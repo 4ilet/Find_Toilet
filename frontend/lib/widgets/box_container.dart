@@ -485,11 +485,11 @@ class ListItem extends StatelessWidget {
                   child: Row(
                     children: [
                       Flexible(
-                        // flex: 17,
                         child: TextWithIcon(
                           icon: locationIcon,
                           text: data.address,
                           flex: 18,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                         ),
                       ),
                     ],
@@ -505,6 +505,7 @@ class ListItem extends StatelessWidget {
                           icon: clockIcon,
                           text: data.duration,
                           flex: 10,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                         ),
                       ),
                     ],
@@ -520,8 +521,9 @@ class ListItem extends StatelessWidget {
                         child: TextWithIcon(
                           icon: starIcon,
                           text:
-                              '${data.score} (${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
+                              '${data.score.toStringAsFixed(2)} (${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
                           iconColor: CustomColors.yellowColor,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                         ),
                       ),
                       data.phoneNo != ''
@@ -532,6 +534,7 @@ class ListItem extends StatelessWidget {
                                 text: data.phoneNo,
                                 flex: 6,
                                 gap: 7,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                               ),
                             )
                           : const SizedBox(),

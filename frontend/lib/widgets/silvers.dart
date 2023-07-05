@@ -98,7 +98,7 @@ class CustomSilverList extends StatelessWidget {
                       return Column(
                         children: [
                           i < getPage(context) * cnt
-                              //  || !getAdditional(context)
+                              // || !getAdditional(context)
                               ? returnedWidget
                               : const SizedBox(),
                           i == data.length - 1 &&

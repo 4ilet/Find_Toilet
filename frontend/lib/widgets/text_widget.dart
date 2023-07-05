@@ -2,6 +2,7 @@ import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
+import 'package:find_toilet/widgets/icon.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -43,13 +44,13 @@ class CustomTextField extends StatelessWidget {
       child: Padding(
         padding: padding,
         child: TextField(
-          textAlignVertical: TextAlignVertical.bottom,
-          // textAlign: TextAlign.left,
           controller: TextEditingController(text: initValue),
           onChanged: onChanged,
           decoration: InputDecoration(
+            contentPadding:
+                EdgeInsets.only(top: isDefaultTheme(context) ? 13 : 12),
             border: InputBorder.none,
-            hintText: hintText,
+            // hintText: hintText,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
           ),
@@ -129,7 +130,7 @@ class TextWithIcon extends StatelessWidget {
     this.font,
     this.flex = 4,
     this.mainAxisAlignment = MainAxisAlignment.start,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
     this.gap = 10,
     this.applyTheme = true,
     this.hasUnderline = false,
@@ -145,8 +146,8 @@ class TextWithIcon extends StatelessWidget {
         Flexible(
           flex: 2,
           fit: FlexFit.loose,
-          child: Icon(
-            icon,
+          child: CustomIcon(
+            icon: icon,
             color: convertedColor(iconColor),
           ),
         ),

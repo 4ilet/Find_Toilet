@@ -102,12 +102,42 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  String optionTitle(int i) {
+    switch (i) {
+      case 0:
+        return context.watch<SettingsProvider>().magnigyState;
+      case 1:
+        return context.watch<SettingsProvider>().fontState;
+      default:
+        return context.watch<SettingsProvider>().radiusState;
+    }
+  }
+
+  final StringList menuList = [
+    '확대/축소 버튼',
+    '글자 크기',
+    '지도 반경',
+    '문의하기',
+    '개인/위치 정보 처리 방침',
+    '라이선스',
+    '도움말'
+  ];
+  final IconDataList iconList = [
+    scaleIcon,
+    fontIcon,
+    gpsIcon,
+    inquiryIcon,
+    policyIcon,
+    licenseIcon,
+    helpIcon,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 35),
         child: GestureDetector(
           onHorizontalDragEnd: (_) {
             routerPop(context)();
@@ -127,11 +157,10 @@ class _SettingsState extends State<Settings> {
                               textColor: CustomColors.blackColor,
                               fontSize: FontSize.smallSize,
                               onPressed: () {
-                                showModal(
-                                  context,
-                                  page:
-                                      const NicknameInputModal(isAlert: false),
-                                );
+                                showModal(context,
+                                    page: const NicknameInputModal(
+                                      isAlert: false,
+                                    ));
                               },
                               buttonText: '닉네임 변경',
                             )
@@ -201,15 +230,7 @@ class _SettingsState extends State<Settings> {
                   children: [
                     ExitPage(
                       color: CustomColors.blackColor,
-                      onTap: () {
-                        routerPop(context)();
-                      },
-                      // , onTap: () {
-                      //   routerPop(context).then((_) {
-                      //     setState(() {
-
-                      //     });
-                      //   })}
+                      onTap: routerPop(context),
                     ),
                   ],
                 ),
@@ -222,19 +243,8 @@ class _SettingsState extends State<Settings> {
   }
 
   Widget option(int i) {
-    String optionTitle() {
-      switch (i) {
-        case 0:
-          return context.watch<SettingsProvider>().magnigyState;
-        case 1:
-          return context.watch<SettingsProvider>().fontState;
-        default:
-          return context.watch<SettingsProvider>().radiusState;
-      }
-    }
-
     return CustomText(
-      title: optionTitle(),
+      title: optionTitle(i),
       fontSize: FontSize.defaultSize,
       color: CustomColors.mainColor,
       font: kimm,
@@ -246,25 +256,8 @@ class _SettingsState extends State<Settings> {
     Widget? child,
     required ReturnVoid onTap,
     MainAxisAlignment? mainAxisAlignment,
+    int? flex,
   }) {
-    const StringList menuList = [
-      '확대/축소 버튼',
-      '글자 크기',
-      '지도 반경',
-      '문의하기',
-      '개인 정보 및 위치 처리 방침',
-      '라이선스',
-      '도움말'
-    ];
-    const IconDataList iconList = [
-      scaleIcon,
-      fontIcon,
-      gpsIcon,
-      inquiryIcon,
-      policyIcon,
-      licenseIcon,
-      helpIcon,
-    ];
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -280,7 +273,7 @@ class _SettingsState extends State<Settings> {
                 iconColor: CustomColors.blackColor,
                 fontSize: FontSize.defaultSize,
                 font: kimm,
-                flex: 20,
+                flex: 15,
               ),
             ),
             child ?? const SizedBox()
