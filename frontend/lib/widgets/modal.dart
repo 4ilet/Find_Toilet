@@ -223,6 +223,7 @@ class NicknameInputModal extends StatelessWidget {
     return InputModal(
       title: '닉네임 설정',
       buttonText: '확인',
+      hideButton: isAlert,
       isAlert: isAlert,
       onPressed: setNickname,
       initialValue: context.read<UserInfoProvider>().nickname,
@@ -298,7 +299,7 @@ class CreateOrEditFolderModal extends StatelessWidget {
 //* 입력창 존재 모달
 class InputModal extends StatelessWidget {
   final String title, buttonText;
-  final bool isAlert;
+  final bool isAlert, hideButton;
   final int? folderId;
   final void Function(String) onPressed;
   final String? initialValue;
@@ -310,6 +311,7 @@ class InputModal extends StatelessWidget {
     required this.onPressed,
     this.folderId,
     this.initialValue,
+    this.hideButton = false,
   });
 
   @override
@@ -333,18 +335,58 @@ class InputModal extends StatelessWidget {
       }
     }
 
-    return CustomModal(
+    return CustomModalWithClose(
       title: title,
-      buttonText: buttonText,
-      onPressed: changeValue,
-      isAlert: isAlert,
+      titleColor: CustomColors.blackColor,
+      iconColor: CustomColors.mainColor,
+      font: kimm,
+      hideButton: hideButton,
       children: [
-        Expanded(
-          child: CustomTextField(
-            onChanged: fillData,
-            initValue: data,
-          ),
+        CustomTextField(
+          onChanged: fillData,
+          initValue: data,
+          hasBorder: true,
+          height: 50,
+          padding: const EdgeInsets.only(left: 5),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: isAlert
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: changeValue,
+                        textColor: CustomColors.whiteColor,
+                        buttonColor: mainColor,
+                        fontSize: FontSize.smallSize,
+                      ),
+                    )
+                  ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomButton(
+                        buttonText: '취소',
+                        textColor: CustomColors.blackColor,
+                        buttonColor: whiteColor,
+                        fontSize: FontSize.smallSize,
+                        onPressed: routerPop(context),
+                      ),
+                      CustomButton(
+                        buttonText: buttonText,
+                        onPressed: changeValue,
+                        textColor: CustomColors.whiteColor,
+                        buttonColor: mainColor,
+                        fontSize: FontSize.smallSize,
+                      ),
+                    ],
+                  ),
+                ),
+        )
       ],
     );
   }
@@ -442,8 +484,9 @@ class CustomModalWithClose extends StatelessWidget {
   final Widget? titleWidget;
   final WidgetList children;
   final CustomColors titleColor, iconColor;
-  final bool isBoldText;
+  final bool isBoldText, hideButton;
   final ReturnVoid? onClosed;
+  final CrossAxisAlignment crossAxisAlignment;
   const CustomModalWithClose({
     super.key,
     this.title,
@@ -454,6 +497,8 @@ class CustomModalWithClose extends StatelessWidget {
     this.isBoldText = true,
     this.font,
     this.onClosed,
+    this.hideButton = false,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   });
 
   @override
@@ -469,7 +514,7 @@ class CustomModalWithClose extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: crossAxisAlignment,
                 children: [
                   title != null
                       ? CustomText(
@@ -480,11 +525,13 @@ class CustomModalWithClose extends StatelessWidget {
                           fontSize: FontSize.smallSize,
                         )
                       : titleWidget ?? const SizedBox(),
-                  CustomIconButton(
-                    color: iconColor,
-                    icon: closeIcon,
-                    onPressed: onClosed ?? routerPop(context),
-                  )
+                  hideButton
+                      ? const SizedBox()
+                      : CustomIconButton(
+                          color: iconColor,
+                          icon: closeIcon,
+                          onPressed: onClosed ?? routerPop(context),
+                        )
                 ],
               ),
             ),
@@ -952,6 +999,7 @@ class _JoinModalState extends State<JoinModal> {
     return CustomModalWithClose(
       titleColor: CustomColors.mainColor,
       iconColor: CustomColors.mainColor,
+      crossAxisAlignment: CrossAxisAlignment.start,
       titleWidget: RichText(
         text: TextSpan(
           text: '화장실을 찾아서',
