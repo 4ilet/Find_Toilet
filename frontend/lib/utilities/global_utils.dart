@@ -207,10 +207,13 @@ ToiletList mainToiletList(BuildContext context) =>
     context.read<MainSearchProvider>().mainToiletList;
 
 FutureToiletList getMainToiletList(BuildContext context) =>
-    context.read<MainSearchProvider>().getMainToiletList();
+    context.read<MainSearchProvider>().getMainToiletList(getPage(context));
 
 void initToiletList(BuildContext context) =>
     context.read<MainSearchProvider>().initToiletList();
+
+void setMainPage(BuildContext context, int newVal) =>
+    context.read<MainSearchProvider>().setMainPage(newVal);
 
 //* review list
 void addReviewList(BuildContext context, ReviewList reviewData) =>
@@ -258,10 +261,13 @@ void initBookmarkList(BuildContext context) =>
 ToiletList searchToiletList(BuildContext context) =>
     context.read<MainSearchProvider>().searchToiletList;
 FutureToiletList getSearchList(BuildContext context) =>
-    context.read<MainSearchProvider>().getSearchList();
+    context.read<MainSearchProvider>().getSearchList(getPage(context));
 
 void initSearchList(BuildContext context) =>
     context.read<MainSearchProvider>().initSearchList();
+
+void setSearchPage(BuildContext context, int newVal) =>
+    context.read<MainSearchProvider>().setSearchPage(newVal);
 
 //* init main/search/review/bookmark data
 FutureList initMainData(
@@ -305,16 +311,17 @@ bool getAdditional(BuildContext context) =>
 void setAdditional(BuildContext context, bool value) =>
     context.read<ScrollProvider>().setAdditional(value);
 
-void initLoadingData(BuildContext context) {
+void initLoadingData(BuildContext context, {bool? isMain, bool? isSearch}) {
+  if (isMain == true) {
+    setMainPage(context, 0);
+  } else if (isSearch == true) {
+    setSearchPage(context, 0);
+  }
   setLoading(context, true);
   initPage(context);
   setAdditional(context, false);
   setWorking(context, false);
 }
-
-// bool getAdditional(BuildContext context) => context.read<GlobalProvider>().additional;
-
-// void setAdditional(BuildContext context, bool value) => context.read<GlobalProvider>().setAdditional(value);
 
 //* key
 void setKey(BuildContext context, GlobalKey key) =>

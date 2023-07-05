@@ -58,19 +58,19 @@ class _MainState extends State<Main> {
     if (refreshState) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
-          initLoadingData(context);
+          initLoadingData(context, isMain: true);
           initMainData(
             context,
             showReview: widget.showReview,
             needClear: true,
           ).then((_) {
             setLoading(context, false);
-            refreshState = false;
           });
           increasePage(context);
           setKey(context, globalKey);
-          // setState(() {
-          // });
+          setState(() {
+            refreshState = false;
+          });
         },
       );
     }

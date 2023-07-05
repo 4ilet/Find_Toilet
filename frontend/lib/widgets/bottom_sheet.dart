@@ -45,7 +45,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
                   setWorking(context, true);
-                  Future.delayed(const Duration(milliseconds: 2000), () {
+                  Future.delayed(const Duration(seconds: 3), () {
                     if (!getAdditional(context)) {
                       setAdditional(context, true);
                       moreData();

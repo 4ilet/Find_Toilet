@@ -530,7 +530,9 @@ class DeleteModal extends StatelessWidget {
         switch (deleteMode) {
           case 0:
             ReviewProvider().deleteReview(id).then((_) {
-              ToiletProvider().getToilet(getToiletId(context)!).then((data) {
+              ToiletProvider()
+                  .getToilet(getToiletId(reviewContext ?? context)!)
+                  .then((data) {
                 setToilet(reviewContext ?? context, data);
                 refreshPage!();
               });

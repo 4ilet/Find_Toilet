@@ -41,7 +41,7 @@ class _BookMarkListState extends State<BookMarkList> {
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
                   setWorking(context, true);
-                  Future.delayed(const Duration(milliseconds: 2000), () {
+                  Future.delayed(const Duration(seconds: 3), () {
                     if (!getAdditional(context)) {
                       setAdditional(context, true);
                       moreData();
@@ -70,6 +70,7 @@ class _BookMarkListState extends State<BookMarkList> {
 
   void moreData() {
     if (getAdditional(context)) {
+      print('요청!!!!!!!!!!!!!!!!!!!!!!');
       getBookmarkList(
         context,
         folderId: widget.folderId,
@@ -100,7 +101,13 @@ class _BookMarkListState extends State<BookMarkList> {
       body: CustomBoxWithScrollView(
         listScroll: controller,
         toolbarHeight: 100,
-        expandedHeight: 100,
+        expandedHeight: isDefaultTheme(context)
+            ? widget.folderName.length > 7
+                ? 110
+                : 60
+            : widget.folderName.length > 6
+                ? 120
+                : 70,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
           padding:

@@ -69,7 +69,6 @@ class _ReviewFormState extends State<ReviewForm> {
           enabled = false;
         });
         late final String state;
-        print('clicked!!!!');
         if (widget.reviewId == 0) {
           ReviewProvider()
               .postNewReview(
@@ -77,7 +76,6 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((_) {
-            print('send post!!!!!!!');
             if (widget.showReview) {
               ToiletProvider().getToilet(widget.toiletId).then((data) {
                 setToilet(context, data);

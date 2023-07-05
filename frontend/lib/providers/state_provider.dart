@@ -450,24 +450,29 @@ class MainSearchProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  FutureToiletList getMainToiletList() => _getMainToiletList();
+  void setMainPage(int newVal) => _setMainPage(newVal);
+  void setSearchPage(int newVal) => _setSearchPage(newVal);
 
-  FutureToiletList getSearchList() => _getSearchList();
+  FutureToiletList getMainToiletList(int page) => _getMainToiletList(page);
+
+  FutureToiletList getSearchList(int page) => _getSearchList(page);
 
   void setSearchData(DynamicMap newData) => _setSearchData(newData);
 
   void initSearchList() => _initSearchList();
 
   //* private
-  FutureToiletList _getMainToiletList() async {
+  FutureToiletList _getMainToiletList(int page) async {
     final toiletData = await ToiletProvider().getNearToilet(_mainToiletData);
+    _setMainPage(page + 1);
     _addToiletList(toiletData);
     notifyListeners();
     return toiletData;
   }
 
-  FutureToiletList _getSearchList() async {
+  FutureToiletList _getSearchList(int page) async {
     final toiletData = await ToiletProvider().searchToilet(_searchData);
+    _setSearchPage(page + 1);
     _searchToiletList.addAll(toiletData);
     notifyListeners();
     return toiletData;
@@ -491,6 +496,9 @@ class MainSearchProvider with ChangeNotifier {
     _searchData['lat'] = _lat;
     _searchData['lon'] = _lng;
   }
+
+  void _setMainPage(int newVal) => _mainToiletData['page'] = newVal;
+  void _setSearchPage(int newVal) => _searchData['page'] = newVal;
 
   // void _setCnt(int newVal) => _cnt = newVal;
   // void _setQuery(String? value) => _query['value'] = value;

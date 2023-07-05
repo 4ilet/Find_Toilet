@@ -43,7 +43,7 @@ class _SearchState extends State<Search> {
           if (getPage(context) < getTotal(context)!) {
             if (!getWorking(context)) {
               setWorking(context, true);
-              Future.delayed(const Duration(milliseconds: 2000), () {
+              Future.delayed(const Duration(seconds: 3), () {
                 if (!getAdditional(context)) {
                   setAdditional(context, true);
                   search();
@@ -61,10 +61,7 @@ class _SearchState extends State<Search> {
       initSearchList(context);
       getSearchList(context).then((_) {
         setLoading(context, false);
-        refreshState = false;
       });
-      // setState(() {
-      // });
       increasePage(context);
     }
   }
@@ -94,12 +91,16 @@ class _SearchState extends State<Search> {
     if (refreshState) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
-          initLoadingData(context);
+          initLoadingData(context, isSearch: true);
           firstSearch();
           setKey(context, globalKey);
+          setState(() {
+            refreshState = false;
+          });
         },
       );
     }
+    print('search build');
     return WillPopScope(
       onWillPop: () {
         removedRouterPush(context, page: const Main());
@@ -115,9 +116,11 @@ class _SearchState extends State<Search> {
             padding: EdgeInsets.only(top: statusBarHeight(context)),
             child: CustomBoxWithScrollView(
               expandedHeight: expandSearch
-                  ? 430
+                  ? isDefaultTheme(context)
+                      ? 400
+                      : 430
                   : isDefaultTheme(context)
-                      ? 100
+                      ? 115
                       : 130,
               listScroll: scrollController,
               flexibleSpace: Column(
@@ -127,8 +130,6 @@ class _SearchState extends State<Search> {
                     query: widget.query,
                     onSearchMode: changeExpandSearch,
                     refreshPage: () {
-                      // initLoadingData(context);
-                      // firstSearch();
                       setState(() {
                         refreshState = true;
                       });
@@ -144,8 +145,6 @@ class _SearchState extends State<Search> {
                   isSearch: true,
                   data: searchToiletList(context),
                   refreshPage: () {
-                    // initLoadingData(context);
-                    // firstSearch();
                     setState(() {
                       refreshState = true;
                     });
@@ -159,42 +158,6 @@ class _SearchState extends State<Search> {
       ),
     );
   }
-
-  // Padding searchToiletList() {
-  //   return Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 10),
-  //       child: CustomListView(
-  //         itemCount: toiletList.length,
-  //         itemBuilder: (context, i) {
-  //           return Column(
-  //             children: [
-  //               i < searchData['page'] * cnt
-  //                   ? ListItem(
-  //                       data: toiletList[i],
-  //                       showReview: false,
-  //                     )
-  //                   : !additional
-  //                       ? ListItem(
-  //                           data: toiletList[i],
-  //                           showReview: false,
-  //                         )
-  //                       : const SizedBox(),
-  //               i == toiletList.length - 1 &&
-  //                       getTotal(context) != searchData['page']
-  //                   ? const Padding(
-  //                       padding: EdgeInsets.symmetric(
-  //                         vertical: 40,
-  //                       ),
-  //                       child: Center(
-  //                         child: CircularProgressIndicator(),
-  //                       ),
-  //                     )
-  //                   : const SizedBox()
-  //             ],
-  //           );
-  //         },
-  //       ));
-  // }
 
   //* app bar 맨 윗 부분
   Padding topOfAppBar() {
@@ -211,55 +174,8 @@ class _SearchState extends State<Search> {
               font: kimm,
             ),
           ),
-          // Flexible(
-          //   child: GestureDetector(
-          //     onTap: changeExpandSearch,
-          //     child: const TextWithIcon(
-          //       icon: settingsIcon,
-          //       text: '검색 설정',
-          //       iconColor: CustomColors.whiteColor,
-          //       textColor: CustomColors.whiteColor,
-          //       font: kimm,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
   }
-
-  //* 선택 상자 눌렀을 때 나오는 목록
-  // Widget sortList() {
-  //   return Padding(
-  //     padding: EdgeInsets.fromLTRB(0, position!.dy, 20, 0),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.end,
-  //       children: [
-  //         CustomBox(
-  //           width: 120,
-  //           color: whiteColor,
-  //           boxShadow: const [defaultShadow],
-  //           child: Column(
-  //             children: [
-  //               for (int i = 0; i < 3; i += 1)
-  //                 CustomBox(
-  //                   onTap: () => changeSelected(i),
-  //                   width: 120,
-  //                   child: Center(
-  //                     child: Padding(
-  //                       padding: const EdgeInsets.symmetric(vertical: 4),
-  //                       child: CustomText(
-  //                         title: sortOrder[i],
-  //                         fontSize: FontSize.smallSize,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 )
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
