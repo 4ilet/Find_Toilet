@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
   final EdgeInsetsGeometry padding;
   final bool searchMode;
+  final bool hasBorder;
   const CustomTextField({
     super.key,
     this.initValue,
@@ -30,6 +31,7 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted,
     this.searchMode = false,
     this.textHeight = 1,
+    this.hasBorder = false,
   });
 
   @override
@@ -37,6 +39,7 @@ class CustomTextField extends StatelessWidget {
     return CustomBox(
       width: width,
       height: height,
+      border: hasBorder ? Border.all(color: mainColor, width: 2) : null,
       // isDefaultTheme(context) ? height : height * 1.2,
       radius: radius,
       color: whiteColor,
