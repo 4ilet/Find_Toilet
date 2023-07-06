@@ -93,6 +93,7 @@ class CustomSilverList extends StatelessWidget {
                               toiletModel: data[i],
                               isMain: isMain,
                               refreshPage: refreshPage,
+                              index: i,
                             );
 
                       return Column(

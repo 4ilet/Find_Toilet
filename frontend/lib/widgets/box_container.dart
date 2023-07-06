@@ -1,7 +1,6 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -14,7 +13,6 @@ import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
@@ -248,6 +246,7 @@ class ListItem extends StatelessWidget {
   final bool isMain, showReview;
   final ToiletModel? toiletModel;
   final ReturnVoid refreshPage;
+  final int? index;
 
   const ListItem({
     super.key,
@@ -255,6 +254,7 @@ class ListItem extends StatelessWidget {
     required this.isMain,
     required this.showReview,
     required this.refreshPage,
+    this.index,
   });
 
   @override
@@ -358,17 +358,17 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    void setHeight() {
-      if (boxKey.currentContext != null) {
-        final renderBox =
-            boxKey.currentContext!.findRenderObject() as RenderBox;
-        setItemHeight(context, renderBox.size.height);
-      }
-    }
+    // void setHeight() {
+    //   if (boxKey.currentContext != null) {
+    //     final renderBox =
+    //         boxKey.currentContext!.findRenderObject() as RenderBox;
+    //     setItemHeight(context, renderBox.size.height);
+    //   }
+    // }
 
     void toReview() {
       if (!showReview) {
-        setHeight();
+        setItemHeight(context, index!);
         setToilet(context, data);
         routerPush(
           context,
@@ -379,6 +379,17 @@ class ListItem extends StatelessWidget {
         )();
       }
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // print('index => $index, getHeight => ${getHeight(context, index!)}');
+      if (index != null && getHeight(context, index!) == 0) {
+        if (boxKey.currentContext != null) {
+          final renderBox =
+              boxKey.currentContext!.findRenderObject() as RenderBox;
+          setHeight(context, index!, renderBox.size.height);
+        }
+      }
+    });
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
@@ -801,15 +812,14 @@ class ReviewBox extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         getToken(context) != null &&
-                                review.nickname ==
-                                    context.read<UserInfoProvider>().nickname
+                                review.nickname == getName(context)
                             ? Row(
                                 children: [
                                   CustomIconButton(
                                     color: CustomColors.mainColor,
                                     icon: editIcon,
                                     iconSize: 20,
-                                    onPressed: () => routerPush(
+                                    onPressed: routerPush(
                                       context,
                                       page: ReviewForm(
                                         toiletName: toiletName,

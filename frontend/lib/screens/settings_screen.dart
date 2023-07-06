@@ -157,10 +157,12 @@ class _SettingsState extends State<Settings> {
                               textColor: CustomColors.blackColor,
                               fontSize: FontSize.smallSize,
                               onPressed: () {
-                                showModal(context,
-                                    page: const NicknameInputModal(
-                                      isAlert: false,
-                                    ));
+                                showModal(
+                                  context,
+                                  page: const NicknameInputModal(
+                                    isAlert: false,
+                                  ),
+                                );
                               },
                               buttonText: '닉네임 변경',
                             )
