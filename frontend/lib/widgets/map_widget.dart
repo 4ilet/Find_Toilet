@@ -32,6 +32,12 @@ class MapScreenState extends State<MapScreen> {
   List<LatLng> markers = [];
   List<LatLng> toiletMarkers = [];
 
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
   void getLocation() async {
     try {
       LocationPermission permission = await Geolocator.requestPermission();
@@ -49,16 +55,17 @@ class MapScreenState extends State<MapScreen> {
       }
       // controller.zoom = 16;
       // print(GlobalProvider().mainToiletList.length);
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mainToiletList(context).isNotEmpty) {
-          toiletMarkers.clear();
-          for (int i = 0; i < mainToiletList(context).length; i++) {
-            toiletMarkers.add(LatLng(mainToiletList(context)[i].lat,
-                mainToiletList(context)[i].lng));
-          }
+      print(mainToiletList(context));
+      if (mainToiletList(context).isNotEmpty) {
+        toiletMarkers.clear();
+        for (int i = 0; i < mainToiletList(context).length; i++) {
+          toiletMarkers.add(LatLng(
+              mainToiletList(context)[i].lat, mainToiletList(context)[i].lng));
         }
-      });
-      setState(() {});
+        setState(() {});
+      }
+      // Future.delayed(const Duration(milliseconds: 500), () {
+      // });
       // refreshMain;
     } catch (error) {
       SystemNavigator.pop();

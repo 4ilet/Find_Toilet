@@ -420,7 +420,6 @@ class CustomModal extends StatelessWidget {
             child: Center(
               child: CustomText(
                 title: title,
-                fontSize: FontSize.largeSize,
                 color: titleColor,
               ),
             ),
@@ -436,6 +435,7 @@ class CustomModal extends StatelessWidget {
                       modalButton(
                         onPressed: onPressed ?? routerPop(context),
                         buttonText: buttonText,
+                        isButtonWhite: false,
                       ),
                     ],
                   ),
@@ -449,6 +449,7 @@ class CustomModal extends StatelessWidget {
                         modalButton(
                           onPressed: routerPop(context),
                           buttonText: '취소',
+                          isButtonWhite: true,
                         ),
                         modalButton(
                           onPressed: onPressed ??
@@ -456,6 +457,7 @@ class CustomModal extends StatelessWidget {
                                 getKey(context)?.currentContext ?? context,
                               ),
                           buttonText: buttonText,
+                          isButtonWhite: false,
                         ),
                       ],
                     ),
@@ -469,11 +471,15 @@ class CustomModal extends StatelessWidget {
   CustomButton modalButton({
     required ReturnVoid onPressed,
     required String buttonText,
+    required bool isButtonWhite,
   }) {
     return CustomButton(
-      textColor: CustomColors.mainColor,
+      textColor:
+          isButtonWhite ? CustomColors.mainColor : CustomColors.whiteColor,
       onPressed: onPressed,
       buttonText: buttonText,
+      buttonColor: isButtonWhite ? whiteColor : mainColor,
+      fontSize: FontSize.smallSize,
     );
   }
 }
@@ -710,7 +716,15 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
             routerPop(context)();
           },
           title: '즐겨찾기 추가/삭제 취소',
-          children: const [CustomText(title: '즐겨찾기 추가/삭제 작업을 종료하시겠습니까?')],
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: CustomText(
+                title: '즐겨찾기 추가/삭제 작업을 종료하시겠습니까?',
+                fontSize: FontSize.smallSize,
+              ),
+            )
+          ],
         ),
       );
     }
