@@ -40,7 +40,7 @@ class _MainState extends State<Main> {
   void refreshMain(int index) {
     print('refresh main! ${readLoading(context)}');
     print('get token : ${readToken(context)}');
-    if (!readLoading(context)) {
+    if (readLoading(context)) {
       initMainData(
         context,
         showReview: widget.showReview,
@@ -97,7 +97,9 @@ class _MainState extends State<Main> {
                       SizedBox(
                         width: screenWidth(context),
                         height: screenHeight(context) - paddingTop,
-                        child: const MapScreen(),
+                        child: MapScreen(
+                          showReview: widget.showReview,
+                        ),
                       ),
                     ],
                   ),

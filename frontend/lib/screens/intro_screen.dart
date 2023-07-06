@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
@@ -7,6 +9,8 @@ import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class Intro extends StatefulWidget {
@@ -30,18 +34,35 @@ class _IntroState extends State<Intro> {
     }
   }
 
+  Future<Position> userLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setLatLng(context, position.latitude, position.longitude);
+      return position;
+    } catch (error) {
+      throw Error();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     preparation();
     context.read<SettingsProvider>().initSettings();
-    Future.delayed(const Duration(seconds: 5), () {
-      removedRouterPush(
-        context,
-        page: getFontSize(context) == null
-            ? const SelectFontTheme()
-            : const Main(),
-      );
+    userLocation().then((_) {
+      Future.delayed(const Duration(seconds: 2), () {
+        removedRouterPush(
+          context,
+          page: getFontSize(context) == null
+              ? const SelectFontTheme()
+              : const Main(),
+        );
+      });
+    }).catchError((_) {
+      SystemNavigator.pop();
     });
   }
 

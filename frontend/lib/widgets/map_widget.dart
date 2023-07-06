@@ -16,8 +16,11 @@ import 'package:map/map.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
-
+  final bool showReview;
+  const MapScreen({
+    super.key,
+    this.showReview = false,
+  });
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -32,12 +35,24 @@ class MapScreenState extends State<MapScreen> {
   List<LatLng> markers = [];
   List<LatLng> toiletMarkers = [];
 
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
   void getLocation() async {
     try {
-      LocationPermission permission = await Geolocator.requestPermission();
+      // LocationPermission permission = await Geolocator.requestPermission();
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      controller.center = LatLng(position.latitude, position.longitude);
+      if (widget.showReview) {
+        double conLat = getToilet(context)!.lat;
+        double conLng = getToilet(context)!.lng;
+        controller.center = LatLng(conLat, conLng);
+      } else {
+        controller.center = LatLng(position.latitude, position.longitude);
+      }
       if (controller.zoom < 16) controller.zoom = 16;
       setLatLng(context, position.latitude, position.longitude);
 
@@ -49,23 +64,29 @@ class MapScreenState extends State<MapScreen> {
       }
       // controller.zoom = 16;
       // print(GlobalProvider().mainToiletList.length);
-      Future.delayed(const Duration(milliseconds: 200), () {
-        print("데이터 앞");
-        print(mainToiletList(context).length);
-        print("데이터 뒤");
-        if (mainToiletList(context).isNotEmpty) {
-          toiletMarkers.clear();
-          for (int i = 0; i < mainToiletList(context).length; i++) {
-            toiletMarkers.add(LatLng(mainToiletList(context)[i].lat,
-                mainToiletList(context)[i].lng));
-          }
+      // Future.delayed(const Duration(milliseconds: 200), () {
+      print("데이터 앞");
+      print(mainToiletList(context).length);
+      print("데이터 뒤");
+      if (mainToiletList(context).isNotEmpty) {
+        toiletMarkers.clear();
+        for (int i = 0; i < mainToiletList(context).length; i++) {
+          toiletMarkers.add(
+            LatLng(
+              mainToiletList(context)[i].lat,
+              mainToiletList(context)[i].lng,
+            ),
+          );
         }
-      });
-      setState(() {});
-      // refreshMain;
+        setState(() {});
+      }
     } catch (error) {
       SystemNavigator.pop();
     }
+  }
+
+  void clickMarker() {
+    print(widget.showReview);
   }
 
   void zoomIn() {
@@ -150,7 +171,7 @@ class MapScreenState extends State<MapScreen> {
           if (controller.zoom < 18) {
             controller.zoom = 18;
           }
-          getLocation();
+          clickMarker();
         },
       ),
     );
@@ -254,8 +275,8 @@ class MapScreenState extends State<MapScreen> {
                     ),
                   ),
                   ...markerWidgets,
-                  ...toiletMarkerWidgets,
-                  // ...(!getLoading(context) ? toiletMarkerWidgets : []),
+                  // ...toiletMarkerWidgets,
+                  ...(!getLoading(context) ? toiletMarkerWidgets : []),
                 ],
               ),
             ),
@@ -264,40 +285,46 @@ class MapScreenState extends State<MapScreen> {
       ),
       floatingActionButton: Stack(
         children: <Widget>[
-          Align(
-            alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.55),
-            child: GestureDetector(
-              onTap: () => zoomIn(),
-              child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: const BoxDecoration(
-                      color: whiteColor,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(6))),
-                  child: const Center(
-                    child: Icon(Icons.add),
-                  )),
-            ),
-          ),
-          Align(
-            alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
-            child: GestureDetector(
-              onTap: () => zoomOut(),
-              child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: const BoxDecoration(
-                      color: whiteColor,
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(6))),
-                  child: const Center(
-                    child: Icon(Icons.remove),
-                  )),
-            ),
-          ),
+          watchMagnify(context) == '표시함'
+              ? Align(
+                  alignment: Alignment(
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.55),
+                  child: GestureDetector(
+                    onTap: () => zoomIn(),
+                    child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: const BoxDecoration(
+                            boxShadow: [defaultShadow],
+                            color: whiteColor,
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(6))),
+                        child: const Center(
+                          child: Icon(Icons.add),
+                        )),
+                  ),
+                )
+              : const SizedBox(),
+          watchMagnify(context) == '표시함'
+              ? Align(
+                  alignment: Alignment(
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
+                  child: GestureDetector(
+                    onTap: () => zoomOut(),
+                    child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: const BoxDecoration(
+                            boxShadow: [defaultShadow],
+                            color: whiteColor,
+                            borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(6))),
+                        child: const Center(
+                          child: Icon(Icons.remove),
+                        )),
+                  ),
+                )
+              : const SizedBox(),
           Align(
             alignment: Alignment(
                 Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),

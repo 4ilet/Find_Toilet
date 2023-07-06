@@ -92,6 +92,9 @@ FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
 String getMagnify(BuildContext context) =>
     context.read<SettingsProvider>().magnigyState;
 
+String watchMagnify(BuildContext context) =>
+    context.watch<SettingsProvider>().magnigyState;
+
 //* 지도 반경
 String getRadius(BuildContext context) =>
     context.read<SettingsProvider>().radiusState;

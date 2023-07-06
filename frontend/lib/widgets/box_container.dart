@@ -614,10 +614,12 @@ class _FilterBoxState extends State<FilterBox> {
 
   void onTapInMain(int index) {
     setFilter(context, index, !readFilter(context, index));
+    initLoadingData(context, isMain: true);
     widget.onPressed(index);
   }
 
   void onTapInSearch(int index) {
+    initLoadingData(context, isSearch: true);
     widget.onPressed(index);
   }
 
