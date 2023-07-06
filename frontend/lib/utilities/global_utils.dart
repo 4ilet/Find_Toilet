@@ -57,9 +57,12 @@ void changeToken(BuildContext context, {String? token, String? refresh}) {
   userInfo.setStoreRefresh(refresh);
 }
 
-//* 닉네임 변경
+//* 닉네임
 void changeName(BuildContext context, String? name) =>
     context.read<UserInfoProvider>().setStoreName(name);
+
+String? getName(BuildContext context) =>
+    context.read<UserInfoProvider>().nickname;
 
 //* 현재 글자 크기
 String? getFontSize(BuildContext context) =>
@@ -118,10 +121,11 @@ Future<Map<String, dynamic>> login(BuildContext context) async {
   // ignore: use_build_context_synchronously
   changeToken(context, token: result['token'], refresh: result['refresh']);
   // ignore: use_build_context_synchronously
-  changeName(context, result['nickname']);
   if (result['state'] != 'login' || result['nickname'] == null) {
     // ignore: use_build_context_synchronously
     showModal(context, page: const NicknameInputModal(isAlert: true));
+  } else {
+    changeName(context, result['nickname']);
   }
   return result;
 }
@@ -231,8 +235,8 @@ void setToilet(BuildContext context, ToiletModel toiletModel) =>
 double? getItemHeight(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().itemHeight;
 
-void setItemHeight(BuildContext context, double height) =>
-    context.read<ReviewBookMarkProvider>().setItemHeight(height);
+void setItemHeight(BuildContext context, int i) =>
+    context.read<ReviewBookMarkProvider>().setItemHeight(i);
 
 int? getToiletId(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().toiletId;
@@ -242,6 +246,15 @@ FutureReviewList getReviewList(BuildContext context) =>
 
 void initReviewList(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().initReviewList();
+
+double getHeight(BuildContext context, int i) =>
+    context.read<ReviewBookMarkProvider>().heightList[i];
+
+void setHeightListSize(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().setHeightListSize();
+
+void setHeight(BuildContext context, int i, double newHeight) =>
+    context.read<ReviewBookMarkProvider>().setHeight(i, newHeight);
 
 //* bookmark list
 ToiletList bookmarkList(BuildContext context) =>
@@ -269,7 +282,7 @@ void initSearchList(BuildContext context) =>
 void setSearchPage(BuildContext context, int newVal) =>
     context.read<MainSearchProvider>().setSearchPage(newVal);
 
-//* init main/search/review/bookmark data
+//* init main data
 FutureList initMainData(
   BuildContext context, {
   required bool showReview,

@@ -294,6 +294,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
   static double? _itemHeight;
   static final ReviewList _reviewList = [];
   static final ToiletList _bookmarkList = [];
+  static final List<double> _heightList = [];
   // String? get query => _query['value'];
   //* get
   ToiletModel? get toiletInfo => _toiletInfo;
@@ -301,6 +302,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
   double? get itemHeight => _itemHeight;
   ReviewList get reviewList => _reviewList;
   ToiletList get bookmarkList => _bookmarkList;
+  List<double> get heightList => _heightList;
 
   //* private
   //* review
@@ -313,7 +315,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
 
   void _addReviewList(ReviewList reviewData) => _reviewList.addAll(reviewData);
   void _initReviewList() => _reviewList.clear();
-  void _setItemHeight(double height) => _itemHeight = height;
+  void _setItemHeight(int i) => _itemHeight = _heightList[i];
   void _setToiletInfo(ToiletModel toiletData) {
     _toiletInfo = toiletData;
     _toiletId = toiletData.toiletId;
@@ -323,6 +325,11 @@ class ReviewBookMarkProvider with ChangeNotifier {
     _toiletInfo = null;
     _toiletId = null;
   }
+
+  void _setHeightListSize() =>
+      _heightList.addAll(List.generate(20, (index) => 0));
+
+  void _setHeight(int i, double newHeight) => _heightList[i] = newHeight;
 
   //* bookmark
   FutureToiletList _getBookmarkList(int folderId, int page) async {
@@ -345,8 +352,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
   void initReviewList() => _initReviewList();
   FutureReviewList getReviewList(int page) => _getReviewList(page);
 
-  void setItemHeight(double height) {
-    _setItemHeight(height);
+  void setItemHeight(int i) {
+    _setItemHeight(i);
     notifyListeners();
   }
 
@@ -358,6 +365,16 @@ class ReviewBookMarkProvider with ChangeNotifier {
   void initToiletInfo() => _initToiletInfo();
 
   void initBookmarkList() => _initBookmarkList();
+
+  void setHeightListSize() {
+    _setHeightListSize();
+    notifyListeners();
+  }
+
+  void setHeight(int i, double newHeight) {
+    _setHeight(i, newHeight);
+    notifyListeners();
+  }
 }
 
 class MainSearchProvider with ChangeNotifier {

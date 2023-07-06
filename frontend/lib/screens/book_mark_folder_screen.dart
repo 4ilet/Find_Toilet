@@ -7,9 +7,7 @@ import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/box_container.dart';
 import 'package:find_toilet/widgets/button.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class BookMarkFolderList extends StatelessWidget {
   const BookMarkFolderList({super.key});
@@ -45,7 +43,7 @@ class BookMarkFolderList extends StatelessWidget {
                       const SizedBox(width: 5),
                       CustomText(
                         title:
-                            '${context.read<UserInfoProvider>().nickname}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                            '${getName(context)}님의\n즐겨 찾기 폴더${onRefresh(context)}',
                         fontSize: FontSize.largeSize,
                         color: CustomColors.whiteColor,
                         font: kimm,

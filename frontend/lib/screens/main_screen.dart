@@ -45,10 +45,13 @@ class _MainState extends State<Main> {
         context,
         showReview: widget.showReview,
         needClear: true,
-      ).then((_) {
+      ).then((data) {
+        if (!widget.showReview) {
+          setHeightListSize(context);
+        }
         setLoading(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
@@ -63,7 +66,10 @@ class _MainState extends State<Main> {
             context,
             showReview: widget.showReview,
             needClear: true,
-          ).then((_) {
+          ).then((data) {
+            if (!widget.showReview) {
+              setHeightListSize(context);
+            }
             setLoading(context, false);
           });
           increasePage(context);
