@@ -900,11 +900,13 @@ class NavigationModal extends StatelessWidget {
 class AlertModal extends StatelessWidget {
   final String title, content;
   final ReturnVoid? onPressed;
+  final double? width;
   const AlertModal({
     super.key,
     required this.title,
     required this.content,
     this.onPressed,
+    this.width,
   });
 
   @override
@@ -1008,12 +1010,16 @@ class _JoinModalState extends State<JoinModal> {
   }
 
   void joinOrLogin() {
+    bool ifLogin = false;
     if (checked) {
       setJoin(context);
     }
     final newContext = widget.pageContext ?? getKey(context)?.currentContext;
     login(newContext ?? context).then((result) {
       widget.refreshPage();
+      setState(() {
+        ifLogin = true;
+      });
     });
     routerPop(context)();
   }

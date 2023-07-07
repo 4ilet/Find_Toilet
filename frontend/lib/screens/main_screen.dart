@@ -103,7 +103,9 @@ class _MainState extends State<Main> {
                       SizedBox(
                         width: screenWidth(context),
                         height: screenHeight(context) - paddingTop,
-                        child: const MapScreen(),
+                        child: MapScreen(
+                          showReview: widget.showReview,
+                        ),
                       ),
                     ],
                   ),
