@@ -1,6 +1,5 @@
 import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/providers/user_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
@@ -15,7 +14,6 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //* 도움말, 라이선스 모달
@@ -173,7 +171,23 @@ class NicknameInputModal extends StatelessWidget {
   Widget build(BuildContext context) {
     void setNickname(String? data) async {
       try {
-        if (data != null && data != '') {
+        if (data == null || data == '') {
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '올바르지 않은 닉네임',
+              content: '닉네임을 바르게 입력해주세요.',
+            ),
+          );
+        } else if (data == getName(context)) {
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '닉네임 미변경',
+              content: '이전과 다른 닉네임을 설정해주세요',
+            ),
+          );
+        } else {
           UserProvider().changeName(data).then((result) {
             print('result: $result');
             if (result['success'] != null) {
@@ -199,14 +213,6 @@ class NicknameInputModal extends StatelessWidget {
               return;
             }
           });
-        } else {
-          showModal(
-            context,
-            page: const AlertModal(
-              title: '올바르지 않은 닉네임',
-              content: '닉네임을 바르게 입력해주세요.',
-            ),
-          );
         }
       } catch (error) {
         print(error);
@@ -226,7 +232,7 @@ class NicknameInputModal extends StatelessWidget {
       hideButton: isAlert,
       isAlert: isAlert,
       onPressed: setNickname,
-      initialValue: context.read<UserInfoProvider>().nickname,
+      initialValue: getName(context),
     );
   }
 }
@@ -429,15 +435,18 @@ class CustomModal extends StatelessWidget {
           ...children,
           isAlert
               ? Flexible(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      modalButton(
-                        onPressed: onPressed ?? routerPop(context),
-                        buttonText: buttonText,
-                        isButtonWhite: false,
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        modalButton(
+                          onPressed: onPressed ?? routerPop(context),
+                          buttonText: buttonText,
+                          isButtonWhite: false,
+                        ),
+                      ],
+                    ),
                   ),
                 )
               : Flexible(
@@ -913,6 +922,7 @@ class AlertModal extends StatelessWidget {
         CustomText(
           title: content,
           isCentered: true,
+          fontSize: FontSize.smallSize,
         )
       ],
     );

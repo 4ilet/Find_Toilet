@@ -67,10 +67,13 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
         showReview: widget.showReview,
         needClear: false,
       ).then((data) {
+        if (!widget.showReview) {
+          setHeightListSize(context);
+        }
         setAdditional(context, false);
         setWorking(context, false);
-        increasePage(context);
       });
+      increasePage(context);
     }
   }
 
