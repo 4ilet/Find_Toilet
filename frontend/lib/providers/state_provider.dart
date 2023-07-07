@@ -295,7 +295,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
   static final ReviewList _reviewList = [];
   static final ToiletList _bookmarkList = [];
   static final List<double> _heightList = [];
-  // String? get query => _query['value'];
+
   //* get
   ToiletModel? get toiletInfo => _toiletInfo;
   int? get toiletId => _toiletId;
@@ -325,6 +325,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
     _toiletInfo = null;
     _toiletId = null;
   }
+
+  void _initHeightList() => _heightList.clear();
 
   void _setHeightListSize() =>
       _heightList.addAll(List.generate(20, (index) => 0));
@@ -365,6 +367,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
   void initToiletInfo() => _initToiletInfo();
 
   void initBookmarkList() => _initBookmarkList();
+
+  void initHeightList() => _initHeightList();
 
   void setHeightListSize() {
     _setHeightListSize();
@@ -499,6 +503,7 @@ class MainSearchProvider with ChangeNotifier {
 
   void _setSearchData(DynamicMap newData) async {
     _searchData.addAll(newData);
+    _searchData['order'] = _sortValues[_sortIdx];
     notifyListeners();
   }
 

@@ -120,11 +120,11 @@ Future<Map<String, dynamic>> login(BuildContext context) async {
   final DynamicMap result = await UserProvider().login();
   // ignore: use_build_context_synchronously
   changeToken(context, token: result['token'], refresh: result['refresh']);
-  // ignore: use_build_context_synchronously
   if (result['state'] != 'login' || result['nickname'] == null) {
     // ignore: use_build_context_synchronously
     showModal(context, page: const NicknameInputModal(isAlert: true));
   } else {
+    // ignore: use_build_context_synchronously
     changeName(context, result['nickname']);
   }
   return result;
@@ -247,14 +247,19 @@ FutureReviewList getReviewList(BuildContext context) =>
 void initReviewList(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().initReviewList();
 
-double getHeight(BuildContext context, int i) =>
-    context.read<ReviewBookMarkProvider>().heightList[i];
+double? getHeight(BuildContext context, int i) =>
+    context.read<ReviewBookMarkProvider>().heightList.length > i
+        ? context.read<ReviewBookMarkProvider>().heightList[i]
+        : null;
 
 void setHeightListSize(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().setHeightListSize();
 
 void setHeight(BuildContext context, int i, double newHeight) =>
     context.read<ReviewBookMarkProvider>().setHeight(i, newHeight);
+
+void initHeightList(BuildContext context) =>
+    context.read<ReviewBookMarkProvider>().initHeightList();
 
 //* bookmark list
 ToiletList bookmarkList(BuildContext context) =>

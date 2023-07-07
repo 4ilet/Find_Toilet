@@ -58,8 +58,8 @@ class _SearchState extends State<Search> {
 
   void firstSearch() {
     if (readLoading(context)) {
-      initSearchList(context);
       getSearchList(context).then((_) {
+        setHeightListSize(context);
         setLoading(context, false);
       });
       increasePage(context);
@@ -69,6 +69,7 @@ class _SearchState extends State<Search> {
   void search() async {
     if (getAdditional(context)) {
       getSearchList(context).then((_) {
+        setHeightListSize(context);
         setAdditional(context, false);
         setWorking(context, false);
       });
@@ -92,6 +93,8 @@ class _SearchState extends State<Search> {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           initLoadingData(context, isSearch: true);
+          initSearchList(context);
+          initHeightList(context);
           firstSearch();
           setKey(context, globalKey);
           setState(() {
@@ -115,13 +118,13 @@ class _SearchState extends State<Search> {
           body: Padding(
             padding: EdgeInsets.only(top: statusBarHeight(context)),
             child: CustomBoxWithScrollView(
-              expandedHeight: expandSearch
+              toolbarHeight: expandSearch
                   ? isDefaultTheme(context)
                       ? 400
                       : 430
                   : isDefaultTheme(context)
                       ? 115
-                      : 130,
+                      : 120,
               listScroll: scrollController,
               flexibleSpace: Column(
                 children: [

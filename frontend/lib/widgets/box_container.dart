@@ -382,7 +382,7 @@ class ListItem extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // print('index => $index, getHeight => ${getHeight(context, index!)}');
-      if (index != null && getHeight(context, index!) == 0) {
+      if (index != null && !showReview && getHeight(context, index!) == 0) {
         if (boxKey.currentContext != null) {
           final renderBox =
               boxKey.currentContext!.findRenderObject() as RenderBox;
@@ -391,15 +391,15 @@ class ListItem extends StatelessWidget {
       }
     });
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Flexible(
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
         child: CustomBox(
           key: boxKey,
           onTap: toReview,
           color: whiteColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -587,7 +587,7 @@ class ListItem extends StatelessWidget {
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -787,85 +787,86 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: CustomBox(
-        color: whiteColor,
-        width: 360,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 4,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          color: CustomColors.mainColor,
-                          title: review.nickname,
-                          fontSize: FontSize.smallSize,
-                        ),
-                        const SizedBox(width: 10),
-                        getToken(context) != null &&
-                                review.nickname == getName(context)
-                            ? Row(
-                                children: [
-                                  CustomIconButton(
-                                    color: CustomColors.mainColor,
-                                    icon: editIcon,
-                                    iconSize: 20,
-                                    onPressed: routerPush(
-                                      context,
-                                      page: ReviewForm(
-                                        toiletName: toiletName,
-                                        toiletId: toiletId,
-                                        reviewId: review.id,
-                                        preComment: review.comment,
-                                        preScore: review.score,
-                                        showReview: true,
-                                        afterWork: refreshPage,
-                                      ),
+    return CustomBox(
+      color: whiteColor,
+      width: 360,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 4,
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        color: CustomColors.mainColor,
+                        title: review.nickname,
+                        fontSize: FontSize.smallSize,
+                      ),
+                      const SizedBox(width: 10),
+                      getToken(context) != null &&
+                              review.nickname == getName(context)
+                          ? Row(
+                              children: [
+                                CustomIconButton(
+                                  color: CustomColors.mainColor,
+                                  icon: editIcon,
+                                  iconSize: 20,
+                                  onPressed: routerPush(
+                                    context,
+                                    page: ReviewForm(
+                                      toiletName: toiletName,
+                                      toiletId: toiletId,
+                                      reviewId: review.id,
+                                      preComment: review.comment,
+                                      preScore: review.score,
+                                      showReview: true,
+                                      afterWork: refreshPage,
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
-                                  CustomIconButton(
-                                    color: CustomColors.redColor,
-                                    icon: deleteIcon,
-                                    iconSize: 20,
-                                    onPressed: () => showModal(
-                                      context,
-                                      page: DeleteModal(
-                                        deleteMode: 0,
-                                        id: review.id,
-                                        refreshPage: refreshPage,
-                                        reviewContext: context,
-                                      ),
+                                ),
+                                const SizedBox(width: 10),
+                                CustomIconButton(
+                                  color: CustomColors.redColor,
+                                  icon: deleteIcon,
+                                  iconSize: 20,
+                                  onPressed: () => showModal(
+                                    context,
+                                    page: DeleteModal(
+                                      deleteMode: 0,
+                                      id: review.id,
+                                      refreshPage: refreshPage,
+                                      reviewContext: context,
                                     ),
                                   ),
-                                ],
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                    ],
                   ),
-                  Flexible(
-                    child: TextWithIcon(
-                      icon: starIcon,
-                      text: '${review.score}',
-                      iconColor: CustomColors.yellowColor,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                    ),
+                ),
+                Flexible(
+                  child: TextWithIcon(
+                    flex: 3,
+                    icon: starIcon,
+                    text: '${review.score}',
+                    iconColor: CustomColors.yellowColor,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                   ),
-                ],
-              ),
-              CustomText(title: review.comment)
-            ],
-          ),
+                ),
+              ],
+            ),
+            CustomText(title: review.comment),
+            const SizedBox(
+              height: 5,
+            )
+          ],
         ),
       ),
     );

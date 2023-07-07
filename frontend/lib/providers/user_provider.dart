@@ -24,7 +24,7 @@ class UserProvider extends ApiProvider {
   FutureDynamicMap changeName(String newName) => _changeName(newName);
 
   //* private function
-  StringMap _returnTokens(dynamic response) {
+  DynamicMap _returnTokens(dynamic response) {
     final headers = response.headers;
     final data = response.data;
     return {

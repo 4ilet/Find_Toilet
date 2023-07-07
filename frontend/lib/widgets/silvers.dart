@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 //* app bar
 class CustomSilverAppBar extends StatelessWidget {
-  final double toolbarHeight, expandedHeight;
+  final double toolbarHeight;
+  // expandedHeight;
   final double? elevation;
   final Widget flexibleSpace;
   final Color backgroundColor;
@@ -16,7 +17,7 @@ class CustomSilverAppBar extends StatelessWidget {
   const CustomSilverAppBar({
     super.key,
     required this.toolbarHeight,
-    required this.expandedHeight,
+    // required this.expandedHeight,
     required this.flexibleSpace,
     required this.backgroundColor,
     this.elevation,
@@ -29,7 +30,7 @@ class CustomSilverAppBar extends StatelessWidget {
       toolbarHeight: toolbarHeight,
       backgroundColor: backgroundColor,
       pinned: true,
-      expandedHeight: expandedHeight,
+      // expandedHeight: expandedHeight,
       flexibleSpace: flexibleSpace,
       elevation: elevation,
     );
@@ -100,7 +101,10 @@ class CustomSilverList extends StatelessWidget {
                         children: [
                           i < getPage(context) * cnt
                               // || !getAdditional(context)
-                              ? returnedWidget
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: returnedWidget,
+                                )
                               : const SizedBox(),
                           i == data.length - 1 &&
                                   getTotal(context)! > getPage(context)
@@ -135,7 +139,8 @@ class CustomSilverList extends StatelessWidget {
 class CustomBoxWithScrollView extends StatefulWidget {
   final ScrollController? appBarScroll, listScroll;
   final Widget flexibleSpace;
-  final double toolbarHeight, expandedHeight;
+  final double toolbarHeight;
+  // expandedHeight;
   final Color backgroundColor;
   final WidgetList? silverChild;
   // final ReturnVoid addScrollListner;
@@ -148,7 +153,7 @@ class CustomBoxWithScrollView extends StatefulWidget {
     this.listScroll,
     required this.flexibleSpace,
     this.toolbarHeight = 200,
-    this.expandedHeight = 100,
+    // this.expandedHeight = 100,
     this.backgroundColor = mainColor,
     this.silverChild,
     // required this.addScrollListner,
@@ -176,14 +181,14 @@ class _CustomBoxWithScrollViewState extends State<CustomBoxWithScrollView> {
       child: Column(
         children: [
           SizedBox(
-            height: widget.expandedHeight,
+            height: widget.toolbarHeight,
             child: CustomScrollView(
               controller: widget.appBarScroll,
               slivers: [
                 CustomSilverAppBar(
                   elevation: 0,
                   toolbarHeight: widget.toolbarHeight,
-                  expandedHeight: widget.expandedHeight,
+                  // expandedHeight: widget.expandedHeight,
                   flexibleSpace: widget.flexibleSpace,
                   backgroundColor: widget.backgroundColor,
                 ),
