@@ -61,7 +61,7 @@ class _ReviewFormState extends State<ReviewForm> {
     });
   }
 
-  void changeComment(String comment) => reviewData['comment'] = comment;
+  void changeComment(String comment) => reviewData['comment'] = comment.trim();
   void addOrEditReview() async {
     try {
       if (enabled) {
@@ -76,14 +76,17 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((_) {
-            if (widget.showReview) {
-              ToiletProvider().getToilet(widget.toiletId).then((data) {
-                setToilet(context, data);
-              });
-            }
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '리뷰 등록',
+                content: '리뷰가 성공적으로\n 등록되었습니다',
+              ),
+            ).then((_) {
+              routerPop(context)();
+              widget.afterWork();
+            });
           });
-
-          state = '등록';
         } else {
           ReviewProvider()
               .updateReview(
@@ -91,25 +94,18 @@ class _ReviewFormState extends State<ReviewForm> {
             reviewData: reviewData,
           )
               .then((result) {
-            if (widget.showReview) {
-              ToiletProvider().getToilet(widget.toiletId).then((data) {
-                setToilet(context, data);
-              });
-            }
+            showModal(
+              context,
+              page: const AlertModal(
+                title: '리뷰 수정',
+                content: '리뷰가 성공적으로\n 수정되었습니다',
+              ),
+            ).then((_) {
+              routerPop(context)();
+              widget.afterWork();
+            });
           });
-          state = '수정';
         }
-        if (!mounted) return;
-        showModal(
-          context,
-          page: AlertModal(
-            title: '리뷰 $state',
-            content: '리뷰가 성공적으로\n $state되었습니다',
-          ),
-        ).then((_) {
-          routerPop(context)();
-          widget.afterWork();
-        });
       }
     } catch (error) {
       print(error);

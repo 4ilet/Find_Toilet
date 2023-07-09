@@ -353,7 +353,7 @@ class InputModal extends StatelessWidget {
           initValue: data,
           hasBorder: true,
           height: 50,
-          padding: const EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 10),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -526,7 +526,7 @@ class CustomModalWithClose extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+              padding: const EdgeInsets.fromLTRB(10, 15, 0, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: crossAxisAlignment,
@@ -537,7 +537,6 @@ class CustomModalWithClose extends StatelessWidget {
                           color: titleColor,
                           isBoldText: isBoldText,
                           font: font,
-                          fontSize: FontSize.smallSize,
                         )
                       : titleWidget ?? const SizedBox(),
                   hideButton
@@ -1047,8 +1046,8 @@ class _JoinModalState extends State<JoinModal> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomBox(
-              height: screenHeight(context) * 0.4,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
                   Row(
@@ -1116,23 +1115,25 @@ class _JoinModalState extends State<JoinModal> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      CustomButton(
-                        onPressed: routerPop(context),
-                        buttonText: '취소',
-                        buttonColor: greyColor,
-                        textColor: CustomColors.whiteColor,
-                      ),
-                      CustomButton(
-                        onPressed: joinOrLogin,
-                        buttonText: '회원가입',
-                        buttonColor: mainColor,
-                        textColor: CustomColors.whiteColor,
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomButton(
+                          onPressed: routerPop(context),
+                          buttonText: '취소',
+                          buttonColor: greyColor,
+                          textColor: CustomColors.whiteColor,
+                        ),
+                        CustomButton(
+                          onPressed: joinOrLogin,
+                          buttonText: '회원가입',
+                          buttonColor: mainColor,
+                          textColor: CustomColors.whiteColor,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

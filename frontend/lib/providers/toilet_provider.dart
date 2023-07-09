@@ -46,6 +46,7 @@ class ToiletProvider extends ApiProvider {
 
   Future<ToiletModel> _getToilet(int toiletId) async {
     try {
+      print('화장실 정보!!!! => $toiletId');
       final response = token == null
           ? await dio.get(eachToiletUrl(toiletId))
           : await dioWithToken(url: eachToiletUrl(toiletId), method: 'GET').get(

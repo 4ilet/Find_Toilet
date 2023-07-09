@@ -1,5 +1,6 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/providers/toilet_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -36,6 +37,11 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
     toiletModel = getToilet(context);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        print(
+            'show review => ${widget.showReview}, item height => ${getItemHeight(context)}');
+        print(context.read<ReviewBookMarkProvider>().heightList);
+        print(
+            '${widget.showReview ? getItemHeight(context)! + (context.read<SettingsProvider>().fontState == '기본' ? 60 : 100) : context.read<SettingsProvider>().fontState == '기본' ? 80 : 95}');
         toiletId = getToiletId(context);
         controller.addListener(
           () {
@@ -72,6 +78,9 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
         }
         setAdditional(context, false);
         setWorking(context, false);
+        print(
+            'show review => ${widget.showReview}, item height => $getItemHeight');
+        print(context.read<ReviewBookMarkProvider>().heightList);
       });
       increasePage(context);
     }
@@ -91,8 +100,14 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
         return CustomBoxWithScrollView(
           appBarScroll: scrollController,
           listScroll: controller,
-          toolbarHeight: widget.showReview ? 55 : 40,
-          expandedHeight: widget.showReview ? getItemHeight(context)! + 95 : 95,
+          toolbarHeight: widget.showReview
+              ? getItemHeight(context)! + (isDefaultTheme(context) ? 60 : 100)
+              : isDefaultTheme(context)
+                  ? 80
+                  : 95,
+          // expandedHeight: widget.showReview
+          //     ? getItemHeight(context)! + (isDefaultTheme(context) ? 120 : 150)
+          //     : 95,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,
@@ -104,9 +119,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
                     child: Row(
                       children: [
                         widget.showReview
@@ -136,15 +149,23 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                     ),
                   ),
                   widget.showReview
-                      ? ListItem(
-                          showReview: true,
-                          isMain: true,
-                          refreshPage: widget.refreshPage,
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: ListItem(
+                            showReview: true,
+                            isMain: true,
+                            refreshPage: () {
+                              ToiletProvider()
+                                  .getToilet(getToiletId(context)!)
+                                  .then((data) {
+                                setToilet(context, data);
+                                widget.refreshPage();
+                              });
+                            },
+                          ),
                         )
                       : const Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: CustomText(
                             title: '필터를 적용한 결과입니다',
                             fontSize: FontSize.smallSize,

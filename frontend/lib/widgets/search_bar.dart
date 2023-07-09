@@ -94,10 +94,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         );
       } else if (isChanged()) {
         setSortIdx(context, sortIdx);
-        // print(filterValueList);
         for (int i = 0; i < 4; i += 1) {
           if (filterValueList[i] != searchData[filterKeyList[i]]) {
             setFilter(context, i, filterValueList[i]);
+            searchData[filterKeyList[i]] = filterValueList[i];
           }
         }
         context.read<MainSearchProvider>().setSearchData(searchData);
@@ -167,8 +167,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void onChange(String? value) {
-    print('value => $value');
-    searchData['keyword'] = value;
+    searchData['keyword'] = value?.trim();
     if (value == null) {
       setState(() {});
     }
@@ -176,6 +175,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    print('search bar');
     return CustomBox(
       color: showDetail ? mainColor : null,
       child: Column(

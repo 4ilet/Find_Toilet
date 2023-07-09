@@ -62,6 +62,7 @@ class _BookMarkListState extends State<BookMarkList> {
         context,
         folderId: widget.folderId,
       ).then((_) {
+        setHeightListSize(context);
         setLoading(context, false);
       });
       increasePage(context);
@@ -70,11 +71,11 @@ class _BookMarkListState extends State<BookMarkList> {
 
   void moreData() {
     if (getAdditional(context)) {
-      print('요청!!!!!!!!!!!!!!!!!!!!!!');
       getBookmarkList(
         context,
         folderId: widget.folderId,
       ).then((_) {
+        setHeightListSize(context);
         setWorking(context, false);
         setAdditional(context, false);
       });
@@ -89,6 +90,7 @@ class _BookMarkListState extends State<BookMarkList> {
         (_) {
           initLoadingData(context);
           initBookmarkList(context);
+          initHeightList(context);
           initData();
           setState(() {
             refreshState = false;
@@ -101,13 +103,13 @@ class _BookMarkListState extends State<BookMarkList> {
       body: CustomBoxWithScrollView(
         listScroll: controller,
         toolbarHeight: 100,
-        expandedHeight: isDefaultTheme(context)
-            ? widget.folderName.length > 7
-                ? 110
-                : 60
-            : widget.folderName.length > 6
-                ? 120
-                : 70,
+        // expandedHeight: isDefaultTheme(context)
+        //     ? widget.folderName.length > 7
+        //         ? 110
+        //         : 60
+        //     : widget.folderName.length > 6
+        //         ? 120
+        //         : 70,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
           padding:

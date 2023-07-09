@@ -41,14 +41,14 @@ class _MainState extends State<Main> {
     print('refresh main! ${readLoading(context)}');
     print('get token : ${readToken(context)}');
     if (readLoading(context)) {
+      initPage(context);
+      initHeightList(context);
       initMainData(
         context,
         showReview: widget.showReview,
         needClear: true,
       ).then((data) {
-        if (!widget.showReview) {
-          setHeightListSize(context);
-        }
+        setHeightListSize(context);
         setLoading(context, false);
       });
       increasePage(context);
@@ -62,6 +62,9 @@ class _MainState extends State<Main> {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           initLoadingData(context, isMain: true);
+          if (!widget.showReview) {
+            initHeightList(context);
+          }
           initMainData(
             context,
             showReview: widget.showReview,
