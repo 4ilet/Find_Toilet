@@ -108,6 +108,7 @@ class _MainState extends State<Main> {
                         height: screenHeight(context) - paddingTop,
                         child: MapScreen(
                           showReview: widget.showReview,
+                          refreshPage: widget.refreshPage,
                         ),
                       ),
                     ],
