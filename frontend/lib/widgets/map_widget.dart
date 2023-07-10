@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
+import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/utilities/utils.dart';
 import 'package:find_toilet/utilities/tile_servers.dart';
@@ -18,13 +19,13 @@ import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
 class MapScreen extends StatefulWidget {
-  final bool showReview;
+  final bool showReview, needNear;
   final ReturnVoid? refreshPage;
   const MapScreen({
     super.key,
     this.showReview = false,
     required this.refreshPage,
-    // required this.getLocation,
+    required this.needNear,
   });
   @override
   MapScreenState createState() => MapScreenState();
@@ -36,7 +37,8 @@ class MapScreenState extends State<MapScreen> {
     zoom: 15,
   );
   final bool _darkMode = false;
-  bool refreshState = true;
+  bool refreshState = false;
+  int? length;
 
   List<LatLng> markers = [];
   List<LatLng> toiletMarkers = [];
@@ -44,6 +46,15 @@ class MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void getOnlyToilet() async {
+    double conLat = getToilet(context)!.lat;
+    double conLng = getToilet(context)!.lng;
+    controller.center = LatLng(conLat, conLng);
+    toiletMarkers.clear();
+    toiletMarkers.add(LatLng(conLat, conLng));
+    setState(() {});
   }
 
   void getLocation() async {
@@ -61,27 +72,30 @@ class MapScreenState extends State<MapScreen> {
       if (controller.zoom < 16) controller.zoom = 16;
       setLatLng(context, position.latitude, position.longitude);
 
-      if (markers == []) {
+      if (markers.isEmpty) {
         markers.add(LatLng(position.latitude, position.longitude));
       } else {
         markers.clear();
         markers.add(LatLng(position.latitude, position.longitude));
       }
+
       // controller.zoom = 16;
       // print(GlobalProvider().mainToiletList.length);
       // Future.delayed(const Duration(milliseconds: 200), () {
-      if (mainToiletList(context).isNotEmpty) {
-        toiletMarkers.clear();
-        for (int i = 0; i < mainToiletList(context).length; i++) {
-          toiletMarkers.add(
-            LatLng(
-              mainToiletList(context)[i].lat,
-              mainToiletList(context)[i].lng,
-            ),
-          );
-        }
-        setState(() {});
+
+      // if (mainToiletList(context).isNotEmpty) {
+      toiletMarkers.clear();
+      length = mainToiletList(context).length;
+      for (int i = 0; i < length!; i++) {
+        toiletMarkers.add(
+          LatLng(
+            mainToiletList(context)[i].lat,
+            mainToiletList(context)[i].lng,
+          ),
+        );
+        // }
       }
+      setState(() {});
     } catch (error) {
       SystemNavigator.pop();
     }
@@ -97,6 +111,7 @@ class MapScreenState extends State<MapScreen> {
         page: Main(
           showReview: true,
           refreshPage: widget.refreshPage,
+          needNear: widget.needNear,
         ),
       )();
     }
@@ -168,18 +183,14 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerWidget(Offset pos, Color color, double size, int? index,
-      [IconData icon = Icons.radio_button_checked]) {
+      [bool isMarker = true]) {
     return Positioned(
       left: pos.dx - 24,
       top: pos.dy - 48,
       width: size,
       height: size,
       child: GestureDetector(
-        child: Icon(
-          icon,
-          color: color,
-          size: size,
-        ),
+        child: Image.asset(isMarker ? toilet : user),
         onTap: () {
           if (controller.zoom < 18) {
             controller.zoom = 18;
@@ -194,15 +205,24 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (refreshState && !getLoading(context)) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) {
-          setState(() {
-            refreshState = false;
+    if (!getLoading(context)) {
+      // print('get loading');
+      if (!refreshState) {
+        // print(false);
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            refreshState = true;
+            widget.needNear ? getLocation() : getOnlyToilet();
+          },
+        );
+      } else if (length != mainToiletList(context).length) {
+        // print('renew');
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
             getLocation();
-          });
-        },
-      );
+          },
+        );
+      }
     }
     return Scaffold(
       // appBar: AppBar(
@@ -225,48 +245,47 @@ class MapScreenState extends State<MapScreen> {
           final lat = readLat(context);
           final lng = readLng(context);
           late final Iterable<Widget> markerWidgets;
-          if (markers != []) {
+          if (markers.isNotEmpty) {
             final markerPositions = markers.map(transformer.toOffset).toList();
             markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, Colors.red, 48, null),
+              (pos) => _buildMarkerWidget(pos, Colors.red, 48, null, false),
             );
           } else {
             final markerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
                 .map(transformer.toOffset)
                 .toList();
             markerWidgets = markerPositions.map(
-              (pos) =>
-                  _buildMarkerWidget(pos, const Color(0x00000000), 48, null),
+              (pos) => _buildMarkerWidget(
+                  pos, const Color(0x00000000), 48, null, false),
             );
           }
           final List<Widget> toiletMarkerWidgets = [];
-          if (toiletMarkers.isNotEmpty) {
-            final toileMarkerPositions =
-                toiletMarkers.map(transformer.toOffset).toList();
-            for (int i = 0; i < toileMarkerPositions.length; i += 1) {
-              toiletMarkerWidgets.add(_buildMarkerWidget(
-                  toileMarkerPositions[i],
-                  mainColor,
-                  36,
-                  i,
-                  Icons.location_on));
-            }
-            // toiletMarkerWidgets = toileMarkerPositions.map(
-            //   (pos) =>
-            //       _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
-            // );
-          } else {
-            final toileMarkerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
-                .map(transformer.toOffset)
-                .toList();
-            for (int i = 0; i < toileMarkerPositions.length; i += 1) {
-              toiletMarkerWidgets.add(_buildMarkerWidget(
-                  toileMarkerPositions[i], const Color(0x00000000), 36, i));
-            }
-            // toiletMarkerWidgets = toileMarkerPositions.map(
-            //   (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 36),
-            // );
+          // if (toiletMarkers.isNotEmpty) {
+          final toileMarkerPositions =
+              toiletMarkers.map(transformer.toOffset).toList();
+          for (int i = 0; i < toileMarkerPositions.length; i += 1) {
+            toiletMarkerWidgets.add(
+                _buildMarkerWidget(toileMarkerPositions[i], mainColor, 36, i));
           }
+          print('widgets => $toiletMarkerWidgets');
+          // toiletMarkerWidgets = toileMarkerPositions.map(
+          //   (pos) =>
+          //       _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
+          // );
+          // } else {
+          // toiletMarkerWidgets = [];
+          // final toileMarkerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
+          //     .map(transformer.toOffset)
+          //     .toList();
+          // for (int i = 0; i < toileMarkerPositions.length; i += 1) {
+          //   toiletMarkerWidgets.add(_buildMarkerWidget(
+          //       toileMarkerPositions[i], const Color(0x00000000), 36, i));
+          // }
+
+          // toiletMarkerWidgets = toileMarkerPositions.map(
+          //   (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 36),
+          // );
+          // }
           // print('main toilet => ${mainToiletList(context)}');
           // print('toilet marker => $toiletMarkerWidgets');
           return GestureDetector(
@@ -318,7 +337,7 @@ class MapScreenState extends State<MapScreen> {
                   ),
                   ...markerWidgets,
                   // ...toiletMarkerWidgets,
-                  ...(!getLoading(context) ? toiletMarkerWidgets : []),
+                  ...toiletMarkerWidgets,
                 ],
               ),
             ),
@@ -367,22 +386,24 @@ class MapScreenState extends State<MapScreen> {
                   ),
                 )
               : const SizedBox(),
-          Align(
-            alignment: Alignment(
-                Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
-            child: FloatingActionButton(
-              // onPressed: _gotoDefault,
-              // onPressed: widget.getLocation,
-              onPressed: getLocation,
-              backgroundColor: whiteColor,
-              mini: true,
-              tooltip: 'My Location',
-              child: const Icon(
-                Icons.my_location_rounded,
-                color: mainColor,
-              ),
-            ),
-          ),
+          widget.needNear
+              ? Align(
+                  alignment: Alignment(
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
+                  child: FloatingActionButton(
+                    // onPressed: _gotoDefault,
+                    // onPressed: widget.getLocation,
+                    onPressed: getLocation,
+                    backgroundColor: whiteColor,
+                    mini: true,
+                    tooltip: 'My Location',
+                    child: const Icon(
+                      Icons.my_location_rounded,
+                      color: mainColor,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
       bottomNavigationBar:

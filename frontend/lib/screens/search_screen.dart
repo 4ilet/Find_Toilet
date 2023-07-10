@@ -106,7 +106,7 @@ class _SearchState extends State<Search> {
     print('search build');
     return WillPopScope(
       onWillPop: () {
-        removedRouterPush(context, page: const Main());
+        removedRouterPush(context, page: const Main(needNear: true));
         return Future.value(false);
       },
       child: GestureDetector(

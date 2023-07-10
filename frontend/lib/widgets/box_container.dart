@@ -375,6 +375,7 @@ class ListItem extends StatelessWidget {
           page: Main(
             showReview: true,
             refreshPage: refreshPage,
+            needNear: isMain,
           ),
         )();
       }
