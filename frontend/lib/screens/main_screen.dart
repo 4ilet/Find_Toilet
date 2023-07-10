@@ -8,12 +8,13 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class Main extends StatefulWidget {
-  final bool showReview;
+  final bool showReview, needNear;
   final ReturnVoid? refreshPage;
   const Main({
     super.key,
     this.showReview = false,
     this.refreshPage,
+    this.needNear = true,
   });
 
   @override
@@ -109,6 +110,7 @@ class _MainState extends State<Main> {
                         child: MapScreen(
                           showReview: widget.showReview,
                           refreshPage: widget.refreshPage,
+                          needNear: widget.needNear,
                         ),
                       ),
                     ],

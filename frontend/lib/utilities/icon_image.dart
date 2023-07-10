@@ -49,3 +49,5 @@ const naverMap = 'assets/images/naver_map.png';
 const kakaoMap = 'assets/images/kakao_map.png';
 const tMap = 'assets/images/t_map.png';
 const kakaoLogin = 'assets/images/kakao_login_medium.png';
+const user = 'assets/images/user.png';
+const toilet = 'assets/images/toilet.png';
