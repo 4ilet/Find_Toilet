@@ -92,21 +92,21 @@ FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
 }
 
 //* 화면 확대/축소 버튼
-String getMagnify(BuildContext context) =>
-    context.read<SettingsProvider>().magnigyState;
-
 String watchMagnify(BuildContext context) =>
     context.watch<SettingsProvider>().magnigyState;
 
 //* 지도 반경
 String getRadius(BuildContext context) =>
-    context.read<SettingsProvider>().radiusState;
+    context.watch<SettingsProvider>().radiusState;
 
 int getIntRadius(BuildContext context) =>
     context.read<SettingsProvider>().radius;
 
 //* 메뉴 옵션 변경
 void changeOptions(BuildContext context, int menuIdx) {
+  if (menuIdx == 1) {
+    setRadius(context);
+  }
   context.read<SettingsProvider>().applyOption(menuIdx);
 }
 
@@ -155,12 +155,6 @@ int? getTotal(BuildContext context) =>
 void setTotal(BuildContext context, int? newTotal) =>
     context.read<ScrollProvider>().setTotal(newTotal);
 
-//* 검색어
-// String? getQuery(BuildContext context) => context.watch<GlobalProvider>().query;
-// String? readQuery(BuildContext context) => context.read<GlobalProvider>().query;
-// void setQuery(BuildContext context, String? value) =>
-//     context.read<GlobalProvider>().setQuery(value);
-
 //* 필터
 void setFilter(BuildContext context, int index, bool value) =>
     context.read<MainSearchProvider>().setFilter(index, value);
@@ -204,6 +198,10 @@ void setLatLng(BuildContext context, double newLat, double newLng) =>
     context.read<MainSearchProvider>().setLatLng(newLat, newLng);
 
 //* main toilet list
+void setRadius(BuildContext context) => context
+    .read<MainSearchProvider>()
+    .setRadius(((getIntRadius(context) + 1) % 3 + 1) * 500);
+
 void addToiletList(BuildContext context, ToiletList toiletList) =>
     context.read<MainSearchProvider>().addToiletList(toiletList);
 

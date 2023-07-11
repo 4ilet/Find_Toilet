@@ -481,6 +481,7 @@ class MainSearchProvider with ChangeNotifier {
   void setSearchData(DynamicMap newData) => _setSearchData(newData);
 
   void initSearchList() => _initSearchList();
+  void setRadius(int value) => _setRadius(value);
 
   //* private
   FutureToiletList _getMainToiletList(int page) async {
@@ -549,4 +550,6 @@ class MainSearchProvider with ChangeNotifier {
       _mainToiletList.addAll(toiletList);
 
   void _initToiletList() => _mainToiletList.clear();
+
+  void _setRadius(int value) => _mainToiletData['radius'] = value;
 }

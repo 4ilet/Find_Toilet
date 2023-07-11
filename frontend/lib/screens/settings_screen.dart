@@ -1,4 +1,3 @@
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/settings_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -10,7 +9,6 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   final bool showReview;
@@ -105,11 +103,11 @@ class _SettingsState extends State<Settings> {
   String optionTitle(int i) {
     switch (i) {
       case 0:
-        return context.watch<SettingsProvider>().magnigyState;
+        return watchMagnify(context);
       case 1:
-        return context.watch<SettingsProvider>().fontState;
+        return getThemeState(context);
       default:
-        return context.watch<SettingsProvider>().radiusState;
+        return getRadius(context);
     }
   }
 
@@ -232,7 +230,10 @@ class _SettingsState extends State<Settings> {
                   children: [
                     ExitPage(
                       color: CustomColors.blackColor,
-                      onTap: routerPop(context),
+                      onTap: () {
+                        widget.refreshPage();
+                        routerPop(context)();
+                      },
                     ),
                   ],
                 ),

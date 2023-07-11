@@ -14,6 +14,7 @@ import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:url_launcher/url_launcher.dart';
 
 //* 도움말, 라이선스 모달
@@ -30,19 +31,19 @@ class HelpModal extends StatelessWidget {
       title: isHelpModal ? '도움말' : '라이선스',
       children: [
         SingleChildScrollView(
-            child: isHelpModal
-                ? const CustomBox(
-                    child: Center(
-                      child: CustomText(
-                        title: '여기에 내용이 들어감',
-                        fontSize: FontSize.defaultSize,
-                      ),
-                    ),
-                  )
-                : const PolicyContent(
-                    isPrivate: false,
-                    isLicense: true,
-                  )),
+          child: isHelpModal
+              ? CustomBox(
+                  child: Column(
+                    children: [
+                      html.Html(data: license),
+                    ],
+                  ),
+                )
+              : const PolicyContent(
+                  isPrivate: false,
+                  isLicense: true,
+                ),
+        ),
       ],
     );
   }
@@ -60,14 +61,20 @@ class _PolicyModalState extends State<PolicyModal>
     with TickerProviderStateMixin {
   final List<Tab> policyTabs = [
     const Tab(
-      child: CustomText(
-        title: '개인 정보 처리 방침',
+      // text: '개인 정보\n처리 방침',
+      icon: CustomText(
+        title: '개인 정보\n처리 방침',
         fontSize: FontSize.smallSize,
       ),
+      // child: CustomText(
+      //   title: '개인 정보\n처리 방침',
+      //   fontSize: FontSize.smallSize,
+      // ),
     ),
     const Tab(
-      child: CustomText(
-        title: '위치 정보 처리 방침',
+      // text: '위치 정보\n처리 방침',
+      icon: CustomText(
+        title: '위치 정보\n처리 방침',
         fontSize: FontSize.smallSize,
       ),
     ),
@@ -89,6 +96,11 @@ class _PolicyModalState extends State<PolicyModal>
             controller: tabController,
             tabs: policyTabs,
             indicatorColor: mainColor,
+            // labelColor: blackColor,
+            // labelStyle: TextStyle(
+            //     fontSize:
+            //         isDefaultTheme(context) ? defaultSize : largeDefaultSize),
+            labelPadding: const EdgeInsets.only(bottom: 5),
           ),
         ),
         Flexible(
@@ -96,6 +108,7 @@ class _PolicyModalState extends State<PolicyModal>
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: CustomBox(
+              radius: 0,
               child: TabBarView(
                 controller: tabController,
                 children: const [
@@ -123,36 +136,43 @@ class PolicyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBox(
-      color: lightGreyColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: CustomText(
-                isBoldText: true,
-                title: isLicense
-                    ? '라이선스'
-                    : isPrivate
-                        ? '개인 정보 처리 방침'
-                        : '위치 정보 처리 방침',
-                fontSize: FontSize.largeSize,
+    return SingleChildScrollView(
+      child: CustomBox(
+        color: lightGreyColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: CustomText(
+                  isBoldText: true,
+                  title: isLicense
+                      ? '라이선스'
+                      : isPrivate
+                          ? '개인 정보 처리 방침'
+                          : '위치 정보 처리 방침',
+                  fontSize: FontSize.defaultSize,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: CustomText(
-                title: isLicense
-                    ? license
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: isLicense
+                    ? html.Html(
+                        data: license,
+                        style: {
+                          'span': html.Style(fontWeight: FontWeight.bold)
+                        },
+                      )
                     : isPrivate
-                        ? privatePolicy
-                        : gpsPolicy,
-                fontSize: FontSize.smallSize,
+                        ? html.Html(data: privatePolicy)
+                        : const CustomText(
+                            title: gpsPolicy,
+                            fontSize: FontSize.smallSize,
+                          ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

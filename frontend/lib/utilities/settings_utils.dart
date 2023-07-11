@@ -5,9 +5,13 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-const privatePolicy = '서비스 제공자(포일렛)은 사용자의 개인 정보를';
+const privatePolicy = '''
+<p>내용</p>
+''';
 const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
-const license = '글꼴\n위치 정보';
+const license = '''
+<p>글꼴<p><span>한국기계연구원 서체,</span>\n한국기계연구원,\nkimm.re.kr/webfont</p><p><span>Noto Sans</span>,\nGoogle Fonts,\nhttps://fonts.google.com/noto/specimen/Noto+Sans+KR</p></p>
+''';
 
 //* 문의하기 내부 내용
 String inquiryBody() {
