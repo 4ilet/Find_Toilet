@@ -115,7 +115,7 @@ class SettingsProvider with ChangeNotifier {
     ['큰 글씨', '기본'],
     ['좁게', '보통', '넓게'],
   ];
-  final _valueList = [700, 1000, 2000];
+  final _valueList = [500, 1000, 1500];
 
   get fontState => _fontState;
   get magnigyState => _magnigyState;

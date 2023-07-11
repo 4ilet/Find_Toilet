@@ -51,7 +51,7 @@ class MapScreenState extends State<MapScreen> {
   void getOnlyToilet() async {
     double conLat = getToilet(context)!.lat;
     double conLng = getToilet(context)!.lng;
-    controller.center = LatLng(conLat, conLng);
+    // controller.center = LatLng(conLat, conLng);
     toiletMarkers.clear();
     toiletMarkers.add(LatLng(conLat, conLng));
     setState(() {});
@@ -69,7 +69,14 @@ class MapScreenState extends State<MapScreen> {
       } else {
         controller.center = LatLng(position.latitude, position.longitude);
       }
-      if (controller.zoom < 16) controller.zoom = 16;
+
+      int nowRadius = getIntRadius(context);
+      print(nowRadius);
+
+      if (nowRadius == 500 && controller.zoom < 16) controller.zoom = 16;
+      if (nowRadius == 1000 && controller.zoom < 15) controller.zoom = 15;
+      if (nowRadius == 1500 && controller.zoom < 14) controller.zoom = 14;
+
       setLatLng(context, position.latitude, position.longitude);
 
       if (markers.isEmpty) {
