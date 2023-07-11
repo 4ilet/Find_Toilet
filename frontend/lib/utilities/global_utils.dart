@@ -104,10 +104,10 @@ int getIntRadius(BuildContext context) =>
 
 //* 메뉴 옵션 변경
 void changeOptions(BuildContext context, int menuIdx) {
+  context.read<SettingsProvider>().applyOption(menuIdx);
   if (menuIdx == 1) {
     setRadius(context);
   }
-  context.read<SettingsProvider>().applyOption(menuIdx);
 }
 
 //* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)
@@ -198,9 +198,8 @@ void setLatLng(BuildContext context, double newLat, double newLng) =>
     context.read<MainSearchProvider>().setLatLng(newLat, newLng);
 
 //* main toilet list
-void setRadius(BuildContext context) => context
-    .read<MainSearchProvider>()
-    .setRadius(((getIntRadius(context) + 1) % 3 + 1) * 500);
+void setRadius(BuildContext context) =>
+    context.read<MainSearchProvider>().setRadius(getIntRadius(context));
 
 void addToiletList(BuildContext context, ToiletList toiletList) =>
     context.read<MainSearchProvider>().addToiletList(toiletList);

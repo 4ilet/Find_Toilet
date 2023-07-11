@@ -54,6 +54,7 @@ class _IntroState extends State<Intro> {
     context.read<SettingsProvider>().initSettings();
     userLocation().then((_) {
       Future.delayed(const Duration(seconds: 2), () {
+        setRadius(context);
         removedRouterPush(
           context,
           page: getFontSize(context) == null

@@ -115,7 +115,7 @@ class SettingsProvider with ChangeNotifier {
     ['큰 글씨', '기본'],
     ['좁게', '보통', '넓게'],
   ];
-  final _valueList = [700, 1000, 2000];
+  final _valueList = [500, 1000, 1500];
 
   get fontState => _fontState;
   get magnigyState => _magnigyState;
@@ -387,8 +387,8 @@ class MainSearchProvider with ChangeNotifier {
   static final StringList _sortValues = ['distance', 'score', 'comment'];
   // static int _cnt = 20;
   // static final Map<String, String?> _query = {'value': null};
-  static double? _lat = 37.537229;
-  static double? _lng = 127.005515;
+  static double? _lat;
+  static double? _lng;
   static int _sortIdx = 0;
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
