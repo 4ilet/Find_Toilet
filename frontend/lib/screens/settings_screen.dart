@@ -232,7 +232,10 @@ class _SettingsState extends State<Settings> {
                   children: [
                     ExitPage(
                       color: CustomColors.blackColor,
-                      onTap: routerPop(context),
+                      onTap: () {
+                        widget.refreshPage();
+                        routerPop(context)();
+                      },
                     ),
                   ],
                 ),
