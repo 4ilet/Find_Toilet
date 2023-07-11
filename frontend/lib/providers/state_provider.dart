@@ -387,8 +387,8 @@ class MainSearchProvider with ChangeNotifier {
   static final StringList _sortValues = ['distance', 'score', 'comment'];
   // static int _cnt = 20;
   // static final Map<String, String?> _query = {'value': null};
-  static double? _lat = 37.537229;
-  static double? _lng = 127.005515;
+  static double? _lat;
+  static double? _lng;
   static int _sortIdx = 0;
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
@@ -481,6 +481,7 @@ class MainSearchProvider with ChangeNotifier {
   void setSearchData(DynamicMap newData) => _setSearchData(newData);
 
   void initSearchList() => _initSearchList();
+  void setRadius(int value) => _setRadius(value);
 
   //* private
   FutureToiletList _getMainToiletList(int page) async {
@@ -549,4 +550,6 @@ class MainSearchProvider with ChangeNotifier {
       _mainToiletList.addAll(toiletList);
 
   void _initToiletList() => _mainToiletList.clear();
+
+  void _setRadius(int value) => _mainToiletData['radius'] = value;
 }

@@ -36,7 +36,7 @@ class _IntroState extends State<Intro> {
 
   Future<Position> userLocation() async {
     try {
-      LocationPermission permission = await Geolocator.requestPermission();
+      await Geolocator.requestPermission();
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -54,6 +54,7 @@ class _IntroState extends State<Intro> {
     context.read<SettingsProvider>().initSettings();
     userLocation().then((_) {
       Future.delayed(const Duration(seconds: 2), () {
+        setRadius(context);
         removedRouterPush(
           context,
           page: getFontSize(context) == null

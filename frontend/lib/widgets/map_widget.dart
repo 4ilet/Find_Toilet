@@ -32,10 +32,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class MapScreenState extends State<MapScreen> {
-  final controller = MapController(
-    location: const LatLng(35.145, 126.844),
-    zoom: 15,
-  );
+  late MapController controller;
   final bool _darkMode = false;
   bool refreshState = false;
   int? length;
@@ -46,6 +43,10 @@ class MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+    controller = MapController(
+      location: LatLng(readLat(context)!, readLng(context)!),
+      zoom: 15,
+    );
   }
 
   void getOnlyToilet() async {
@@ -69,13 +70,6 @@ class MapScreenState extends State<MapScreen> {
       } else {
         controller.center = LatLng(position.latitude, position.longitude);
       }
-
-      int nowRadius = getIntRadius(context);
-      print(nowRadius);
-
-      if (nowRadius == 500 && controller.zoom < 16) controller.zoom = 16;
-      if (nowRadius == 1000 && controller.zoom < 15) controller.zoom = 15;
-      if (nowRadius == 1500 && controller.zoom < 14) controller.zoom = 14;
 
       setLatLng(context, position.latitude, position.longitude);
 
@@ -249,6 +243,14 @@ class MapScreenState extends State<MapScreen> {
       body: MapLayout(
         controller: controller,
         builder: (context, transformer) {
+          int nowRadius = getIntRadius(context);
+          if (nowRadius == 500 && controller.zoom < 16) {
+            controller.zoom = 16;
+          } else if (nowRadius == 1000 && controller.zoom < 15) {
+            controller.zoom = 15;
+          } else if (nowRadius == 1500 && controller.zoom < 14) {
+            controller.zoom = 14;
+          }
           final lat = readLat(context);
           final lng = readLng(context);
           late final Iterable<Widget> markerWidgets;
@@ -274,7 +276,6 @@ class MapScreenState extends State<MapScreen> {
             toiletMarkerWidgets.add(
                 _buildMarkerWidget(toileMarkerPositions[i], mainColor, 36, i));
           }
-          print('widgets => $toiletMarkerWidgets');
           // toiletMarkerWidgets = toileMarkerPositions.map(
           //   (pos) =>
           //       _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
