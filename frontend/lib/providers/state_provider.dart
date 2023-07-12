@@ -383,7 +383,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
 
 class MainSearchProvider with ChangeNotifier {
   static GlobalKey? _globalKey;
-  static bool checked = false;
+  // static bool _checked = false;
+  static int? _selectedMarker;
   static final StringList _sortValues = ['distance', 'score', 'comment'];
   // static int _cnt = 20;
   // static final Map<String, String?> _query = {'value': null};
@@ -426,6 +427,7 @@ class MainSearchProvider with ChangeNotifier {
   bool get disabled => _mainToiletData['disabled'];
   bool get allDay => _mainToiletData['allDay'];
   int get sortIdx => _sortIdx;
+  int? get selectedMarker => _selectedMarker;
 
   double? get lat => _lat;
   double? get lng => _lng;
@@ -435,6 +437,11 @@ class MainSearchProvider with ChangeNotifier {
 
   ToiletList get searchToiletList => _searchToiletList;
   //* public
+  void setMarker(int? index) {
+    _setMarker(index);
+    notifyListeners();
+  }
+
   void setKey(GlobalKey key) {
     _setKey(key);
     notifyListeners();
@@ -484,6 +491,8 @@ class MainSearchProvider with ChangeNotifier {
   void setRadius(int value) => _setRadius(value);
 
   //* private
+  void _setMarker(int? index) => _selectedMarker = index;
+
   FutureToiletList _getMainToiletList(int page) async {
     final toiletData = await ToiletProvider().getNearToilet(_mainToiletData);
     _setMainPage(page + 1);

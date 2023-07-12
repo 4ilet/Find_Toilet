@@ -46,17 +46,6 @@ class ApiProvider extends UrlClass {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
 
-  // Dio dioWithToken({
-  //   required String url,
-  //   // required String method,
-  // }) =>
-  //     Dio(
-  //       BaseOptions(
-  //         baseUrl: _baseUrl!,
-  //         headers: {'Authorization': token},
-  //       ),
-  //     );
-
   Dio dioWithToken({
     required String url,
     required String method,
@@ -70,30 +59,21 @@ class ApiProvider extends UrlClass {
     );
     tempDio.interceptors.add(InterceptorsWrapper(
       onError: (e, handler) {
-        print('token error => $e');
-        // print('token error code : ${e.error}');
-        // print('token error message : ${e.message}');
         if (e.response?.statusCode == 401) {
           //* token refresh
-          print('token 401 : ${e.response}');
           _refreshToken(
             url: url,
             method: method,
             data: data,
           ).then((response) async {
-            print('refresh => $response');
             UserInfoProvider().setStoreToken(response['token']);
             UserInfoProvider().setStoreRefresh(response['refresh']);
             //* 재요청
-            print('재요청 : token => $token');
-            print('method : ${e.requestOptions.method}');
-            print('data : ${e.requestOptions.data}');
-            print('headers : ${e.requestOptions.headers}');
+
             e.requestOptions.headers['Authorization'] = response['token'];
             final secondRes = await dio.fetch(e.requestOptions);
             return handler.resolve(secondRes);
           }).catchError((error) {
-            print('catch error : $error');
             UserInfoProvider().setStoreToken(null);
             UserInfoProvider().setStoreRefresh(null);
           });
@@ -118,7 +98,6 @@ class ApiProvider extends UrlClass {
           'Authorization': token,
           'method': method,
         },
-        // method: method,
       ),
     );
     return tempDio;
@@ -131,13 +110,9 @@ class ApiProvider extends UrlClass {
     dynamic data,
   }) async {
     try {
-      print('url : $url');
-
       final response = await _dioWithRefresh(method).request(url, data: data);
-      print('refesth response : $response');
       if (response.statusCode == 200) {
         final headers = response.headers;
-        print('refresh headers : $headers');
         return {
           'token': headers['Authorization']!.first,
           'refresh': headers['Authorization-refresh']!.first,
@@ -146,7 +121,6 @@ class ApiProvider extends UrlClass {
         throw Error();
       }
     } catch (error) {
-      print('refresh error : $error');
       throw Error();
     }
   }
@@ -156,7 +130,6 @@ class ApiProvider extends UrlClass {
     required String method,
     dynamic data,
   }) =>
-      // _refreshToken(url: url, method: method);
       _refreshToken(url: url, method: method, data: data);
 
   //* 생성 전반
@@ -172,7 +145,6 @@ class ApiProvider extends UrlClass {
       }
       throw Error();
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
@@ -213,8 +185,6 @@ class ApiProvider extends UrlClass {
     try {
       final response =
           await dioWithToken(url: url, method: 'DELETE').delete(url);
-      print(response.statusCode);
-      print(response.data);
       if (response.statusCode == 200) {
         return true;
       }

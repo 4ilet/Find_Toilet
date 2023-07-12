@@ -83,6 +83,7 @@ flutter:
     - assets/images/kakao_login_medium.png
     - assets/images/user.png
     - assets/images/toilet.png
+    - assets/images/selected.png
     - .env
 
 

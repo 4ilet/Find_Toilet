@@ -30,20 +30,17 @@ class HelpModal extends StatelessWidget {
     return CustomModalWithClose(
       title: isHelpModal ? '도움말' : '라이선스',
       children: [
-        SingleChildScrollView(
-          child: isHelpModal
-              ? CustomBox(
-                  child: Column(
-                    children: [
-                      html.Html(data: license),
-                    ],
+        isHelpModal
+            ? const CustomText(title: '여기에 도움말이!!!')
+            : const Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: PolicyContent(
+                    isPrivate: false,
+                    isLicense: true,
                   ),
-                )
-              : const PolicyContent(
-                  isPrivate: false,
-                  isLicense: true,
                 ),
-        ),
+              )
       ],
     );
   }
@@ -59,20 +56,20 @@ class PolicyModal extends StatefulWidget {
 
 class _PolicyModalState extends State<PolicyModal>
     with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
   final List<Tab> policyTabs = [
     const Tab(
-      // text: '개인 정보\n처리 방침',
       icon: CustomText(
         title: '개인 정보\n처리 방침',
         fontSize: FontSize.smallSize,
       ),
-      // child: CustomText(
-      //   title: '개인 정보\n처리 방침',
-      //   fontSize: FontSize.smallSize,
-      // ),
     ),
     const Tab(
-      // text: '위치 정보\n처리 방침',
       icon: CustomText(
         title: '위치 정보\n처리 방침',
         fontSize: FontSize.smallSize,
@@ -80,11 +77,6 @@ class _PolicyModalState extends State<PolicyModal>
     ),
   ];
   late TabController tabController;
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 2, vsync: this);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +88,6 @@ class _PolicyModalState extends State<PolicyModal>
             controller: tabController,
             tabs: policyTabs,
             indicatorColor: mainColor,
-            // labelColor: blackColor,
-            // labelStyle: TextStyle(
-            //     fontSize:
-            //         isDefaultTheme(context) ? defaultSize : largeDefaultSize),
             labelPadding: const EdgeInsets.only(bottom: 5),
           ),
         ),
@@ -136,42 +124,29 @@ class PolicyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return
+        // isLicense
+        //     ? CustomBox(
+        //         color: lightGreyColor,
+        //         child: Padding(
+        //           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        //           child: html.Html(
+        //             data: license,
+        //           ),
+        //         ),
+        //       )
+        //     :
+        SingleChildScrollView(
       child: CustomBox(
         color: lightGreyColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: CustomText(
-                  isBoldText: true,
-                  title: isLicense
-                      ? '라이선스'
-                      : isPrivate
-                          ? '개인 정보 처리 방침'
-                          : '위치 정보 처리 방침',
-                  fontSize: FontSize.defaultSize,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: isLicense
-                    ? html.Html(
-                        data: license,
-                        style: {
-                          'span': html.Style(fontWeight: FontWeight.bold)
-                        },
-                      )
-                    : isPrivate
-                        ? html.Html(data: privatePolicy)
-                        : const CustomText(
-                            title: gpsPolicy,
-                            fontSize: FontSize.smallSize,
-                          ),
-              ),
-            ],
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+          child: html.Html(
+            data: isLicense
+                ? license
+                : isPrivate
+                    ? privacyPolicy
+                    : gpsPolicy,
           ),
         ),
       ),

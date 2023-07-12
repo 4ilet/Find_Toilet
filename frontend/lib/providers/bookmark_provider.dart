@@ -12,13 +12,11 @@ class FolderProvider extends ApiProvider {
       final response = await dioWithToken(url: folderListUrl, method: 'GET')
           .get(folderListUrl);
       final data = response.data['data'];
-      print(data);
       FolderList folderList = data.map<FolderModel>((json) {
         return FolderModel.fromJson(json);
       }).toList();
       return folderList;
     } catch (error) {
-      print('folderError: $error');
       throw Error();
     }
   }
@@ -71,7 +69,6 @@ class BookMarkProvider extends ApiProvider {
       ScrollProvider().setTotal(response.data['size']);
       return toiletList;
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
