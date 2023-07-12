@@ -1,6 +1,7 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
 import 'package:find_toilet/utilities/style.dart';
@@ -127,7 +128,13 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
                                 onPressed: () {
-                                  routerPop(context)();
+                                  context
+                                      .read<MainSearchProvider>()
+                                      .setMarker(null);
+                                  removedRouterPush(context,
+                                      page: Main(
+                                        refreshPage: widget.refreshPage,
+                                      ));
                                   context
                                       .read<ReviewBookMarkProvider>()
                                       .initToiletInfo();

@@ -2,6 +2,7 @@
 
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/icon_image.dart';
@@ -17,6 +18,7 @@ import 'package:geolocator/geolocator.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:provider/provider.dart';
 
 class MapScreen extends StatefulWidget {
   final bool showReview, needNear;
@@ -105,6 +107,7 @@ class MapScreenState extends State<MapScreen> {
   void clickMarker(int markerIndex) {
     final toiletData = mainToiletList(context)[markerIndex];
     if (!widget.showReview || getToiletId(context) != toiletData.toiletId) {
+      context.read<MainSearchProvider>().setMarker(markerIndex);
       setItemHeight(context, markerIndex);
       setToilet(context, toiletData);
       routerPush(
@@ -184,14 +187,18 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildMarkerWidget(Offset pos, Color color, double size, int? index,
-      [bool isMarker = true]) {
+      [bool isMarker = true, bool isSelected = false]) {
     return Positioned(
       left: pos.dx - 24,
       top: pos.dy - 48,
       width: size,
       height: size,
       child: GestureDetector(
-        child: Image.asset(isMarker ? toilet : user),
+        child: Image.asset(isMarker
+            ? isSelected
+                ? selected
+                : toilet
+            : user),
         onTap: () {
           if (controller.zoom < 18) {
             controller.zoom = 18;
@@ -272,9 +279,17 @@ class MapScreenState extends State<MapScreen> {
           // if (toiletMarkers.isNotEmpty) {
           final toileMarkerPositions =
               toiletMarkers.map(transformer.toOffset).toList();
+          final selectedMarker =
+              context.read<MainSearchProvider>().selectedMarker;
           for (int i = 0; i < toileMarkerPositions.length; i += 1) {
-            toiletMarkerWidgets.add(
-                _buildMarkerWidget(toileMarkerPositions[i], mainColor, 36, i));
+            toiletMarkerWidgets.add(_buildMarkerWidget(
+              toileMarkerPositions[i],
+              mainColor,
+              i == selectedMarker ? 50 : 36,
+              i,
+              true,
+              i == selectedMarker,
+            ));
           }
           // toiletMarkerWidgets = toileMarkerPositions.map(
           //   (pos) =>
