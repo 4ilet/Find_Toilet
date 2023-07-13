@@ -49,3 +49,4 @@ const tMap = 'assets/images/t_map.png';
 const kakaoLogin = 'assets/images/kakao_login_medium.png';
 const user = 'assets/images/user.png';
 const toilet = 'assets/images/toilet.png';
+const selected = 'assets/images/selected.png';
