@@ -106,7 +106,7 @@ class SettingsProvider with ChangeNotifier {
   final List<StringList> _optionList = [
     ['표시 안 함', '표시함'],
     ['큰 글씨', '기본'],
-    ['좁게', '보통', '넓게'],
+    ['500m', '1km', '1.5km'],
   ];
   final _valueList = [500, 1000, 1500];
 

@@ -50,3 +50,9 @@ const kakaoLogin = 'assets/images/kakao_login_medium.png';
 const user = 'assets/images/user.png';
 const toilet = 'assets/images/toilet.png';
 const selected = 'assets/images/selected.png';
+const helpImg = [
+  'assets/images/help1.png',
+  'assets/images/help2.png',
+  'assets/images/help3.png',
+  'assets/images/help4.png',
+];
