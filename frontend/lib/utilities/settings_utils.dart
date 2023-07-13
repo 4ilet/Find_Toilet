@@ -10,7 +10,7 @@ const privatePolicy = '''
 ''';
 const gpsPolicy = '서비스 제공자(포일렛)은 사용자의 위치 정보를';
 const license = '''
-<p>글꼴<p><span>한국기계연구원 서체,</span>\n한국기계연구원,\nkimm.re.kr/webfont</p><p><span>Noto Sans</span>,\nGoogle Fonts,\nhttps://fonts.google.com/noto/specimen/Noto+Sans+KR</p></p>
+<p>글꼴<p><b>한국기계연구원 서체,</b>\n한국기계연구원,\nkimm.re.kr/webfont</p><p><span>Noto Sans</span>,\nGoogle Fonts,\nhttps://fonts.google.com/noto/specimen/Noto+Sans+KR</p></p>
 ''';
 
 //* 문의하기 내부 내용
