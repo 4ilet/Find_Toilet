@@ -1,0 +1,60 @@
+#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#spring.datasource.url=jdbc:mysql://43.201.124.70:3306/sys?serverTimezone=UTC&characterEncoding=UTF-8
+#spring.datasource.username=4ilet
+#spring.datasource.password=Fourilet@2023
+
+spring:
+    mvc:
+      pathmatch:
+        matching-strategy: ant_path_matcher
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://43.201.124.70:3306/Fourilet?serverTimezone=UTC&characterEncoding=UTF-8
+      username: 4ilet
+      password: Fourilet@2023
+    # JPA Setting Info
+    jpa:
+      database: mysql
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+      hibernate:
+        ddl-auto: update # option type : create, create-drop, update, validate, none
+      properties:
+        hibernate:
+          show_sql: true # ??????? ??? ?? sql ?? ??? ??.
+          format_sql: true # sql ?? ??? ?? ??
+          use_sql_comments: true # ??? ?? ??
+    security:
+      oauth2:
+        client:
+          registration:
+            kakao:
+              client-id: 12a9eb103bcd45acefe504833d7f8f7e
+              redirect-uri: http://43.201.124.70:8080/oauth2/code/kakao
+              client-authentication-method: POST
+              client-secret: rqzG2KZpFzRUH7fqbIkFgBlnnVeyz6zs
+              authorization-grant-type: authorization_code
+              scope:
+                - profile_nickname
+                - account_email
+              client_name: kakao
+          provider:
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth/authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
+jwt:
+  secretKey: 'find_toilet_project_fourilet_backend_yoonju_find_toilet_project_fourilet_backend_yoonju'
+  access:
+#    expiration: 86400000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+    expiration: 86400000
+    header: Authorization
+
+  refresh:
+#    expiration: 1209600000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 14(2주))
+    expiration: 1209600000
+    header: Authorization-refresh
+logging:
+  level:
+    org:
+      hibernate: info
