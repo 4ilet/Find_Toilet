@@ -22,15 +22,12 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  // final StringList sortValues = ['distance', 'score', 'comment'];
-  // final ToiletList toiletList = [];
   final scrollController = ScrollController();
   final cnt = 10;
   bool expandSearch = false;
   bool refreshState = true;
   final globalKey = GlobalKey<ScaffoldState>();
 
-  // DynamicMap searchData = {};
   late String selectedValue;
 
   @override
@@ -103,7 +100,6 @@ class _SearchState extends State<Search> {
         },
       );
     }
-    print('search build');
     return WillPopScope(
       onWillPop: () {
         removedRouterPush(context, page: const Main(needNear: true));

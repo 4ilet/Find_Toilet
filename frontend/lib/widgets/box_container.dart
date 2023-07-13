@@ -89,12 +89,7 @@ class _ThemeBoxState extends State<ThemeBox> {
                     )
                   ],
                 ),
-              )
-              // Image.asset(
-              //   widget.path,
-              //   fit: BoxFit.fitWidth,
-              // ),
-              ),
+              )),
           CustomText(
             title: widget.text,
             fontSize: widget.fontSize,
@@ -123,9 +118,6 @@ class FolderBox extends StatelessWidget {
     String folderName = folderInfo.folderName;
     int bookmarkCnt = folderInfo.bookmarkCnt;
     int folderId = folderInfo.folderId;
-    // String printedName = folderName.length <= 5
-    //     ? folderName
-    //     : '${folderName.substring(0, 5)}\n${folderName.substring(5)}';
     return CustomBox(
       onTap: routerPush(
         context,
@@ -165,7 +157,6 @@ class FolderBox extends StatelessWidget {
                 children: [
                   CustomText(
                     title: '$bookmarkCnt 개',
-                    // fontSize: FontSize.smallSize,
                     color: CustomColors.blackColor,
                   ),
                   Row(
@@ -358,14 +349,6 @@ class ListItem extends StatelessWidget {
       }
     }
 
-    // void setHeight() {
-    //   if (boxKey.currentContext != null) {
-    //     final renderBox =
-    //         boxKey.currentContext!.findRenderObject() as RenderBox;
-    //     setItemHeight(context, renderBox.size.height);
-    //   }
-    // }
-
     void toReview() {
       if (!showReview) {
         setItemHeight(context, index!);
@@ -382,7 +365,6 @@ class ListItem extends StatelessWidget {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // print('index => $index, getHeight => ${getHeight(context, index!)}');
       if (index != null && !showReview && getHeight(context, index!) == 0) {
         if (boxKey.currentContext != null) {
           final renderBox =
@@ -408,7 +390,6 @@ class ListItem extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         flex: 2,
@@ -637,9 +618,6 @@ class _FilterBoxState extends State<FilterBox> {
 
   @override
   Widget build(BuildContext context) {
-    // for (int i = 0; i < 4; i += 1) {
-    //   print(readFilter(context, i));
-    // }
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -802,7 +780,6 @@ class ReviewBox extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
                         color: CustomColors.mainColor,

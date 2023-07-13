@@ -24,7 +24,6 @@ class BookMarkFolderList extends StatelessWidget {
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
           child: Flexible(
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: CustomIconButton(

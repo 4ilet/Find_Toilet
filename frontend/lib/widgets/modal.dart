@@ -144,19 +144,7 @@ class PolicyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // isLicense
-        //     ? CustomBox(
-        //         color: lightGreyColor,
-        //         child: Padding(
-        //           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        //           child: html.Html(
-        //             data: license,
-        //           ),
-        //         ),
-        //       )
-        //     :
-        SingleChildScrollView(
+    return SingleChildScrollView(
       child: CustomBox(
         color: lightGreyColor,
         child: Padding(
@@ -204,7 +192,6 @@ class NicknameInputModal extends StatelessWidget {
           );
         } else {
           UserProvider().changeName(data).then((result) {
-            print('result: $result');
             if (result['success'] != null) {
               changeName(context, result['success']);
               showModal(
@@ -230,7 +217,6 @@ class NicknameInputModal extends StatelessWidget {
           });
         }
       } catch (error) {
-        print(error);
         showModal(
           context,
           page: const AlertModal(
@@ -790,7 +776,6 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 5,
-                                        // horizontal: 10,
                                       ),
                                       child: TextWithIcon(
                                         flex: 12,
@@ -946,8 +931,6 @@ class AlertModal extends StatelessWidget {
 
 //* 로그인 확인 모달
 class LoginConfirmModal extends StatelessWidget {
-  // final GlobalKey? globalKey;
-  // final ReturnVoid nextAction;
   final ReturnVoid afterLogin;
   final bool showReview, isMain;
   final int? toiletId;

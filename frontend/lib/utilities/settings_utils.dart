@@ -26,7 +26,7 @@ const gpsPolicy = '''
 ''';
 const license = '''
 <article>
-<h3>글꼴</h3><p><b>한국기계연구원 서체,</b><br>한국기계연구원,<br>https://www.kimm.re.kr/webfont</p><p><b>Noto Sans</b>,<br>Google Fonts,<br>https://fonts.google.com/noto/specimen/Noto+Sans+KR</p>
+<h3>글꼴</h3><p><b>한국기계연구원 서체 Bold,</b><br>한국기계연구원,<br>https://www.kimm.re.kr/webfont</p><p><b>Noto Sans</b>,<br>Google Fonts,<br>https://fonts.google.com/noto/specimen/Noto+Sans+KR</p>
 <br></br>
 <h3>오픈소스</h3>
 <p><b>cached_network_image</b><br>The MIT License (MIT)<br>Copyright (c) 2018 Rene Floor<br>https://github.com/Baseflow/flutter_cached_network_image</p>

@@ -45,12 +45,10 @@ class CustomButton extends StatelessWidget {
 class ExitPage extends StatelessWidget {
   final CustomColors color;
   final void Function()? onTap;
-  // final ReturnVoid? onTap;
   const ExitPage({
     super.key,
     this.color = CustomColors.whiteColor,
     this.onTap,
-    // this.onTap,
   });
 
   @override

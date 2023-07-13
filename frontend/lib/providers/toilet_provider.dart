@@ -16,8 +16,6 @@ class ToiletProvider extends ApiProvider {
   //* private
   FutureToiletList _getNearToilet(DynamicMap queryData) async {
     try {
-      print('token : $token');
-      print('queryData : $queryData');
       final response = token == null
           ? await dio.get(
               nearToiletUrl,
@@ -28,7 +26,6 @@ class ToiletProvider extends ApiProvider {
               queryParameters: queryData,
             );
       final data = response.data['content'];
-      print('response : $response');
       if (data.isNotEmpty) {
         ToiletList toiletList = data.map<ToiletModel>((json) {
           return ToiletModel.fromJson(json);
@@ -39,21 +36,18 @@ class ToiletProvider extends ApiProvider {
         return [];
       }
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
 
   Future<ToiletModel> _getToilet(int toiletId) async {
     try {
-      print('화장실 정보!!!! => $toiletId');
       final response = token == null
           ? await dio.get(eachToiletUrl(toiletId))
           : await dioWithToken(url: eachToiletUrl(toiletId), method: 'GET').get(
               eachToiletUrl(toiletId),
             );
       final data = response.data['content'];
-      print('get toilet => $data');
       if (data.isNotEmpty) {
         ToiletModel toiletModel = ToiletModel.fromJson(data);
         return toiletModel;
@@ -61,7 +55,6 @@ class ToiletProvider extends ApiProvider {
         throw Error();
       }
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
@@ -84,7 +77,6 @@ class ToiletProvider extends ApiProvider {
       ScrollProvider().setTotal(response.data['totalPages']);
       return toiletList;
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
