@@ -50,7 +50,6 @@ dependencies:
   provider: ^6.0.5
   shared_preferences: ^2.1.0
   flutter_html: ^2.2.1
-  flutter_oss_licenses: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +83,10 @@ flutter:
     - assets/images/user.png
     - assets/images/toilet.png
     - assets/images/selected.png
+    - assets/images/help1.png
+    - assets/images/help2.png
+    - assets/images/help3.png
+    - assets/images/help4.png
     - .env
 
 

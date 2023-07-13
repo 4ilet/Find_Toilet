@@ -28,10 +28,30 @@ class HelpModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomModalWithClose(
-      title: isHelpModal ? '도움말' : '라이선스',
+      title: isHelpModal ? '도움말\n(터치 시 확대 가능)' : '라이선스',
       children: [
         isHelpModal
-            ? const CustomText(title: '여기에 도움말이!!!')
+            ? Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: ListView.builder(
+                    itemCount: 4,
+                    itemBuilder: (context, i) => GestureDetector(
+                      child: Image.asset(helpImg[i]),
+                      onTap: () => showDialog(
+                        context: context,
+                        builder: (context) => InteractiveViewer(
+                          child: CustomBox(
+                            height: screenHeight(context),
+                            onTap: routerPop(context),
+                            child: Image.asset(helpImg[i]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             : const Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 20),
@@ -330,7 +350,7 @@ class InputModal extends StatelessWidget {
           context,
           page: AlertModal(
             title: title,
-            content: '값이 변경되지 않았습니다.',
+            content: '새로운 닉네임을 설정해주세요',
           ),
         );
       }
@@ -692,7 +712,8 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
         routerPop(context)();
         showModal(
           context,
-          page: const AlertModal(title: '즐겨찾기 추가/삭제 완료', content: '작업이 성공했습니다'),
+          page: const AlertModal(
+              title: '즐겨찾기 추가/삭제 완료', content: '즐겨찾기에 추가/삭제되었습니다'),
         ).then((value) {
           widget.afterWork();
         });
