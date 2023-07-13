@@ -86,4 +86,3 @@
 |:---:|:---:|:---:|:---:|
 |**Backend**|**Backend**|**Frontend**|**Frontend**|
 |[김윤주](https://github.com/gimewn)|[나장엽](https://github.com/kaydenna92)|[나원경](https://github.com/hitriee)|[박한](https://github.com/Hanpark04)|
-
