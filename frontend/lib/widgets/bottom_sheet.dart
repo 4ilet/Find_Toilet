@@ -38,17 +38,11 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
     toiletModel = getToilet(context);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        print(
-            'show review => ${widget.showReview}, item height => ${getItemHeight(context)}');
-        print(context.read<ReviewBookMarkProvider>().heightList);
-        print(
-            '${widget.showReview ? getItemHeight(context)! + (context.read<SettingsProvider>().fontState == '기본' ? 60 : 100) : context.read<SettingsProvider>().fontState == '기본' ? 80 : 95}');
         toiletId = getToiletId(context);
         controller.addListener(
           () {
             if (controller.position.pixels >=
                 controller.position.maxScrollExtent * 0.9) {
-              print('${getPage(context)}, ${getTotal(context)}');
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
                   setWorking(context, true);
@@ -79,9 +73,6 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
         }
         setAdditional(context, false);
         setWorking(context, false);
-        print(
-            'show review => ${widget.showReview}, item height => $getItemHeight');
-        print(context.read<ReviewBookMarkProvider>().heightList);
       });
       increasePage(context);
     }
@@ -106,9 +97,6 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
               : isDefaultTheme(context)
                   ? 80
                   : 95,
-          // expandedHeight: widget.showReview
-          //     ? getItemHeight(context)! + (isDefaultTheme(context) ? 120 : 150)
-          //     : 95,
           backgroundColor: Colors.white10,
           flexibleSpace: CustomBox(
             color: mainColor,

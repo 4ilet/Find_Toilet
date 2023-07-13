@@ -37,7 +37,6 @@ class _BookMarkListState extends State<BookMarkList> {
           () {
             if (controller.position.pixels >=
                 controller.position.maxScrollExtent * 0.9) {
-              print('${getPage(context)}, ${getTotal(context)}');
               if (getPage(context) < getTotal(context)!) {
                 if (!getWorking(context)) {
                   setWorking(context, true);
@@ -103,19 +102,11 @@ class _BookMarkListState extends State<BookMarkList> {
       body: CustomBoxWithScrollView(
         listScroll: controller,
         toolbarHeight: 100,
-        // expandedHeight: isDefaultTheme(context)
-        //     ? widget.folderName.length > 7
-        //         ? 110
-        //         : 60
-        //     : widget.folderName.length > 6
-        //         ? 120
-        //         : 70,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
           padding:
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Flexible(
                 child: CustomIconButton(

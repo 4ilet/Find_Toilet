@@ -14,13 +14,6 @@ class UserInfoProvider with ChangeNotifier {
   String? get refresh => _refresh;
   String? get nickname => _nickname;
 
-  // void debugFillProperites(DiagnosticPropertiesBuilder properties) {
-  //   super.debugFillProperties(properties);
-  //   properties.add(StringProperty('token', token));
-  //   properties.add(StringProperty('refresh', refresh));
-  //   properties.add(StringProperty('nickname', nickname));
-  // }
-
   //* public
 
   FutureBool initVar() async {
@@ -221,21 +214,6 @@ class SettingsProvider with ChangeNotifier {
 }
 
 //* width, height
-// class SizeProvider with ChangeNotifier {
-//   static double _screenWidth = 0.0;
-//   static double _screenHeight = 0.0;
-//   double get screenWidth => _screenWidth;
-//   double get screenHeight => _screenHeight;
-
-//   void _initWidthHeight(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-//     _screenWidth = size.width;
-//     _screenHeight = size.height;
-//   }
-
-//   void initWidthHeight(BuildContext context) => _initWidthHeight(context);
-// }
-
 class ScrollProvider with ChangeNotifier {
   static int? _totalPages;
   static bool _loading = true;
@@ -383,11 +361,8 @@ class ReviewBookMarkProvider with ChangeNotifier {
 
 class MainSearchProvider with ChangeNotifier {
   static GlobalKey? _globalKey;
-  // static bool _checked = false;
   static int? _selectedMarker;
   static final StringList _sortValues = ['distance', 'score', 'comment'];
-  // static int _cnt = 20;
-  // static final Map<String, String?> _query = {'value': null};
   static double? _lat;
   static double? _lng;
   static int _sortIdx = 0;
@@ -431,7 +406,7 @@ class MainSearchProvider with ChangeNotifier {
 
   double? get lat => _lat;
   double? get lng => _lng;
-  // int get cnt => _cnt;
+
   ToiletList get mainToiletList => _mainToiletList;
   DynamicMap get mainToiletData => _mainToiletData;
 
@@ -446,14 +421,6 @@ class MainSearchProvider with ChangeNotifier {
     _setKey(key);
     notifyListeners();
   }
-  // void setQuery(String? value) {
-  //   _setQuery(value);
-  // }
-
-  // void setCnt(int newVal) {
-  //   _setCnt(newVal);
-  //   notifyListeners();
-  // }
 
   void setFilter(int index, bool value) {
     _setFilter(index, value);
@@ -532,8 +499,6 @@ class MainSearchProvider with ChangeNotifier {
   void _setMainPage(int newVal) => _mainToiletData['page'] = newVal;
   void _setSearchPage(int newVal) => _searchData['page'] = newVal;
 
-  // void _setCnt(int newVal) => _cnt = newVal;
-  // void _setQuery(String? value) => _query['value'] = value;
   void _setKey(GlobalKey key) => _globalKey = key;
 
   void _setFilter(int index, bool value) {

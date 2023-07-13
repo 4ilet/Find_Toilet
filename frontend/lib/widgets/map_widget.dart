@@ -54,7 +54,6 @@ class MapScreenState extends State<MapScreen> {
   void getOnlyToilet() async {
     double conLat = getToilet(context)!.lat;
     double conLng = getToilet(context)!.lng;
-    // controller.center = LatLng(conLat, conLng);
     toiletMarkers.clear();
     toiletMarkers.add(LatLng(conLat, conLng));
     setState(() {});
@@ -62,7 +61,6 @@ class MapScreenState extends State<MapScreen> {
 
   void getLocation() async {
     try {
-      // LocationPermission permission = await Geolocator.requestPermission();
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       if (widget.showReview) {
@@ -82,11 +80,6 @@ class MapScreenState extends State<MapScreen> {
         markers.add(LatLng(position.latitude, position.longitude));
       }
 
-      // controller.zoom = 16;
-      // print(GlobalProvider().mainToiletList.length);
-      // Future.delayed(const Duration(milliseconds: 200), () {
-
-      // if (mainToiletList(context).isNotEmpty) {
       toiletMarkers.clear();
       length = mainToiletList(context).length;
       for (int i = 0; i < length!; i++) {
@@ -214,9 +207,7 @@ class MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     if (!getLoading(context)) {
-      // print('get loading');
       if (!refreshState) {
-        // print(false);
         WidgetsBinding.instance.addPostFrameCallback(
           (_) {
             refreshState = true;
@@ -224,7 +215,6 @@ class MapScreenState extends State<MapScreen> {
           },
         );
       } else if (length != mainToiletList(context).length) {
-        // print('renew');
         WidgetsBinding.instance.addPostFrameCallback(
           (_) {
             getLocation();
@@ -233,20 +223,6 @@ class MapScreenState extends State<MapScreen> {
       }
     }
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Raster Map'),
-      //   actions: [
-      //     IconButton(
-      //       tooltip: 'Toggle Dark Mode',
-      //       onPressed: () {
-      //         setState(() {
-      //           _darkMode = !_darkMode;
-      //         });
-      //       },
-      //       icon: const Icon(Icons.wb_sunny),
-      //     ),
-      //   ],
-      // ),
       body: MapLayout(
         controller: controller,
         builder: (context, transformer) {
@@ -276,7 +252,6 @@ class MapScreenState extends State<MapScreen> {
             );
           }
           final List<Widget> toiletMarkerWidgets = [];
-          // if (toiletMarkers.isNotEmpty) {
           final toileMarkerPositions =
               toiletMarkers.map(transformer.toOffset).toList();
           final selectedMarker =
@@ -291,26 +266,7 @@ class MapScreenState extends State<MapScreen> {
               i == selectedMarker,
             ));
           }
-          // toiletMarkerWidgets = toileMarkerPositions.map(
-          //   (pos) =>
-          //       _buildMarkerWidget(pos, mainColor, 36, Icons.location_on),
-          // );
-          // } else {
-          // toiletMarkerWidgets = [];
-          // final toileMarkerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
-          //     .map(transformer.toOffset)
-          //     .toList();
-          // for (int i = 0; i < toileMarkerPositions.length; i += 1) {
-          //   toiletMarkerWidgets.add(_buildMarkerWidget(
-          //       toileMarkerPositions[i], const Color(0x00000000), 36, i));
-          // }
 
-          // toiletMarkerWidgets = toileMarkerPositions.map(
-          //   (pos) => _buildMarkerWidget(pos, const Color(0x00000000), 36),
-          // );
-          // }
-          // print('main toilet => ${mainToiletList(context)}');
-          // print('toilet marker => $toiletMarkerWidgets');
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onDoubleTapDown: (details) => _onDoubleTap(
@@ -359,7 +315,6 @@ class MapScreenState extends State<MapScreen> {
                     ),
                   ),
                   ...markerWidgets,
-                  // ...toiletMarkerWidgets,
                   ...toiletMarkerWidgets,
                 ],
               ),
@@ -414,8 +369,6 @@ class MapScreenState extends State<MapScreen> {
                   alignment: Alignment(
                       Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
                   child: FloatingActionButton(
-                    // onPressed: _gotoDefault,
-                    // onPressed: widget.getLocation,
                     onPressed: getLocation,
                     backgroundColor: whiteColor,
                     mini: true,

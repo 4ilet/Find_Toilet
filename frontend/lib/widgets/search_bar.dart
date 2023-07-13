@@ -19,8 +19,6 @@ class CustomSearchBar extends StatefulWidget {
   final String? query;
   final ReturnVoid? onSearchMode;
   final ReturnVoid refreshPage;
-  // final void Function(String value) onChange;
-  // final ReturnVoid onSearchAction;
   const CustomSearchBar({
     super.key,
     required this.isMain,
@@ -28,7 +26,6 @@ class CustomSearchBar extends StatefulWidget {
     required this.refreshPage,
     this.onSearchMode,
     this.query,
-    // required this.onSearchAction,
   });
 
   @override
@@ -58,8 +55,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       'keyword': widget.query,
       for (int i = 0; i < 4; i += 1) filterKeyList[i]: filterValueList[i],
     });
-    // setState(() {
-    // });
   }
 
   bool isChanged() {
@@ -175,7 +170,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    print('search bar');
     return CustomBox(
       color: showDetail ? mainColor : null,
       child: Column(
@@ -219,16 +213,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                             icon: closeIcon,
                             onPressed: () {
                               onChange(null);
-                              // print(readQuery(context));
                             },
                             color: CustomColors.blackColor,
                           )
                         : null,
                   ),
                 ),
-                // showDetail
-                //     ? const SizedBox()
-                //     :
                 CustomCircleButton(
                   width: 40,
                   height: 40,
@@ -254,13 +244,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                             child: CustomText(
                               title: '원하는 조건이 있으신가요?',
                               color: CustomColors.whiteColor,
-                              // fontSize: FontSize.smallSize,
                               font: kimm,
                             ),
                           ),
                         ],
                       ),
-                      // const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: FilterBox(
@@ -275,7 +263,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                             child: CustomText(
                               title: '어떻게 정렬해드릴까요?',
                               color: CustomColors.whiteColor,
-                              // fontSize: FontSize.smallSize,
                               font: kimm,
                             ),
                           ),
