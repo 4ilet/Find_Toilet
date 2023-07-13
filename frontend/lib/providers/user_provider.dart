@@ -7,10 +7,8 @@ class UserProvider extends ApiProvider {
   //* public function
   FutureDynamicMap login() => _login();
   FutureDynamicMap autoLogin() async {
-    print('token: $token');
     try {
       if (token != null && token != '') {
-        print('sned');
         return _sendOldToken(token!);
       }
       throw Error();
@@ -49,10 +47,8 @@ class UserProvider extends ApiProvider {
     try {
       final response = await dioWithToken(url: loginUrl, method: 'POST')
           .post(loginUrl, data: {'token': token});
-      print('login response : $response');
       return _returnTokens(response);
     } catch (error) {
-      print(error);
       throw Error();
     }
   }
@@ -102,7 +98,6 @@ class UserProvider extends ApiProvider {
       final response = await updateApi(changeNameUrl, data: data);
       return response;
     } catch (error) {
-      print(error);
       throw Error();
     }
   }

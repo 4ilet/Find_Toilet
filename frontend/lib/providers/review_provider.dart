@@ -18,11 +18,9 @@ class ReviewProvider extends ApiProvider {
               reviewListUrl(toiletId),
               queryParameters: {'page': page},
             );
-      print('res: $response');
       switch (response.statusCode) {
         case 200:
           final data = response.data['data'];
-          print('data: $data');
           data.forEach((review) {
             reviewList.add(ReviewModel.fromJson(review));
           });
@@ -35,7 +33,6 @@ class ReviewProvider extends ApiProvider {
           throw Error();
       }
     } catch (error) {
-      print('error: $error');
       throw Error();
     }
   }
@@ -49,7 +46,6 @@ class ReviewProvider extends ApiProvider {
       final data = response.data['data'];
       return ReviewModel.fromJson(data);
     } catch (error) {
-      print(error);
       throw Error();
     }
   }

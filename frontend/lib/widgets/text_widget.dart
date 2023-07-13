@@ -40,7 +40,6 @@ class CustomTextField extends StatelessWidget {
       width: width,
       height: height,
       border: hasBorder ? Border.all(color: mainColor, width: 2) : null,
-      // isDefaultTheme(context) ? height : height * 1.2,
       radius: radius,
       color: whiteColor,
       boxShadow: boxShadow,
@@ -53,7 +52,6 @@ class CustomTextField extends StatelessWidget {
             contentPadding:
                 EdgeInsets.only(top: isDefaultTheme(context) ? 13 : 12),
             border: InputBorder.none,
-            // hintText: hintText,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
           ),
@@ -106,8 +104,6 @@ class CustomText extends StatelessWidget {
         fontWeight: isBoldText ? FontWeight.bold : null,
         decoration: hasUnderline ? TextDecoration.underline : null,
       ),
-      // overflow: TextOverflow.ellipsis,
-      // maxLines: 3,
     );
   }
 }

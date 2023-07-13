@@ -39,8 +39,6 @@ class _MainState extends State<Main> {
   }
 
   void refreshMain(int index) {
-    print('refresh main! ${readLoading(context)}');
-    print('get token : ${readToken(context)}');
     if (readLoading(context)) {
       initPage(context);
       initHeightList(context);
@@ -58,7 +56,6 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
-    print('main build');
     if (refreshState) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
