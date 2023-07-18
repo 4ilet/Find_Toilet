@@ -17,7 +17,7 @@ class UserProvider extends ApiProvider {
     }
   }
 
-  void deleteUser() => _deleteUser();
+  FutureBool deleteUser() => _deleteUser();
 
   FutureDynamicMap changeName(String newName) => _changeName(newName);
 
@@ -35,8 +35,7 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _sendOldToken(String token) async {
     try {
-      final response =
-          await dioWithToken(url: userInfoUrl, method: 'GET').get(userInfoUrl);
+      await dioWithToken(url: userInfoUrl, method: 'GET').get(userInfoUrl);
       return {};
     } catch (error) {
       throw Error();
@@ -66,7 +65,10 @@ class UserProvider extends ApiProvider {
     } catch (error) {
       if (error is PlatformException && error.code == 'CANCELED') {
         return {'result': false};
+      } else if (error is KakaoAuthException) {
+        return {'result': false};
       }
+      print('$error & ${error.runtimeType}');
       throw Error();
     }
   }
@@ -84,9 +86,10 @@ class UserProvider extends ApiProvider {
     return _kakaoLogin(false);
   }
 
-  void _deleteUser() async {
+  FutureBool _deleteUser() async {
     try {
       await deleteApi(deleteUserUrl);
+      return Future.value(true);
     } catch (error) {
       throw Error();
     }
