@@ -72,7 +72,7 @@ class _SettingsState extends State<Settings> {
       final token = readToken(context);
       if (token == null || token == '') {
         if (hideModal(context)) {
-          login(context).then((result) {});
+          await login(context);
         } else {
           showModal(
             context,
@@ -226,8 +226,25 @@ class _SettingsState extends State<Settings> {
               Flexible(
                 flex: 2,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    getToken(context) != null
+                        ? CustomButton(
+                            textColor: CustomColors.blackColor,
+                            fontSize: FontSize.smallSize,
+                            onPressed: () {
+                              showModal(
+                                context,
+                                page: DeleteModal(
+                                  deleteMode: 2,
+                                  id: 0,
+                                  reviewContext: context,
+                                ),
+                              );
+                            },
+                            buttonText: '회원 탈퇴',
+                          )
+                        : const SizedBox(),
                     ExitPage(
                       color: CustomColors.blackColor,
                       onTap: () {

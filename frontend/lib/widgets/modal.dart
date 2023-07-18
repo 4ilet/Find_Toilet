@@ -15,6 +15,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_html/flutter_html.dart' as html;
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //* 도움말, 라이선스 모달
@@ -580,9 +581,13 @@ class DeleteModal extends StatelessWidget {
           target = '리뷰';
           message = '이 리뷰를\n삭제하시겠습니까?';
           break;
-        default:
+        case 1:
           target = '폴더';
           message = '폴더 삭제 시\n내부의 즐겨찾기도\n모두 삭제됩니다.\n그래도 삭제하시겠습니까?';
+          break;
+        default:
+          target = '계정';
+          message = '정말 \'화장실을 찾아서\'를 떠나시나요?';
           break;
       }
     }
@@ -600,21 +605,47 @@ class DeleteModal extends StatelessWidget {
               });
             });
             break;
-          default:
+          case 1:
             FolderProvider().deleteFolder(id).then((_) {
               changeRefresh(context);
             });
             break;
+          default:
+            UserProvider().deleteUser().then((_) async {
+              changeToken(context, token: null, refresh: null);
+              changeName(context, null);
+              await UserApi.instance.unlink();
+              routerPop(reviewContext ?? context)();
+              showModal(
+                reviewContext ?? context,
+                page: const AlertModal(
+                  title: '탈퇴 확인',
+                  content: '탈퇴되었습니다.',
+                ),
+              );
+            }).catchError((_) {
+              routerPop(context)();
+              showModal(
+                context,
+                page: AlertModal(
+                  title: '오류 발생',
+                  content: '오류가 발생해\n$target 삭제에 실패했습니다.',
+                ),
+              );
+            });
+            break;
         }
         if (!context.mounted) return;
-        routerPop(context)();
-        showModal(
-          context,
-          page: const AlertModal(
-            title: '삭제 확인',
-            content: '성공적으로 삭제 작업이 완료되었습니다.',
-          ),
-        );
+        if (deleteMode != 2) {
+          routerPop(reviewContext ?? context)();
+          showModal(
+            context,
+            page: const AlertModal(
+              title: '삭제 확인',
+              content: '성공적으로 삭제 작업이 완료되었습니다.',
+            ),
+          );
+        }
       } catch (error) {
         routerPop(context)();
         showModal(
@@ -631,14 +662,18 @@ class DeleteModal extends StatelessWidget {
 
     return CustomModal(
       title: '$target 삭제 확인',
+      buttonText: deleteMode != 2 ? '확인' : '탈퇴',
       onPressed: onPressed,
       children: [
-        Center(
-          child: CustomText(
-            title: message,
-            isCentered: true,
-            fontSize: FontSize.defaultSize,
-            color: CustomColors.blackColor,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+            child: CustomText(
+              title: message,
+              isCentered: true,
+              fontSize: FontSize.defaultSize,
+              color: CustomColors.blackColor,
+            ),
           ),
         ),
       ],
@@ -1008,16 +1043,12 @@ class _JoinModalState extends State<JoinModal> {
   }
 
   void joinOrLogin() {
-    bool ifLogin = false;
     if (checked) {
       setJoin(context);
     }
     final newContext = widget.pageContext ?? getKey(context)?.currentContext;
     login(newContext ?? context).then((result) {
       widget.refreshPage();
-      setState(() {
-        ifLogin = true;
-      });
     });
     routerPop(context)();
   }

@@ -119,18 +119,21 @@ bool watchPressed(BuildContext context) =>
     context.watch<ApplyChangeProvider>().pressedOnce;
 
 //* 로그인
-Future<Map<String, dynamic>> login(BuildContext context) async {
+FutureDynamicMap login(BuildContext context) async {
   final DynamicMap result = await UserProvider().login();
-  // ignore: use_build_context_synchronously
-  changeToken(context, token: result['token'], refresh: result['refresh']);
-  if (result['state'] != 'login' || result['nickname'] == null) {
+  if (result['result'] != false) {
     // ignore: use_build_context_synchronously
-    showModal(context, page: const NicknameInputModal(isAlert: true));
-  } else {
-    // ignore: use_build_context_synchronously
-    changeName(context, result['nickname']);
+    changeToken(context, token: result['token'], refresh: result['refresh']);
+    if (result['state'] != 'login' || result['nickname'] == null) {
+      // ignore: use_build_context_synchronously
+      showModal(context, page: const NicknameInputModal(isAlert: true));
+    } else {
+      // ignore: use_build_context_synchronously
+      changeName(context, result['nickname']);
+    }
+    return result;
   }
-  return result;
+  return {};
 }
 
 //* 새로고침 확인
