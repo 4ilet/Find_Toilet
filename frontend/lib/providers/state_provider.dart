@@ -361,7 +361,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
 
 class MainSearchProvider with ChangeNotifier {
   static GlobalKey? _globalKey;
-  static int? _selectedMarker;
+  static final List<int> _selectedMarker = [];
   static final StringList _sortValues = ['distance', 'score', 'comment'];
   static double? _lat;
   static double? _lng;
@@ -402,7 +402,8 @@ class MainSearchProvider with ChangeNotifier {
   bool get disabled => _mainToiletData['disabled'];
   bool get allDay => _mainToiletData['allDay'];
   int get sortIdx => _sortIdx;
-  int? get selectedMarker => _selectedMarker;
+  int? get selectedMarker =>
+      _selectedMarker.isNotEmpty ? _selectedMarker.last : null;
 
   double? get lat => _lat;
   double? get lng => _lng;
@@ -412,8 +413,15 @@ class MainSearchProvider with ChangeNotifier {
 
   ToiletList get searchToiletList => _searchToiletList;
   //* public
-  void setMarker(int? index) {
+  void setMarker(int index) {
     _setMarker(index);
+    notifyListeners();
+  }
+
+  void initMarker() => _initMarker();
+
+  void removeMarker() {
+    _removeMarker();
     notifyListeners();
   }
 
@@ -458,7 +466,13 @@ class MainSearchProvider with ChangeNotifier {
   void setRadius(int value) => _setRadius(value);
 
   //* private
-  void _setMarker(int? index) => _selectedMarker = index;
+  void _setMarker(int index) => _selectedMarker.add(index);
+  void _initMarker() => _selectedMarker.clear();
+  void _removeMarker() {
+    if (_selectedMarker.isNotEmpty) {
+      _selectedMarker.removeLast();
+    }
+  }
 
   FutureToiletList _getMainToiletList(int page) async {
     final toiletData = await ToiletProvider().getNearToilet(_mainToiletData);

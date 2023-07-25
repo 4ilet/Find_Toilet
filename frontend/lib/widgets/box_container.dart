@@ -1,6 +1,7 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -13,6 +14,7 @@ import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
@@ -351,6 +353,7 @@ class ListItem extends StatelessWidget {
 
     void toReview() {
       if (!showReview) {
+        context.read<MainSearchProvider>().setMarker(index!);
         setItemHeight(context, index!);
         setToilet(context, data);
         routerPush(
@@ -374,204 +377,200 @@ class ListItem extends StatelessWidget {
       }
     });
 
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: CustomBox(
-          key: boxKey,
-          onTap: toReview,
-          color: whiteColor,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: CustomText(
-                          color: CustomColors.mainColor,
-                          title: data.toiletName,
-                          fontSize: FontSize.defaultSize,
-                        ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: CustomBox(
+        key: boxKey,
+        onTap: toReview,
+        color: whiteColor,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: CustomText(
+                        color: CustomColors.mainColor,
+                        title: data.toiletName,
+                        fontSize: FontSize.defaultSize,
                       ),
-                      Flexible(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
-                              children: [
-                                IconButton(
-                                  onPressed: pressedHeart,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  constraints: const BoxConstraints(),
-                                  icon: CustomIcon(
-                                    icon: getToken(context) != null &&
-                                            data.folderId.isNotEmpty
-                                        ? heartIcon
-                                        : emptyHeartIcon,
-                                    color: redColor,
-                                  ),
+                    ),
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
+                            children: [
+                              IconButton(
+                                onPressed: pressedHeart,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
                                 ),
-                                getToken(context) != null &&
-                                        data.folderId.isNotEmpty
-                                    ? GestureDetector(
-                                        onTap: pressedHeart,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              25, 10, 0, 0),
-                                          child: CustomCircleButton(
-                                            width: 20,
-                                            height: 20,
-                                            shadow: true,
-                                            hasBorder: true,
-                                            child: Center(
-                                              child: CustomText(
-                                                title:
-                                                    '${data.folderId.length}',
-                                                fontSize: FontSize.smallSize,
-                                                color: CustomColors.mainColor,
-                                              ),
+                                constraints: const BoxConstraints(),
+                                icon: CustomIcon(
+                                  icon: getToken(context) != null &&
+                                          data.folderId.isNotEmpty
+                                      ? heartIcon
+                                      : emptyHeartIcon,
+                                  color: redColor,
+                                ),
+                              ),
+                              getToken(context) != null &&
+                                      data.folderId.isNotEmpty
+                                  ? GestureDetector(
+                                      onTap: pressedHeart,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            25, 10, 0, 0),
+                                        child: CustomCircleButton(
+                                          width: 20,
+                                          height: 20,
+                                          shadow: true,
+                                          hasBorder: true,
+                                          child: Center(
+                                            child: CustomText(
+                                              title: '${data.folderId.length}',
+                                              fontSize: FontSize.smallSize,
+                                              color: CustomColors.mainColor,
                                             ),
                                           ),
                                         ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () => showModal(
-                                context,
-                                page: NavigationModal(
-                                  startPoint: [
-                                    readLat(context)!,
-                                    readLng(context)!
-                                  ],
-                                  endPoint: [data.lat, data.lng],
-                                  destination: data.toiletName,
-                                ),
-                              ),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              constraints: const BoxConstraints(),
-                              icon: const CustomIcon(
-                                icon: planeIcon,
-                                color: Colors.lightBlue,
-                                size: 35,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () => showModal(
+                              context,
+                              page: NavigationModal(
+                                startPoint: [
+                                  readLat(context)!,
+                                  readLng(context)!
+                                ],
+                                endPoint: [data.lat, data.lng],
+                                destination: data.toiletName,
                               ),
                             ),
-                          ],
-                        ),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            constraints: const BoxConstraints(),
+                            icon: const CustomIcon(
+                              icon: planeIcon,
+                              color: Colors.lightBlue,
+                              size: 35,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: TextWithIcon(
-                          icon: locationIcon,
-                          text: data.address,
-                          flex: 18,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                        ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: TextWithIcon(
+                        icon: locationIcon,
+                        text: data.address,
+                        flex: 18,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        // flex: 2,
-                        child: TextWithIcon(
-                          icon: clockIcon,
-                          text: data.duration,
-                          flex: 10,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                        ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  children: [
+                    Flexible(
+                      // flex: 2,
+                      child: TextWithIcon(
+                        icon: clockIcon,
+                        text: data.duration,
+                        flex: 10,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 7,
-                        child: TextWithIcon(
-                          icon: starIcon,
-                          text:
-                              '${data.score.toStringAsFixed(2)} (${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
-                          iconColor: CustomColors.yellowColor,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                        ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 7,
+                      child: TextWithIcon(
+                        icon: starIcon,
+                        text:
+                            '${data.score.toStringAsFixed(2)} (${data.commentCnt >= 1000 ? '999+' : data.commentCnt}개)',
+                        iconColor: CustomColors.yellowColor,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                       ),
-                      data.phoneNo != ''
-                          ? Flexible(
-                              flex: 8,
-                              child: TextWithIcon(
-                                icon: phoneIcon,
-                                text: data.phoneNo,
-                                flex: 6,
-                                gap: 7,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                    data.phoneNo != ''
+                        ? Flexible(
+                            flex: 8,
+                            child: TextWithIcon(
+                              icon: phoneIcon,
+                              text: data.phoneNo,
+                              flex: 6,
+                              gap: 7,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    existState()
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const CustomText(
+                                title: '이용 가능 시설',
+                                fontSize: FontSize.smallSize,
+                                color: CustomColors.mainColor,
+                                isBoldText: true,
                               ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
+                              const SizedBox(height: 10),
+                              CustomText(
+                                title: available(15),
+                                fontSize: FontSize.smallSize,
+                                height: 1.6,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    CustomButton(
+                      fontSize: FontSize.smallSize,
+                      onPressed: addOrEditReview,
+                      buttonText:
+                          getToken(context) == null || data.reviewId == 0
+                              ? '리뷰 남기기'
+                              : '리뷰 수정하기',
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      existState()
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  title: '이용 가능 시설',
-                                  fontSize: FontSize.smallSize,
-                                  color: CustomColors.mainColor,
-                                  isBoldText: true,
-                                ),
-                                const SizedBox(height: 10),
-                                CustomText(
-                                  title: available(15),
-                                  fontSize: FontSize.smallSize,
-                                  height: 1.6,
-                                ),
-                              ],
-                            )
-                          : const SizedBox(),
-                      CustomButton(
-                        fontSize: FontSize.smallSize,
-                        onPressed: addOrEditReview,
-                        buttonText:
-                            getToken(context) == null || data.reviewId == 0
-                                ? '리뷰 남기기'
-                                : '리뷰 수정하기',
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

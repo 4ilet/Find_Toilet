@@ -1,3 +1,4 @@
+import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/utilities/global_utils.dart';
 import 'package:find_toilet/utilities/type_enum.dart';
 import 'package:find_toilet/widgets/bottom_sheet.dart';
@@ -6,15 +7,18 @@ import 'package:find_toilet/widgets/search_bar.dart';
 import 'package:find_toilet/widgets/map_widget.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Main extends StatefulWidget {
   final bool showReview, needNear;
   final ReturnVoid? refreshPage;
+  final String? beforePage;
   const Main({
     super.key,
     this.showReview = false,
     this.refreshPage,
     this.needNear = true,
+    this.beforePage,
   });
 
   @override
@@ -84,6 +88,7 @@ class _MainState extends State<Main> {
     return WillPopScope(
         onWillPop: widget.showReview
             ? () {
+                context.read<MainSearchProvider>().removeMarker();
                 routerPop(context)();
                 return Future.value(false);
               }
