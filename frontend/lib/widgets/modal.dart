@@ -872,9 +872,18 @@ class NavigationModal extends StatelessWidget {
     final packageNmae = dotenv.env['packageName'];
     const StringList appList = ['네이버맵', '카카오맵', 'T맵'];
     List<Image> imgList = [
-      Image.asset(naverMap),
-      Image.asset(kakaoMap),
-      Image.asset(tMap)
+      Image.asset(
+        naverMap,
+        filterQuality: FilterQuality.high,
+      ),
+      Image.asset(
+        kakaoMap,
+        filterQuality: FilterQuality.high,
+      ),
+      Image.asset(
+        tMap,
+        filterQuality: FilterQuality.high,
+      )
     ];
     List<Uri> uriList = [
       Uri.parse(
