@@ -1,6 +1,4 @@
 package com.Fourilet.project.fourilet.service;
-
-//import com.Fourilet.project.fourilet.config.oauth2.CustomOAuth2User;
 import com.Fourilet.project.fourilet.data.entity.BookMark;
 import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Member;

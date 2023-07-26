@@ -39,7 +39,6 @@ public class ReviewController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
-        // accessToken으로 id 추출
         Long reqMemberId = jwtService.extractId(accessToken).get();
         try {
             reviewService.postReview(reqMemberId, toiletId, postReviewDto);
