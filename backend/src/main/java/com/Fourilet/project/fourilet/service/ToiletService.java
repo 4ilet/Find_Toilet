@@ -45,17 +45,15 @@ public class ToiletService {
         for(ToiletDto toiletDto : item) {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
-            long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
+            long alreadyReviewed = 0; 
             if(member != null) {
-                // 해당 화장실의 리뷰 목록
                 Toilet toilet = toiletRepository.findById(toiletDto.getToiletId()).orElse(null);
                 List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
                 for (Review review : reviewList) {
-                    if (review.getMember().getMemberId() == memberId) { // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
+                    if (review.getMember().getMemberId() == memberId) { 
                         alreadyReviewed = review.getReviewId();
                     }
                 }
-                // 로그인한 상태라면 유저가 해당 화장실을 북마크했는지 확인
                 List<Folder> folderList = folderRepository.findAllByMember(member);
                 List<Long> isBookmark = bookMarkRepository.isBookmark(folderList, toiletDto.getToiletId()).orElseGet(() -> new ArrayList<>());
                 toiletDto.setFolderId(isBookmark);
@@ -94,25 +92,20 @@ public class ToiletService {
         for(ToiletDto toiletDto : item) {
             Long distance = toiletRepository.calDistance(condition.getNowLon(), condition.getNowLat(), toiletDto.getToiletId());
             toiletDto.setDistance(distance);
-            long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
-            // memberId != null -> 로그인한 상태
+            long alreadyReviewed = 0; 
             if(member != null){
-                // 해당 화장실의 리뷰 목록
                 Toilet toilet = toiletRepository.findById(toiletDto.getToiletId()).orElse(null);
                 List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
                 for (Review review : reviewList) {
-                    if (review.getMember().getMemberId() == memberId) { // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
+                    if (review.getMember().getMemberId() == memberId) { 
                         alreadyReviewed = review.getReviewId();
                     }
                 }
-                // 로그인한 상태라면 유저가 해당 화장실을 북마크했는지 확인
                 List<Folder> folderList = folderRepository.findAllByMember(member);
-                // 폴더 ID가 없으면 빈 배열 넣어주기
                 List<Long> isBookmark = bookMarkRepository.isBookmark(folderList, toiletDto.getToiletId()).orElseGet(() -> new ArrayList<>());
                 toiletDto.setFolderId(isBookmark);
             }
             else{
-                // member가 null이면 빈 배열 넣어주기
                 toiletDto.setFolderId(new ArrayList<>());
             }
             toiletDto.setReviewId(alreadyReviewed);
@@ -157,17 +150,14 @@ public class ToiletService {
 
         Long distance = toiletRepository.calDistance(toilet.getLon(), toilet.getLat(), toiletId);
         toiletDto.setDistance(distance);
-
-        long alreadyReviewed = 0; // 리뷰를 작성한 적이 있다면 해당 reviewId를, 리뷰 작성한 적이 없다면 0
-
-        // 해당 화장실의 리뷰 목록
+        long alreadyReviewed = 0; 
         List<Review> reviewList = reviewRepository.findAllByToilet(toilet);
         if (reviewList.size() > 0 ) {
             for (Review review : reviewList) {
                 review_cnt += 1;
                 review_score += review.getScore();
                 if(member != null) {
-                    if (review.getMember().getMemberId() == memberId) { // 리뷰의 작성자와 현재 접속한 유저의 아이디가 같다면? : 리뷰를 작성한 유저이다.
+                    if (review.getMember().getMemberId() == memberId) { 
                         alreadyReviewed = review.getReviewId();
                     }
                 }
@@ -178,20 +168,15 @@ public class ToiletService {
         }
 
         if(member != null){
-            // 로그인한 상태라면 유저가 해당 화장실을 북마크했는지 확인
             List<Folder> folderList = folderRepository.findAllByMember(member);
-            // 폴더 ID가 없으면 빈 배열 넣어주기
             List<Long> isBookmark = bookMarkRepository.isBookmark(folderList, toiletDto.getToiletId()).orElseGet(() -> new ArrayList<>());
             toiletDto.setFolderId(isBookmark);
         }else {
-            // member가 null이면 빈 배열 넣어주기
             toiletDto.setFolderId(new ArrayList<>());
         }
 
         toiletDto.setReviewId(alreadyReviewed);
         toiletDto.setComment(review_cnt);
-
-
         result.put("content", toiletDto);
 
         return result;

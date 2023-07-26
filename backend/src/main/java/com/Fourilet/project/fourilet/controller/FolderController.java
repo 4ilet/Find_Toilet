@@ -32,7 +32,7 @@ import java.util.DuplicateFormatFlagsException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/like") // 고정 url 설정
+@RequestMapping("/like") 
 @RequiredArgsConstructor
 public class FolderController {
     private final Logger LOGGER = LoggerFactory.getLogger(FolderController.class);
@@ -43,7 +43,6 @@ public class FolderController {
     @ApiOperation(value = "즐겨찾기 목록", notes = "해당 멤버의 즐겨찾기 목록을 가져온다.")
     public ResponseEntity<?> getFolderList(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
-        // accessToken으로 id 추출
         Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -73,7 +72,6 @@ public class FolderController {
     @ApiOperation(value = "즐겨찾기 삭제", notes = "특정 즐겨찾기 삭제.")
     public ResponseEntity<?> deleteFolder(HttpServletRequest request, @PathVariable long folderId){
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
-        // accessToken으로 id 추출
         Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -124,7 +122,6 @@ public class FolderController {
     @ApiOperation(value = "즐겨찾기 생성", notes = "해당 멤버의 즐겨찾기 폴더를 생성한다.")
     public ResponseEntity<?> createFolder(HttpServletRequest request, @RequestBody FolderDto.NewFolderDto newFolderDto) throws IOException {
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
-        // accessToken으로 id 추출
         Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -186,10 +183,6 @@ public class FolderController {
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
 
         }
-//        } catch (IllegalArgumentException e) {
-//            message.setStatus(StatusEnum.BAD_REQUEST);
-//            message.setMessage(String.valueOf(e));
-//            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         catch (Exception e) {
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러 발생");
@@ -197,32 +190,10 @@ public class FolderController {
         }
     }
 
-//    @DeleteMapping("/delete/toilet/{folderId}/{toiletId}")
-//    @ApiOperation(value = "특정 화장실을 즐겨찾기에서 삭제", notes = "특정 화장실을 즐겨찾기에서 삭제")
-//    public ResponseEntity<?> deleteToilet(HttpServletRequest request, @PathVariable("folderId") long folderId, @PathVariable("toiletId") long toiletId){
-//        Message message = new Message();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//        try {
-//            folderService.deleteToilet(folderId, toiletId);
-//            message.setStatus(StatusEnum.OK);
-//            message.setMessage("삭제 성공");
-//            return new ResponseEntity<>(message, headers, HttpStatus.OK);
-//        } catch (NullPointerException e) {
-//            message.setStatus(StatusEnum.BAD_REQUEST);
-//            message.setMessage(String.valueOf(e));
-//            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-//        } catch (Exception e) {
-//            message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
-//            message.setMessage("서버 에러 발생");
-//            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     @GetMapping("/folder/toiletlist/{folderId}")
     @ApiOperation(value = "즐겨찾기 화장실 목록 가져오기", notes = "즐겨찾기 폴더 안에 있는 화장실 목록을 가져온다.")
     public ResponseEntity<?> getToiletList(HttpServletRequest request, @PathVariable("folderId") long folderId, @ApiParam(value = "page=int(시작은 0)") int page){
-//        Message message = new Message();
         Message2 message = new Message2();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -232,7 +203,6 @@ public class FolderController {
         if(accessToken != null){
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
-        System.out.println("reqmemberid" + reqMemberId);
         try {
             ToiletDto2.ToiletDto2WithSize result = folderService.getToiletList(folderId, reqMemberId, page);
             message.setStatus(StatusEnum.OK);

@@ -14,9 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-//import javax.xml.ws.Response;
-//import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -54,14 +51,11 @@ public class ReviewService {
         }
         List<Review> alreadyPostedReviewByMember = reviewRepository.findAllByMember(member);
         boolean flag = false;
-        for (Review review : alreadyPostedReviewByMember ){ // 해당 멤버가 등록한 리뷰의 리스트들
-            if (review.getToilet() == toilet){ // 리뷰 리스트를 순회하면서, 등록할 화장실의 아이디가 들어있는지 체크,
-
-//                throw new DuplicatedReviewerException(); // 존재하면 throw
+        for (Review review : alreadyPostedReviewByMember ){ 
+            if (review.getToilet() == toilet){ 
                 flag = true;
             }
         }
-        // 리뷰 등록
         if (flag != true){
             Review newReview = new Review();
             newReview.setToilet(toilet);
@@ -70,12 +64,6 @@ public class ReviewService {
             newReview.setScore(postReviewDto.getScore());
             reviewRepository.save(newReview);
         }
-//        Review newReview = new Review();
-//        newReview.setToilet(toilet);
-//        newReview.setMember(member);
-//        newReview.setComment(postReviewDto.getComment());
-//        newReview.setScore(postReviewDto.getScore());
-//        reviewRepository.save(newReview);
     }
 
 
