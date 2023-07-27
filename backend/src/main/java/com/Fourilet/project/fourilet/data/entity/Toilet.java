@@ -24,10 +24,6 @@ public class Toilet {
     @JsonManagedReference
     @OneToMany(mappedBy = "toilet")
     private List<Review> reviewList = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "toilet")
-//    private BookMark bookMark;
-
     private String toiletName;
 
     private String address;

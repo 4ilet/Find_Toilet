@@ -90,7 +90,6 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(email).orElse(null);
 
-        System.out.println("member"+member);
 
         Folder folder = new Folder();
         if(member == null){
