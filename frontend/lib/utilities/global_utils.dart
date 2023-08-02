@@ -200,6 +200,12 @@ double? readLng(BuildContext context) => context.read<MainSearchProvider>().lng;
 void setLatLng(BuildContext context, double newLat, double newLng) =>
     context.read<MainSearchProvider>().setLatLng(newLat, newLng);
 
+//* main touch
+void changeShow(BuildContext context) =>
+    context.read<MainSearchProvider>().changeShow();
+bool showAll(BuildContext context) =>
+    context.watch<MainSearchProvider>().showAll;
+
 //* main toilet list
 void setRadius(BuildContext context) =>
     context.read<MainSearchProvider>().setRadius(getIntRadius(context));
@@ -356,3 +362,7 @@ bool hideModal(BuildContext context) =>
 
 void setJoin(BuildContext context) =>
     context.read<SettingsProvider>().setJoin();
+
+//* map marker
+void setMarker(BuildContext context, int i) =>
+    context.read<MainSearchProvider>().setMarker(i);

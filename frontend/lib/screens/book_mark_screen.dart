@@ -126,14 +126,17 @@ class _BookMarkListState extends State<BookMarkList> {
                   font: kimm,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                child: Flexible(
-                  child: CustomText(
-                    title: '${widget.bookmarkCnt}',
-                    fontSize: FontSize.defaultSize,
-                    color: CustomColors.whiteColor,
-                  ),
+              const SizedBox(height: 10),
+              Flexible(
+                child: Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    CustomText(
+                      title: '${widget.bookmarkCnt}',
+                      fontSize: FontSize.defaultSize,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ],
                 ),
               ),
             ],

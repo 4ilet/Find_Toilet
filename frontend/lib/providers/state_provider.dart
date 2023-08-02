@@ -265,7 +265,7 @@ class ScrollProvider with ChangeNotifier {
   void _setLoading(bool value) => _loading = value;
 }
 
-//* main, search, review, book mark
+//* review, book mark
 class ReviewBookMarkProvider with ChangeNotifier {
   static ToiletModel? _toiletInfo;
   static int? _toiletId;
@@ -359,6 +359,7 @@ class ReviewBookMarkProvider with ChangeNotifier {
   }
 }
 
+//* main, search
 class MainSearchProvider with ChangeNotifier {
   static GlobalKey? _globalKey;
   static final List<int> _selectedMarker = [];
@@ -366,6 +367,7 @@ class MainSearchProvider with ChangeNotifier {
   static double? _lat;
   static double? _lng;
   static int _sortIdx = 0;
+  static bool _showAll = true;
   static final ToiletList _mainToiletList = [];
   static final DynamicMap _mainToiletData = {
     'allDay': false,
@@ -401,6 +403,7 @@ class MainSearchProvider with ChangeNotifier {
   bool get kids => _mainToiletData['kids'];
   bool get disabled => _mainToiletData['disabled'];
   bool get allDay => _mainToiletData['allDay'];
+  bool get showAll => _showAll;
   int get sortIdx => _sortIdx;
   int? get selectedMarker =>
       _selectedMarker.isNotEmpty ? _selectedMarker.last : null;
@@ -413,6 +416,11 @@ class MainSearchProvider with ChangeNotifier {
 
   ToiletList get searchToiletList => _searchToiletList;
   //* public
+  void changeShow() {
+    _changeShow();
+    notifyListeners();
+  }
+
   void setMarker(int index) {
     _setMarker(index);
     notifyListeners();
@@ -466,6 +474,7 @@ class MainSearchProvider with ChangeNotifier {
   void setRadius(int value) => _setRadius(value);
 
   //* private
+  void _changeShow() => _showAll = !_showAll;
   void _setMarker(int index) => _selectedMarker.add(index);
   void _initMarker() => _selectedMarker.clear();
   void _removeMarker() {
