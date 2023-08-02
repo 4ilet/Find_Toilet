@@ -1,7 +1,6 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/state_provider.dart';
 import 'package:find_toilet/screens/book_mark_screen.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/review_form_screen.dart';
@@ -14,7 +13,6 @@ import 'package:find_toilet/widgets/icon.dart';
 import 'package:find_toilet/widgets/modal.dart';
 import 'package:find_toilet/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //* 테마 선택 시의 상자
 class ThemeBox extends StatefulWidget {
@@ -253,7 +251,7 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final boxKey = GlobalKey();
-    ToiletModel data = toiletModel ?? getToilet(context)!;
+    ToiletModel data = showReview ? getToilet(context)! : toiletModel!;
     BoolList availableList = [
       data.can24hour,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
@@ -353,7 +351,7 @@ class ListItem extends StatelessWidget {
 
     void toReview() {
       if (!showReview) {
-        context.read<MainSearchProvider>().setMarker(index!);
+        setMarker(context, index!);
         setItemHeight(context, index!);
         setToilet(context, data);
         routerPush(

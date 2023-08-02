@@ -35,6 +35,9 @@ class _MainState extends State<Main> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        if (widget.showReview && !context.read<MainSearchProvider>().showAll) {
+          changeShow(context);
+        }
         setState(() {
           paddingTop = statusBarHeight(context);
         });
@@ -117,61 +120,57 @@ class _MainState extends State<Main> {
                       ),
                     ],
                   ),
-                  widget.showReview
-                      ? const SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 70),
-                          child: Column(
-                            children: [
-                              FilterBox(
-                                onPressed: refreshMain,
-                                applyLong: !isDefaultTheme(context),
-                                isMain: true,
-                              ),
-                            ],
+                  if (widget.showReview && showAll(context))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 70),
+                      child: Column(
+                        children: [
+                          FilterBox(
+                            onPressed: refreshMain,
+                            applyLong: !isDefaultTheme(context),
+                            isMain: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (showAll(context))
+                    ToiletBottomSheet(
+                        showReview: widget.showReview,
+                        refreshPage: () {
+                          if (widget.refreshPage != null) {
+                            widget.refreshPage!();
+                          }
+                          setState(() {
+                            refreshState = true;
+                          });
+                        }),
+                  if (showAll(context))
+                    CustomSearchBar(
+                        isMain: true,
+                        showReview: widget.showReview,
+                        refreshPage: () {
+                          if (widget.refreshPage != null) {
+                            widget.refreshPage!();
+                          }
+                          setState(() {
+                            refreshState = true;
+                          });
+                        }),
+                  if (watchPressed(context))
+                    Center(
+                      child: CustomBox(
+                        height: 80,
+                        width: isDefaultTheme(context) ? 300 : 350,
+                        color: const Color.fromRGBO(0, 0, 0, 0.6),
+                        child: const Center(
+                          child: CustomText(
+                            title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
+                            isCentered: true,
+                            color: CustomColors.whiteColor,
                           ),
                         ),
-                  ToiletBottomSheet(
-                      showReview: widget.showReview,
-                      refreshPage: () {
-                        if (widget.refreshPage != null) {
-                          widget.refreshPage!();
-                        }
-                        setState(() {
-                          refreshState = true;
-                        });
-                      }),
-                  Column(
-                    children: [
-                      CustomSearchBar(
-                          isMain: true,
-                          showReview: widget.showReview,
-                          refreshPage: () {
-                            if (widget.refreshPage != null) {
-                              widget.refreshPage!();
-                            }
-                            setState(() {
-                              refreshState = true;
-                            });
-                          }),
-                    ],
-                  ),
-                  watchPressed(context)
-                      ? Center(
-                          child: CustomBox(
-                            height: 80,
-                            width: isDefaultTheme(context) ? 300 : 350,
-                            color: const Color.fromRGBO(0, 0, 0, 0.6),
-                            child: const Center(
-                              child: CustomText(
-                                title: '뒤로 가기 버튼을 한 번 더\n누르시면 앱이 종료됩니다',
-                                isCentered: true,
-                                color: CustomColors.whiteColor,
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                      ),
+                    )
                 ],
               ),
             ),

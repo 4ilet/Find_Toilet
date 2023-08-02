@@ -100,7 +100,7 @@ class MapScreenState extends State<MapScreen> {
   void clickMarker(int markerIndex) {
     final toiletData = mainToiletList(context)[markerIndex];
     if (!widget.showReview || getToiletId(context) != toiletData.toiletId) {
-      context.read<MainSearchProvider>().setMarker(markerIndex);
+      setMarker(context, markerIndex);
       setItemHeight(context, markerIndex);
       setToilet(context, toiletData);
       routerPush(
@@ -223,104 +223,108 @@ class MapScreenState extends State<MapScreen> {
       }
     }
     return Scaffold(
-      body: MapLayout(
-        controller: controller,
-        builder: (context, transformer) {
-          int nowRadius = getIntRadius(context);
-          if (nowRadius == 500 && controller.zoom < 16) {
-            controller.zoom = 16;
-          } else if (nowRadius == 1000 && controller.zoom < 15) {
-            controller.zoom = 15;
-          } else if (nowRadius == 1500 && controller.zoom < 14) {
-            controller.zoom = 14;
-          }
-          final lat = readLat(context);
-          final lng = readLng(context);
-          late final Iterable<Widget> markerWidgets;
-          if (markers.isNotEmpty) {
-            final markerPositions = markers.map(transformer.toOffset).toList();
-            markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(pos, Colors.red, 48, null, false),
-            );
-          } else {
-            final markerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
-                .map(transformer.toOffset)
-                .toList();
-            markerWidgets = markerPositions.map(
-              (pos) => _buildMarkerWidget(
-                  pos, const Color(0x00000000), 48, null, false),
-            );
-          }
-          final List<Widget> toiletMarkerWidgets = [];
-          final toileMarkerPositions =
-              toiletMarkers.map(transformer.toOffset).toList();
-          final selectedMarker =
-              context.read<MainSearchProvider>().selectedMarker;
-          for (int i = 0; i < toileMarkerPositions.length; i += 1) {
-            toiletMarkerWidgets.add(_buildMarkerWidget(
-              toileMarkerPositions[i],
-              mainColor,
-              i == selectedMarker ? 50 : 36,
-              i,
-              true,
-              i == selectedMarker,
-            ));
-          }
+      body: GestureDetector(
+        onTap: () => changeShow(context),
+        child: MapLayout(
+          controller: controller,
+          builder: (context, transformer) {
+            int nowRadius = getIntRadius(context);
+            if (nowRadius == 500 && controller.zoom < 16) {
+              controller.zoom = 16;
+            } else if (nowRadius == 1000 && controller.zoom < 15) {
+              controller.zoom = 15;
+            } else if (nowRadius == 1500 && controller.zoom < 14) {
+              controller.zoom = 14;
+            }
+            final lat = readLat(context);
+            final lng = readLng(context);
+            late final Iterable<Widget> markerWidgets;
+            if (markers.isNotEmpty) {
+              final markerPositions =
+                  markers.map(transformer.toOffset).toList();
+              markerWidgets = markerPositions.map(
+                (pos) => _buildMarkerWidget(pos, Colors.red, 48, null, false),
+              );
+            } else {
+              final markerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
+                  .map(transformer.toOffset)
+                  .toList();
+              markerWidgets = markerPositions.map(
+                (pos) => _buildMarkerWidget(
+                    pos, const Color(0x00000000), 48, null, false),
+              );
+            }
+            final List<Widget> toiletMarkerWidgets = [];
+            final toileMarkerPositions =
+                toiletMarkers.map(transformer.toOffset).toList();
+            final selectedMarker =
+                context.read<MainSearchProvider>().selectedMarker;
+            for (int i = 0; i < toileMarkerPositions.length; i += 1) {
+              toiletMarkerWidgets.add(_buildMarkerWidget(
+                toileMarkerPositions[i],
+                mainColor,
+                i == selectedMarker ? 50 : 36,
+                i,
+                true,
+                i == selectedMarker,
+              ));
+            }
 
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onDoubleTapDown: (details) => _onDoubleTap(
-              transformer,
-              details.localPosition,
-            ),
-            onScaleStart: _onScaleStart,
-            onScaleUpdate: (details) => _onScaleUpdate(details, transformer),
-            child: Listener(
+            return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onPointerSignal: (event) {
-                if (event is PointerScrollEvent) {
-                  final delta = event.scrollDelta.dy / -1000.0;
-                  final zoom = clamp(controller.zoom + delta, 2, 18);
-
-                  transformer.setZoomInPlace(zoom, event.localPosition);
-                  setState(() {});
-                }
-              },
-              child: Stack(
-                children: [
-                  TileLayer(
-                    builder: (context, x, y, z) {
-                      final tilesInZoom = pow(2.0, z).floor();
-
-                      while (x < 0) {
-                        x += tilesInZoom;
-                      }
-                      while (y < 0) {
-                        y += tilesInZoom;
-                      }
-
-                      x %= tilesInZoom;
-                      y %= tilesInZoom;
-
-                      return CachedNetworkImage(
-                        imageUrl:
-                            _darkMode ? googleDark(z, x, y) : google(z, x, y),
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-                  CustomPaint(
-                    painter: ViewportPainter(
-                      transformer.getViewport(),
-                    ),
-                  ),
-                  ...markerWidgets,
-                  ...toiletMarkerWidgets,
-                ],
+              onDoubleTapDown: (details) => _onDoubleTap(
+                transformer,
+                details.localPosition,
               ),
-            ),
-          );
-        },
+              onScaleStart: _onScaleStart,
+              onScaleUpdate: (details) => _onScaleUpdate(details, transformer),
+              child: Listener(
+                behavior: HitTestBehavior.opaque,
+                onPointerSignal: (event) {
+                  if (event is PointerScrollEvent) {
+                    final delta = event.scrollDelta.dy / -1000.0;
+                    final zoom = clamp(controller.zoom + delta, 2, 18);
+
+                    transformer.setZoomInPlace(zoom, event.localPosition);
+                    setState(() {});
+                  }
+                },
+                child: Stack(
+                  children: [
+                    TileLayer(
+                      builder: (context, x, y, z) {
+                        final tilesInZoom = pow(2.0, z).floor();
+
+                        while (x < 0) {
+                          x += tilesInZoom;
+                        }
+                        while (y < 0) {
+                          y += tilesInZoom;
+                        }
+
+                        x %= tilesInZoom;
+                        y %= tilesInZoom;
+
+                        return CachedNetworkImage(
+                          imageUrl:
+                              _darkMode ? googleDark(z, x, y) : google(z, x, y),
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                    CustomPaint(
+                      painter: ViewportPainter(
+                        transformer.getViewport(),
+                      ),
+                    ),
+                    ...markerWidgets,
+                    ...toiletMarkerWidgets,
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: Stack(
         children: <Widget>[
@@ -382,8 +386,8 @@ class MapScreenState extends State<MapScreen> {
               : const SizedBox(),
         ],
       ),
-      bottomNavigationBar:
-          BottomAppBar(height: MediaQuery.of(context).size.height * 0.08),
+      // bottomNavigationBar:
+      //     BottomAppBar(height: MediaQuery.of(context).size.height * 0.08),
     );
   }
 }

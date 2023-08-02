@@ -115,14 +115,14 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
                                 onPressed: () {
-                                  routerPop(context)();
-
                                   context
                                       .read<MainSearchProvider>()
                                       .removeMarker();
-                                  context
-                                      .read<ReviewBookMarkProvider>()
-                                      .initToiletInfo();
+                                  routerPop(context)();
+
+                                  // context
+                                  //     .read<ReviewBookMarkProvider>()
+                                  //     .initToiletInfo();
                                 },
                                 padding: EdgeInsets.zero,
                                 iconSize: 35,
