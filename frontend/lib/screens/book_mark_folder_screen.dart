@@ -22,36 +22,34 @@ class BookMarkFolderList extends StatelessWidget {
         flexibleSpace: Padding(
           padding:
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
-          child: Flexible(
-            child: Row(
-              children: [
-                Flexible(
-                  child: CustomIconButton(
-                    icon: exitIcon,
-                    color: CustomColors.whiteColor,
-                    onPressed: routerPop(context),
-                    iconSize: 45,
-                    padding: EdgeInsets.zero,
-                  ),
+          child: Row(
+            children: [
+              Flexible(
+                child: CustomIconButton(
+                  icon: exitIcon,
+                  color: CustomColors.whiteColor,
+                  onPressed: routerPop(context),
+                  iconSize: 45,
+                  padding: EdgeInsets.zero,
                 ),
-                Flexible(
-                  flex: 4,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 5),
-                      CustomText(
-                        title:
-                            '${getName(context)}님의\n즐겨 찾기 폴더${onRefresh(context)}',
-                        fontSize: FontSize.largeSize,
-                        color: CustomColors.whiteColor,
-                        font: kimm,
-                      ),
-                    ],
-                  ),
+              ),
+              Flexible(
+                flex: 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 5),
+                    CustomText(
+                      title:
+                          '${getName(context)}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                      fontSize: FontSize.largeSize,
+                      color: CustomColors.whiteColor,
+                      font: kimm,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         automaticallyImplyLeading: false,
@@ -64,10 +62,12 @@ class BookMarkFolderList extends StatelessWidget {
           child: FutureBuilder(
             future: FolderProvider().getFolderList(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Flexible(child: folderListView(snapshot));
-              }
-              return const Center(child: CircularProgressIndicator());
+              // if (snapshot.hasData) {
+              return snapshot.hasData
+                  ? folderListView(snapshot)
+                  : const Center(child: CircularProgressIndicator());
+              // }
+              // return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

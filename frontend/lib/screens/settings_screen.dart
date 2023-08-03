@@ -182,7 +182,10 @@ class _SettingsState extends State<Settings> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 applyTheme: false,
                               )
-                            : Image.asset(kakaoLogin),
+                            : Image.asset(
+                                kakaoLogin,
+                                filterQuality: FilterQuality.high,
+                              ),
                       ),
                     ),
                   ],

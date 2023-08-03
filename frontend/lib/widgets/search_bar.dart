@@ -34,7 +34,7 @@ class CustomSearchBar extends StatefulWidget {
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
   bool showDetail = false;
-  final StringList sortOrder = ['가까운 순', '평점 좋은 순', '리뷰 많은 순'];
+  final StringList sortOrder = ['가까운 순', '평점 순', '리뷰 순'];
   final DynamicMap searchData = {};
   final StringList filterKeyList = ['diaper', 'kids', 'disabled', 'allDay'];
   final BoolList filterValueList = [];

@@ -92,7 +92,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
           appBarScroll: scrollController,
           listScroll: controller,
           toolbarHeight: widget.showReview
-              ? getItemHeight(context)! + (isDefaultTheme(context) ? 60 : 100)
+              ? getItemHeight(context)! + (isDefaultTheme(context) ? 71 : 100)
               : isDefaultTheme(context)
                   ? 80
                   : 95,
@@ -115,14 +115,14 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
                                 onPressed: () {
-                                  routerPop(context)();
-
                                   context
                                       .read<MainSearchProvider>()
                                       .removeMarker();
-                                  context
-                                      .read<ReviewBookMarkProvider>()
-                                      .initToiletInfo();
+                                  routerPop(context)();
+
+                                  // context
+                                  //     .read<ReviewBookMarkProvider>()
+                                  //     .initToiletInfo();
                                 },
                                 padding: EdgeInsets.zero,
                                 iconSize: 35,

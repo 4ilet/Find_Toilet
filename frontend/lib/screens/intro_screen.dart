@@ -71,7 +71,11 @@ class _IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
-      body: Center(child: Image.asset(logo)),
+      body: Center(
+          child: Image.asset(
+        logo,
+        filterQuality: FilterQuality.high,
+      )),
     );
   }
 }
