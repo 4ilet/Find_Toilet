@@ -26,10 +26,12 @@ const gpsPolicy = '''
 ''';
 const license = '''
 <article>
-<h3>글꼴</h3><p><b>한국기계연구원 서체 Bold,</b><br>한국기계연구원,<br>https://www.kimm.re.kr/webfont</p><p><b>Noto Sans</b>,<br>Google Fonts,<br>https://fonts.google.com/noto/specimen/Noto+Sans+KR</p>
+<h3>화장실 데이터</h3><p><b>지방행정 인허가 데이터 개방 시스템,</b><br>행정자치부,<br><a href="https://www.localdata.go.kr/main.do">https://www.localdata.go.kr/main.do</a></p>
+<h3>글꼴</h3><p><b>한국기계연구원 서체 Bold,</b><br>한국기계연구원,<br><a href="https://www.kimm.re.kr/webfont">https://www.kimm.re.kr/webfont</a></p>
+<p><b>Noto Sans</b>,<br>Google Fonts,<br><a href="https://fonts.google.com/noto/specimen/Noto+Sans+KR">https://fonts.google.com/noto/specimen/Noto+Sans+KR</a></p>
 <br></br>
 <h3>오픈소스</h3>
-<p><b>cached_network_image</b><br>The MIT License (MIT)<br>Copyright (c) 2018 Rene Floor<br>https://github.com/Baseflow/flutter_cached_network_image<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>cached_network_image</b><br>The MIT License (MIT)<br>Copyright (c) 2018 Rene Floor<br><a href="https://github.com/Baseflow/flutter_cached_network_image">https://github.com/Baseflow/flutter_cached_network_image</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -46,7 +48,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>dio</b><br>MIT License<br>Copyright (c) 2018 wendux<br>https://github.com/flutterchina/dio<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>dio</b><br>MIT License<br>Copyright (c) 2018 wendux<br><a href="https://github.com/flutterchina/dio">https://github.com/flutterchina/dio</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -63,7 +65,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>flutter</b><br>Copyright 2014 The Flutter Authors<br>https://flutter.dev<br>Redistribution and use in source and binary forms, with or without modification,
+<p><b>flutter</b><br>Copyright 2014 The Flutter Authors<br><a href="https://flutter.dev">https://flutter.dev</a><br>Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright
@@ -86,7 +88,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p><b>flutter_dotenv</b><br>The MIT License (MIT)<br>Copyright (c) 2018 java-james<br>https://github.com/java-james/flutter_dotenv<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>flutter_dotenv</b><br>The MIT License (MIT)<br>Copyright (c) 2018 java-james<br><a href="https://github.com/java-james/flutter_dotenv">https://github.com/java-james/flutter_dotenv</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -302,7 +304,7 @@ SOFTWARE.</p>
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.</p>
-<p><b>flutter_html</b><br>MIT License<br>Copyright (c) 2019 Matthew Whitaker<br>https://github.com/Sub6Resources/flutter_html<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>flutter_html</b><br>MIT License<br>Copyright (c) 2019 Matthew Whitaker<br><a href="https://github.com/Sub6Resources/flutter_html">https://github.com/Sub6Resources/flutter_html</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -319,7 +321,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>flutter_lints</b><br>Copyright 2013 The Flutter Authors<br>https://github.com/flutter/packages/tree/main/packages/flutter_lints<br>Redistribution and use in source and binary forms, with or without modification,
+<p><b>flutter_lints</b><br>Copyright 2013 The Flutter Authors<br><a href="https://github.com/flutter/packages/tree/main/packages/flutter_lints">https://github.com/flutter/packages/tree/main/packages/flutter_lints</a><br>Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright
@@ -342,7 +344,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p><b>flutter_oss_licenses</b><br>MIT License<br>Copyright (c) 2019 Takashi Kawasaki<br>https://pub.dev/packages/flutter_oss_licenses<br>Redistribution and use in source and binary forms, with or without
+<p><b>flutter_oss_licenses</b><br>MIT License<br>Copyright (c) 2019 Takashi Kawasaki<br><a href="https://pub.dev/packages/flutter_oss_licenses">https://pub.dev/packages/flutter_oss_licenses</a><br>Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
@@ -367,7 +369,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p><b>flutter_secure_storage</b><br>BSD 3-Clause License<br>Copyright 2017 German Saprykin<br>https://github.com/mogol/flutter_secure_storage/tree/develop/flutter_secure_storage<br>All rights reserved.
+<p><b>flutter_secure_storage</b><br>BSD 3-Clause License<br>Copyright 2017 German Saprykin<br><a href="https://github.com/mogol/flutter_secure_storage/tree/develop/flutter_secure_storage">https://github.com/mogol/flutter_secure_storage/tree/develop/flutter_secure_storage</a><br>All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -411,7 +413,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>kakao_flutter_sdk_user</b><br>Apache License<br>Version 2.0, January 2004<br>https://github.com/kakao/kakao_flutter_sdk<br>http://www.apache.org/licenses/
+<p><b>kakao_flutter_sdk_user</b><br>Apache License<br>Version 2.0, January 2004<br><a href="https://github.com/kakao/kakao_flutter_sdk">https://github.com/kakao/kakao_flutter_sdk</a><br>http://www.apache.org/licenses/
 
    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
@@ -610,7 +612,7 @@ SOFTWARE.</p>
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.</p>
-<p><b>location</b><br>Copyright (c) 2017 Guillaume Bernos<br>https://github.com/Lyokone/flutterlocation<br>Permission is hereby granted, free of charge, to any person obtaining a copy of
+<p><b>location</b><br>Copyright (c) 2017 Guillaume Bernos<br><a href="https://github.com/Lyokone/flutterlocation">https://github.com/Lyokone/flutterlocation</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
 the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
@@ -627,7 +629,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>map</b><br>MIT License<br>Copyright (c) 2020-2022 Mahdi K. Fard<br>https://github.com/xclud/flutter_map<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>map</b><br>MIT License<br>Copyright (c) 2020-2022 Mahdi K. Fard<br><a href="https://github.com/xclud/flutter_map">https://github.com/xclud/flutter_map</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -644,7 +646,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>package_info_plus</b><br>Copyright 2017 The Chromium Authors<br>https://github.com/fluttercommunity/plus_plugins/tree/main/packages<br>Redistribution and use in source and binary forms, with or without
+<p><b>package_info_plus</b><br>Copyright 2017 The Chromium Authors<br><a href="https://github.com/fluttercommunity/plus_plugins/tree/main/packages">https://github.com/fluttercommunity/plus_plugins/tree/main/packages</a><br>Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
@@ -669,7 +671,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p><b>provider</b><br>MIT License<br>Copyright (c) 2019 Remi Rousselet<br>https://github.com/rrousselGit/provider<br>Permission is hereby granted, free of charge, to any person obtaining a copy
+<p><b>provider</b><br>MIT License<br>Copyright (c) 2019 Remi Rousselet<br><a href="https://github.com/rrousselGit/provider">https://github.com/rrousselGit/provider</a><br>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -686,30 +688,1330 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
-<p><b>shared_preferences</b><br>Copyright 2013 The Flutter Authors<br>https://github.com/rrousselGit/provider</p>
-<p><b>url_launcher</b><br>Copyright 2013 The Flutter Authors<br>https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher<br>Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of Google Inc. nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p><b>shared_preferences</b><br>Copyright 2013 The Flutter Authors<br><a href="https://github.com/rrousselGit/provider">https://github.com/rrousselGit/provider</a></p>
+<p><b>url_launcher</b><br>Copyright 2013 The Flutter Authors<br><a href="https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher">https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher</a><br></p>
+<a id='project_Apache_License_2.0'></a>
+<h3>Apache License 2.0</h3>
+<div class='dependency'>
+<p><strong> 1.</strong> <strong>Group:</strong> io.swagger <strong>Name:</strong> swagger-annotations <strong>Version:</strong> 1.5.20 </p><label>POM License</label>
+<div class='dependency-value'>Apache License 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.html'>http://www.apache.org/licenses/LICENSE-2.0.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 2.</strong> <strong>Group:</strong> io.swagger <strong>Name:</strong> swagger-models <strong>Version:</strong> 1.5.20 </p><label>POM License</label>
+<div class='dependency-value'>Apache License 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.html'>http://www.apache.org/licenses/LICENSE-2.0.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 3.</strong> <strong>Group:</strong> io.swagger.core.v3 <strong>Name:</strong> swagger-annotations <strong>Version:</strong> 2.1.2 </p><label>POM License</label>
+<div class='dependency-value'>Apache License 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.html'>http://www.apache.org/licenses/LICENSE-2.0.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 4.</strong> <strong>Group:</strong> io.swagger.core.v3 <strong>Name:</strong> swagger-models <strong>Version:</strong> 2.1.2 </p><label>POM License</label>
+<div class='dependency-value'>Apache License 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.html'>http://www.apache.org/licenses/LICENSE-2.0.html</a></div>
+</div>
+<a id='project_Apache_License,_Version_2.0'></a>
+<h3>Apache License, Version 2.0</h3>
+<div class='dependency'>
+<p><strong> 5.</strong> <strong>Group:</strong> com.fasterxml <strong>Name:</strong> classmate <strong>Version:</strong> 1.5.1 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/java-classmate'>https://github.com/FasterXML/java-classmate</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='classmate-1.5.1.jar/META-INF/LICENSE'>classmate-1.5.1.jar/META-INF/LICENSE</a><br><a href='classmate-1.5.1.jar/META-INF/NOTICE'>classmate-1.5.1.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 6.</strong> <strong>Group:</strong> com.fasterxml.jackson.core <strong>Name:</strong> jackson-core <strong>Version:</strong> 2.13.4 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-core'>https://github.com/FasterXML/jackson-core</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-core-2.13.4.jar/META-INF/LICENSE'>jackson-core-2.13.4.jar/META-INF/LICENSE</a><br><a href='jackson-core-2.13.4.jar/META-INF/NOTICE'>jackson-core-2.13.4.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 7.</strong> <strong>Group:</strong> com.fasterxml.jackson.core <strong>Name:</strong> jackson-databind <strong>Version:</strong> 2.13.4.2 </p><label>Project URL</label>
+<div class='dependency-value'><a href='http://github.com/FasterXML/jackson'>http://github.com/FasterXML/jackson</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-databind-2.13.4.2.jar/META-INF/LICENSE'>jackson-databind-2.13.4.2.jar/META-INF/LICENSE</a><br><a href='jackson-databind-2.13.4.2.jar/META-INF/NOTICE'>jackson-databind-2.13.4.2.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 8.</strong> <strong>Group:</strong> com.fasterxml.jackson.datatype <strong>Name:</strong> jackson-datatype-jdk8 <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8'>https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 9.</strong> <strong>Group:</strong> com.fasterxml.jackson.datatype <strong>Name:</strong> jackson-datatype-jsr310 <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310'>https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-datatype-jsr310-2.13.4.jar/META-INF/LICENSE'>jackson-datatype-jsr310-2.13.4.jar/META-INF/LICENSE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 10.</strong> <strong>Group:</strong> com.fasterxml.jackson.module <strong>Name:</strong> jackson-module-parameter-names <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names'>https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 11.</strong> <strong>Group:</strong> com.github.stephenc.jcip <strong>Name:</strong> jcip-annotations <strong>Version:</strong> 1.0-1 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://stephenc.github.com/jcip-annotations'>http://stephenc.github.com/jcip-annotations</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 12.</strong> <strong>Group:</strong> com.querydsl <strong>Name:</strong> querydsl-core <strong>Version:</strong> 5.0.0 </p><label>POM Project URL</label>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 13.</strong> <strong>Group:</strong> com.querydsl <strong>Name:</strong> querydsl-jpa <strong>Version:</strong> 5.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 14.</strong> <strong>Group:</strong> io.jsonwebtoken <strong>Name:</strong> jjwt-api <strong>Version:</strong> 0.11.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/jwtk/jjwt'>https://github.com/jwtk/jjwt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0'>http://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 15.</strong> <strong>Group:</strong> io.jsonwebtoken <strong>Name:</strong> jjwt-impl <strong>Version:</strong> 0.11.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/jwtk/jjwt'>https://github.com/jwtk/jjwt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0'>http://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 16.</strong> <strong>Group:</strong> io.jsonwebtoken <strong>Name:</strong> jjwt-jackson <strong>Version:</strong> 0.11.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/jwtk/jjwt'>https://github.com/jwtk/jjwt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0'>http://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 17.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-buffer <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 18.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-codec <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 19.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-codec-dns <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 20.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-codec-http <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 21.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-codec-http2 <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 22.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-codec-socks <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 23.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-common <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 24.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-handler <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 25.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-handler-proxy <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 26.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-resolver <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 27.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-resolver-dns <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 28.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-resolver-dns-classes-macos <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 29.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-resolver-dns-native-macos <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 30.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-transport <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 31.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-transport-classes-epoll <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 32.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-transport-native-epoll <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 33.</strong> <strong>Group:</strong> io.netty <strong>Name:</strong> netty-transport-native-unix-common <strong>Version:</strong> 4.1.87.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://netty.io/'>https://netty.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 34.</strong> <strong>Group:</strong> io.projectreactor <strong>Name:</strong> reactor-core <strong>Version:</strong> 3.4.26 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/reactor/reactor-core'>https://github.com/reactor/reactor-core</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 35.</strong> <strong>Group:</strong> net.bytebuddy <strong>Name:</strong> byte-buddy <strong>Version:</strong> 1.12.22 </p><label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='byte-buddy-1.12.22.jar/META-INF/LICENSE'>byte-buddy-1.12.22.jar/META-INF/LICENSE</a><br><a href='byte-buddy-1.12.22.jar/META-INF/NOTICE'>byte-buddy-1.12.22.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 36.</strong> <strong>Group:</strong> org.apache.logging.log4j <strong>Name:</strong> log4j-api <strong>Version:</strong> 2.17.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.apache.org/'>https://www.apache.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='log4j-api-2.17.2.jar/META-INF/LICENSE'>log4j-api-2.17.2.jar/META-INF/LICENSE</a><br><a href='log4j-api-2.17.2.jar/META-INF/NOTICE'>log4j-api-2.17.2.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 37.</strong> <strong>Group:</strong> org.apache.logging.log4j <strong>Name:</strong> log4j-to-slf4j <strong>Version:</strong> 2.17.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.apache.org/'>https://www.apache.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='log4j-to-slf4j-2.17.2.jar/META-INF/LICENSE'>log4j-to-slf4j-2.17.2.jar/META-INF/LICENSE</a><br><a href='log4j-to-slf4j-2.17.2.jar/META-INF/NOTICE'>log4j-to-slf4j-2.17.2.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 38.</strong> <strong>Group:</strong> org.apache.tomcat.embed <strong>Name:</strong> tomcat-embed-core <strong>Version:</strong> 9.0.71 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://tomcat.apache.org/'>https://tomcat.apache.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='tomcat-embed-core-9.0.71.jar/META-INF/LICENSE'>tomcat-embed-core-9.0.71.jar/META-INF/LICENSE</a><br><a href='tomcat-embed-core-9.0.71.jar/META-INF/NOTICE'>tomcat-embed-core-9.0.71.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 39.</strong> <strong>Group:</strong> org.apache.tomcat.embed <strong>Name:</strong> tomcat-embed-el <strong>Version:</strong> 9.0.71 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://tomcat.apache.org/'>https://tomcat.apache.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='tomcat-embed-el-9.0.71.jar/META-INF/LICENSE'>tomcat-embed-el-9.0.71.jar/META-INF/LICENSE</a><br><a href='tomcat-embed-el-9.0.71.jar/META-INF/NOTICE'>tomcat-embed-el-9.0.71.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 40.</strong> <strong>Group:</strong> org.apache.tomcat.embed <strong>Name:</strong> tomcat-embed-websocket <strong>Version:</strong> 9.0.71 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://tomcat.apache.org/'>https://tomcat.apache.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='tomcat-embed-websocket-9.0.71.jar/META-INF/LICENSE'>tomcat-embed-websocket-9.0.71.jar/META-INF/LICENSE</a><br><a href='tomcat-embed-websocket-9.0.71.jar/META-INF/NOTICE'>tomcat-embed-websocket-9.0.71.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 41.</strong> <strong>Group:</strong> org.jboss <strong>Name:</strong> jandex <strong>Version:</strong> 2.4.2.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.jboss.org'>http://www.jboss.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Public Domain - <a href='http://repository.jboss.org/licenses/cc0-1.0.txt'>http://repository.jboss.org/licenses/cc0-1.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 42.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-aop <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-aop-5.3.25.jar/META-INF/license.txt'>spring-aop-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-aop-5.3.25.jar/META-INF/notice.txt'>spring-aop-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 43.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-aspects <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-aspects-5.3.25.jar/META-INF/license.txt'>spring-aspects-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-aspects-5.3.25.jar/META-INF/notice.txt'>spring-aspects-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 44.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-beans <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-beans-5.3.25.jar/META-INF/license.txt'>spring-beans-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-beans-5.3.25.jar/META-INF/notice.txt'>spring-beans-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 45.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-context <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-context-5.3.25.jar/META-INF/license.txt'>spring-context-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-context-5.3.25.jar/META-INF/notice.txt'>spring-context-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 46.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-core <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-core-5.3.25.jar/META-INF/license.txt'>spring-core-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-core-5.3.25.jar/META-INF/notice.txt'>spring-core-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 47.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-expression <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-expression-5.3.25.jar/META-INF/license.txt'>spring-expression-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-expression-5.3.25.jar/META-INF/notice.txt'>spring-expression-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 48.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-jcl <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-jcl-5.3.25.jar/META-INF/license.txt'>spring-jcl-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-jcl-5.3.25.jar/META-INF/notice.txt'>spring-jcl-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 49.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-jdbc <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-jdbc-5.3.25.jar/META-INF/license.txt'>spring-jdbc-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-jdbc-5.3.25.jar/META-INF/notice.txt'>spring-jdbc-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 50.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-orm <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-orm-5.3.25.jar/META-INF/license.txt'>spring-orm-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-orm-5.3.25.jar/META-INF/notice.txt'>spring-orm-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 51.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-tx <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-tx-5.3.25.jar/META-INF/license.txt'>spring-tx-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-tx-5.3.25.jar/META-INF/notice.txt'>spring-tx-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 52.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-web <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-web-5.3.25.jar/META-INF/license.txt'>spring-web-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-web-5.3.25.jar/META-INF/notice.txt'>spring-web-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 53.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-webflux <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-webflux-5.3.25.jar/META-INF/license.txt'>spring-webflux-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-webflux-5.3.25.jar/META-INF/notice.txt'>spring-webflux-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 54.</strong> <strong>Group:</strong> org.springframework <strong>Name:</strong> spring-webmvc <strong>Version:</strong> 5.3.25 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/spring-projects/spring-framework'>https://github.com/spring-projects/spring-framework</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-webmvc-5.3.25.jar/META-INF/license.txt'>spring-webmvc-5.3.25.jar/META-INF/license.txt</a><br><a href='spring-webmvc-5.3.25.jar/META-INF/notice.txt'>spring-webmvc-5.3.25.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 55.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 56.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-autoconfigure <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-autoconfigure-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-autoconfigure-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-autoconfigure-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-autoconfigure-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 57.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-devtools <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-devtools-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-devtools-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-devtools-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-devtools-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 58.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 59.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-aop <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-aop-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-aop-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-aop-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-aop-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 60.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-data-jpa <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-data-jpa-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-data-jpa-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-data-jpa-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-data-jpa-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 61.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-jdbc <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-jdbc-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-jdbc-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-jdbc-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-jdbc-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 62.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-json <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-json-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-json-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-json-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-json-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 63.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-logging <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-logging-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-logging-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-logging-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-logging-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 64.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-oauth3-client <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-oauth3-client-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-oauth3-client-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-oauth3-client-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-oauth3-client-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 65.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-reactor-netty <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-reactor-netty-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-reactor-netty-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-reactor-netty-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-reactor-netty-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 66.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-security <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-security-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-security-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-security-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-security-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 67.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-tomcat <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-tomcat-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-tomcat-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-tomcat-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-tomcat-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 68.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-web <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-web-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-web-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-web-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-web-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 69.</strong> <strong>Group:</strong> org.springframework.boot <strong>Name:</strong> spring-boot-starter-webflux <strong>Version:</strong> 2.7.8 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-boot'>https://spring.io/projects/spring-boot</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-boot-starter-webflux-2.7.8.jar/META-INF/LICENSE.txt'>spring-boot-starter-webflux-2.7.8.jar/META-INF/LICENSE.txt</a><br><a href='spring-boot-starter-webflux-2.7.8.jar/META-INF/NOTICE.txt'>spring-boot-starter-webflux-2.7.8.jar/META-INF/NOTICE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 70.</strong> <strong>Group:</strong> org.springframework.data <strong>Name:</strong> spring-data-commons <strong>Version:</strong> 2.7.7 </p><label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-data-commons-2.7.7.jar/license.txt'>spring-data-commons-2.7.7.jar/license.txt</a><br><a href='spring-data-commons-2.7.7.jar/notice.txt'>spring-data-commons-2.7.7.jar/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 71.</strong> <strong>Group:</strong> org.springframework.data <strong>Name:</strong> spring-data-jpa <strong>Version:</strong> 2.7.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-data-jpa'>https://spring.io/projects/spring-data-jpa</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-data-jpa-2.7.7.jar/license.txt'>spring-data-jpa-2.7.7.jar/license.txt</a><br><a href='spring-data-jpa-2.7.7.jar/notice.txt'>spring-data-jpa-2.7.7.jar/notice.txt</a><br><a href='spring-data-jpa-2.7.7.jar/readme.txt'>spring-data-jpa-2.7.7.jar/readme.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 72.</strong> <strong>Group:</strong> org.springframework.plugin <strong>Name:</strong> spring-plugin-core <strong>Version:</strong> 2.0.0.RELEASE </p><label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-plugin-core-2.0.0.RELEASE.jar/META-INF/license.txt'>spring-plugin-core-2.0.0.RELEASE.jar/META-INF/license.txt</a><br><a href='spring-plugin-core-2.0.0.RELEASE.jar/META-INF/notice.txt'>spring-plugin-core-2.0.0.RELEASE.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 73.</strong> <strong>Group:</strong> org.springframework.plugin <strong>Name:</strong> spring-plugin-metadata <strong>Version:</strong> 2.0.0.RELEASE </p><label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='spring-plugin-metadata-2.0.0.RELEASE.jar/META-INF/license.txt'>spring-plugin-metadata-2.0.0.RELEASE.jar/META-INF/license.txt</a><br><a href='spring-plugin-metadata-2.0.0.RELEASE.jar/META-INF/notice.txt'>spring-plugin-metadata-2.0.0.RELEASE.jar/META-INF/notice.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 74.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-config <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 75.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-core <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 76.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-crypto <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 77.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-oauth3-client <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 78.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-oauth3-core <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 79.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-oauth3-jose <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 80.</strong> <strong>Group:</strong> org.springframework.security <strong>Name:</strong> spring-security-web <strong>Version:</strong> 5.7.6 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://spring.io/projects/spring-security'>https://spring.io/projects/spring-security</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0'>https://www.apache.org/licenses/LICENSE-2.0</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 81.</strong> <strong>Group:</strong> org.yaml <strong>Name:</strong> snakeyaml <strong>Version:</strong> 1.30 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://bitbucket.org/snakeyaml/snakeyaml'>https://bitbucket.org/snakeyaml/snakeyaml</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<a id='project_Apache_License,_version_2.0'></a>
+<h3>Apache License, version 2.0</h3>
+<div class='dependency'>
+<p><strong> 82.</strong> <strong>Group:</strong> com.nimbusds <strong>Name:</strong> oauth3-oidc-sdk <strong>Version:</strong> 9.35 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://connect2id.com'>https://connect2id.com</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions'>https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.html'>https://www.apache.org/licenses/LICENSE-2.0.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 83.</strong> <strong>Group:</strong> org.jboss.logging <strong>Name:</strong> jboss-logging <strong>Version:</strong> 3.4.3.Final </p><label>Project URL</label>
+<div class='dependency-value'><a href='http://www.jboss.org'>http://www.jboss.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Public Domain - <a href='http://repository.jboss.org/licenses/cc0-1.0.txt'>http://repository.jboss.org/licenses/cc0-1.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jboss-logging-3.4.3.Final.jar/META-INF/LICENSE.txt'>jboss-logging-3.4.3.Final.jar/META-INF/LICENSE.txt</a></div>
+</div>
+<a id='project_BSD_License'></a>
+<h3>BSD License</h3>
+<div class='dependency'>
+<p><strong> 84.</strong> <strong>Group:</strong> antlr <strong>Name:</strong> antlr <strong>Version:</strong> 2.7.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://www.antlr.org/'>http://www.antlr.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>BSD License - <a href='http://www.antlr.org/license.html'>http://www.antlr.org/license.html</a></div>
+</div>
+<a id='project_BSD-3-Clause'></a>
+<h3>BSD-3-Clause</h3>
+<div class='dependency'>
+<p><strong> 85.</strong> <strong>Group:</strong> org.ow2.asm <strong>Name:</strong> asm <strong>Version:</strong> 9.1 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://asm.ow2.org'>http://asm.ow2.org</a></div>
+<label>Manifest License</label>
+<div class='dependency-value'>BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not Packaged)</div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='http://asm.ow2.io/'>http://asm.ow2.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>BSD-3-Clause - <a href='https://asm.ow2.io/license.html'>https://asm.ow2.io/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<a id='project_EDL_1.0'></a>
+<h3>EDL 1.0</h3>
+<div class='dependency'>
+<p><strong> 86.</strong> <strong>Group:</strong> com.sun.activation <strong>Name:</strong> jakarta.activation <strong>Version:</strong> 1.2.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EDL 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.activation-1.2.2.jar/META-INF/LICENSE.md'>jakarta.activation-1.2.2.jar/META-INF/LICENSE.md</a><br><a href='jakarta.activation-1.2.2.jar/META-INF/NOTICE.md'>jakarta.activation-1.2.2.jar/META-INF/NOTICE.md</a></div>
+</div>
+<a id='project_EPL_2.0'></a>
+<h3>EPL 2.0</h3>
+<div class='dependency'>
+<p><strong> 87.</strong> <strong>Group:</strong> jakarta.annotation <strong>Name:</strong> jakarta.annotation-api <strong>Version:</strong> 1.3.5 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.ca'>https://projects.eclipse.org/projects/ee4j.ca</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md</a><br><a href='jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 88.</strong> <strong>Group:</strong> jakarta.transaction <strong>Name:</strong> jakarta.transaction-api <strong>Version:</strong> 1.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j'>https://github.com/eclipse-ee4j</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.jta'>https://projects.eclipse.org/projects/ee4j.jta</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<a id='project_Eclipse_Distribution_License_-_v_1.0'></a>
+<h3>Eclipse Distribution License - v 1.0</h3>
+<div class='dependency'>
+<p><strong> 89.</strong> <strong>Group:</strong> com.sun.istack <strong>Name:</strong> istack-commons-runtime <strong>Version:</strong> 3.0.12 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md'>istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md</a><br><a href='istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md'>istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 90.</strong> <strong>Group:</strong> jakarta.xml.bind <strong>Name:</strong> jakarta.xml.bind-api <strong>Version:</strong> 2.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md</a><br><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 91.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> jaxb-runtime <strong>Version:</strong> 2.3.7 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md'>jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md'>jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 92.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> txw2 <strong>Version:</strong> 2.3.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='txw2-2.3.7.jar/META-INF/LICENSE.md'>txw2-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='txw2-2.3.7.jar/META-INF/NOTICE.md'>txw2-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<a id='project_Eclipse_Distribution_License_v._1.0'></a>
+<h3>Eclipse Distribution License v. 1.0</h3>
+<div class='dependency'>
+<p><strong> 93.</strong> <strong>Group:</strong> jakarta.persistence <strong>Name:</strong> jakarta.persistence-api <strong>Version:</strong> 2.2.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j/jpa-api'>https://github.com/eclipse-ee4j/jpa-api</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License v. 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<a id='project_Eclipse_Public_License_-_v_1.0'></a>
+<h3>Eclipse Public License - v 1.0</h3>
+<div class='dependency'>
+<p><strong> 94.</strong> <strong>Group:</strong> ch.qos.logback <strong>Name:</strong> logback-classic <strong>Version:</strong> 1.2.11 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.qos.ch'>http://www.qos.ch</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License - v 1.0 - <a href='http://www.eclipse.org/legal/epl-v10.html'>http://www.eclipse.org/legal/epl-v10.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Lesser General Public License - <a href='http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 95.</strong> <strong>Group:</strong> ch.qos.logback <strong>Name:</strong> logback-core <strong>Version:</strong> 1.2.11 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.qos.ch'>http://www.qos.ch</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License - v 1.0 - <a href='http://www.eclipse.org/legal/epl-v10.html'>http://www.eclipse.org/legal/epl-v10.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Lesser General Public License - <a href='http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a></div>
+</div>
+<a id='project_Eclipse_Public_License_-_v_2.0'></a>
+<h3>Eclipse Public License - v 2.0</h3>
+<div class='dependency'>
+<p><strong> 96.</strong> <strong>Group:</strong> org.aspectj <strong>Name:</strong> aspectjweaver <strong>Version:</strong> 1.9.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org/aspectj/'>https://www.eclipse.org/aspectj/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License - v 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+</div>
+<a id='project_Eclipse_Public_License_v._2.0'></a>
+<h3>Eclipse Public License v. 2.0</h3>
+<div class='dependency'>
+<p><strong> 97.</strong> <strong>Group:</strong> com.sun.activation <strong>Name:</strong> jakarta.activation <strong>Version:</strong> 1.2.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EDL 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.activation-1.2.2.jar/META-INF/LICENSE.md'>jakarta.activation-1.2.2.jar/META-INF/LICENSE.md</a><br><a href='jakarta.activation-1.2.2.jar/META-INF/NOTICE.md'>jakarta.activation-1.2.2.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 98.</strong> <strong>Group:</strong> com.sun.istack <strong>Name:</strong> istack-commons-runtime <strong>Version:</strong> 3.0.12 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md'>istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md</a><br><a href='istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md'>istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 99.</strong> <strong>Group:</strong> jakarta.annotation <strong>Name:</strong> jakarta.annotation-api <strong>Version:</strong> 1.3.5 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.ca'>https://projects.eclipse.org/projects/ee4j.ca</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md</a><br><a href='jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 100.</strong> <strong>Group:</strong> jakarta.persistence <strong>Name:</strong> jakarta.persistence-api <strong>Version:</strong> 2.2.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j/jpa-api'>https://github.com/eclipse-ee4j/jpa-api</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License v. 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 101.</strong> <strong>Group:</strong> jakarta.transaction <strong>Name:</strong> jakarta.transaction-api <strong>Version:</strong> 1.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j'>https://github.com/eclipse-ee4j</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.jta'>https://projects.eclipse.org/projects/ee4j.jta</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 102.</strong> <strong>Group:</strong> jakarta.xml.bind <strong>Name:</strong> jakarta.xml.bind-api <strong>Version:</strong> 2.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md</a><br><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 103.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> jaxb-runtime <strong>Version:</strong> 2.3.7 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md'>jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md'>jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 104.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> txw2 <strong>Version:</strong> 2.3.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='txw2-2.3.7.jar/META-INF/LICENSE.md'>txw2-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='txw2-2.3.7.jar/META-INF/NOTICE.md'>txw2-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<a id='project_GNU_General_Public_License,_version_2_with_the_GNU_Classpath_Exception'></a>
+<h3>GNU General Public License, version 2 with the GNU Classpath Exception</h3>
+<div class='dependency'>
+<p><strong> 105.</strong> <strong>Group:</strong> com.sun.activation <strong>Name:</strong> jakarta.activation <strong>Version:</strong> 1.2.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EDL 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.activation-1.2.2.jar/META-INF/LICENSE.md'>jakarta.activation-1.2.2.jar/META-INF/LICENSE.md</a><br><a href='jakarta.activation-1.2.2.jar/META-INF/NOTICE.md'>jakarta.activation-1.2.2.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 106.</strong> <strong>Group:</strong> com.sun.istack <strong>Name:</strong> istack-commons-runtime <strong>Version:</strong> 3.0.12 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md'>istack-commons-runtime-3.0.12.jar/META-INF/LICENSE.md</a><br><a href='istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md'>istack-commons-runtime-3.0.12.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 107.</strong> <strong>Group:</strong> jakarta.annotation <strong>Name:</strong> jakarta.annotation-api <strong>Version:</strong> 1.3.5 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.ca'>https://projects.eclipse.org/projects/ee4j.ca</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md</a><br><a href='jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 108.</strong> <strong>Group:</strong> jakarta.persistence <strong>Name:</strong> jakarta.persistence-api <strong>Version:</strong> 2.2.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j/jpa-api'>https://github.com/eclipse-ee4j/jpa-api</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License v. 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 109.</strong> <strong>Group:</strong> jakarta.transaction <strong>Name:</strong> jakarta.transaction-api <strong>Version:</strong> 1.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j'>https://github.com/eclipse-ee4j</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.jta'>https://projects.eclipse.org/projects/ee4j.jta</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 110.</strong> <strong>Group:</strong> jakarta.xml.bind <strong>Name:</strong> jakarta.xml.bind-api <strong>Version:</strong> 2.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/LICENSE.md</a><br><a href='jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md'>jakarta.xml.bind-api-2.3.3.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 111.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> jaxb-runtime <strong>Version:</strong> 2.3.7 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md'>jaxb-runtime-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md'>jaxb-runtime-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 112.</strong> <strong>Group:</strong> org.glassfish.jaxb <strong>Name:</strong> txw2 <strong>Version:</strong> 2.3.7 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://eclipse-ee4j.github.io/jaxb-ri/'>https://eclipse-ee4j.github.io/jaxb-ri/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Distribution License - v 1.0 - <a href='http://www.eclipse.org/org/documents/edl-v10.php'>http://www.eclipse.org/org/documents/edl-v10.php</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='txw2-2.3.7.jar/META-INF/LICENSE.md'>txw2-2.3.7.jar/META-INF/LICENSE.md</a><br><a href='txw2-2.3.7.jar/META-INF/NOTICE.md'>txw2-2.3.7.jar/META-INF/NOTICE.md</a></div>
+</div>
+<a id='project_GNU_Lesser_General_Public_License'></a>
+<h3>GNU Lesser General Public License</h3>
+<div class='dependency'>
+<p><strong> 113.</strong> <strong>Group:</strong> ch.qos.logback <strong>Name:</strong> logback-classic <strong>Version:</strong> 1.2.11 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.qos.ch'>http://www.qos.ch</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License - v 1.0 - <a href='http://www.eclipse.org/legal/epl-v10.html'>http://www.eclipse.org/legal/epl-v10.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Lesser General Public License - <a href='http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 114.</strong> <strong>Group:</strong> ch.qos.logback <strong>Name:</strong> logback-core <strong>Version:</strong> 1.2.11 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.qos.ch'>http://www.qos.ch</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License - v 1.0 - <a href='http://www.eclipse.org/legal/epl-v10.html'>http://www.eclipse.org/legal/epl-v10.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Lesser General Public License - <a href='http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a></div>
+</div>
+<a id='project_GNU_Library_General_Public_License_v2.1_or_later'></a>
+<h3>GNU Library General Public License v2.1 or later</h3>
+<div class='dependency'>
+<p><strong> 115.</strong> <strong>Group:</strong> org.hibernate <strong>Name:</strong> hibernate-core <strong>Version:</strong> 5.6.14.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://hibernate.org/orm/5.6'>https://hibernate.org/orm/5.6</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://hibernate.org/orm'>https://hibernate.org/orm</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Library General Public License v2.1 or later - <a href='https://www.opensource.org/licenses/LGPL-2.1'>https://www.opensource.org/licenses/LGPL-2.1</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 116.</strong> <strong>Group:</strong> org.hibernate.common <strong>Name:</strong> hibernate-commons-annotations <strong>Version:</strong> 5.1.2.Final </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://hibernate.org'>http://hibernate.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU Library General Public License v2.1 or later - <a href='http://www.opensource.org/licenses/LGPL-2.1'>http://www.opensource.org/licenses/LGPL-2.1</a></div>
+</div>
+<a id='project_GPL2_w/_CPE'></a>
+<h3>GPL2 w/ CPE</h3>
+<div class='dependency'>
+<p><strong> 117.</strong> <strong>Group:</strong> jakarta.annotation <strong>Name:</strong> jakarta.annotation-api <strong>Version:</strong> 1.3.5 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://www.eclipse.org'>https://www.eclipse.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.ca'>https://projects.eclipse.org/projects/ee4j.ca</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/LICENSE.md</a><br><a href='jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md'>jakarta.annotation-api-1.3.5.jar/META-INF/NOTICE.md</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 118.</strong> <strong>Group:</strong> jakarta.transaction <strong>Name:</strong> jakarta.transaction-api <strong>Version:</strong> 1.3.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/eclipse-ee4j'>https://github.com/eclipse-ee4j</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://projects.eclipse.org/projects/ee4j.jta'>https://projects.eclipse.org/projects/ee4j.jta</a></div>
+<label>POM License</label>
+<div class='dependency-value'>EPL 2.0 - <a href='http://www.eclipse.org/legal/epl-2.0'>http://www.eclipse.org/legal/epl-2.0</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Eclipse Public License v. 2.0 - <a href='https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt'>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GNU General Public License, version 2 with the GNU Classpath Exception - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>GPL2 w/ CPE - <a href='https://www.gnu.org/software/classpath/license.html'>https://www.gnu.org/software/classpath/license.html</a></div>
+</div>
+<a id='project_MIT_License'></a>
+<h3>MIT License</h3>
+<div class='dependency'>
+<p><strong> 119.</strong> <strong>Group:</strong> org.slf4j <strong>Name:</strong> jul-to-slf4j <strong>Version:</strong> 1.7.36 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://www.slf4j.org'>http://www.slf4j.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>MIT License - <a href='http://www.opensource.org/licenses/mit-license.php'>http://www.opensource.org/licenses/mit-license.php</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 120.</strong> <strong>Group:</strong> org.slf4j <strong>Name:</strong> slf4j-api <strong>Version:</strong> 1.7.36 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://www.slf4j.org'>http://www.slf4j.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>MIT License - <a href='http://www.opensource.org/licenses/mit-license.php'>http://www.opensource.org/licenses/mit-license.php</a></div>
+</div>
+<a id='project_MIT-0'></a>
+<h3>MIT-0</h3>
+<div class='dependency'>
+<p><strong> 121.</strong> <strong>Group:</strong> org.reactivestreams <strong>Name:</strong> reactive-streams <strong>Version:</strong> 1.0.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://reactive-streams.org'>http://reactive-streams.org</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='http://www.reactive-streams.org/'>http://www.reactive-streams.org/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>MIT-0 - <a href='https://spdx.org/licenses/MIT-0.html'>https://spdx.org/licenses/MIT-0.html</a></div>
+</div>
+<a id='project_Public_Domain'></a>
+<h3>Public Domain</h3>
+<div class='dependency'>
+<p><strong> 122.</strong> <strong>Group:</strong> org.jboss <strong>Name:</strong> jandex <strong>Version:</strong> 2.4.2.Final </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://www.jboss.org'>http://www.jboss.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Public Domain - <a href='http://repository.jboss.org/licenses/cc0-1.0.txt'>http://repository.jboss.org/licenses/cc0-1.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 123.</strong> <strong>Group:</strong> org.jboss.logging <strong>Name:</strong> jboss-logging <strong>Version:</strong> 3.4.3.Final </p><label>Project URL</label>
+<div class='dependency-value'><a href='http://www.jboss.org'>http://www.jboss.org</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Public Domain - <a href='http://repository.jboss.org/licenses/cc0-1.0.txt'>http://repository.jboss.org/licenses/cc0-1.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jboss-logging-3.4.3.Final.jar/META-INF/LICENSE.txt'>jboss-logging-3.4.3.Final.jar/META-INF/LICENSE.txt</a></div>
+</div>
+<a id='project_The_Apache_Software_License,_Version_2.0'></a>
+<h3>The Apache Software License, Version 2.0</h3>
+<div class='dependency'>
+<p><strong> 124.</strong> <strong>Group:</strong> com.fasterxml <strong>Name:</strong> classmate <strong>Version:</strong> 1.5.1 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/java-classmate'>https://github.com/FasterXML/java-classmate</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='classmate-1.5.1.jar/META-INF/LICENSE'>classmate-1.5.1.jar/META-INF/LICENSE</a><br><a href='classmate-1.5.1.jar/META-INF/NOTICE'>classmate-1.5.1.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 125.</strong> <strong>Group:</strong> com.fasterxml.jackson.core <strong>Name:</strong> jackson-annotations <strong>Version:</strong> 2.13.4 </p><label>Project URL</label>
+<div class='dependency-value'><a href='http://github.com/FasterXML/jackson'>http://github.com/FasterXML/jackson</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-annotations-2.13.4.jar/META-INF/LICENSE'>jackson-annotations-2.13.4.jar/META-INF/LICENSE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 126.</strong> <strong>Group:</strong> com.fasterxml.jackson.core <strong>Name:</strong> jackson-core <strong>Version:</strong> 2.13.4 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-core'>https://github.com/FasterXML/jackson-core</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-core-2.13.4.jar/META-INF/LICENSE'>jackson-core-2.13.4.jar/META-INF/LICENSE</a><br><a href='jackson-core-2.13.4.jar/META-INF/NOTICE'>jackson-core-2.13.4.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 127.</strong> <strong>Group:</strong> com.fasterxml.jackson.core <strong>Name:</strong> jackson-databind <strong>Version:</strong> 2.13.4.2 </p><label>Project URL</label>
+<div class='dependency-value'><a href='http://github.com/FasterXML/jackson'>http://github.com/FasterXML/jackson</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-databind-2.13.4.2.jar/META-INF/LICENSE'>jackson-databind-2.13.4.2.jar/META-INF/LICENSE</a><br><a href='jackson-databind-2.13.4.2.jar/META-INF/NOTICE'>jackson-databind-2.13.4.2.jar/META-INF/NOTICE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 128.</strong> <strong>Group:</strong> com.fasterxml.jackson.datatype <strong>Name:</strong> jackson-datatype-jdk8 <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8'>https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 129.</strong> <strong>Group:</strong> com.fasterxml.jackson.datatype <strong>Name:</strong> jackson-datatype-jsr310 <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310'>https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='jackson-datatype-jsr310-2.13.4.jar/META-INF/LICENSE'>jackson-datatype-jsr310-2.13.4.jar/META-INF/LICENSE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 130.</strong> <strong>Group:</strong> com.fasterxml.jackson.module <strong>Name:</strong> jackson-module-parameter-names <strong>Version:</strong> 2.13.4 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names'>https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names</a></div>
+<label>POM License</label>
+<div class='dependency-value'>Apache License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 131.</strong> <strong>Group:</strong> com.mysema.commons <strong>Name:</strong> mysema-commons-lang <strong>Version:</strong> 0.2.4 </p><label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 132.</strong> <strong>Group:</strong> com.nimbusds <strong>Name:</strong> content-type <strong>Version:</strong> 2.2 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://connect2id.com'>https://connect2id.com</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://bitbucket.org/connect2id/nimbus-content-type'>https://bitbucket.org/connect2id/nimbus-content-type</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 133.</strong> <strong>Group:</strong> com.nimbusds <strong>Name:</strong> lang-tag <strong>Version:</strong> 1.6 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://connect2id.com/'>https://connect2id.com/</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://bitbucket.org/connect2id/nimbus-language-tags'>https://bitbucket.org/connect2id/nimbus-language-tags</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 134.</strong> <strong>Group:</strong> com.nimbusds <strong>Name:</strong> nimbus-jose-jwt <strong>Version:</strong> 9.22 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://connect2id.com'>https://connect2id.com</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://bitbucket.org/connect2id/nimbus-jose-jwt'>https://bitbucket.org/connect2id/nimbus-jose-jwt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 135.</strong> <strong>Group:</strong> com.zaxxer <strong>Name:</strong> HikariCP <strong>Version:</strong> 4.0.3 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='https://github.com/brettwooldridge'>https://github.com/brettwooldridge</a></div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/brettwooldridge/HikariCP'>https://github.com/brettwooldridge/HikariCP</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 136.</strong> <strong>Group:</strong> io.projectreactor.netty <strong>Name:</strong> reactor-netty-core <strong>Version:</strong> 1.0.27 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/reactor/reactor-netty'>https://github.com/reactor/reactor-netty</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 137.</strong> <strong>Group:</strong> io.projectreactor.netty <strong>Name:</strong> reactor-netty-http <strong>Version:</strong> 1.0.27 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/reactor/reactor-netty'>https://github.com/reactor/reactor-netty</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='https://www.apache.org/licenses/LICENSE-2.0.txt'>https://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 138.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-bean-validators <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 139.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-boot-starter <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 140.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-core <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 141.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-data-rest <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 142.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-oas <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 143.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-schema <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 144.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-spi <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 145.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-spring-web <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 146.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-spring-webflux <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 147.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-spring-webmvc <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 148.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-swagger-common <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 149.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-swagger-ui <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 150.</strong> <strong>Group:</strong> io.springfox <strong>Name:</strong> springfox-swagger2 <strong>Version:</strong> 3.0.0 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/springfox/springfox'>https://github.com/springfox/springfox</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 151.</strong> <strong>Group:</strong> net.minidev <strong>Name:</strong> accessors-smart <strong>Version:</strong> 2.4.8 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://urielch.github.io/'>https://urielch.github.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 152.</strong> <strong>Group:</strong> net.minidev <strong>Name:</strong> json-smart <strong>Version:</strong> 2.4.8 </p><label>Project URL</label>
+<div class='dependency-value'><a href='https://urielch.github.io/'>https://urielch.github.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 153.</strong> <strong>Group:</strong> org.mapstruct <strong>Name:</strong> mapstruct <strong>Version:</strong> 1.3.1.Final </p><label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='mapstruct-1.3.1.Final.jar/META-INF/LICENSE.txt'>mapstruct-1.3.1.Final.jar/META-INF/LICENSE.txt</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 154.</strong> <strong>Group:</strong> org.ow2.asm <strong>Name:</strong> asm <strong>Version:</strong> 9.1 </p><label>Manifest Project URL</label>
+<div class='dependency-value'><a href='http://asm.ow2.org'>http://asm.ow2.org</a></div>
+<label>Manifest License</label>
+<div class='dependency-value'>BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not Packaged)</div>
+<label>POM Project URL</label>
+<div class='dependency-value'><a href='http://asm.ow2.io/'>http://asm.ow2.io/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>BSD-3-Clause - <a href='https://asm.ow2.io/license.html'>https://asm.ow2.io/license.html</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The Apache Software License, Version 2.0 - <a href='http://www.apache.org/licenses/LICENSE-2.0.txt'>http://www.apache.org/licenses/LICENSE-2.0.txt</a></div>
+</div>
+<a id='project_The_GNU_General_Public_License,_v2_with_Universal_FOSS_Exception,_v1.0'></a>
+<h3>The GNU General Public License, v2 with Universal FOSS Exception, v1.0</h3>
+<div class='dependency'>
+<p><strong> 155.</strong> <strong>Group:</strong> com.mysql <strong>Name:</strong> mysql-connector-j <strong>Version:</strong> 8.0.32 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='http://dev.mysql.com/doc/connector-j/en/'>http://dev.mysql.com/doc/connector-j/en/</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The GNU General Public License, v2 with Universal FOSS Exception, v1.0</div>
+<label>Embedded license files</label>
+<div class='dependency-value'><a href='mysql-connector-j-8.0.32.jar/LICENSE'>mysql-connector-j-8.0.32.jar/LICENSE</a><br><a href='mysql-connector-j-8.0.32.jar/README'>mysql-connector-j-8.0.32.jar/README</a></div>
+</div>
+<a id='project_The_MIT_License_(MIT)'></a>
+<h3>The MIT License (MIT)</h3>
+<div class='dependency'>
+<p><strong> 156.</strong> <strong>Group:</strong> com.auth0 <strong>Name:</strong> java-jwt <strong>Version:</strong> 4.2.1 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/auth0/java-jwt'>https://github.com/auth0/java-jwt</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The MIT License (MIT) - <a href='https://raw.githubusercontent.com/auth0/java-jwt/master/LICENSE'>https://raw.githubusercontent.com/auth0/java-jwt/master/LICENSE</a></div>
+</div>
+<div class='dependency'>
+<p><strong> 157.</strong> <strong>Group:</strong> io.github.classgraph <strong>Name:</strong> classgraph <strong>Version:</strong> 4.8.83 </p><label>POM Project URL</label>
+<div class='dependency-value'><a href='https://github.com/classgraph/classgraph'>https://github.com/classgraph/classgraph</a></div>
+<label>POM License</label>
+<div class='dependency-value'>The MIT License (MIT) - <a href='http://opensource.org/licenses/MIT'>http://opensource.org/licenses/MIT</a></div>
+</div>
+<a id='project_Unknown'></a>
+<h3>Unknown</h3>
+<div class='dependency'>
+<p><strong> 158.</strong> <strong>Group:</strong> com.fasterxml.jackson <strong>Name:</strong> jackson-bom <strong>Version:</strong> 2.13.4 </p></div>
+</div>
 </article>
 ''';
 
