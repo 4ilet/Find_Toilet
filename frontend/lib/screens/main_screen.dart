@@ -120,7 +120,7 @@ class _MainState extends State<Main> {
                       ),
                     ],
                   ),
-                  if (widget.showReview && showAll(context))
+                  if (!widget.showReview && showAll(context))
                     Padding(
                       padding: const EdgeInsets.only(top: 70),
                       child: Column(
