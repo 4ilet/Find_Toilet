@@ -59,11 +59,11 @@ class MapScreenState extends State<MapScreen> {
     setState(() {});
   }
 
-  void getLocation() async {
+  void getLocation([bool mode = true]) async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      if (widget.showReview) {
+      if (widget.showReview && mode == true) {
         double conLat = getToilet(context)!.lat;
         double conLng = getToilet(context)!.lng;
         controller.center = LatLng(conLat, conLng);
@@ -124,7 +124,7 @@ class MapScreenState extends State<MapScreen> {
 
   void zoomOut() {
     var zoom = controller.zoom;
-    if (zoom > 7) {
+    if (zoom > 8) {
       controller.zoom = zoom - 1;
     }
     setState(() {});
@@ -193,9 +193,6 @@ class MapScreenState extends State<MapScreen> {
                 : toilet
             : user),
         onTap: () {
-          if (controller.zoom < 18) {
-            controller.zoom = 18;
-          }
           if (index != null) {
             clickMarker(index);
           }
@@ -228,14 +225,6 @@ class MapScreenState extends State<MapScreen> {
         child: MapLayout(
           controller: controller,
           builder: (context, transformer) {
-            int nowRadius = getIntRadius(context);
-            if (nowRadius == 500 && controller.zoom < 16) {
-              controller.zoom = 16;
-            } else if (nowRadius == 1000 && controller.zoom < 15) {
-              controller.zoom = 15;
-            } else if (nowRadius == 1500 && controller.zoom < 14) {
-              controller.zoom = 14;
-            }
             final lat = readLat(context);
             final lng = readLng(context);
             late final Iterable<Widget> markerWidgets;
@@ -331,7 +320,7 @@ class MapScreenState extends State<MapScreen> {
           watchMagnify(context) == '표시함'
               ? Align(
                   alignment: Alignment(
-                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.55),
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.75),
                   child: GestureDetector(
                     onTap: () => zoomIn(),
                     child: Container(
@@ -351,7 +340,7 @@ class MapScreenState extends State<MapScreen> {
           watchMagnify(context) == '표시함'
               ? Align(
                   alignment: Alignment(
-                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.65),
                   child: GestureDetector(
                     onTap: () => zoomOut(),
                     child: Container(
@@ -371,9 +360,9 @@ class MapScreenState extends State<MapScreen> {
           widget.needNear
               ? Align(
                   alignment: Alignment(
-                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.25),
+                      Alignment.bottomRight.x, Alignment.bottomRight.y - 0.45),
                   child: FloatingActionButton(
-                    onPressed: getLocation,
+                    onPressed: () => getLocation(false),
                     backgroundColor: whiteColor,
                     mini: true,
                     tooltip: 'My Location',
@@ -386,8 +375,6 @@ class MapScreenState extends State<MapScreen> {
               : const SizedBox(),
         ],
       ),
-      // bottomNavigationBar:
-      //     BottomAppBar(height: MediaQuery.of(context).size.height * 0.08),
     );
   }
 }
