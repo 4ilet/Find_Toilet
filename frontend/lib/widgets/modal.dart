@@ -295,7 +295,7 @@ class CreateOrEditFolderModal extends StatelessWidget {
     }
 
     return InputModal(
-      title: folderId == null ? '즐겨찾기 폴더 $work' : '즐겨찾기 폴더명 $work',
+      title: folderId == null ? '폴더 $work' : '폴더명 $work',
       buttonText: work,
       isAlert: false,
       onPressed: createFolder(context),
@@ -424,54 +424,48 @@ class CustomModal extends StatelessWidget {
       child: SimpleDialog(
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Flexible(
-            child: Center(
-              child: CustomText(
-                title: title,
-                color: titleColor,
-              ),
+          child: Center(
+            child: CustomText(
+              title: title,
+              color: titleColor,
             ),
           ),
         ),
         children: [
           ...children,
           isAlert
-              ? Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        modalButton(
-                          onPressed: onPressed ?? routerPop(context),
-                          buttonText: buttonText,
-                          isButtonWhite: false,
-                        ),
-                      ],
-                    ),
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      modalButton(
+                        onPressed: onPressed ?? routerPop(context),
+                        buttonText: buttonText,
+                        isButtonWhite: false,
+                      ),
+                    ],
                   ),
                 )
-              : Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        modalButton(
-                          onPressed: routerPop(context),
-                          buttonText: '취소',
-                          isButtonWhite: true,
-                        ),
-                        modalButton(
-                          onPressed: onPressed ??
-                              routerPop(
-                                getKey(context)?.currentContext ?? context,
-                              ),
-                          buttonText: buttonText,
-                          isButtonWhite: false,
-                        ),
-                      ],
-                    ),
+              : Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      modalButton(
+                        onPressed: routerPop(context),
+                        buttonText: '취소',
+                        isButtonWhite: true,
+                      ),
+                      modalButton(
+                        onPressed: onPressed ??
+                            routerPop(
+                              getKey(context)?.currentContext ?? context,
+                            ),
+                        buttonText: buttonText,
+                        isButtonWhite: false,
+                      ),
+                    ],
                   ),
                 ),
         ],

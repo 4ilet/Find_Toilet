@@ -51,6 +51,20 @@ class _BookMarkListState extends State<BookMarkList> {
             }
           },
         );
+        final textPainter = TextPainter(
+          text: TextSpan(
+            text: '${widget.bookmarkCnt}',
+            style: const TextStyle(
+              fontSize: defaultSize,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+          maxLines: 2,
+        )..layout(minWidth: 0, maxWidth: double.infinity);
+        setState(() {
+          appBarHeight =
+              statusBarHeight(context) + 15 + textPainter.size.height * 3.2;
+        });
       },
     );
   }
@@ -101,12 +115,13 @@ class _BookMarkListState extends State<BookMarkList> {
       backgroundColor: mainColor,
       body: CustomBoxWithScrollView(
         listScroll: controller,
-        toolbarHeight: 100,
+        toolbarHeight: appBarHeight,
         backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
         flexibleSpace: Padding(
           padding:
               EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
                 child: CustomIconButton(
@@ -119,11 +134,18 @@ class _BookMarkListState extends State<BookMarkList> {
               ),
               Flexible(
                 flex: 5,
-                child: CustomText(
-                  title: widget.folderName,
-                  fontSize: FontSize.titleSize,
-                  color: CustomColors.whiteColor,
-                  font: kimm,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: CustomText(
+                        title: widget.folderName,
+                        fontSize: FontSize.titleSize,
+                        color: CustomColors.whiteColor,
+                        font: kimm,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
