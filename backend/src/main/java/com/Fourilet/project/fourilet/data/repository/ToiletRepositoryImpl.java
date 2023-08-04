@@ -19,6 +19,7 @@ import org.springframework.data.querydsl.QuerydslUtils;
 import javax.persistence.EntityManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.Fourilet.project.fourilet.data.entity.QReview.review;
@@ -32,6 +33,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    public List<Long> emptyList = Collections.emptyList();
     @Override
     public Page<ToiletDto> nearByToilet(ToiletGetCondition condition, Pageable pageable){
         int maxPageSize = 150;
@@ -56,7 +58,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.cMalePoo,
                                 toilet.allDay,
                                 toilet.diaper,
-                                toilet.toiletId,
+                                Expressions.constant(Collections.emptyList()),
                                 toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
@@ -120,7 +122,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.cMalePoo,
                                 toilet.allDay,
                                 toilet.diaper,
-                                toilet.toiletId,
+                                Expressions.constant(Collections.emptyList()),
                                 toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
@@ -178,7 +180,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.cMalePoo,
                                 toilet.allDay,
                                 toilet.diaper,
-                                toilet.toiletId,
+                                Expressions.constant(Collections.emptyList()),
                                 toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)
@@ -228,7 +230,7 @@ public class ToiletRepositoryImpl implements ToiletRepositoryCustom{
                                 toilet.cMalePoo,
                                 toilet.allDay,
                                 toilet.diaper,
-                                toilet.toiletId,
+                                Expressions.constant(Collections.emptyList()),
                                 toilet.toiletId,
                                 toilet.toiletId
                         )).from(toilet)

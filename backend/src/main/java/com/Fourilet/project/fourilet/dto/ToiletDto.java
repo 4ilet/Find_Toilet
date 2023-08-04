@@ -2,10 +2,14 @@ package com.Fourilet.project.fourilet.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ToiletDto {
     private Long toiletId;
     private String toiletName;
@@ -24,7 +28,7 @@ public class ToiletDto {
     private boolean cMalePoo;
     private boolean allDay;
     private boolean diaper;
-    private Long folderId;
+    private List<Long> folderId;
     private Long distance;
     private Long reviewId;
 
@@ -32,7 +36,7 @@ public class ToiletDto {
     public ToiletDto(Long toiletId, String toiletName, String address, String operationTime, BigDecimal lat,
                      BigDecimal lon, String phoneNumber, Double score, Long comment, boolean dMalePee, boolean dMalePoo,
                      boolean dFemalePoo, boolean cFemalePoo, boolean cMalePee, boolean cMalePoo, boolean allDay, boolean diaper,
-                     Long folderId, Long distance, Long reviewId
+                     List<Long> folderId, Long distance, Long reviewId
     ){
         this.toiletId = toiletId;
         this.toiletName = toiletName;
@@ -54,5 +58,9 @@ public class ToiletDto {
         this.folderId = folderId;
         this.distance = distance;
         this.reviewId = reviewId;
+    }
+
+    public ToiletDto() {
+
     }
 }

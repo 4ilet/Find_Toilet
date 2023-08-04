@@ -25,12 +25,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// Webclient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-//	implementation 'com.google.code.gson¡:gson:2.8.7'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'com.auth0:java-jwt:4.2.1'
 	// swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
 	apply plugin: "io.spring.dependency-management"
 	implementation("com.querydsl:querydsl-jpa")
 	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")

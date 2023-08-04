@@ -5,10 +5,12 @@ import com.Fourilet.project.fourilet.data.entity.Folder;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
 import com.Fourilet.project.fourilet.data.repository.FolderRepository;
 import com.Fourilet.project.fourilet.dto.*;
+import com.Fourilet.project.fourilet.exception.AtLeastException;
 import com.Fourilet.project.fourilet.exception.DuplicationNameException;
 import com.Fourilet.project.fourilet.exception.LimitException;
 import com.Fourilet.project.fourilet.service.FolderService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Duplication;
 import org.slf4j.Logger;
@@ -23,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.DuplicateFormatFlagsException;
 import java.util.List;
 
@@ -67,13 +71,16 @@ public class FolderController {
 
     @DeleteMapping("/delete/folder/{folderId}")
     @ApiOperation(value = "즐겨찾기 삭제", notes = "특정 즐겨찾기 삭제.")
-    public ResponseEntity<?> deleteFolder(@PathVariable long folderId){
+    public ResponseEntity<?> deleteFolder(HttpServletRequest request, @PathVariable long folderId){
+        String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+        // accessToken으로 id 추출
+        Long reqMemberId = jwtService.extractId(accessToken).get();
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         try {
-            folderService.deleteFolder(folderId);
+            folderService.deleteFolder(folderId, reqMemberId);
             message.setStatus(StatusEnum.OK);
             message.setMessage("즐겨찾기 폴더 삭제 성공");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
@@ -82,7 +89,13 @@ public class FolderController {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
+
+        } catch (AtLeastException e) {
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러");
             return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -152,78 +165,84 @@ public class FolderController {
         }
     }
 
-    @PostMapping("/add/{folderId}/{toiletId}")
-    @ApiOperation(value = "즐겨찾기에 화장실 추가", notes = "즐겨찾기 폴더에 화장실을 추가한다..")
-    public ResponseEntity<?> addToilet(@PathVariable("folderId") long folderId, @PathVariable("toiletId") long toiletId){
+    @PostMapping("/add")
+    @ApiOperation(value = "즐겨찾기에 화장실을 추가, 삭제하는 Api", notes = "즐겨찾기에 화장실을 추가 또는 삭제한다.")
+    public ResponseEntity<?> AddDeleteToilet(@RequestBody FolderDto.AddOrDelToiletDto addOrDelToiletDto){
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try{
-            folderService.addToilet(folderId, toiletId);
+            folderService.AddDeleteToilet(addOrDelToiletDto);
             message.setStatus(StatusEnum.OK);
-            message.setMessage("화장실 추가 성공");
+            message.setMessage("추가 혹은 삭제 성공");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
         } catch (NullPointerException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage("폴더 혹은 화장실이 존재하지 않습니다");
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
+
+        }
+//        } catch (IllegalArgumentException e) {
+//            message.setStatus(StatusEnum.BAD_REQUEST);
+//            message.setMessage(String.valueOf(e));
+//            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        catch (Exception e) {
             message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage("서버 에러 발생");
             return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/delete/toilet/{folderId}/{toiletId}")
-    @ApiOperation(value = "특정 화장실을 즐겨찾기에서 삭제", notes = "특정 화장실을 즐겨찾기에서 삭제")
-    public ResponseEntity<?> deleteToilet(@PathVariable("folderId") long folderId, @PathVariable("toiletId") long toiletId){
-        Message message = new Message();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        try {
-            folderService.deleteToilet(folderId, toiletId);
-            message.setStatus(StatusEnum.OK);
-            message.setMessage("삭제 성공");
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
-        } catch (NullPointerException e) {
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage(String.valueOf(e));
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
-            message.setMessage("서버 에러 발생");
-            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @DeleteMapping("/delete/toilet/{folderId}/{toiletId}")
+//    @ApiOperation(value = "특정 화장실을 즐겨찾기에서 삭제", notes = "특정 화장실을 즐겨찾기에서 삭제")
+//    public ResponseEntity<?> deleteToilet(HttpServletRequest request, @PathVariable("folderId") long folderId, @PathVariable("toiletId") long toiletId){
+//        Message message = new Message();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+//        try {
+//            folderService.deleteToilet(folderId, toiletId);
+//            message.setStatus(StatusEnum.OK);
+//            message.setMessage("삭제 성공");
+//            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+//        } catch (NullPointerException e) {
+//            message.setStatus(StatusEnum.BAD_REQUEST);
+//            message.setMessage(String.valueOf(e));
+//            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+//        } catch (Exception e) {
+//            message.setStatus(StatusEnum.INTERNAL_SERVER_ERROR);
+//            message.setMessage("서버 에러 발생");
+//            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @GetMapping("/folder/toiletlist/{folderId}")
     @ApiOperation(value = "즐겨찾기 화장실 목록 가져오기", notes = "즐겨찾기 폴더 안에 있는 화장실 목록을 가져온다.")
-    public ResponseEntity<?> getToiletList(HttpServletRequest request, @PathVariable("folderId") long folderId){
-        Message message = new Message();
+    public ResponseEntity<?> getToiletList(HttpServletRequest request, @PathVariable("folderId") long folderId, @ApiParam(value = "page=int(시작은 0)") int page){
+//        Message message = new Message();
+        Message2 message = new Message2();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
         String accessToken = request.getHeader("Authorization");
-
         Long reqMemberId = null;
 
         if(accessToken != null){
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
-
+        System.out.println("reqmemberid" + reqMemberId);
         try {
-            List<ToiletDto2> toiletDtoList = folderService.getToiletList(folderId, reqMemberId);
+            ToiletDto2.ToiletDto2WithSize result = folderService.getToiletList(folderId, reqMemberId, page);
             message.setStatus(StatusEnum.OK);
-            if (toiletDtoList.size() > 0) {
+            if (result.getTotalPage() > 0) {
                 message.setMessage("목록 가져오기 성공");
             } else {
                 message.setMessage("화장실이 즐겨찾기에 없습니다.");
             }
-            message.setData(toiletDtoList);
+            message.setData(result.getResponse());
+            message.setSize(result.getTotalPage());
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
         } catch (NullPointerException e) {
             message.setStatus(StatusEnum.BAD_REQUEST);
@@ -237,3 +256,4 @@ public class FolderController {
         }
     }
 }
+

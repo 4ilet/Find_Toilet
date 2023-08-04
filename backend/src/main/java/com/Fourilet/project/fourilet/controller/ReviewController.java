@@ -2,8 +2,10 @@ package com.Fourilet.project.fourilet.controller;
 
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
 import com.Fourilet.project.fourilet.dto.Message;
+import com.Fourilet.project.fourilet.dto.Message2;
 import com.Fourilet.project.fourilet.dto.ReviewDto;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
+import com.Fourilet.project.fourilet.exception.DuplicatedReviewerException;
 import com.Fourilet.project.fourilet.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,41 +51,47 @@ public class ReviewController {
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         } catch (IllegalArgumentException e){
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
             return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
+        } catch (DuplicatedReviewerException e) {
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage(String.valueOf(e));
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+
         }
     }
     @GetMapping("/{toiletId}")
     @ApiOperation(value = "화장실 리뷰 목록", notes = "특정 화장실의 리뷰 목록들을 가져온다.")
     public ResponseEntity<?> getReviewList(@PathVariable("toiletId") long toiletId, @ApiParam(value = "page=int(시작은 0)") int page){
-        Message message = new Message();
+        Message2 message2 = new Message2();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         try {
-            List<ReviewDto.GetReviewDto> result = reviewService.getReview(toiletId,  page);
-
-            message.setStatus(StatusEnum.OK);
-            message.setData(result);
-            message.setMessage("화장실 리뷰 가져오기 성공");
-
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            ReviewDto.GetReviewListDto result = reviewService.getReview(toiletId,  page);
+            message2.setStatus(StatusEnum.OK);
+            message2.setSize(result.getTotalPage());
+            message2.setData(result.getResponse());
+            message2.setMessage("화장실 리뷰 가져오기 성공");
+            return new ResponseEntity<>(message2, headers, HttpStatus.OK);
 
         } catch (NoSuchElementException e){
 
-            message.setStatus(StatusEnum.NO_CONTENT);
-            message.setMessage(String.valueOf(e));
+            message2.setStatus(StatusEnum.NO_CONTENT);
+            message2.setMessage(String.valueOf(e));
 
-            return new ResponseEntity<>(message, headers, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(message2, headers, HttpStatus.NO_CONTENT);
 
         } catch (NullPointerException e) {
 
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage(String.valueOf(e));
+            message2.setStatus(StatusEnum.BAD_REQUEST);
+            message2.setMessage(String.valueOf(e));
 
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(message2, headers, HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -117,7 +125,6 @@ public class ReviewController {
             message.setStatus(StatusEnum.OK);
             message.setMessage("리뷰 수정 완료");
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
-
         } catch (NullPointerException e){
             message.setStatus(StatusEnum.BAD_REQUEST);
             message.setMessage(String.valueOf(e));
@@ -130,12 +137,12 @@ public class ReviewController {
     }
     @GetMapping("/get/{reviewId}")
     @ApiOperation(value = "개별 화장실 리뷰 가져오기", notes = "특정 리뷰를 가져온다")
-    public ResponseEntity<?> getReview(@PathVariable("reviewId") long reviewId) {
+    public ResponseEntity<?> getEachReview(@PathVariable("reviewId") long reviewId) {
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         try {
-            ReviewDto.GetReviewDto result = reviewService.getReview(reviewId);
+            ReviewDto.GetReviewDto result = reviewService.getEachReview(reviewId);
             message.setStatus(StatusEnum.OK);
             message.setData(result);
             message.setMessage("리뷰 가져오기 성공");

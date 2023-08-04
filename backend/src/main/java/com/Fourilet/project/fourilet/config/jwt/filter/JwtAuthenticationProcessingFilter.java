@@ -6,10 +6,12 @@ import com.Fourilet.project.fourilet.data.repository.MemberRepository;
 import com.Fourilet.project.fourilet.config.jwt.service.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,8 +45,6 @@ import java.io.IOException;
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private static final String NO_CHECK_URL = "/user/login"; // "/login"으로 들어오는 요청은 Filter 작동 X
-    private static final String NO_CHECK_TOILET = "/toilet/**";
-
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
 
@@ -55,7 +55,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().equals(NO_CHECK_TOILET)) {
+        if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().matches("/v3/api-docs/*.*") ||
+                request.getRequestURI().matches("/swagger-ui/*.*") || request.getRequestURI().matches("/swagger-resources/*.*") ||
+                request.getRequestURI().matches("/oauth2/*.*") || request.getRequestURI().matches("/review/\\d+")) {
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
             return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
         }
@@ -64,9 +66,27 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         // -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
         // 사용자의 요청 헤더에 RefreshToken이 있는 경우는, AccessToken이 만료되어 요청한 경우밖에 없다.
         // 따라서, 위의 경우를 제외하면 추출한 refreshToken은 모두 null
-        String refreshToken = jwtService.extractRefreshToken(request)
-                .filter(jwtService::isTokenValid)
-                .orElse(null);
+        String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
+
+        boolean flag = false;
+
+        if(refreshToken != null){
+            flag = true;
+        }
+        // 리프레시 토큰이 유효한지 확인
+        try{
+            // 토큰이 만료되었으면 => null
+            refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid)
+                    .orElse(null);
+        }catch (JWTDecodeException e){
+            // 유효하지 않은 토큰일 경우 오류 반환
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String message = "{\"message\": \"유효하지 않은 리프레시 토큰\"}";
+            response.getWriter().write(message);
+            return;
+        }
 
         // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
         // RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
@@ -80,7 +100,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         // AccessToken이 없거나 유효하지 않다면, 인증 객체가 담기지 않은 상태로 다음 필터로 넘어가기 때문에 403 에러 발생
         // AccessToken이 유효하다면, 인증 객체가 담긴 상태로 다음 필터로 넘어가기 때문에 인증 성공
         if (refreshToken == null) {
-            checkAccessTokenAndAuthentication(request, response, filterChain);
+            // 리프레시 토큰이 있으나 만료되었을 경우 => flag True
+            checkAccessTokenAndAuthentication(request, response, filterChain, flag);
         }
     }
 
@@ -121,26 +142,42 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * 그 후 다음 인증 필터로 진행
      */
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                                  FilterChain filterChain) throws ServletException, IOException {
+                                                  FilterChain filterChain, boolean flag) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        String token = jwtService.extractAccessToken(request).orElse(null);
 
-        try{
-            String token = jwtService.extractAccessToken(request).orElse(null);
-            String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
-            Member member = memberRepository.findByEmail(email).orElse(null);
-            saveAuthentication(member);
-
-        }catch (TokenExpiredException e){
-            e.printStackTrace();
-            request.setAttribute("Authorization", "토큰 만료");
-        }catch (JWTVerificationException e){
-            e.printStackTrace();
-            request.setAttribute("Authorization", "유효하지 않은 토큰");
+        if((requestURI.matches(".*/toilet/.*") && token != null) || !requestURI.matches(".*/toilet/.*")){
+            try {
+                String email = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim("email").asString();
+                Member member = memberRepository.findByEmail(email).orElse(null);
+                saveAuthentication(member);
+            } catch (TokenExpiredException e) {
+                // RefreshToken이 만료된 경우
+                if(flag == true){
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    String message = "{\"message\": \"리프레시 토큰 만료\"}";
+                    response.getWriter().write(message);
+                }else{
+                    // 액세스 토큰이 만료된 경우
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    String message = "{\"message\": \"액세스 토큰 만료\"}";
+                    response.getWriter().write(message);
+                }
+                return;
+            } catch (JWTVerificationException e) {
+                // 액세스 토큰이 유효하지 않은 경우
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                String message = "{\"message\": \"유효하지 않은 액세스 토큰\"}";
+                response.getWriter().write(message);
+                return;
+            }
         }
-//        jwtService.extractAccessToken(request)
-//                .filter(jwtService::isTokenValid)
-//                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-//                        .ifPresent(email -> memberRepository.findByEmail(email)
-//                                .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
     }

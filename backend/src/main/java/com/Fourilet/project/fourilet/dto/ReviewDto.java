@@ -2,11 +2,15 @@ package com.Fourilet.project.fourilet.dto;
 
 import com.Fourilet.project.fourilet.data.entity.Member;
 import com.Fourilet.project.fourilet.data.entity.Toilet;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,6 +48,12 @@ public class ReviewDto {
         private float score;
         @ApiParam(value = "유저 닉네임", type = "String")
         private String nickname;
+    }
+    @Getter
+    @Setter
+    public static class GetReviewListDto {
+        private int totalPage;
+        private List<GetReviewDto> response = new ArrayList<>();
     }
     @Getter
     @Setter

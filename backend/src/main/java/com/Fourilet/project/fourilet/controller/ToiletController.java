@@ -6,6 +6,7 @@ import com.Fourilet.project.fourilet.dto.Message;
 import com.Fourilet.project.fourilet.dto.StatusEnum;
 import com.Fourilet.project.fourilet.dto.ToiletDto;
 import com.Fourilet.project.fourilet.service.ToiletService;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,14 +18,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 @Api(tags = "Toilet API")
 @RestController
@@ -45,32 +44,31 @@ public class ToiletController {
             @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
             @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
 
-        Message message = new Message();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            Message message = new Message();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            String accessToken = request.getHeader("Authorization");
 
-        String accessToken = request.getHeader("Authorization");
+            Long reqMemberId = null;
 
-        Long reqMemberId = null;
+            if (accessToken != null) {
+                reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+            }
 
-        if (accessToken != null) {
-            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
-        }
+            try {
+                Map<String, Object> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
+                return ResponseEntity.ok().body(page);
 
-        try {
-            Page<ToiletDto> page = toiletService.getSearchToilet(reqMemberId, lon, lat, allDay, disabled, kids, diaper, keyword, order, pageable);
-            return ResponseEntity.ok().body(page);
-
-        } catch (IllegalArgumentException e) {
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            message.setMessage("정렬 기준이 올바르지 않습니다.");
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        }
+            } catch (IllegalArgumentException e) {
+                message.setStatus(StatusEnum.BAD_REQUEST);
+                message.setMessage("정렬 기준이 올바르지 않습니다.");
+                return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            }
     }
 
     @GetMapping("/near")
     @ApiOperation(value = "주변 화장실 API", notes = "유저 좌표 기준 지정한 반경 내 주변 화장실 목록을 반환합니다!")
-    public ResponseEntity<Page<ToiletDto>> getNearByToilet(HttpServletRequest request, @ApiParam(value = "유저의 경도(longitude)") @RequestParam("lon") BigDecimal lon, @ApiParam(value = "유저의 위도(latitude)") @RequestParam("lat") BigDecimal lat, @ApiParam(value = "반경") @RequestParam("radius") long radius,
+    public ResponseEntity<?> getNearByToilet(HttpServletRequest request, @ApiParam(value = "유저의 경도(longitude)") @RequestParam("lon") BigDecimal lon, @ApiParam(value = "유저의 위도(latitude)") @RequestParam("lat") BigDecimal lat, @ApiParam(value = "반경") @RequestParam("radius") long radius,
                                                            @ApiParam(value = "24시간 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("allDay") Boolean allDay, @ApiParam(value = "장애인용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("disabled") Boolean disabled,
                                                            @ApiParam(value = "어린이용 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("kids") Boolean kids, @ApiParam(value = "기저귀 교환대 유무 (필터링 사용하면 1 / 사용 안 하면 0)") @RequestParam("diaper") Boolean diaper,
                                                            @ApiParam(value = "page=int(시작은 0)?size=int(한 페이지당 나올 개수)") Pageable pageable) {
@@ -83,10 +81,33 @@ public class ToiletController {
             reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
         }
 
-        System.out.println("memberId"+reqMemberId);
-
-        Page<ToiletDto> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
+        Map<String, Object> page = toiletService.getNearToilet(reqMemberId, lon, lat, radius, allDay, disabled, kids, diaper, pageable);
 
         return ResponseEntity.ok().body(page);
+    }
+    @ApiOperation(value = "화장실 정보 조회 API", notes = "특정 화장실의 정보를 반환합니다!")
+    @GetMapping("/{toiletId}")
+    public ResponseEntity<?> getToilet(HttpServletRequest request, @PathVariable("toiletId") long toiletId) {
+
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        String accessToken = request.getHeader("Authorization");
+
+        Long reqMemberId = null;
+
+        if (accessToken != null) {
+            reqMemberId = jwtService.extractId(accessToken.replace("Bearer ", "")).get();
+        }
+        try{
+            Map<String, Object> result = toiletService.getToilet(reqMemberId, toiletId);
+
+            return ResponseEntity.ok().body(result);
+        }catch (NullPointerException e){
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            message.setMessage("존재하지 않는 화장실입니다.");
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
     }
 }
