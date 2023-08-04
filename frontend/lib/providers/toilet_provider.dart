@@ -36,6 +36,7 @@ class ToiletProvider extends ApiProvider {
         return [];
       }
     } catch (error) {
+      print(error);
       throw Error();
     }
   }

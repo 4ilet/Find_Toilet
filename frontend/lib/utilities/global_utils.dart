@@ -52,9 +52,8 @@ String? getToken(BuildContext context) =>
 
 //* 토큰 변경
 void changeToken(BuildContext context, {String? token, String? refresh}) {
-  final userInfo = context.read<UserInfoProvider>();
-  userInfo.setStoreToken(token);
-  userInfo.setStoreRefresh(refresh);
+  context.read<UserInfoProvider>().setStoreToken(token);
+  context.read<UserInfoProvider>().setStoreRefresh(refresh);
 }
 
 //* 닉네임
